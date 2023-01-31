@@ -11,20 +11,9 @@ export const useJeopardyStore = defineStore("jeopardy", () => {
 	const table = ref();
 	const participants = ref([]);
 
+	// keeps track of which cell(s) have been answered or not.
 	// cell has been answered ? participant.name : false
 	const tracker = ref([]);
-
-	// CREATE TABLE
-	// for (let i = 0; i < rows.value.length; i++) {
-	// 	table.value.push({});
-
-	// 	for (let k = 0; k < columns.value.length; k++) {
-	// 		table.value[i][columns.value[k].id] = {
-	// 			question: "",
-	// 			answer: "",
-	// 		};
-	// 	}
-	// }
 
 	const activeCell = ref({
 		row: null,
@@ -32,6 +21,16 @@ export const useJeopardyStore = defineStore("jeopardy", () => {
 	});
 
 	const activeCategoryCell = ref(null);
+
+	const gameOngoing = computed(() => {
+		let array = [];
+		for (let i = 0; i < tracker.value.length; i++) {
+			const row = tracker.value[i].every((state) => state === false);
+			array.push(row);
+		}
+
+		return !array.every((state) => state === true);
+	});
 
 	function createTracker() {
 		let array = [];
@@ -56,8 +55,6 @@ export const useJeopardyStore = defineStore("jeopardy", () => {
 		participants.value.forEach((participant) => {
 			participant.points = 0;
 		});
-
-		showRestartModal.value = false;
 	}
 
 	function resetTemplate() {
@@ -76,49 +73,42 @@ export const useJeopardyStore = defineStore("jeopardy", () => {
 	async function fetchJeopardy() {
 		loading.value = true;
 
-		let res = await fetch(`http://localhost:8000/save1?id=1&id=2&id=3`);
-		const data = await res.json();
+		if (
+			JSON.parse(localStorage.getItem("rows")) === null &&
+			JSON.parse(localStorage.getItem("columns")) === null &&
+			JSON.parse(localStorage.getItem("table")) === null
+		) {
+			let rows = [];
+			let columns = [];
+			let table = [];
 
-		// console.log(data);
+			// CREATE ROWS AND COLUMNS
+			for (let i = 0; i < 5; i++) {
+				rows.push(100 * (i + 1));
+				columns.push({ id: `column${i + 1}`, name: `column${i + 1}` });
+			}
 
-		rows.value = data[0].rows;
-		columns.value = data[1].columns;
-		table.value = data[2].table;
+			// CREATE TABLE
+			for (let row = 0; row < rows.length; row++) {
+				table.push({});
+
+				for (let column = 0; column < columns.length; column++) {
+					table[row][columns[column].id] = {
+						question: "",
+						answer: "",
+					};
+				}
+			}
+
+			localStorage.setItem("rows", JSON.stringify(rows));
+			localStorage.setItem("columns", JSON.stringify(columns));
+			localStorage.setItem("table", JSON.stringify(table));
+		}
+		rows.value = JSON.parse(localStorage.getItem("rows"));
+		columns.value = JSON.parse(localStorage.getItem("columns"));
+		table.value = JSON.parse(localStorage.getItem("table"));
 
 		loading.value = false;
-	}
-
-	async function upddateRows() {
-		const newRows = { id: 1, columns: rows.value };
-		const res = await fetch(`http://localhost:8000/save1/1`, {
-			method: "PUT",
-			headers: {
-				"content-type": "application/json",
-			},
-			body: JSON.stringify(newRows),
-		});
-	}
-
-	async function upddateColumns() {
-		const newColumns = { id: 2, columns: columns.value };
-		const res = await fetch(`http://localhost:8000/save1/2`, {
-			method: "PUT",
-			headers: {
-				"content-type": "application/json",
-			},
-			body: JSON.stringify(newColumns),
-		});
-	}
-
-	async function updateTable() {
-		const newTable = { id: 3, table: table.value };
-		const res = await fetch("http://localhost:8000/save1/3", {
-			method: "PUT",
-			headers: {
-				"content-type": "application/json",
-			},
-			body: JSON.stringify(newTable),
-		});
 	}
 
 	watch(
@@ -133,7 +123,7 @@ export const useJeopardyStore = defineStore("jeopardy", () => {
 		() => columns,
 		(x) => {
 			console.log("columns", x.value);
-			upddateColumns();
+			localStorage.setItem("columns", JSON.stringify(columns.value));
 		},
 		{ deep: true }
 	);
@@ -142,7 +132,7 @@ export const useJeopardyStore = defineStore("jeopardy", () => {
 		() => table,
 		(x) => {
 			console.log("table", x.value);
-			updateTable();
+			localStorage.setItem("table", JSON.stringify(table.value));
 		},
 		{ deep: true }
 	);
@@ -164,6 +154,7 @@ export const useJeopardyStore = defineStore("jeopardy", () => {
 		tracker,
 		activeCell,
 		activeCategoryCell,
+		gameOngoing,
 
 		createTracker,
 		resetProgress,

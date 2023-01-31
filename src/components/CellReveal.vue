@@ -20,8 +20,6 @@ function setTrackerAnswered(name) {
 	jeop.tracker[jeop.activeCell.row][
 		jeop.columns.findIndex((column) => column.id === jeop.activeCell.column)
 	] = name;
-
-	console.log(jeop.tracker);
 }
 
 function toggleReveal(e) {

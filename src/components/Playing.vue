@@ -1,16 +1,6 @@
 <script setup>
 const jeop = useJeopardyStore();
 
-const showResetProgressBtn = computed(() => {
-	let array = [];
-	for (let i = 0; i < jeop.tracker.length; i++) {
-		const row = jeop.tracker[i].every((state) => state === false);
-		array.push(row);
-	}
-
-	return array.every((state) => state === true);
-});
-
 if (!jeop.tracker.length) {
 	jeop.createTracker();
 }
@@ -76,15 +66,15 @@ if (!jeop.tracker.length) {
 
 			<button
 				:class="[
-					showResetProgressBtn
-						? 'bg-neutral-500 text-neutral-300 cursor-not-allowed'
-						: 'bg-red-400 hover:bg-red-300 text-[#fff]',
+					jeop.gameOngoing
+						? 'bg-red-400 hover:bg-red-300 text-[#fff]'
+						: 'bg-neutral-500 text-neutral-300 cursor-not-allowed',
 					'absolute right-0 px-4 py-2 rounded duration-150',
 				]"
-				:disabled="showResetProgressBtn"
+				:disabled="!jeop.gameOngoing"
 				@click="jeop.showRestartModal = true"
 			>
-				reset progress
+				restart
 			</button>
 		</div>
 

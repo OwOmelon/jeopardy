@@ -54,6 +54,8 @@ watch(
 			<p>just press ESC to open up the menu whenever</p>
 		</div>
 	</Transition>
+
+	<!-- <test /> -->
 </template>
 
 <style lang="scss">

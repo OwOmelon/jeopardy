@@ -1,11 +1,10 @@
 <script setup>
 import { vOnClickOutside } from "@vueuse/components";
-import { useTextareaAutosize } from "@vueuse/core";
 
 const jeop = useJeopardyStore();
 
-const { textarea, input } = useTextareaAutosize();
 const editor = ref(null);
+const showSaveChangesWarning = ref(false);
 
 const cellToEdit = computed(() => {
 	return jeop.table[jeop.activeCell.row][jeop.activeCell.column];
@@ -23,6 +22,14 @@ const showSaveChanges = computed(() => {
 		: true;
 });
 
+function confirm() {
+	if (jeop.gameOngoing) {
+		showSaveChangesWarning.value = true;
+	} else {
+		saveChanges();
+	}
+}
+
 function saveChanges() {
 	if (showSaveChanges.value) {
 		cellToEdit.value.question = newQuestion.value;
@@ -32,8 +39,10 @@ function saveChanges() {
 		newAnswer.value = "";
 
 		jeop.resetActiveCell();
-	} else {
-		console.log("bruh");
+
+		if (jeop.gameOngoing) {
+			jeop.resetProgress();
+		}
 	}
 }
 
@@ -41,9 +50,8 @@ function windowKeyDown(e) {
 	e.key === "Escape"
 		? jeop.resetActiveCell()
 		: e.key === "Enter"
-		? saveChanges()
+		? confirm()
 		: "";
-	console.log(e.key);
 }
 
 window.addEventListener("keydown", windowKeyDown);
@@ -55,11 +63,10 @@ onBeforeUnmount(() => {
 
 <template>
 	<div
-		class="grid place-items-center fixed top-0 left-0 w-screen h-screen bg-[#000]/50"
+		class="grid place-items-center fixed top-0 left-0 w-screen h-screen bg-[#000]/50 backdrop-blur-sm"
 	>
 		<div
-			class="rounded-md overflow-hidden"
-			v-on-click-outside="jeop.resetActiveCell"
+			class="rounded-md overflow-hidden shadow-[0_10px_40px] shadow-[#000]/40"
 		>
 			<div
 				class="flex justify-between bg-neutral-500 p-2 border-b-2 border-neutral-600 text-[#fff] font-semibold"
@@ -73,7 +80,7 @@ onBeforeUnmount(() => {
 						<button
 							class="mr-5 hover:text-green-500 duration-150"
 							v-if="showSaveChanges"
-							@click="saveChanges"
+							@click="confirm"
 						>
 							Save Changes [Enter]
 						</button>
@@ -109,5 +116,37 @@ onBeforeUnmount(() => {
 				</div>
 			</div>
 		</div>
+
+		<Transition name="fade">
+			<div
+				v-if="showSaveChangesWarning"
+				class="fixed top-0 left-0 grid place-items-center w-screen h-screen backdrop-blur-sm"
+			>
+				<div
+					class="bg-red-400 max-w-[50%] p-5 rounded text-[#fff] shadow-[0_10px_40px] shadow-[#000]/40"
+				>
+					<h1 class="mb-3 text-3xl font-bold">!GAME ONGOING</h1>
+					<p>
+						Committing any changes in your jeopardy template will reset
+						your game progress. This action cannot be undone. Do you wish
+						to continue?
+					</p>
+					<div class="mt-3">
+						<button
+							class="bg-[#fff] hover:bg-red-300 p-3 rounded text-red-400 hover:text-[#fff] duration-150"
+							@click="jeop.resetActiveCell"
+						>
+							cancel
+						</button>
+						<button
+							class="bg-[#fff] hover:bg-red-300 p-3 ml-5 rounded text-red-400 hover:text-[#fff] duration-150"
+							@click="saveChanges"
+						>
+							save changes
+						</button>
+					</div>
+				</div>
+			</div>
+		</Transition>
 	</div>
 </template>

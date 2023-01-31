@@ -1,13 +1,5 @@
 <script setup>
 const jeop = useJeopardyStore();
-
-function test() {
-	jeop.participants.forEach((participant) => {
-		participant.points = 0;
-	});
-
-	console.log(jeop.participants);
-}
 </script>
 
 <template>
@@ -31,7 +23,7 @@ function test() {
 				</button>
 				<button
 					class="bg-[#fff] hover:bg-red-300 p-3 ml-5 rounded text-red-400 hover:text-[#fff] duration-150"
-					@click="jeop.resetProgress"
+					@click="(jeop.showRestartModal = false), jeop.resetProgress()"
 				>
 					restart
 				</button>

@@ -20,12 +20,6 @@ function addParticipant() {
 		newParticipant.value = "";
 	}
 }
-
-function test() {
-	jeop.columns.forEach((column) => {
-		column.name = column.id;
-	});
-}
 </script>
 
 <template>
@@ -138,8 +132,6 @@ function test() {
 				>
 					edit
 				</button>
-
-				<!-- <button class="on-focus btn" @click="test">edit</button> -->
 				<button
 					class="on-focus btn"
 					v-text="jeop.currentView === jeop.views[1] ? 'resume' : 'start'"
