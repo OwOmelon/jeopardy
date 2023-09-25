@@ -18,10 +18,6 @@ const emit = defineEmits<{
 	"on-mouse-leave": [];
 }>();
 
-const missingData = computed<boolean>(() => {
-	return !props.data.question || !props.data.answer;
-});
-
 const textDisplay = computed<string>(() => {
 	const question = props.data.question || "Add Question";
 	const answer = props.data.answer || "Add Answer";
@@ -33,9 +29,12 @@ const textDisplay = computed<string>(() => {
 <template>
 	<td
 		:class="[
-			missingData
-				? 'bg-stone-500 text-stone-50'
-				: 'bg-stone-300 text-stone-800',
+			{
+				'td-missing-data': template.cellHasMissingData(
+					props.rowID,
+					props.columnID,
+				),
+			},
 			'text-xs',
 		]"
 		@mouseenter="emit('on-mouse-enter', props.rowID, props.columnID)"

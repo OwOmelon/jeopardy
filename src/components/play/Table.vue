@@ -15,12 +15,15 @@ const template = useTemplateStore();
 			</th>
 		</tr>
 
-		<tr v-for="row in template.tableDisplay">
+		<tr v-for="(rowValue, rowKey, rowIndex) in template.tableDisplay">
 			<td
-				v-for="cell in row"
-				class="grid place-items-center bg-stone-300 text-lg hover:bg-red-400 hover:text-white"
+				v-for="(cellValue, cellKey, cellIndex) in rowValue"
+				:class="[
+					{ 'td-missing-data': template.cellHasMissingData(rowKey, cellKey) },
+					'grid place-items-center hover:bg-red-400 hover:text-white',
+				]"
 			>
-				<span>{{ cell.points }}</span>
+				<span>{{ cellValue.points }}</span>
 			</td>
 		</tr>
 	</table>
