@@ -36,17 +36,17 @@ function TDMouseLeave(): void {
 	<div>
 		<TemplateNameTextBox />
 		
-		<table class="m-auto grid max-w-[1000px] gap-5">
+		<table class="m-auto grid grid-cols-[auto,_900px] gap-5">
 		<TRPoints />
 		<TRCategories />
 
-		<div class="flex w-[90vw] max-w-[900px] flex-col gap-3">
+		<div class="flex flex-col gap-3">
 			<TransitionGroup
 				tag="tr"
 				move-class="duration-300 ease-out"
 				v-for="(rowValue, rowKey, rowIndex) in template.tableDisplay"
 				:key="rowKey"
-				class="relative grid w-full grid-cols-5 gap-3"
+				class="relative grid grid-cols-5 gap-3"
 			>
 				<template
 					v-for="(cellValue, cellKey, columnIndex) in rowValue"
