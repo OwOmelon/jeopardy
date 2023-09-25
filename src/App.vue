@@ -47,7 +47,7 @@ input[type="number"] {
 }
 
 td {
-  @apply h-20 cursor-pointer rounded p-2 shadow !shadow-black/30 transition-[box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100;
+  @apply h-20 cursor-pointer rounded p-2 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100;
 }
 </style>
 

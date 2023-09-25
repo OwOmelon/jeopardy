@@ -7,13 +7,19 @@ const template = useTemplateStore();
 <template>
 	<table class="flex w-[900px] flex-col gap-5">
 		<tr class="items-end">
-			<th v-for="category in template.columns" class="bg-red-400 text-white rounded p-2 shadow shadow-black/30">
+			<th
+				v-for="category in template.columns"
+				class="rounded bg-red-400 p-2 text-white shadow shadow-black/30"
+			>
 				{{ category.name || category.id }}
 			</th>
 		</tr>
 
 		<tr v-for="row in template.tableDisplay">
-			<td v-for="cell in row" class="grid place-items-center bg-stone-300 text-lg">
+			<td
+				v-for="cell in row"
+				class="grid place-items-center bg-stone-300 text-lg hover:bg-red-400 hover:text-white"
+			>
 				<span>{{ cell.points }}</span>
 			</td>
 		</tr>
