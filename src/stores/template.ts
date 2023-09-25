@@ -75,6 +75,10 @@ export const useTemplateStore = defineStore("template", () => {
 		},
 	});
 
+	function cellHasMissingData(row: Row, column: Category["id"]): boolean {
+		return rawTable.value[row][column].question && rawTable.value[row][column].answer ? false : true;
+	}
+
 	function createTemplate(): RawTemplateData {
 		console.log("create template");
 
@@ -180,6 +184,7 @@ export const useTemplateStore = defineStore("template", () => {
 		columns,
 		rawTable,
 		rawTemplateData,
+		cellHasMissingData,
 		createTemplate,
 
 		//  ----
