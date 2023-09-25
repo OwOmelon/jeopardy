@@ -21,7 +21,7 @@ const players = usePlayersStore();
 			props.textInputLength
 				? 'bg-red-400 text-white hover:bg-red-300'
 				: 'cursor-not-allowed bg-stone-400',
-			'mt-2 flex w-[85px] items-center justify-center gap-2 rounded px-2 text-xl shadow shadow-black/30 transition-colors',
+			'mt-2 flex items-center justify-center gap-2 rounded px-2 text-xl shadow shadow-black/30 transition-colors',
 		]"
 		@click="emit('save-changes')"
 	>

@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { useModalStore } from "../../stores/modals";
 import { usePlayersStore } from "../../stores/players";
+import { useModesStore } from "../../stores/modes";
 import { vOnClickOutside } from "@vueuse/components";
 
 import ModalWrapper from "../ModalWrapper.vue";
@@ -11,6 +12,7 @@ import PlayerLI from "./PlayerLI.vue";
 
 const modal = useModalStore();
 const players = usePlayersStore();
+const modes = useModesStore();
 
 const textBox = ref<HTMLInputElement | null>(null);
 const textInput = ref<string>("");
@@ -29,6 +31,11 @@ function saveChanges(): void {
 
 	textInput.value = "";
 }
+
+function changeMode(mode: typeof modes.current) {
+	modes.current = mode
+	modal.mainMenu = false
+}
 </script>
 
 <template>
@@ -43,7 +50,11 @@ function saveChanges(): void {
 		>
 			<h1 class="text-3xl font-bold">JEOPARDY</h1>
 
-			<TextBox ref="textBox" v-model="textInput" @save-changes="saveChanges" />
+			<TextBox
+				ref="textBox"
+				v-model="textInput"
+				@save-changes="saveChanges"
+			/>
 
 			<SaveChangesBtn
 				:text-input-length="textInput.length"
@@ -58,7 +69,7 @@ function saveChanges(): void {
 				</p>
 			</Transition>
 
-			<TransitionGroup tag="ul" name="list-slide-left" class="relative">
+			<TransitionGroup tag="ul" name="list-slide-left" class="relative mb-3">
 				<PlayerLI
 					v-for="player in players.players"
 					:key="player.id"
@@ -72,6 +83,23 @@ function saveChanges(): void {
 					"
 				/>
 			</TransitionGroup>
+
+			<button type="button" class="mode-btn" @click="changeMode('edit')">
+				edit
+			</button>
+			<button
+				type="button"
+				class="mode-btn ml-3"
+				@click="changeMode('play')"
+			>
+				play
+			</button>
 		</div>
 	</ModalWrapper>
 </template>
+
+<style scoped lang="postcss">
+.mode-btn {
+	@apply bg-red-400 hover:bg-red-300 shadow shadow-black/30 transition-colors text-white px-2 rounded text-xl;
+}
+</style>
