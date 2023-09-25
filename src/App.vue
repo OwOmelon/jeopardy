@@ -4,6 +4,7 @@ import { useModesStore } from './stores/modes'
 import debug from "./components/debug.vue";
 import MainMenu from "./components/MainMenuModal/Modal.vue";
 import TemplateEditor from "./components/edit/TemplateEditor.vue";
+import PlayTable from "./components/play/Table.vue";
 
 const modes = useModesStore()
 </script>
@@ -12,6 +13,7 @@ const modes = useModesStore()
   <MainMenu />
   <Transition name="fade">
     <TemplateEditor v-if="modes.current === 'edit'" />
+    <PlayTable v-else-if="modes.current === 'play'" />
   </Transition>
 
   <debug />
