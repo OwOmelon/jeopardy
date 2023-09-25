@@ -23,7 +23,7 @@ const template = useTemplateStore();
 					'grid place-items-center hover:bg-red-400 hover:text-white',
 				]"
 			>
-				<span>{{ cellValue.points }}</span>
+				<span v-if="!template.cellHasMissingData(rowKey, cellKey)">{{ cellValue.points }}</span>
 			</td>
 		</tr>
 	</table>
