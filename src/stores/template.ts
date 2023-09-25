@@ -1,7 +1,7 @@
 import { ref, computed, watch, watchEffect, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 
-import type { Guest } from "./players";
+import type { Guest } from "./guests";
 
 export type Row = `row${number}`;
 
