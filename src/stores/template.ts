@@ -1,7 +1,7 @@
 import { ref, computed, watch, watchEffect, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 
-import type { Player } from "./players";
+import type { Guest } from "./players";
 
 export type Row = `row${number}`;
 
@@ -24,7 +24,7 @@ export type RawTable = {
 export type TableDisplayCell = {
 	points: number;
 	category: Category["name"];
-	answeredBy: null | Player["id"];
+	answeredBy: null | Guest["id"];
 } & RawTableCell;
 
 export type TableDisplay = {

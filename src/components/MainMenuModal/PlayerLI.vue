@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { usePlayersStore } from "../../stores/players";
+import { useGuestsStore } from "../../stores/guests";
 import { Icon } from "@iconify/vue";
 
-import type { Player } from "../../stores/players";
+import type { Guest } from "../../stores/guests";
 
 const props = defineProps<{
-	player: Player;
+	guest: Guest;
 }>();
 
 const emit = defineEmits<{
-	"set-text-input-to-player-name": [];
+	"set-text-input-to-guest-name": [];
 	"reset-text-box": [];
 }>();
 
-const players = usePlayersStore();
+const guests = useGuestsStore();
 
 const currentlyEditing = computed<boolean | "active">(() => {
-	return players.activePlayerID
-		? players.activePlayerID === props.player.id
+	return guests.activePlayerID
+		? guests.activePlayerID === props.guest.id
 			? "active"
 			: true
 		: false;
@@ -36,7 +36,7 @@ const currentlyEditing = computed<boolean | "active">(() => {
 			'transition-color group flex items-center justify-between rounded px-2 duration-150',
 		]"
 	>
-		<span>{{ player.name }}</span>
+		<span>{{ guest.name }}</span>
 
 		<div
 			:class="[
@@ -52,12 +52,12 @@ const currentlyEditing = computed<boolean | "active">(() => {
 				type="button"
 				@click="
 					() => {
-						if (players.activePlayerID === props.player.id) {
-							players.activePlayerID = '';
+						if (guests.activePlayerID === props.guest.id) {
+							guests.activePlayerID = '';
 							emit('reset-text-box');
 						} else {
-							players.activePlayerID = props.player.id;
-							emit('set-text-input-to-player-name');
+							guests.activePlayerID = props.guest.id;
+							emit('set-text-input-to-guest-name');
 						}
 					}
 				"
@@ -70,7 +70,7 @@ const currentlyEditing = computed<boolean | "active">(() => {
 					"
 				/>
 			</button>
-			<button type="button" @click="players.deletePlayer(props.player.id)">
+			<button type="button" @click="guests.deletePlayer(props.guest.id)">
 				<Icon icon="material-symbols:delete-rounded" />
 			</button>
 		</div>

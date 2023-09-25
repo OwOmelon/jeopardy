@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useModalStore } from "../../stores/modals";
-import { usePlayersStore } from "../../stores/players";
+import { useGuestsStore } from "../../stores/guests";
 import { useModesStore } from "../../stores/modes";
 import { vOnClickOutside } from "@vueuse/components";
 
@@ -11,21 +11,21 @@ import SaveChangesBtn from "./SaveChangesBtn.vue";
 import PlayerLI from "./PlayerLI.vue";
 
 const modal = useModalStore();
-const players = usePlayersStore();
+const guests = useGuestsStore();
 const modes = useModesStore();
 
 const textBox = ref<HTMLInputElement | null>(null);
 const textInput = ref<string>("");
 
 function saveChanges(): void {
-	if (players.activePlayerID) {
-		players.editPlayerName(players.activePlayerID, textInput.value);
+	if (guests.activePlayerID) {
+		guests.editPlayerName(guests.activePlayerID, textInput.value);
 		textBox.value?.blur();
 
-		players.activePlayerID = "";
+		guests.activePlayerID = "";
 	} else {
 		if (textInput.value) {
-			players.addPlayer(textInput.value);
+			guests.addPlayer(textInput.value);
 		}
 	}
 
@@ -61,20 +61,20 @@ function changeMode(mode: typeof modes.current) {
 				@save-changes="saveChanges"
 			/>
 
-			<h2 class="mt-3 text-xl font-semibold">PLAYERS:</h2>
+			<h2 class="mt-3 text-xl font-semibold">guests:</h2>
 
 			<Transition name="fade" leave-active-class="absolute duration-150">
-				<p v-if="!players.players.length" class="text-sm">
+				<p v-if="!guests.list.length" class="text-sm">
 					nobody to play with :(
 				</p>
 			</Transition>
 
 			<TransitionGroup tag="ul" name="list-slide-left" class="relative mb-3">
 				<PlayerLI
-					v-for="player in players.players"
-					:key="player.id"
-					:player="player"
-					@set-text-input-to-player-name="textInput = player.name"
+					v-for="guest in guests.guests"
+					:key="guest.id"
+					:guest="guest"
+					@set-text-input-to-guest-name="textInput = guest.name"
 					@reset-text-box="
 						() => {
 							textBox?.blur();

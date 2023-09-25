@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { usePlayersStore } from "../../stores/players";
+import { useGuestsStore } from "../../stores/guests";
 
 const props = defineProps<{
 	textInputLength: number;
@@ -10,7 +10,7 @@ const emit = defineEmits<{
 	"save-changes": [];
 }>();
 
-const players = usePlayersStore();
+const guests = useGuestsStore();
 </script>
 
 <template>
@@ -25,9 +25,9 @@ const players = usePlayersStore();
 		]"
 		@click="emit('save-changes')"
 	>
-		<span>{{ players.activePlayerID ? "edit" : "add" }}</span>
+		<span>{{ guests.activePlayerID ? "edit" : "add" }}</span>
 		<Icon
-			:icon="players.activePlayerID ? 'ion:checkmark-round' : 'ion:plus-round'"
+			:icon="guests.activePlayerID ? 'ion:checkmark-round' : 'ion:plus-round'"
 		/>
 	</button>
 </template>

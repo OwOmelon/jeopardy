@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { usePlayersStore } from "../../stores/players";
+import { useGuestsStore } from "../../stores/guests";
 
 const props = defineProps<{
 	modelValue: string;
@@ -11,7 +11,7 @@ const emit = defineEmits<{
 	"update:modelValue": [string];
 }>();
 
-const players = usePlayersStore();
+const guests = useGuestsStore();
 
 const textBox = ref<HTMLInputElement | null>(null);
 const writableModalValue = computed<string>({
@@ -37,24 +37,24 @@ defineExpose({ blur });
 		v-model="writableModalValue"
 		type="text"
 		:placeholder="
-			players.activePlayerID
-				? 'edit player name'
-				: players.playerLimitReached
-				? 'player limit reached'
-				: 'add player'
+			guests.activePlayerID
+				? 'edit guest name'
+				: guests.playerLimitReached
+				? 'guest limit reached'
+				: 'add guest'
 		"
 		maxlength="12"
 		:disabled="
-			players.playerLimitReached
-				? players.activePlayerID
+			guests.playerLimitReached
+				? guests.activePlayerID
 					? false
 					: true
 				: false
 		"
 		@keydown.enter="emit('save-changes')"
 		:class="[
-			players.playerLimitReached
-				? players.activePlayerID
+			guests.playerLimitReached
+				? guests.activePlayerID
 					? 'bg-stone-100'
 					: 'bg-neutral-400 placeholder:text-neutral-500'
 				: 'bg-stone-100',
