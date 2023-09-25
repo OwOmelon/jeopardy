@@ -35,8 +35,8 @@ const textDisplay = computed<string>(() => {
 		:class="[
 			missingData
 				? 'bg-stone-500 text-stone-50'
-				: 'bg-stone-400 text-stone-800',
-			'h-20 cursor-pointer rounded p-2 text-xs shadow !shadow-black/30 transition-[box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100',
+				: 'bg-stone-300 text-stone-800',
+			'text-xs',
 		]"
 		@mouseenter="emit('on-mouse-enter', props.rowID, props.columnID)"
 		@mouseleave="emit('on-mouse-leave')"

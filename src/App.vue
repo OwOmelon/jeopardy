@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useModesStore } from './stores/modes'
+import { useModesStore } from "./stores/modes";
 
 import debug from "./components/debug.vue";
 import MainMenu from "./components/MainMenuModal/Modal.vue";
 import TemplateEditor from "./components/edit/TemplateEditor.vue";
 import PlayTable from "./components/play/Table.vue";
 
-const modes = useModesStore()
+const modes = useModesStore();
 </script>
 
 <template>
@@ -29,7 +29,7 @@ const modes = useModesStore()
 }
 
 body {
-  @apply bg-stone-200 font-["Poppins",_sans-serrif] text-stone-500;
+  @apply bg-stone-100 font-["Poppins",_sans-serrif] text-stone-500;
 }
 
 #app {
@@ -44,6 +44,10 @@ input::-webkit-inner-spin-button {
 
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+td {
+  @apply h-20 cursor-pointer rounded p-2 shadow !shadow-black/30 transition-[box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100;
 }
 </style>
 
