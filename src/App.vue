@@ -1,12 +1,18 @@
 <script setup lang="ts">
+import { useModesStore } from './stores/modes'
+
 import debug from "./components/debug.vue";
 import MainMenu from "./components/MainMenuModal/Modal.vue";
-import TemplateEditor from "./components/TemplateEditor/TemplateEditor.vue";
+import TemplateEditor from "./components/edit/TemplateEditor.vue";
+
+const modes = useModesStore()
 </script>
 
 <template>
   <MainMenu />
-  <TemplateEditor />
+  <Transition name="fade">
+    <TemplateEditor v-if="modes.current === 'edit'" />
+  </Transition>
 
   <debug />
 </template>
