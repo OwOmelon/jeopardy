@@ -75,7 +75,7 @@ function TDMouseLeave(): void {
 
 <style scoped lang="postcss">
 :deep(th > div) {
-	@apply relative rounded border-y-2 border-transparent bg-white shadow !shadow-black/30 transition-[border-color,_box-shadow,_transform];
+	@apply relative rounded border-y-2 border-transparent border-white bg-white shadow !shadow-black/30 transition-[border-color,_box-shadow,_transform];
 }
 
 :deep(th > div:has(input:focus, span:focus)) {
