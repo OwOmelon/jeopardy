@@ -18,7 +18,9 @@ const emit = defineEmits<{
 	"on-mouse-leave": [];
 }>();
 
-const textDisplay = computed<string>(() => {
+const textDisplay = computed<number | string>(() => {
+	if (!template.editing) return props.data.points;
+
 	const question = props.data.question || "Add Question";
 	const answer = props.data.answer || "Add Answer";
 
@@ -35,6 +37,7 @@ const textDisplay = computed<string>(() => {
 					props.columnID,
 				),
 			},
+			{ 'grid place-items-center !text-lg': !template.editing },
 			'text-xs',
 		]"
 		@mouseenter="emit('on-mouse-enter', props.rowID, props.columnID)"
