@@ -22,8 +22,8 @@ const TDHovered = ref<{
 });
 
 const horizontalTrTemplateColumns = computed<string>(() => {
-	return `repeat(${template.categoriesDisplay.length}, minmax(0, 1fr))`
-})
+	return `repeat(${template.categoriesDisplay.length}, minmax(0, 1fr))`;
+});
 
 function TDMouseEnter(row: Row, column: Category["id"]): void {
 	TDHovered.value.row = row;
@@ -34,15 +34,9 @@ function TDMouseLeave(): void {
 	TDHovered.value.row = null;
 	TDHovered.value.column = null;
 }
-
-function showColumn(column: Category["id"]): boolean {
-	return !template.editing ? !template.columnIsEmpty(column) : true;
-}
 </script>
 
 <template>
-	<p class="fixed top-0 left-0">{{horizontalTrTemplateColumns}}</p>
-
 	<div>
 		<TemplateNameTextBox />
 
@@ -62,18 +56,16 @@ function showColumn(column: Category["id"]): boolean {
 						v-for="(cellValue, cellKey, columnIndex) in rowValue"
 						:key="cellKey"
 					>
-						<template v-if="showColumn(cellKey)">
-							<TD
-								:row-i-d="rowKey"
-								:column-i-d="cellKey"
-								:data="cellValue"
-								:hovered="
-									rowKey === TDHovered.row && cellKey === TDHovered.column
-								"
-								@on-mouse-enter="TDMouseEnter"
-								@on-mouse-leave="TDMouseLeave"
-							/>
-						</template>
+						<TD
+							:row-i-d="rowKey"
+							:column-i-d="cellKey"
+							:data="cellValue"
+							:hovered="
+								rowKey === TDHovered.row && cellKey === TDHovered.column
+							"
+							@on-mouse-enter="TDMouseEnter"
+							@on-mouse-leave="TDMouseLeave"
+						/>
 					</template>
 				</TransitionGroup>
 			</div>
@@ -97,13 +89,5 @@ function showColumn(column: Category["id"]): boolean {
 
 :deep(th > div:has(input:focus, span:focus)) {
 	@apply -translate-y-2 scale-110 border-b-stone-600 shadow-lg;
-}
-
-td {
-	@apply h-20 cursor-pointer rounded bg-stone-300 p-2 text-stone-600 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100;
-}
-
-.td-missing-data {
-	@apply !bg-stone-500 !text-stone-100;
 }
 </style>
