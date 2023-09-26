@@ -27,23 +27,32 @@ watch(
 
 <template>
 	<th>
-		<div class="group relative">
+		<div
+			:class="[
+				{ '!bg-red-400 !text-white': !template.editing },
+				'group relative',
+			]"
+		>
 			<span
 				ref="textBox"
 				:contenteditable="template.editing"
-				class="p-2 outline-none block"
+				class="outline-none block p-2"
 				@input="textInput = ($event.target as HTMLSpanElement).innerText"
 				@keydown.enter="textBox?.blur()"
 				@blur="emit('change-category-name', textInput, props.category.id)"
-				>{{ props.category.name }}</span
+				>{{
+					template.editing
+						? props.category.name
+						: props.category.name || props.category.id
+				}}</span
 			>
 
-			<p
+			<span
 				v-if="!textInput.length"
 				class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-50"
 			>
 				{{ props.category.id }}
-			</p>
+			</span>
 
 			<DragHandle v-if="template.editing" />
 		</div>
