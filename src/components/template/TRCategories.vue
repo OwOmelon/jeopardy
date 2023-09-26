@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
 import THCategory from "./THCategory.vue";
@@ -22,13 +23,13 @@ function changeCategoryName(newName: string, id: Category["id"]): void {
 
 <template>
 	<draggable
-		v-model="template.columns"
+		v-model="template.categoriesDisplay"
 		item-key="element"
 		tag="tr"
 		handle=".handle"
 		:animation="200"
 		:disabled="!template.editing"
-		class="col-start-2 grid grid-cols-5 items-end gap-3"
+		class="col-start-2 items-end gap-3"
 	>
 		<template #item="{ element }">
 			<THCategory

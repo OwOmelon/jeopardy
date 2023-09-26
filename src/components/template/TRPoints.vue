@@ -24,7 +24,7 @@ function updatePoints(newPoints: number, rowIndex: number) {
 		handle=".handle"
 		:animation="200"
 		:disabled="!template.editing"
-		class="col-start-1 row-start-2 grid items-center gap-3"
+		class="col-start-1 row-start-2 !grid-cols-none items-center gap-3"
 	>
 		<template #item="{ element, index }">
 			<THPoints
