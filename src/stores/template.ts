@@ -45,8 +45,9 @@ export type RawTemplateData = {
 // ------------------------------
 
 export const useTemplateStore = defineStore("template", () => {
-	const currentTemplateID = ref<string>("");
+	const editing = ref<boolean>(true);
 
+	const currentTemplateID = ref<string>("");
 	const name = ref<string>("");
 	const points = ref<number[]>([]);
 	const rows = ref<Row[]>([]);
@@ -76,7 +77,10 @@ export const useTemplateStore = defineStore("template", () => {
 	});
 
 	function cellHasMissingData(row: Row, column: Category["id"]): boolean {
-		return rawTable.value[row][column].question && rawTable.value[row][column].answer ? false : true;
+		return rawTable.value[row][column].question &&
+			rawTable.value[row][column].answer
+			? false
+			: true;
 	}
 
 	function createTemplate(): RawTemplateData {
@@ -177,6 +181,7 @@ export const useTemplateStore = defineStore("template", () => {
 	// ------------------------------
 
 	return {
+		editing,
 		currentTemplateID,
 		name,
 		points,
