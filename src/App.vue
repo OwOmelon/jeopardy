@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { useModesStore } from "./stores/modes";
-
 import debug from "./components/debug.vue";
 import MainMenu from "./components/MainMenuModal/Modal.vue";
 import Template from "./components/template/Template.vue";
-
-const modes = useModesStore();
 </script>
 
 <template>

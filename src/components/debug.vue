@@ -50,9 +50,9 @@ const stuff = computed(() => {
 // ---------------
 
 function func() {
-	const a = JSON.parse('')
+	const a = JSON.parse("");
 
-	console.log(a ?? null)
+	console.log(a ?? null);
 }
 </script>
 
@@ -66,7 +66,9 @@ function func() {
 		<div
 			class="absolute min-w-[400px] rounded border-[1px] border-white bg-black/50 p-3 text-xs text-white backdrop-blur-sm"
 		>
-			<p class="text-center font-bold">{{ template.name || "template name" }}</p>
+			<p class="text-center font-bold">
+				{{ template.name || "template name" }}, editing: {{ template.editing }}
+			</p>
 
 			<br />
 
@@ -74,11 +76,11 @@ function func() {
 
 			<div class="relative grid grid-cols-5 grid-rows-2 text-center">
 				<template v-for="category in template.columns">
-					<div class="row-start-1 grid place-items-center">
+					<div class="row-start-1 grid items-end">
 						<p>{{ category.id }}</p>
 					</div>
 
-					<div class="row-start-2 grid place-items-center">
+					<div class="row-start-2 grid items-start">
 						<p>{{ category.name || "x" }}</p>
 					</div>
 				</template>

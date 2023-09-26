@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import type { Category } from "@/stores/template";
+import { useTemplateStore } from "@/stores/template";
 import DragHandle from "@/components/DragHandle.vue";
+import type { Category } from "@/stores/template";
 
 const props = defineProps<{
 	category: Category;
@@ -10,6 +11,8 @@ const props = defineProps<{
 const emit = defineEmits<{
 	"change-category-name": [string, Category["id"]];
 }>();
+
+const template = useTemplateStore();
 
 const textBox = ref<HTMLSpanElement | null>(null);
 const textInput = ref(props.category.name);
@@ -27,7 +30,7 @@ watch(
 		<div class="group relative">
 			<span
 				ref="textBox"
-				contenteditable
+				:contenteditable="template.editing"
 				class="p-2 outline-none block"
 				@input="textInput = ($event.target as HTMLSpanElement).innerText"
 				@keydown.enter="textBox?.blur()"
@@ -42,7 +45,7 @@ watch(
 				{{ props.category.id }}
 			</p>
 
-			<DragHandle />
+			<DragHandle v-if="template.editing" />
 		</div>
 	</th>
 </template>

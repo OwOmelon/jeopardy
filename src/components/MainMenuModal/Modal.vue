@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useModalStore } from "../../stores/modals";
-import { useGuestsStore } from "../../stores/guests";
-import { useModesStore } from "../../stores/modes";
+import { useModalStore } from "@/stores/modals";
+import { useGuestsStore } from "@/stores/guests";
+import { useTemplateStore } from "@/stores/template";
 import { vOnClickOutside } from "@vueuse/components";
 
 import ModalWrapper from "../ModalWrapper.vue";
@@ -12,7 +12,7 @@ import PlayerLI from "./PlayerLI.vue";
 
 const modal = useModalStore();
 const guests = useGuestsStore();
-const modes = useModesStore();
+const template = useTemplateStore();
 
 const textBox = ref<HTMLInputElement | null>(null);
 const textInput = ref<string>("");
@@ -32,8 +32,8 @@ function saveChanges(): void {
 	textInput.value = "";
 }
 
-function changeMode(mode: typeof modes.current) {
-	modes.current = mode
+function changeEditMode(mode: boolean) {
+	template.editing = mode
 	modal.mainMenu = false
 }
 </script>
@@ -71,7 +71,7 @@ function changeMode(mode: typeof modes.current) {
 
 			<TransitionGroup tag="ul" name="list-slide-left" class="relative mb-3">
 				<PlayerLI
-					v-for="guest in guests.guests"
+					v-for="guest in guests.list"
 					:key="guest.id"
 					:guest="guest"
 					@set-text-input-to-guest-name="textInput = guest.name"
@@ -84,13 +84,13 @@ function changeMode(mode: typeof modes.current) {
 				/>
 			</TransitionGroup>
 
-			<button type="button" class="mode-btn" @click="changeMode('edit')">
+			<button type="button" class="mode-btn" @click="changeEditMode(true)">
 				edit
 			</button>
 			<button
 				type="button"
 				class="mode-btn ml-3"
-				@click="changeMode('play')"
+				@click="changeEditMode(false)"
 			>
 				play
 			</button>

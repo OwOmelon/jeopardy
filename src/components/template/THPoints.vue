@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import { useTemplateStore } from "@/stores/template";
 import DragHandle from "@/components/DragHandle.vue";
 
 const props = defineProps<{
@@ -10,6 +11,8 @@ const props = defineProps<{
 const emit = defineEmits<{
 	"update-points": [number, number];
 }>();
+
+const template = useTemplateStore();
 
 const textBox = ref<HTMLInputElement | null>(null);
 const textInput = ref<number>(props.points);
@@ -38,12 +41,13 @@ watch(
 				ref="textBox"
 				v-model="textInput"
 				type="number"
+				:disabled="!template.editing"
 				class="w-20 bg-transparent p-2 text-center outline-none"
 				@keydown.enter="textBox?.blur()"
 				@blur="onKeydownEnter"
 			/>
 
-			<DragHandle rotate />
+			<DragHandle v-if="template.editing" rotate />
 		</div>
 	</th>
 </template>

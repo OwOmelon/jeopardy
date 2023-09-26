@@ -21,23 +21,20 @@ function changeCategoryName(newName: string, id: Category["id"]): void {
 </script>
 
 <template>
-	<div class="col-start-2">
-		<hr class="opacity-0" />
-
-		<draggable
-			v-model="template.columns"
-			item-key="element"
-			tag="tr"
-			handle=".handle"
-			:animation="200"
-			class="grid grid-cols-5 items-end gap-3"
-		>
-			<template #item="{ element }">
-				<THCategory
-					:category="element"
-					@change-category-name="changeCategoryName"
-				/>
-			</template>
-		</draggable>
-	</div>
+	<draggable
+		v-model="template.columns"
+		item-key="element"
+		tag="tr"
+		handle=".handle"
+		:animation="200"
+		:disabled="!template.editing"
+		class="col-start-2 grid grid-cols-5 items-end gap-3"
+	>
+		<template #item="{ element }">
+			<THCategory
+				:category="element"
+				@change-category-name="changeCategoryName"
+			/>
+		</template>
+	</draggable>
 </template>
