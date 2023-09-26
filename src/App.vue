@@ -37,14 +37,6 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
-
-td {
-  @apply h-20 cursor-pointer rounded bg-stone-300 p-2 text-stone-800 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100;
-}
-
-.td-missing-data {
-  @apply !bg-stone-500 !text-stone-50;
-}
 </style>
 
 <style lang="scss">
