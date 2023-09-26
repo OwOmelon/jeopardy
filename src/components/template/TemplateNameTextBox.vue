@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
 const template = useTemplateStore();
@@ -18,11 +18,18 @@ const textInput = ref<string>(template.name);
 			@blur="template.name = textInput"
 			@input="textInput = ($event.target as HTMLSpanElement).innerText"
 		>
-			{{ template.editing ? template.name : template.name || "template name" }}
+			{{
+				template.editing
+					? template.name
+					: template.name ||
+					  (template.isEmpty
+							? "your jeopardy template is empty D:"
+							: "template name")
+			}}
 		</span>
 
 		<span
-			v-if="!textInput.length"
+			v-if="!textInput.length && template.editing"
 			class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-50"
 			>template name</span
 		>

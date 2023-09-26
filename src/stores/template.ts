@@ -177,6 +177,10 @@ export const useTemplateStore = defineStore("template", () => {
 		}, {});
 	});
 
+	const isEmpty = computed<boolean>(() => {
+		return categoriesDisplay.value.length ? false : true;
+	});
+
 	const activeCellIndeces = ref<{
 		row: Row | null;
 		column: Category["id"] | null;
@@ -220,6 +224,7 @@ export const useTemplateStore = defineStore("template", () => {
 		//  ----
 
 		tableDisplay,
+		isEmpty,
 		categoriesDisplay,
 		activeCellIndeces,
 		activeCellData,
