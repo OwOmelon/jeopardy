@@ -37,10 +37,10 @@ function TDMouseLeave(): void {
 		<TemplateNameTextBox />
 
 		<table class="m-auto grid grid-cols-[auto,_900px] gap-5">
-			<TRPoints />
+			<TRPoints v-if="template.editing" />
 			<TRCategories />
 
-			<div class="flex flex-col gap-3">
+			<div class="flex flex-col row-start-2 col-start-2 gap-3">
 				<TransitionGroup
 					tag="tr"
 					move-class="duration-300 ease-out"
@@ -75,7 +75,7 @@ function TDMouseLeave(): void {
 
 <style scoped lang="postcss">
 :deep(th > div) {
-	@apply relative rounded border-y-2 border-transparent border-white bg-white shadow !shadow-black/30 transition-[border-color,_box-shadow,_transform];
+	@apply relative rounded border-y-2 border-transparent bg-white shadow !shadow-black/30 transition-[border-color,_box-shadow,_transform];
 }
 
 :deep(th > div:has(input:focus, span:focus)) {

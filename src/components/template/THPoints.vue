@@ -41,8 +41,7 @@ watch(
 				ref="textBox"
 				v-model="textInput"
 				type="number"
-				:disabled="!template.editing"
-				class="w-20 bg-transparent p-2 text-center outline-none"
+				class="w-20 bg-transparent p-2 text-center outline-none bg-white"
 				@keydown.enter="textBox?.blur()"
 				@blur="onKeydownEnter"
 			/>
