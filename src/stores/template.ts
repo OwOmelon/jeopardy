@@ -77,7 +77,7 @@ export const useTemplateStore = defineStore("template", () => {
 	});
 
 	function cellHasMissingData(row: Row, column: Category["id"]): boolean {
-		return rawTable.value[row][column].question &&
+		return rawTable.value[row][column].question ||
 			rawTable.value[row][column].answer
 			? false
 			: true;
@@ -87,12 +87,10 @@ export const useTemplateStore = defineStore("template", () => {
 		const arr: boolean[] = [];
 
 		for (let i = 0; i < rows.value.length; i++) {
-			const cell = rawTable.value[`row${i + 1}`][column];
-
-			arr.push(cell.question && cell.answer ? true : false);
+			arr.push(cellHasMissingData(`row${i + 1}`, column));
 		}
 
-		return arr.every((a) => a === false);
+		return arr.every((a) => a === true);
 	}
 
 	function createTemplate(): RawTemplateData {
@@ -151,8 +149,7 @@ export const useTemplateStore = defineStore("template", () => {
 			if (editing.value) return columns.value;
 
 			return columns.value.filter(
-				(category) =>
-					category.name.length > 0 || !columnIsEmpty(category.id),
+				(category) => category.name || !columnIsEmpty(category.id),
 			);
 		},
 
@@ -165,13 +162,13 @@ export const useTemplateStore = defineStore("template", () => {
 		return rows.value.reduce((rows, row, rowIndex) => {
 			return {
 				...rows,
-				[row]: columns.value.reduce((columns, column) => {
+				[row]: categoriesDisplay.value.reduce((categories, category) => {
 					return {
-						...columns,
-						[column.id]: {
-							...rawTable.value[row][column.id],
+						...categories,
+						[category.id]: {
+							...rawTable.value[row][category.id],
 							points: points.value[rowIndex],
-							category: column.name,
+							category: category.name,
 							answeredBy: null,
 						},
 					};
