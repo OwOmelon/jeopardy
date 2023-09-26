@@ -18,8 +18,12 @@ const emit = defineEmits<{
 	"on-mouse-leave": [];
 }>();
 
+const missingData = computed<boolean>(() => {
+	return props.data.question && props.data.answer ? false : true;
+});
+
 const textDisplay = computed<number | string>(() => {
-	if (!template.editing) return props.data.points;
+	if (!template.editing) return missingData.value ? "" : props.data.points;
 
 	const question = props.data.question || "Add Question";
 	const answer = props.data.answer || "Add Answer";
@@ -31,13 +35,11 @@ const textDisplay = computed<number | string>(() => {
 <template>
 	<td
 		:class="[
+			{ 'td-missing-data': missingData },
 			{
-				'td-missing-data': template.cellHasMissingData(
-					props.rowID,
-					props.columnID,
-				),
+				'hover:bg-red-400 hover:text-white grid place-items-center !text-lg':
+					!template.editing,
 			},
-			{ 'grid place-items-center !text-lg': !template.editing },
 			'text-xs',
 		]"
 		@mouseenter="emit('on-mouse-enter', props.rowID, props.columnID)"
