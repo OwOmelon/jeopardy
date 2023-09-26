@@ -3,10 +3,10 @@ import { defineStore } from "pinia";
 
 import type { Guest } from "./guests";
 
-export type Row = `row${number}`;
+export type Row = `row${number}`; /* row1 - row-5 */
 
 export type Category = {
-	id: `column${number}`;
+	id: `column${number}` /* column1 - column-5 */;
 	name: string;
 };
 
@@ -81,6 +81,18 @@ export const useTemplateStore = defineStore("template", () => {
 			rawTable.value[row][column].answer
 			? false
 			: true;
+	}
+
+	function columnIsEmpty(column: Category["id"]): boolean {
+		const arr: boolean[] = [];
+
+		for (let i = 0; i < rows.value.length; i++) {
+			const cell = rawTable.value[`row${i + 1}`][column];
+
+			arr.push(cell.question && cell.answer ? true : false);
+		}
+
+		return arr.every((a) => a === false);
 	}
 
 	function createTemplate(): RawTemplateData {
@@ -190,6 +202,7 @@ export const useTemplateStore = defineStore("template", () => {
 		rawTable,
 		rawTemplateData,
 		cellHasMissingData,
+		columnIsEmpty,
 		createTemplate,
 
 		//  ----
