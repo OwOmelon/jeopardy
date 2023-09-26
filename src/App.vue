@@ -3,18 +3,14 @@ import { useModesStore } from "./stores/modes";
 
 import debug from "./components/debug.vue";
 import MainMenu from "./components/MainMenuModal/Modal.vue";
-import TemplateEditor from "./components/template/TemplateEditor.vue";
-import PlayTable from "./components/play/Table.vue";
+import Template from "./components/template/Template.vue";
 
 const modes = useModesStore();
 </script>
 
 <template>
   <MainMenu />
-  <Transition name="fade">
-    <TemplateEditor v-if="modes.current === 'edit'" />
-    <PlayTable v-else-if="modes.current === 'play'" />
-  </Transition>
+  <Template />
 
   <debug />
 </template>
@@ -47,11 +43,11 @@ input[type="number"] {
 }
 
 td {
-  @apply bg-stone-300 text-stone-800 h-20 cursor-pointer rounded p-2 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100;
+  @apply h-20 cursor-pointer rounded bg-stone-300 p-2 text-stone-800 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100;
 }
 
 .td-missing-data {
-  @apply !bg-stone-500 !text-stone-50
+  @apply !bg-stone-500 !text-stone-50;
 }
 </style>
 
