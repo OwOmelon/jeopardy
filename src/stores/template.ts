@@ -146,6 +146,21 @@ export const useTemplateStore = defineStore("template", () => {
 
 	// ------------------------------
 
+	const categoriesDisplay = computed<Category[]>({
+		get() {
+			if (editing.value) return columns.value;
+
+			return columns.value.filter(
+				(category) =>
+					category.name.length > 0 || !columnIsEmpty(category.id),
+			);
+		},
+
+		set(newValue) {
+			columns.value = newValue;
+		},
+	});
+
 	const tableDisplay = computed<TableDisplay>(() => {
 		return rows.value.reduce((rows, row, rowIndex) => {
 			return {
@@ -208,6 +223,7 @@ export const useTemplateStore = defineStore("template", () => {
 		//  ----
 
 		tableDisplay,
+		categoriesDisplay,
 		activeCellIndeces,
 		activeCellData,
 		resetActiveCell,
