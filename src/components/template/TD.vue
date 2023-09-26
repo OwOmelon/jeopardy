@@ -8,6 +8,7 @@ const template = useTemplateStore();
 
 const props = defineProps<{
 	rowID: Row;
+	columnIndex: number;
 	columnID: Category["id"];
 	data: TableDisplayCell;
 	hovered: boolean;
@@ -39,6 +40,7 @@ const textDisplay = computed<number | string>(() => {
 
 <template>
 	<td
+		:style="{ gridColumnStart: props.columnIndex + 1 }"
 		:class="[{ 'td-playing': !template.editing }, missingDataStyles, 'text-xs']"
 		@mouseenter="emit('on-mouse-enter', props.rowID, props.columnID)"
 		@mouseleave="emit('on-mouse-leave')"
