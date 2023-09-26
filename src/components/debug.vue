@@ -76,7 +76,12 @@ function func() {
 
 			<div class="relative grid grid-cols-5 grid-rows-2 text-center">
 				<template v-for="category in template.columns">
-					<div class="row-start-1 grid items-end">
+					<div
+						:class="[
+							{ 'text-red-400': template.columnIsEmpty(category.id) },
+							'row-start-1 grid items-end',
+						]"
+					>
 						<p>{{ category.id }}</p>
 					</div>
 
