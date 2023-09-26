@@ -12,13 +12,13 @@ const textInput = ref<string>(template.name);
 	<div class="relative mb-5">
 		<span
 			ref="textBox"
-			contenteditable
+			:contenteditable="template.editing"
 			class="outline-none"
 			@keydown.enter="textBox?.blur()"
 			@blur="template.name = textInput"
 			@input="textInput = ($event.target as HTMLSpanElement).innerText"
 		>
-			{{ template.name }}
+			{{ template.editing ? template.name : template.name || "template name" }}
 		</span>
 
 		<span
