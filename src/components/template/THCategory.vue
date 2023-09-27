@@ -28,15 +28,12 @@ watch(
 <template>
 	<th>
 		<div
-			:class="[
-				{ '!bg-red-400 !text-white': !template.editing },
-				'group relative',
-			]"
+			class="group relative"
 		>
 			<span
 				ref="textBox"
 				:contenteditable="template.editing"
-				class="textBox outline-none block p-2"
+				:class="[{ '!bg-red-400 !text-white': !template.editing }, 'textBox outline-none block p-2']"
 				@input="textInput = ($event.target as HTMLSpanElement).innerText"
 				@keydown.enter="textBox?.blur()"
 				@blur="emit('change-category-name', textInput, props.category.id)"
