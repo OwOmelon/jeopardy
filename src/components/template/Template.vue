@@ -72,7 +72,9 @@ function TDMouseLeave(): void {
 		</table>
 	</div>
 
-	<ModalWrapper :show="template.activeCellData ? true : false">
+	<ModalWrapper
+		:show="template.activeCellData && template.editing ? true : false"
+	>
 		<TDEditor />
 	</ModalWrapper>
 </template>
