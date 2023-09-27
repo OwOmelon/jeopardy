@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
 const template = useTemplateStore();
@@ -9,11 +9,13 @@ const textInput = ref<string>(template.name);
 </script>
 
 <template>
-	<div class="relative mb-5">
+	<div
+		class="relative mx-auto mb-10 w-fit min-w-[9em] rounded bg-white text-2xl shadow shadow-black/30"
+	>
 		<span
 			ref="textBox"
 			:contenteditable="template.editing"
-			class="outline-none"
+			class="border-y-2 border-transparent outline-none focus:border-b-black p-2 transition-colors rounded-[inherit]"
 			@keydown.enter="textBox?.blur()"
 			@blur="template.name = textInput"
 			@input="textInput = ($event.target as HTMLSpanElement).innerText"
@@ -38,6 +40,6 @@ const textInput = ref<string>(template.name);
 
 <style scoped lang="postcss">
 span {
-	@apply block whitespace-nowrap text-center text-3xl font-bold;
+	@apply block whitespace-nowrap text-center font-bold;
 }
 </style>
