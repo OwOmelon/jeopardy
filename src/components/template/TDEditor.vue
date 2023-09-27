@@ -109,6 +109,6 @@ label {
 }
 
 textarea {
-	@apply mt-3 h-[150px] w-full resize-none rounded border-b-2 border-transparent bg-stone-50 p-3 outline-none transition-colors focus:border-stone-600;
+	@apply mt-3 h-[150px] w-full resize-none rounded border-b-2 border-transparent bg-stone-50 p-3 outline-none transition-colors focus:border-stone-600 shadow shadow-black/30;
 }
 </style>
