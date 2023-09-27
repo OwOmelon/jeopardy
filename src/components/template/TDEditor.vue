@@ -56,12 +56,8 @@ onUnmounted(() => {
 			<p>
 				Editing
 				<span class="font-bold">{{
-					template.activeCellData?.category ??
-					template.columns[
-						template.columns.findIndex(
-							(column) => column.name === template.activeCellData?.category,
-						)
-					].id
+					template.activeCellData?.category ||
+					template.activeCellIndeces?.column
 				}}</span>
 				for
 				<span class="font-bold">{{ template.activeCellData?.points }}</span>
