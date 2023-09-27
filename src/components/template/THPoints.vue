@@ -35,13 +35,13 @@ watch(
 </script>
 
 <template>
-	<th class="group grid place-items-center">
+	<th class="group relative grid place-items-center">
 		<div>
 			<input
 				ref="textBox"
 				v-model="textInput"
 				type="number"
-				class="w-20 bg-transparent p-2 text-center outline-none bg-white"
+				class="textBox w-20 bg-transparent p-2 text-center outline-none"
 				@keydown.enter="textBox?.blur()"
 				@blur="onKeydownEnter"
 			/>
