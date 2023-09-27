@@ -55,7 +55,7 @@ const textDisplay = computed<number | string>(() => {
 
 <style scoped lang="postcss">
 td {
-	@apply h-20 cursor-pointer rounded bg-stone-300 p-2 text-stone-600 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100;
+	@apply h-16 cursor-pointer rounded bg-stone-300 p-2 text-stone-600 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100;
 }
 
 .td-missing-data {
