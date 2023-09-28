@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, onBeforeMount } from "vue";
 import { useTemplateStore } from "../stores/template";
+import { useGuestsStore } from "../stores/guests";
 import { useDraggable } from "@vueuse/core";
 import { numToPerc, getElBoundingClientRect } from "../stores/composables";
 
 const template = useTemplateStore();
+const guests = useGuestsStore();
 
 const el = ref<HTMLElement | null>(null);
 const { x, y, style } = useDraggable(el, {
@@ -132,6 +134,10 @@ function func() {
 					<p v-else>{{ key }}: {{ value }}</p>
 				</template>
 			</template>
+
+			<div v-for="guest in guests.list">
+				<p>{{ guest.name }}: {{ guest.points }}</p>
+			</div>
 
 			<br />
 

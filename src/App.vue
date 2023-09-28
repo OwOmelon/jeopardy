@@ -1,12 +1,24 @@
 <script setup lang="ts">
+import { useTemplateStore } from "./stores/template";
+
 import debug from "./components/debug.vue";
 import MainMenu from "./components/MainMenuModal/Modal.vue";
 import Template from "./components/template/Template.vue";
+import TDReveal from "./components/tdreveal/TDReveal.vue";
+import ModalWrapper from "./components/ModalWrapper.vue";
+
+const template = useTemplateStore();
 </script>
 
 <template>
   <MainMenu />
   <Template />
+
+  <ModalWrapper
+    :show="template.activeCellData && !template.editing ? true : false"
+  >
+    <TDReveal />
+  </ModalWrapper>
 
   <debug />
 </template>
@@ -36,6 +48,10 @@ input::-webkit-inner-spin-button {
 
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.th:has(.textbox:focus) {
+  @apply -translate-y-2 scale-110 !cursor-text;
 }
 </style>
 
@@ -97,6 +113,24 @@ input[type="number"] {
   }
 }
 
+.height-auto {
+  &-enter-active,
+  &-leave-active {
+    transition: grid-template-rows 1s, opacity 1s;
+  }
+
+  &-enter-from,
+  &-leave-to {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+
+  &-enter-to,
+  &-leave-from {
+    grid-template-rows: 1fr;
+  }
+}
+
 .breathe {
   animation: breathe 1s ease-in-out infinite;
 }
@@ -110,11 +144,5 @@ input[type="number"] {
   50% {
     transform: scale(1.05);
   }
-}
-</style>
-
-<style lang="postcss">
-.th:has(.textbox:focus) {
-  @apply -translate-y-2 scale-110 !cursor-text;
 }
 </style>
