@@ -90,10 +90,7 @@ onUnmounted(() => {
 			</button>
 
 			<p class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-				<span class="font-bold">{{
-					template.activeCellData?.category ||
-					template.activeCellIndeces?.column
-				}}</span>
+				<span class="font-bold">{{ template.activeCellData?.category }}</span>
 				for
 				<span class="font-bold">{{ template.activeCellData?.points }}</span>
 			</p>

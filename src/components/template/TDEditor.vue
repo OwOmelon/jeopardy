@@ -1,3 +1,4 @@
+\
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { useTemplateStore } from "@/stores/template";
@@ -55,10 +56,7 @@ onUnmounted(() => {
 		>
 			<p>
 				Editing
-				<span class="font-bold">{{
-					template.activeCellData?.category ||
-					template.activeCellIndeces?.column
-				}}</span>
+				<span class="font-bold">{{ template.activeCellData?.category }}</span>
 				for
 				<span class="font-bold">{{ template.activeCellData?.points }}</span>
 			</p>
@@ -105,6 +103,6 @@ label {
 }
 
 textarea {
-	@apply mt-3 h-[150px] w-full resize-none rounded border-b-2 border-transparent bg-stone-50 p-3 outline-none transition-colors focus:border-stone-600 shadow shadow-black/30;
+	@apply mt-3 h-[150px] w-full resize-none rounded border-b-2 border-transparent bg-stone-50 p-3 shadow shadow-black/30 outline-none transition-colors focus:border-stone-600;
 }
 </style>

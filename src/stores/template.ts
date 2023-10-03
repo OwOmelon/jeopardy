@@ -168,7 +168,7 @@ export const useTemplateStore = defineStore("template", () => {
 						[category.id]: {
 							...rawTable.value[row][category.id],
 							points: points.value[rowIndex],
-							category: category.name,
+							category: category.name || category.id,
 							answeredBy: null,
 						},
 					};
