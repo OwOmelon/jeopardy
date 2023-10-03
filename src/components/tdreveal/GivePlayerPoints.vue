@@ -14,15 +14,16 @@ const emit = defineEmits<{
 
 <template>
 	<div class="flex flex-col justify-center gap-3 text-2xl font-bold">
-		<span v-if="props.guestList.length > 1">
-			and the {{ props.cellPoints }} points go to ?
-		</span>
+		<span>{{
+			props.guestList.length > 1
+				? `and the ${props.cellPoints} points go to ?`
+				: `does ${props.guestList[0].name} get the ${props.cellPoints} points ?`
+		}}</span>
 
-		<span v-else>
-			does {{ props.guestList[0].name }} get the {{ props.cellPoints }} points ?
-		</span>
-
-		<div v-if="props.guestList.length > 1" class="flex flex-wrap justify-center gap-3">
+		<div
+			v-if="props.guestList.length > 1"
+			class="flex flex-wrap justify-center gap-3"
+		>
 			<button
 				v-for="(guest, index) in props.guestList"
 				:key="index"
