@@ -45,7 +45,7 @@ watch(
 			>
 
 			<span
-				v-if="!textInput.length"
+				v-if="template.editing && !textInput.length"
 				class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-50"
 			>
 				{{ props.category.id }}
