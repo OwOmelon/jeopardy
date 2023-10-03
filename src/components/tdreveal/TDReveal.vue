@@ -13,33 +13,34 @@ const template = useTemplateStore();
 const guests = useGuestsStore();
 const modals = useModalStore();
 
-const procedure = ["show_question", "reveal_answer", "give_points"] as const;
-const progress = ref<(typeof procedure)[number]>("show_question");
+const procedure: { [key: number]: string } = {
+	1: "show_question",
+	2: "reveal_answer",
+	3: "give_points",
+};
 
-const progressIndex = computed<number>(() => {
-	return procedure.indexOf(progress.value);
-});
+const progress = ref<number>(1);
 
 function advanceProgress(): void {
-	if (progress.value === "give_points") return;
+	if (procedure[progress.value] === "give_points") return;
 
-	if (progress.value === "reveal_answer" && !guests.list.length) {
+	if (procedure[progress.value] === "reveal_answer" && !guests.list.length) {
 		template.resetActiveCell();
 
 		return;
 	}
 
-	progress.value = procedure[progressIndex.value + 1];
+	progress.value++;
 }
 
 function revertProgress(): void {
-	if (progress.value !== "give_points") {
+	if (procedure[progress.value] !== "give_points") {
 		template.resetActiveCell();
 
 		return;
 	}
 
-	progress.value = procedure[progressIndex.value - 1];
+	progress.value--;
 }
 
 function givePoints(guestID: Guest["id"] | null) {
@@ -108,7 +109,7 @@ onUnmounted(() => {
 				:class="[
 					{
 						'pointer-events-none opacity-0 transition-opacity':
-							progress === 'give_points',
+							procedure[progress] === 'give_points',
 					},
 					'ml-auto',
 				]"
@@ -128,10 +129,10 @@ onUnmounted(() => {
 
 			<Transition name="fade" mode="out-in">
 				<QuestionAnswer
-					v-if="progress !== 'give_points'"
+					v-if="procedure[progress] !== 'give_points'"
 					:question="template.activeCellData!.question"
 					:answer="template.activeCellData!.answer"
-					:show-answer="progress === 'reveal_answer'"
+					:show-answer="procedure[progress] === 'reveal_answer'"
 				/>
 
 				<GivePlayerPoints
