@@ -43,12 +43,20 @@ function revertProgress(): void {
 }
 
 function givePoints(guestID: Guest["id"] | null) {
-	if (guestID) {
-		const guestIndex = guests.list.findIndex((guest) => guest.id === guestID);
-		const guest = guests.list[guestIndex];
+	const guestIndex = guestID
+		? guests.list.findIndex((guest) => guest.id === guestID)
+		: -1;
+	const guest: Guest | null = guests.list?.[guestIndex] ?? null;
 
-		guest.points = guest.points + template.activeCellData!.points;
-	}
+	// if (guest) {
+	// 	guest.points = guest.points + template.activeCellData!.points;
+	// }
+
+	template.playProgressTracker[template.activeCellIndeces.row!] = {
+		[template.activeCellIndeces.column!]: guest?.name ?? "no one",
+	};
+
+	console.log(template.playProgressTracker);
 
 	template.resetActiveCell();
 }
@@ -116,6 +124,8 @@ onUnmounted(() => {
 			class="relative grid min-h-[350px] place-items-center bg-white p-5 text-center text-red-400"
 			@click="advanceProgress"
 		>
+			<p>{{ template.activeCellData?.answeredBy }}//</p>
+
 			<Transition name="fade" mode="out-in">
 				<QuestionAnswer
 					v-if="progress !== 'give_points'"

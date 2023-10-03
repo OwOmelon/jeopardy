@@ -24,7 +24,7 @@ export type RawTable = {
 export type TableDisplayCell = {
 	points: number;
 	category: Category["name"];
-	answeredBy: null | Guest["id"];
+	answeredBy: Guest["id"] | null;
 } & RawTableCell;
 
 export type TableDisplay = {
@@ -40,6 +40,12 @@ export type RawTemplateData = {
 	rows: Row[];
 	columns: Category[];
 	rawTable: RawTable;
+};
+
+//  ----
+
+export type PlayProgressTracker = {
+	[key: Row]: { [key: Category["id"]]: Guest["name"] };
 };
 
 // ------------------------------
@@ -75,6 +81,8 @@ export const useTemplateStore = defineStore("template", () => {
 			rawTable.value = newValue.rawTable;
 		},
 	});
+
+	const playProgressTracker = ref<PlayProgressTracker>({});
 
 	function cellHasMissingData(row: Row, column: Category["id"]): boolean {
 		return rawTable.value[row][column].question ||
@@ -169,7 +177,8 @@ export const useTemplateStore = defineStore("template", () => {
 							...rawTable.value[row][category.id],
 							points: points.value[rowIndex],
 							category: category.name || category.id,
-							answeredBy: null,
+							answeredBy:
+								playProgressTracker.value?.[row]?.[category.id] ?? null,
 						},
 					};
 				}, {}),
@@ -217,6 +226,7 @@ export const useTemplateStore = defineStore("template", () => {
 		columns,
 		rawTable,
 		rawTemplateData,
+		playProgressTracker,
 		cellHasMissingData,
 		columnIsEmpty,
 		createTemplate,
