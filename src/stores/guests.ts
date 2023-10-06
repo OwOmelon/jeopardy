@@ -13,29 +13,43 @@ export const useGuestsStore = defineStore("guests", () => {
   const activeGuestID = ref<string>("");
 
   const guestLimitReached = computed<boolean>(() => {
-    const playerLimit = 6;
+    const guestLimit = 6;
 
-    return list.value.length < playerLimit ? false : true;
+    return list.value.length < guestLimit ? false : true;
   });
 
-  function addGuest(name: string): void {
-    if (guestLimitReached.value) return 
+  const getGuest = (id: string): Guest | null => {
+    const guestIndex = list.value.findIndex((guest) => guest.id === id);
 
-    const newPlayer: Guest = {
+    return list.value[guestIndex] ?? null;
+  };
+
+  function addGuest(name: string): void {
+    if (guestLimitReached.value) return;
+
+    const newGuest: Guest = {
       id: uuidv4(),
       name: name,
       points: 0,
     };
 
-    list.value.push(newPlayer);
+    list.value.push(newGuest);
   }
 
   function editGuestName(id: string, newName: string): void {
-    const playerIndex = list.value.findIndex((guest) => guest.id === id);
+    const guest = getGuest(id)
 
-    if (playerIndex === -1) return;
+    if (!guest) return;
 
-    list.value[playerIndex].name = newName;
+    guest.name = newName;
+  }
+
+  function editPoints(id: string, points: number) {
+    const guest = getGuest(id)
+
+    if (!guest) return;
+
+    guest.points = points
   }
 
   function deleteGuest(id: string): void {
