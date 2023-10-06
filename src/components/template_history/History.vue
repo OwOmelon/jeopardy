@@ -2,11 +2,23 @@
 import { ref, computed, watch } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { v4 as uuidv4 } from "uuid";
+
 import type { RawTemplateData } from "@/stores/template";
+
+import HistoryItem from "./HistoryItem.vue";
 
 const template = useTemplateStore();
 
 const show = ref<boolean>(false);
+const activeHistoryItem = ref<number>(-1);
+
+function setActiveItem(index: number) {
+	if (index === activeHistoryItem.value) {
+		activeHistoryItem.value = -1;
+	} else {
+		activeHistoryItem.value = index;
+	}
+}
 
 const history = ref<RawTemplateData[]>([]);
 
@@ -33,10 +45,17 @@ watch(
 	<ul
 		:class="[
 			{ 'translate-x-full': show },
-			'fixed right-0 top-0 w-[450px] rounded bg-black/50 p-2 text-xs text-white transition-transform duration-300',
+			'fixed right-0 top-0 z-50 w-[450px] rounded bg-black/50 p-2 text-xs text-white transition-transform duration-300 backdrop-blur',
 		]"
 	>
-		<li v-for="template in history" :key="template.id">{{ template.id }}</li>
+		<HistoryItem
+			v-for="(template, index) in history"
+			:key="template.id"
+			:template="template"
+			:index="index"
+			:is-active="index === activeHistoryItem"
+			@set-active-item="setActiveItem"
+		/>
 
 		<button
 			type="button"
