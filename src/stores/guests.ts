@@ -15,7 +15,7 @@ export const useGuestsStore = defineStore("guests", () => {
   const guestLimitReached = computed<boolean>(() => {
     const playerLimit = 6;
 
-    return list.value.length <= playerLimit ? false : true;
+    return list.value.length < playerLimit ? false : true;
   });
 
   function addGuest(name: string): void {
