@@ -38,7 +38,7 @@ const emit = defineEmits<{
 			<button
 				v-if="props.guestList.length === 1"
 				type="button"
-				class="player-btn"
+				class="guest-btn"
 				@click="emit('give-points', props.guestList[0].id)"
 			>
 				yup
@@ -46,7 +46,7 @@ const emit = defineEmits<{
 
 			<button
 				type="button"
-				class="player-btn flex items-center gap-2"
+				class="guest-btn flex items-center gap-2"
 				@click="emit('give-points', null)"
 			>
 				{{ props.guestList.length > 1 ? "no one" : "nope" }}

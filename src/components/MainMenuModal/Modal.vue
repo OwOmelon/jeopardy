@@ -18,11 +18,11 @@ const textBox = ref<HTMLInputElement | null>(null);
 const textInput = ref<string>("");
 
 function saveChanges(): void {
-	if (guests.activePlayerID) {
-		guests.editPlayerName(guests.activePlayerID, textInput.value);
+	if (guests.activeGuestID) {
+		guests.editPlayerName(guests.activeGuestID, textInput.value);
 		textBox.value?.blur();
 
-		guests.activePlayerID = "";
+		guests.activeGuestID = "";
 	} else {
 		if (textInput.value) {
 			guests.addPlayer(textInput.value);

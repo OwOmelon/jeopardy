@@ -25,9 +25,9 @@ const guests = useGuestsStore();
 		]"
 		@click="emit('save-changes')"
 	>
-		<span>{{ guests.activePlayerID ? "edit" : "add" }}</span>
+		<span>{{ guests.activeGuestID ? "edit" : "add" }}</span>
 		<Icon
-			:icon="guests.activePlayerID ? 'ion:checkmark-round' : 'ion:plus-round'"
+			:icon="guests.activeGuestID ? 'ion:checkmark-round' : 'ion:plus-round'"
 		/>
 	</button>
 </template>

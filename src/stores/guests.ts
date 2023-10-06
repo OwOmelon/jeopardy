@@ -10,15 +10,17 @@ export type Guest = {
 
 export const useGuestsStore = defineStore("guests", () => {
   const list = ref<Guest[]>([]);
-  const activePlayerID = ref<string>("");
+  const activeGuestID = ref<string>("");
 
-  const playerLimitReached = computed<boolean>(() => {
+  const guestLimitReached = computed<boolean>(() => {
     const playerLimit = 6;
 
     return list.value.length <= playerLimit ? false : true;
   });
 
-  function addPlayer(name: string): void {
+  function addGuest(name: string): void {
+    if (guestLimitReached.value) return 
+
     const newPlayer: Guest = {
       id: uuidv4(),
       name: name,
@@ -28,30 +30,30 @@ export const useGuestsStore = defineStore("guests", () => {
     list.value.push(newPlayer);
   }
 
-  function editPlayerName(id: string, newName: string): void {
-    const playerIndex = list.value.findIndex((player) => player.id === id);
+  function editGuestName(id: string, newName: string): void {
+    const playerIndex = list.value.findIndex((guest) => guest.id === id);
 
     if (playerIndex === -1) return;
 
     list.value[playerIndex].name = newName;
   }
 
-  function deletePlayer(id: string): void {
-    if (activePlayerID.value === id) {
-      activePlayerID.value = "";
+  function deleteGuest(id: string): void {
+    if (activeGuestID.value === id) {
+      activeGuestID.value = "";
     }
-    list.value = list.value.filter((player) => player.id !== id);
+    list.value = list.value.filter((guest) => guest.id !== id);
   }
 
   return {
     list,
-    activePlayerID,
-    playerLimitReached,
+    activeGuestID,
+    guestLimitReached,
 
     // ----
 
-    addPlayer,
-    editPlayerName,
-    deletePlayer,
+    addGuest,
+    editGuestName,
+    deleteGuest,
   };
 });

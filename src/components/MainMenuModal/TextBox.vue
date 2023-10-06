@@ -37,24 +37,24 @@ defineExpose({ blur });
 		v-model="writableModalValue"
 		type="text"
 		:placeholder="
-			guests.activePlayerID
+			guests.activeGuestID
 				? 'edit guest name'
-				: guests.playerLimitReached
+				: guests.guestLimitReached
 				? 'guest limit reached'
 				: 'add guest'
 		"
 		maxlength="12"
 		:disabled="
-			guests.playerLimitReached
-				? guests.activePlayerID
+			guests.guestLimitReached
+				? guests.activeGuestID
 					? false
 					: true
 				: false
 		"
 		@keydown.enter="emit('save-changes')"
 		:class="[
-			guests.playerLimitReached
-				? guests.activePlayerID
+			guests.guestLimitReached
+				? guests.activeGuestID
 					? 'bg-stone-100'
 					: 'bg-neutral-400 placeholder:text-neutral-500'
 				: 'bg-stone-100',
