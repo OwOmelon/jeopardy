@@ -19,12 +19,15 @@ const procedure: { [key: number]: string } = {
 	3: "give_points",
 };
 
-const progress = ref<number>(1);
+const progress = ref<number>(template.activeCellData?.answeredBy ? 2 : 1);
 
 function advanceProgress(): void {
 	if (procedure[progress.value] === "give_points") return;
 
-	if (procedure[progress.value] === "reveal_answer" && !guests.list.length) {
+	if (
+		(procedure[progress.value] === "reveal_answer" && !guests.list.length) ||
+		template.activeCellData?.answeredBy
+	) {
 		template.resetActiveCell();
 
 		return;
@@ -48,10 +51,6 @@ function givePoints(guestID: Guest["id"] | null) {
 		? guests.list.findIndex((guest) => guest.id === guestID)
 		: -1;
 	const guest: Guest | null = guests.list?.[guestIndex] ?? null;
-
-	// if (guest) {
-	// 	guest.points = guest.points + template.activeCellData!.points;
-	// }
 
 	template.playProgressTracker[template.activeCellIndeces.row!] = {
 		[template.activeCellIndeces.column!]: guest?.name ?? "no one",
@@ -109,7 +108,8 @@ onUnmounted(() => {
 				:class="[
 					{
 						'pointer-events-none opacity-0 transition-opacity':
-							procedure[progress] === 'give_points',
+							procedure[progress] === 'give_points' ||
+							template.activeCellData?.answeredBy,
 					},
 					'ml-auto',
 				]"
@@ -122,11 +122,9 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="relative grid min-h-[350px] place-items-center bg-white p-5 text-center text-red-400"
+			class="relative flex min-h-[350px] flex-col items-center justify-center bg-white p-5 text-center text-red-400"
 			@click="advanceProgress"
 		>
-			<p>{{ template.activeCellData?.answeredBy }}//</p>
-
 			<Transition name="fade" mode="out-in">
 				<QuestionAnswer
 					v-if="procedure[progress] !== 'give_points'"
@@ -142,6 +140,13 @@ onUnmounted(() => {
 					@give-points="givePoints"
 				/>
 			</Transition>
+
+			<p
+				v-if="template.activeCellData?.answeredBy"
+				class="font-xl mt-10 font-bold"
+			>
+				answered by: {{ template.activeCellData?.answeredBy }}
+			</p>
 		</div>
 	</div>
 </template>
