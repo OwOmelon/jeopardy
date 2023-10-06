@@ -8,7 +8,7 @@ import { vOnClickOutside } from "@vueuse/components";
 import ModalWrapper from "../ModalWrapper.vue";
 import TextBox from "./TextBox.vue";
 import SaveChangesBtn from "./SaveChangesBtn.vue";
-import PlayerLI from "./PlayerLI.vue";
+import GuestLI from "./GuestLI.vue";
 
 const modal = useModalStore();
 const guests = useGuestsStore();
@@ -19,13 +19,13 @@ const textInput = ref<string>("");
 
 function saveChanges(): void {
 	if (guests.activeGuestID) {
-		guests.editPlayerName(guests.activeGuestID, textInput.value);
+		guests.editGuestName(guests.activeGuestID, textInput.value);
 		textBox.value?.blur();
 
 		guests.activeGuestID = "";
 	} else {
 		if (textInput.value) {
-			guests.addPlayer(textInput.value);
+			guests.addGuest(textInput.value);
 		}
 	}
 
@@ -70,7 +70,7 @@ function changeEditMode(mode: boolean) {
 			</Transition>
 
 			<TransitionGroup tag="ul" name="list-slide-left" class="relative mb-3">
-				<PlayerLI
+				<GuestLI
 					v-for="guest in guests.list"
 					:key="guest.id"
 					:guest="guest"

@@ -7,7 +7,7 @@ import { useModalStore } from "@/stores/modals";
 import type { Guest } from "@/stores/guests";
 
 import QuestionAnswer from "./QuestionAnswer.vue";
-import GivePlayerPoints from "./GivePlayerPoints.vue";
+import GiveGuestPoints from "./GiveGuestPoints.vue";
 
 const template = useTemplateStore();
 const guests = useGuestsStore();
@@ -133,7 +133,7 @@ onUnmounted(() => {
 					:show-answer="procedure[progress] === 'reveal_answer'"
 				/>
 
-				<GivePlayerPoints
+				<GiveGuestPoints
 					v-else
 					:guest-list="guests.list"
 					:cell-points="template.activeCellData!.points"
