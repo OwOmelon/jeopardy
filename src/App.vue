@@ -3,6 +3,7 @@ import { useTemplateStore } from "./stores/template";
 
 import debug from "./components/debug.vue";
 import MainMenu from "./components/MainMenuModal/Modal.vue";
+import ShowMainMenuBtn from "./components/MainMenuModal/ShowMainMenuBtn.vue";
 import Template from "./components/template/Template.vue";
 import TDReveal from "./components/tdreveal/TDReveal.vue";
 import ModalWrapper from "./components/ModalWrapper.vue";
@@ -11,6 +12,7 @@ const template = useTemplateStore();
 </script>
 
 <template>
+  <ShowMainMenuBtn />
   <MainMenu />
   <Template />
 
