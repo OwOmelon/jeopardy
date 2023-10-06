@@ -10,15 +10,18 @@ const show = ref<boolean>(false);
 
 const history = ref<RawTemplateData[]>([]);
 
-const rawTemplateDataNoID = computed(() => {
-	const { id, ...rest } = template.rawTemplateData;
-	return rest;
-});
-
 watch(
-	rawTemplateDataNoID,
+	() => [
+		template.name,
+		template.points,
+		template.rows,
+		template.columns,
+		template.rawTable,
+	],
 	() => {
 		template.id = uuidv4();
+
+		console.log(template.rawTemplateData.id);
 
 		history.value.push(template.rawTemplateData);
 	},
@@ -27,12 +30,18 @@ watch(
 </script>
 
 <template>
-	<ul class="fixed right-0 top-0 rounded bg-black/50 p-2 text-xs text-white">
-		<li v-for="template in history" :key="template.id">{{ template }}</li>
+	<ul
+		:class="[
+			{ 'translate-x-full': show },
+			'fixed right-0 top-0 w-[450px] rounded bg-black/50 p-2 text-xs text-white transition-transform duration-300',
+		]"
+	>
+		<li v-for="template in history" :key="template.id">{{ template.id }}</li>
 
 		<button
 			type="button"
-			class="absolute right-full top-0 mr-2 grid aspect-square h-full place-items-center rounded-[inherit] bg-[inherit]"
+			class="absolute right-full top-0 mr-2 grid aspect-square place-items-center rounded-[inherit] bg-[inherit] p-5"
+			@click="show = !show"
 		>
 			|||
 		</button>
