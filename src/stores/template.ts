@@ -1,6 +1,5 @@
 import { ref, computed, watch, watchEffect, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
-import { v4 as uuidv4 } from "uuid";
 
 import type { Guest } from "./guests";
 
@@ -54,7 +53,7 @@ export type PlayProgressTracker = {
 export const useTemplateStore = defineStore("template", () => {
 	const editing = ref<boolean>(true);
 
-	const id = ref<string>(uuidv4());
+	const currentTemplateID = ref<string>("");
 	const name = ref<string>("");
 	const points = ref<number[]>([]);
 	const rows = ref<Row[]>([]);
@@ -64,7 +63,7 @@ export const useTemplateStore = defineStore("template", () => {
 	const rawTemplateData = computed<RawTemplateData>({
 		get() {
 			return {
-				id: id.value,
+				id: currentTemplateID.value,
 				name: name.value,
 				rows: rows.value,
 				points: points.value,
@@ -74,7 +73,7 @@ export const useTemplateStore = defineStore("template", () => {
 		},
 
 		set(newValue) {
-			id.value = newValue.id;
+			currentTemplateID.value = newValue.id;
 			name.value = newValue.name;
 			rows.value = newValue.rows;
 			points.value = newValue.points;
@@ -220,7 +219,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	return {
 		editing,
-		id,
+		currentTemplateID,
 		name,
 		points,
 		rows,
