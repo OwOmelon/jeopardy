@@ -22,6 +22,7 @@ const template = useTemplateStore();
 					:name="guest.name"
 					:points="guest.points"
 					@delete-guest="guests.deleteGuest"
+					@update-points="guests.updatePoints"
 				/>
 			</template>
 		</ul>

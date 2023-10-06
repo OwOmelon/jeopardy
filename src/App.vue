@@ -5,6 +5,7 @@ import debug from "./components/debug.vue";
 import MainMenu from "./components/MainMenuModal/Modal.vue";
 import ShowMainMenuBtn from "./components/MainMenuModal/ShowMainMenuBtn.vue";
 import Template from "./components/template/Template.vue";
+import GuestList from "./components/guests/GuestList.vue";
 import TDReveal from "./components/tdreveal/TDReveal.vue";
 import ModalWrapper from "./components/ModalWrapper.vue";
 
@@ -14,7 +15,9 @@ const template = useTemplateStore();
 <template>
   <ShowMainMenuBtn />
   <MainMenu />
+  
   <Template />
+  <GuestList />
 
   <ModalWrapper
     :show="template.activeCellData && !template.editing ? true : false"
@@ -39,7 +42,7 @@ body {
 }
 
 #app {
-  @apply grid min-h-screen place-items-center;
+  @apply flex flex-col min-h-screen items-center justify-center;
 }
 
 input::-webkit-outer-spin-button,
