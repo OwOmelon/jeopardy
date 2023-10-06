@@ -86,6 +86,6 @@ function TDMouseLeave(): void {
 }
 
 :deep(.textBox) {
-	@apply rounded  border-y-2 border-transparent bg-white shadow !shadow-black/30 transition-colors focus:border-b-stone-600;
+	@apply rounded border-y-2 border-transparent bg-white shadow !shadow-black/30 transition-colors focus:border-b-red-400;
 }
 </style>
