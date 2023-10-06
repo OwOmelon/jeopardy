@@ -17,7 +17,7 @@ const template = useTemplateStore();
 const textBox = ref<HTMLInputElement | null>(null);
 const textInput = ref<number>(props.points);
 
-function onKeydownEnter(): void {
+function onBlur(): void {
 	if (!textInput.value.toString().length) {
 		textInput.value = props.points;
 		return;
@@ -43,7 +43,7 @@ watch(
 				type="number"
 				class="textBox w-20 bg-transparent p-2 text-center outline-none"
 				@keydown.enter="textBox?.blur()"
-				@blur="onKeydownEnter"
+				@blur="onBlur"
 			/>
 
 			<DragHandle v-if="template.editing" rotate />
