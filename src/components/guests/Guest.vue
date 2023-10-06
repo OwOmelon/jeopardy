@@ -5,34 +5,33 @@ import type { Guest } from "@/stores/guests";
 const props = defineProps<Guest>();
 
 const emit = defineEmits<{
-	"edit-guest-name": [];
-	"delete-guest": [Guest["id"]];
-	'update-points': [number]
+	"edit-points": [Guest["id"], number];
 }>();
 
 const textBox = ref<HTMLInputElement | null>(null);
 const textInput = ref<number>(props.points);
 
-function onKeydownEnter(): void {
+function onBlur(): void {
 	if (!textInput.value.toString().length) {
 		textInput.value = props.points;
 		return;
 	}
 
-	emit("update-points", textInput.value);
+	emit("edit-points", props.id, textInput.value);
 }
 </script>
 
 <template>
 	<li class="group relative flex flex-col items-center">
 		<span contenteditable class="font-bold text-red-400">{{ name }}</span>
+
 		<input
-				ref="textBox"
-				v-model="textInput"
-				type="number"
-				class="w-14 bg-transparent"
-				@keydown.enter="textBox?.blur()"
-				@blur="onKeydownEnter"
-			/>
+			ref="textBox"
+			v-model="textInput"
+			type="number"
+			class="focus: w-14 rounded border-2 border-transparent bg-red-400 bg-transparent text-center outline-none transition-colors hover:border-red-400 focus:bg-red-400 focus:text-white"
+			@keydown.enter="textBox?.blur()"
+			@blur="onBlur"
+		/>
 	</li>
 </template>

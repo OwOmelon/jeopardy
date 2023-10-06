@@ -44,12 +44,14 @@ export const useGuestsStore = defineStore("guests", () => {
     guest.name = newName;
   }
 
-  function editPoints(id: string, points: number) {
+  function editGuestPoints(id: string, newPoints: number) {
     const guest = getGuest(id)
 
     if (!guest) return;
 
-    guest.points = points
+    guest.points = newPoints
+
+    console.log(guest, newPoints)
   }
 
   function deleteGuest(id: string): void {
@@ -68,6 +70,7 @@ export const useGuestsStore = defineStore("guests", () => {
 
     addGuest,
     editGuestName,
+    editGuestPoints,
     deleteGuest,
   };
 });
