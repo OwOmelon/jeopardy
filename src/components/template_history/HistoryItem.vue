@@ -2,12 +2,8 @@
 import { ref, watch } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { Icon } from "@iconify/vue";
-import type { Category, RawTable, RawTemplateData } from "@/stores/template";
 
-const emit = defineEmits<{
-	(e: "load-save", save: RawTemplateData): void;
-	(e: "set-active-item", index: number): void;
-}>();
+import type { RawTable, RawTemplateData } from "@/stores/template";
 
 const props = defineProps<{
 	template: RawTemplateData;
@@ -15,7 +11,12 @@ const props = defineProps<{
 	isActive: boolean;
 }>();
 
-const jeop = useTemplateStore();
+const emit = defineEmits<{
+	(e: "load-save", save: RawTemplateData): void;
+	(e: "set-active-item", index: number): void;
+}>();
+
+const template = useTemplateStore();
 
 const rawTable: RawTable = props.template.rows.reduce((rows, row) => {
 	return {
@@ -31,11 +32,6 @@ const rawTable: RawTable = props.template.rows.reduce((rows, row) => {
 
 const showTableAnswers = ref<boolean>(false);
 
-const toggleShowTableAnswers = (e: Event): void => {
-	e.stopPropagation();
-	showTableAnswers.value = !showTableAnswers.value;
-};
-
 watch(
 	() => props.isActive,
 	() => {
@@ -46,16 +42,16 @@ watch(
 
 <template>
 	<li
-		@click="$emit('set-active-item', index)"
+		@click="emit('set-active-item', props.index)"
 		:class="[
-			isActive ? 'bg-white/20' : 'hover:bg-white/10',
+			props.isActive ? 'bg-white/20' : 'hover:bg-white/10',
 			'group cursor-pointer rounded p-1 duration-300',
 		]"
 	>
 		<div class="group relative flex items-center">
 			<p
 				:class="[
-					template.id === props.template.id ? 'text-red-400' : 'text-white',
+					props.template.id === template.id ? 'text-red-400' : 'text-white',
 					'font-bold duration-150',
 				]"
 			>
@@ -66,7 +62,7 @@ watch(
 				:class="[
 					template.id === props.template.id
 						? 'pointer-events-none opacity-0'
-						: isActive
+						: props.isActive
 						? 'oapcity-100'
 						: 'opacity-0 group-hover:opacity-100',
 					'absolute right-0 flex items-center duration-300',
@@ -74,12 +70,7 @@ watch(
 			>
 				<Icon
 					icon="fluent:tab-arrow-left-24-regular"
-					@click="
-						(e: Event) => {
-							e.stopPropagation();
-							$emit('load-save', template);
-						}
-					"
+					@click.stop="emit('load-save', props.template)"
 					class="peer h-5 w-5 duration-150 hover:scale-125"
 				/>
 
@@ -91,8 +82,8 @@ watch(
 			</div>
 		</div>
 
-		<Transition name="ohyea">
-			<div v-if="isActive" class="grid">
+		<Transition name="grow">
+			<div v-if="props.isActive" class="grid">
 				<div class="flex flex-col gap-2 overflow-hidden">
 					<p>template name: {{ props.template.name || "x" }}</p>
 
@@ -127,7 +118,7 @@ watch(
 							<label>table:</label>
 							<button
 								type="button"
-								@click="(e: Event) => toggleShowTableAnswers(e)"
+								@click.stop="showTableAnswers = !showTableAnswers"
 								class="font-bold duration-150 hover:bg-white/20"
 							>
 								{{ `show table ${showTableAnswers ? "questions" : "answers"}` }}
@@ -165,24 +156,6 @@ watch(
 
 <style lang="scss" scoped>
 .grow {
-	&-enter-active,
-	&-leave-active {
-		transition: max-height opacity 300ms;
-	}
-
-	&-enter-from,
-	&-leave-to {
-		max-height: 0;
-		opacity: 0;
-	}
-
-	&-enter-to,
-	&-leave-from {
-		max-height: 456px;
-	}
-}
-
-.ohyea {
 	&-enter-active,
 	&-leave-active {
 		transition:
