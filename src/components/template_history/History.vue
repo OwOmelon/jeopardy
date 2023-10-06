@@ -21,6 +21,17 @@ function setActiveItem(index: number) {
 }
 
 const history = ref<RawTemplateData[]>([]);
+const allowHistoryLog = ref<boolean>(true)
+
+const historyIndexOfCurrentTemplate = computed<number>(() => {
+	return history.value.findIndex((temp) => temp.id === template.id);
+});
+
+function loadSave(save: RawTemplateData) {
+	allowHistoryLog.value = false;
+
+	template.rawTemplateData = save;
+}
 
 watch(
 	() => [
@@ -31,6 +42,12 @@ watch(
 		template.rawTable,
 	],
 	() => {
+		if (!allowHistoryLog.value) {
+			allowHistoryLog.value = true
+
+			return
+		}
+
 		template.id = uuidv4();
 
 		console.log(template.rawTemplateData.id);
@@ -45,7 +62,7 @@ watch(
 	<ul
 		:class="[
 			{ 'translate-x-full': show },
-			'fixed right-0 top-0 z-50 w-[450px] rounded bg-black/50 p-2 text-xs text-white transition-transform duration-300 backdrop-blur',
+			'fixed right-0 top-0 z-50 w-[450px] rounded bg-black/50 p-2 text-xs text-white backdrop-blur transition-transform duration-300',
 		]"
 	>
 		<HistoryItem
@@ -55,6 +72,7 @@ watch(
 			:index="index"
 			:is-active="index === activeHistoryItem"
 			@set-active-item="setActiveItem"
+			@load-save="loadSave"
 		/>
 
 		<button
