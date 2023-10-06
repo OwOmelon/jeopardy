@@ -47,10 +47,10 @@ function TDMouseLeave(): void {
 			<div class="col-start-2 row-start-2 flex flex-col gap-3">
 				<TransitionGroup
 					tag="tr"
-					move-class="duration-300 ease-out"
+					:name="template.editing ? 'slide' : 'disabled'"
 					v-for="(rowValue, rowKey, rowIndex) in template.tableDisplay"
 					:key="rowKey"
-					class="relative grid grid-cols-5 gap-3"
+					class="relative grid gap-3"
 				>
 					<template
 						v-for="(cellValue, cellKey, columnIndex) in rowValue"
@@ -87,5 +87,23 @@ function TDMouseLeave(): void {
 
 :deep(.textBox) {
 	@apply rounded border-y-2 border-transparent bg-white shadow !shadow-black/30 transition-colors focus:border-b-red-400;
+}
+</style>
+
+<style scoped lang="scss">
+.slide {
+	&-move,
+	&-enter-active,
+	&-leave-active {
+		transition: all 0.25s cubic-bezier(0.55, 0, 0.1, 1);
+	}
+}
+
+.disabled {
+	&-move,
+	&-enter-active,
+	&-leave-active {
+		transition: all 0s;
+	}
 }
 </style>
