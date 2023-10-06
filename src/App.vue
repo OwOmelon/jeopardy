@@ -8,6 +8,7 @@ import Template from "./components/template/Template.vue";
 import GuestList from "./components/guests/GuestList.vue";
 import TDReveal from "./components/tdreveal/TDReveal.vue";
 import ModalWrapper from "./components/ModalWrapper.vue";
+import TemplateHistory from "./components/template_history/History.vue";
 
 const template = useTemplateStore();
 </script>
@@ -15,6 +16,8 @@ const template = useTemplateStore();
 <template>
   <ShowMainMenuBtn />
   <MainMenu />
+
+  <TemplateHistory />
   
   <Template />
   <GuestList />
