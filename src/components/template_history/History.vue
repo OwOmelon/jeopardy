@@ -15,15 +15,19 @@ const rawTemplateDataNoID = computed(() => {
 	return rest;
 });
 
-watch(rawTemplateDataNoID, () => {
-	template.id = uuidv4()
-	
-	history.value.push(template.rawTemplateData);
-});
+watch(
+	rawTemplateDataNoID,
+	() => {
+		template.id = uuidv4();
+
+		history.value.push(template.rawTemplateData);
+	},
+	{ deep: true, immediate: true },
+);
 </script>
 
 <template>
-	<ul class="fixed right-0 top-0 rounded bg-black/50 p-2 text-white text-xs">
+	<ul class="fixed right-0 top-0 rounded bg-black/50 p-2 text-xs text-white">
 		<li v-for="template in history" :key="template.id">{{ template }}</li>
 
 		<button
