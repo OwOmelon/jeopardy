@@ -96,7 +96,7 @@ watch(
 <template>
 	<ul
 		:class="[
-			{ 'translate-x-full': show },
+			{ 'translate-x-full': !show },
 			'fixed right-0 top-0 z-10 w-[450px] rounded bg-black/50 p-2 text-xs text-white backdrop-blur transition-transform duration-300',
 		]"
 	>
