@@ -3,9 +3,11 @@ import { ref, computed, watch } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { v4 as uuidv4 } from "uuid";
 
+import HistoryItem from "./HistoryItem.vue";
+
 import type { RawTemplateData } from "@/stores/template";
 
-import HistoryItem from "./HistoryItem.vue";
+export type HistoryTemplate = RawTemplateData & { dateModified: Date };
 
 const template = useTemplateStore();
 
@@ -20,8 +22,8 @@ function setActiveItem(index: number) {
 	}
 }
 
-const history = ref<RawTemplateData[]>([]);
-const allowHistoryLog = ref<boolean>(true)
+const history = ref<(RawTemplateData & { dateModified: Date })[]>([]);
+const allowHistoryLog = ref<boolean>(true);
 
 const historyIndexOfCurrentTemplate = computed<number>(() => {
 	return history.value.findIndex((temp) => temp.id === template.id);
@@ -43,16 +45,19 @@ watch(
 	],
 	() => {
 		if (!allowHistoryLog.value) {
-			allowHistoryLog.value = true
+			allowHistoryLog.value = true;
 
-			return
+			return;
 		}
 
 		template.id = uuidv4();
 
 		console.log(template.rawTemplateData.id);
 
-		history.value.push(template.rawTemplateData);
+		history.value.push({
+			...template.rawTemplateData,
+			dateModified: new Date(),
+		});
 	},
 	{ deep: true, immediate: true },
 );

@@ -4,9 +4,10 @@ import { useTemplateStore } from "@/stores/template";
 import { Icon } from "@iconify/vue";
 
 import type { RawTable, RawTemplateData } from "@/stores/template";
+import type { HistoryTemplate } from "./History.vue";
 
 const props = defineProps<{
-	template: RawTemplateData;
+	template: HistoryTemplate;
 	index: number;
 	isActive: boolean;
 }>();
@@ -17,6 +18,8 @@ const emit = defineEmits<{
 }>();
 
 const template = useTemplateStore();
+
+const showTableAnswers = ref<boolean>(false);
 
 const rawTable: RawTable = props.template.rows.reduce((rows, row) => {
 	return {
@@ -29,8 +32,6 @@ const rawTable: RawTable = props.template.rows.reduce((rows, row) => {
 		}, {}),
 	};
 }, {});
-
-const showTableAnswers = ref<boolean>(false);
 
 watch(
 	() => props.isActive,
@@ -55,7 +56,8 @@ watch(
 					'font-bold duration-150',
 				]"
 			>
-				save {{ props.template.id }}
+				date modified:
+				{{ new Date(props.template.dateModified).toLocaleTimeString("en-US") }}
 			</p>
 
 			<div
