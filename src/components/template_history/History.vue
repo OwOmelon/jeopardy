@@ -7,9 +7,14 @@ import HistoryItem from "./HistoryItem.vue";
 
 import type { RawTemplateData } from "@/stores/template";
 
-export type HistoryTemplate = RawTemplateData & { dateModified: Date };
+export type HistoryTemplate = RawTemplateData & {
+	iteration: number;
+	dateModified: Date;
+};
 
 const template = useTemplateStore();
+
+// ---------------
 
 const show = ref<boolean>(false);
 const activeHistoryItem = ref<number>(-1);
@@ -22,17 +27,42 @@ function setActiveItem(index: number) {
 	}
 }
 
-const history = ref<(RawTemplateData & { dateModified: Date })[]>([]);
+// ---------------
+
+const history = ref<HistoryTemplate[]>([]);
+const historyPushIteration = ref<number>(0);
 const allowHistoryLog = ref<boolean>(true);
 
 const historyIndexOfCurrentTemplate = computed<number>(() => {
 	return history.value.findIndex((temp) => temp.id === template.id);
 });
 
-function loadSave(save: RawTemplateData) {
-	allowHistoryLog.value = false;
+function pushTemplateToHistory(): void {
+	if (!allowHistoryLog.value) {
+		allowHistoryLog.value = true;
 
-	template.rawTemplateData = save;
+		return;
+	}
+
+	const historyLengthLimit = 15;
+
+	if (historyIndexOfCurrentTemplate.value !== history.value.length - 1) {
+		history.value.splice(historyIndexOfCurrentTemplate.value + 1);
+	}
+
+	if (history.value.length >= historyLengthLimit) {
+		history.value.splice(0, 1);
+	}
+
+	historyPushIteration.value++;
+	template.id = uuidv4();
+
+	history.value.push({
+		...template.rawTemplateData,
+		iteration: historyPushIteration.value,
+		dateModified: new Date(),
+	});
+
 }
 
 watch(
@@ -44,30 +74,25 @@ watch(
 		template.rawTable,
 	],
 	() => {
-		if (!allowHistoryLog.value) {
-			allowHistoryLog.value = true;
-
-			return;
-		}
-
-		template.id = uuidv4();
-
-		console.log(template.rawTemplateData.id);
-
-		history.value.push({
-			...template.rawTemplateData,
-			dateModified: new Date(),
-		});
+		pushTemplateToHistory();
 	},
 	{ deep: true, immediate: true },
 );
+
+// ---------------
+
+function loadTemplate(save: RawTemplateData) {
+	allowHistoryLog.value = false;
+
+	template.rawTemplateData = save;
+}
 </script>
 
 <template>
 	<ul
 		:class="[
 			{ 'translate-x-full': show },
-			'fixed right-0 top-0 z-50 w-[450px] rounded bg-black/50 p-2 text-xs text-white backdrop-blur transition-transform duration-300',
+			'fixed right-0 top-0 z-10 w-[450px] rounded bg-black/50 p-2 text-xs text-white backdrop-blur transition-transform duration-300',
 		]"
 	>
 		<HistoryItem
@@ -75,9 +100,10 @@ watch(
 			:key="template.id"
 			:template="template"
 			:index="index"
+			:is-current-template="index === historyIndexOfCurrentTemplate"
 			:is-active="index === activeHistoryItem"
 			@set-active-item="setActiveItem"
-			@load-save="loadSave"
+			@load-save="loadTemplate"
 		/>
 
 		<button
