@@ -49,7 +49,7 @@ const textDisplay = computed<number | string>(() => {
 			}
 		"
 	>
-		<p>{{ textDisplay }}</p>
+		<p class="line-clamp-3">{{ textDisplay }}</p>
 	</td>
 </template>
 
