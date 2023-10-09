@@ -27,6 +27,10 @@ function setActiveItem(index: number) {
 	}
 }
 
+watch(show, () => {
+	activeHistoryItem.value = -1
+})
+
 // ---------------
 
 const history = ref<HistoryTemplate[]>([]);
@@ -36,6 +40,12 @@ const allowHistoryLog = ref<boolean>(true);
 const historyIndexOfCurrentTemplate = computed<number>(() => {
 	return history.value.findIndex((temp) => temp.id === template.id);
 });
+
+function loadTemplate(save: RawTemplateData) {
+	allowHistoryLog.value = false;
+
+	template.rawTemplateData = save;
+}
 
 function pushTemplateToHistory(): void {
 	if (!allowHistoryLog.value) {
@@ -78,14 +88,6 @@ watch(
 	},
 	{ deep: true, immediate: true },
 );
-
-// ---------------
-
-function loadTemplate(save: RawTemplateData) {
-	allowHistoryLog.value = false;
-
-	template.rawTemplateData = save;
-}
 </script>
 
 <template>
