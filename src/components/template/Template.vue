@@ -85,9 +85,22 @@ function TDMouseLeave(): void {
 	grid-template-columns: v-bind(horizontalTrTemplateColumns);
 }
 
-:deep(.textBox) {
-	@apply rounded border-y-2 border-transparent bg-white shadow !shadow-black/30 transition-colors focus:border-b-red-400;
+:deep(th) {
+	@apply rounded border-y-2 border-transparent bg-white shadow !shadow-black/30 transition-colors;
 }
+
+:deep(th, td) {
+	@apply p-[0.5em];
+}
+
+th,
+td {
+	@apply p-[0.5em];
+}
+
+/* :deep(.textBox) {
+	@apply border-y-2 border-transparent transition-colors focus:border-b-red-400;
+} */
 </style>
 
 <style scoped lang="scss">
