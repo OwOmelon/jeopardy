@@ -17,6 +17,8 @@ const template = useTemplateStore();
 const textBox = ref<HTMLSpanElement | null>(null);
 const textInput = ref(props.category.name);
 
+const focused = ref<boolean>(false);
+
 watch(
 	() => props.category,
 	(val) => {
@@ -26,18 +28,26 @@ watch(
 </script>
 
 <template>
-	<th>
+	<th
+		:class="[
+			{ '!bg-red-400 !text-white': !template.editing },
+			{ '!border-b-red-400': focused },
+		]"
+	>
 		<div class="group relative">
 			<span
 				ref="textBox"
 				:contenteditable="template.editing"
-				:class="[
-					{ '!bg-red-400 !text-white': !template.editing },
-					'textBox block overflow-hidden text-ellipsis p-2 outline-none',
-				]"
+				:class="['block overflow-hidden text-ellipsis outline-none']"
+				@focus="focused = true"
 				@input="textInput = ($event.target as HTMLSpanElement).innerText"
 				@keydown.enter="textBox?.blur()"
-				@blur="emit('change-category-name', textInput, props.category.id)"
+				@blur="
+					() => {
+						focused = false;
+						emit('change-category-name', textInput, props.category.id);
+					}
+				"
 				>{{
 					template.editing
 						? props.category.name

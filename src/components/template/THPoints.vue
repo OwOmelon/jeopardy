@@ -17,12 +17,15 @@ const template = useTemplateStore();
 const textBox = ref<HTMLInputElement | null>(null);
 const textInput = ref<number>(props.points);
 
+const focused = ref<boolean>(false)
+
 function onBlur(): void {
 	if (!textInput.value.toString().length) {
 		textInput.value = props.points;
 		return;
 	}
 
+	focused.value = false
 	emit("update-points", textInput.value, props.rowIndex);
 }
 
@@ -35,18 +38,17 @@ watch(
 </script>
 
 <template>
-	<th class="group relative grid place-items-center">
-		<div>
-			<input
-				ref="textBox"
-				v-model="textInput"
-				type="number"
-				class="textBox w-20 bg-transparent p-2 text-center outline-none"
-				@keydown.enter="textBox?.blur()"
-				@blur="onBlur"
-			/>
+	<th :class="[{'!border-b-red-400': focused}, 'group relative grid place-items-center']">
+		<input
+			ref="textBox"
+			v-model="textInput"
+			type="number"
+			class="textBox w-20 bg-transparent text-center outline-none"
+			@focus="focused = true"
+			@blur="onBlur"
+			@keydown.enter="textBox?.blur()"
+		/>
 
-			<DragHandle v-if="template.editing" rotate />
-		</div>
+		<DragHandle v-if="template.editing" rotate />
 	</th>
 </template>
