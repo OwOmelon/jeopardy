@@ -44,7 +44,8 @@ onUnmounted(() => {
 
 <template>
 	<div
-		class="component w-[80vw] max-w-[900px] overflow-hidden rounded"
+		ref="el"
+		class="component w-[80vw] max-w-[900px]"
 		v-on-click-outside="
 			() => {
 				template.resetActiveCell();
@@ -52,21 +53,17 @@ onUnmounted(() => {
 		"
 	>
 		<div
-			class="flex items-center justify-between border-b-2 border-stone-600 bg-stone-500 p-3 text-sm text-white"
+			class="flex items-center justify-between rounded-t border-b-2 border-stone-600 bg-stone-500 p-3 text-sm text-white"
 		>
-			<p>
+			<p class="w-[35%]">
 				Editing
 				<span class="font-bold">{{ template.activeCellData?.category }}</span>
 				for
 				<span class="font-bold">{{ template.activeCellData?.points }}</span>
 			</p>
 
-			<div>
-				<button
-					type="button"
-					class="mr-3 hover:bg-green-200"
-					@click="saveChanges()"
-				>
+			<div class="flex flex-wrap justify-end gap-3">
+				<button type="button" class="hover:bg-green-200" @click="saveChanges()">
 					Save
 				</button>
 				<button
@@ -74,12 +71,12 @@ onUnmounted(() => {
 					class="hover:bg-red-200"
 					@click="template.resetActiveCell"
 				>
-					Close [Esc]
+					Close <span class="hidden lg:inline">[Esc]</span>
 				</button>
 			</div>
 		</div>
 
-		<div class="flex gap-5 bg-stone-300 p-5">
+		<div class="flex flex-col gap-5 rounded-b bg-stone-300 p-5 md:flex-row">
 			<div class="w-full">
 				<label>Question:</label>
 				<textarea v-model="questionModelValue"></textarea>
@@ -95,7 +92,7 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 button {
-	@apply rounded bg-stone-100 px-2 py-1 text-stone-800 transition-colors;
+	@apply rounded bg-stone-100 px-2 py-1 text-stone-800 shadow shadow-black/30 transition-colors;
 }
 
 label {
@@ -103,6 +100,6 @@ label {
 }
 
 textarea {
-	@apply mt-3 h-[150px] w-full resize-none rounded border-b-2 border-transparent bg-stone-50 p-3 shadow shadow-black/30 outline-none transition-colors focus:border-red-400;
+	@apply mt-3 h-[90px] w-full resize-none rounded border-b-2 border-transparent bg-stone-50 p-3 shadow shadow-black/30 outline-none transition-colors focus:border-red-400 md:h-[150px];
 }
 </style>
