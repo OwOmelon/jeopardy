@@ -28,8 +28,8 @@ function setActiveItem(index: number) {
 }
 
 watch(show, () => {
-	activeHistoryItem.value = -1
-})
+	activeHistoryItem.value = -1;
+});
 
 // ---------------
 
@@ -67,12 +67,15 @@ function pushTemplateToHistory(): void {
 	historyPushIteration.value++;
 	template.id = uuidv4();
 
-	history.value.push({
-		...template.rawTemplateData,
-		iteration: historyPushIteration.value,
-		dateModified: new Date(),
-	});
-
+	history.value.push(
+		JSON.parse(
+			JSON.stringify({
+				...template.rawTemplateData,
+				iteration: historyPushIteration.value,
+				dateModified: new Date(),
+			}),
+		),
+	);
 }
 
 watch(
