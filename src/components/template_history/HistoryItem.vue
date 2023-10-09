@@ -3,7 +3,7 @@ import { ref, watch } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { Icon } from "@iconify/vue";
 
-import type { RawTable, RawTemplateData } from "@/stores/template";
+import type { RawTemplateData } from "@/stores/template";
 import type { HistoryTemplate } from "./History.vue";
 
 const props = defineProps<{
@@ -21,18 +21,6 @@ const emit = defineEmits<{
 const template = useTemplateStore();
 
 const showTableAnswers = ref<boolean>(false);
-
-const rawTable: RawTable = props.template.rows.reduce((rows, row) => {
-	return {
-		...rows,
-		[row]: props.template.columns.reduce((columns, column) => {
-			return {
-				...columns,
-				[column.id]: props.template.rawTable[row][column.id],
-			};
-		}, {}),
-	};
-}, {});
 
 watch(
 	() => props.isActive,
@@ -57,8 +45,7 @@ watch(
 					'font-bold duration-150',
 				]"
 			>
-				{{ props.template.iteration }} | 
-				date modified:
+				{{ props.template.iteration }} | date modified:
 				{{ new Date(props.template.dateModified).toLocaleTimeString("en-US") }}
 			</p>
 
@@ -130,13 +117,13 @@ watch(
 						</div>
 						<table class="flex w-full flex-col gap-2 text-[0.65rem]">
 							<tr
-								v-for="(row, rowIndex) in rawTable"
-								:key="rowIndex"
+								v-for="row in props.template.rows"
+								:key="row"
 								class="stretch grid grid-cols-5 gap-2"
 							>
 								<td
-									v-for="(cell, columnIndex) in row"
-									:key="columnIndex"
+									v-for="column in props.template.columns"
+									:key="column.id"
 									class="flex h-[4rem] w-full items-center justify-center bg-white/20 text-center"
 								>
 									<p
@@ -144,8 +131,9 @@ watch(
 									>
 										{{
 											showTableAnswers
-												? cell.answer || "x"
-												: cell.question || "x"
+												? props.template.rawTable[row][column.id].question ||
+												  "x"
+												: props.template.rawTable[row][column.id].answer || "x"
 										}}
 									</p>
 								</td>
