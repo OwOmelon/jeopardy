@@ -9,6 +9,7 @@ import type { HistoryTemplate } from "./History.vue";
 const props = defineProps<{
 	template: HistoryTemplate;
 	index: number;
+	isCurrentTemplate: boolean;
 	isActive: boolean;
 }>();
 
@@ -52,10 +53,11 @@ watch(
 		<div class="group relative flex items-center">
 			<p
 				:class="[
-					props.template.id === template.id ? 'text-red-400' : 'text-white',
+					props.isCurrentTemplate ? 'text-red-400' : 'text-white',
 					'font-bold duration-150',
 				]"
 			>
+				{{ props.template.iteration }} | 
 				date modified:
 				{{ new Date(props.template.dateModified).toLocaleTimeString("en-US") }}
 			</p>
