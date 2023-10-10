@@ -100,6 +100,6 @@ label {
 }
 
 textarea {
-	@apply mt-3 h-[90px] w-full resize-none rounded border-b-2 border-transparent bg-stone-50 p-3 shadow shadow-black/30 outline-none transition-colors focus:border-red-400 md:h-[150px];
+	@apply mt-3 h-[7em] w-full resize-none rounded border-b-2 border-transparent bg-stone-50 p-[0.5em] shadow shadow-black/30 outline-none transition-colors focus:border-red-400 md:h-[10em];
 }
 </style>
