@@ -35,16 +35,19 @@ function TDMouseLeave(): void {
 </script>
 
 <template>
-	<div class="mt-10">
+	<div class="mt-10 w-full">
 		<TemplateNameTextBox />
 
 		<table
-			class="grid w-[100vw] justify-items-center gap-5 overflow-auto p-8 pt-0"
+			:class="[
+				{ 'gap-x-0': !template.editing },
+				'grid gap-5 w-full overflow-auto p-8',
+			]"
 		>
 			<TRPoints v-if="template.editing" />
 			<TRCategories />
 
-			<div class="row-start-2 flex flex-col gap-3 lg:col-start-2">
+			<div class="col-start-2 row-start-2 flex flex-col gap-3">
 				<TransitionGroup
 					tag="tr"
 					:name="template.editing ? 'slide' : 'disabled'"
