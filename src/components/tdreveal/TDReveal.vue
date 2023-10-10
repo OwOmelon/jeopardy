@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { useGuestsStore } from "@/stores/guests";
 import { useModalStore } from "@/stores/modals";
+import { vOnClickOutside } from "@vueuse/components";
 
 import type { Guest } from "@/stores/guests";
 
@@ -88,35 +89,21 @@ onUnmounted(() => {
 
 <template>
 	<div
-		class="component w-[900px] overflow-hidden rounded shadow-[0_10px_40px] shadow-black/40"
+		class="component w-[80vw] max-w-[900px] overflow-hidden rounded shadow-[0_10px_40px] shadow-black/40"
+		v-on-click-outside="
+			() => {
+				template.resetActiveCell();
+			}
+		"
 	>
 		<div
-			class="top-container relative flex border-b-4 border-red-300 bg-red-400 p-2 text-white"
+			class="relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-sm text-white"
 		>
-			<button type="button" @click="revertProgress">
-				back <span>ESC</span>
-			</button>
-
-			<p class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+			<p class="text-center">
 				<span class="font-bold">{{ template.activeCellData?.category }}</span>
 				for
 				<span class="font-bold">{{ template.activeCellData?.points }}</span>
 			</p>
-
-			<button
-				type="button"
-				:class="[
-					{
-						'pointer-events-none opacity-0 transition-opacity':
-							procedure[progress] === 'give_points' ||
-							template.activeCellData?.answeredBy,
-					},
-					'ml-auto',
-				]"
-				@click="advanceProgress"
-			>
-				continue <span>SPACE</span>
-			</button>
 		</div>
 
 		<!-- -------- -->
@@ -150,13 +137,3 @@ onUnmounted(() => {
 		</div>
 	</div>
 </template>
-
-<style scoped lang="postcss">
-.top-container > button {
-	@apply flex items-center gap-2 text-sm;
-}
-
-.top-container > button > span {
-	@apply rounded bg-red-300 p-2 font-bold;
-}
-</style>
