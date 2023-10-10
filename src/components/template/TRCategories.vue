@@ -29,7 +29,7 @@ function changeCategoryName(newName: string, id: Category["id"]): void {
 		handle=".handle"
 		:animation="200"
 		:disabled="!template.editing"
-		class="lg:col-start-2 row-start-1 items-end gap-3"
+		class="col-start-2 row-start-1 items-end gap-3"
 	>
 		<template #item="{ element }">
 			<THCategory
