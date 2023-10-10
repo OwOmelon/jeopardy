@@ -6,8 +6,6 @@ import TemplateNameTextBox from "./TemplateNameTextBox.vue";
 import TRPoints from "./TRPoints.vue";
 import TRCategories from "./TRCategories.vue";
 import TD from "./TD.vue";
-import TDEditor from "./TDEditor.vue";
-import ModalWrapper from "../ModalWrapper.vue";
 
 import type { Row, Category } from "@/stores/template";
 
@@ -22,7 +20,7 @@ const TDHovered = ref<{
 });
 
 const horizontalTrTemplateColumns = computed<string>(() => {
-	return `repeat(${template.categoriesDisplay.length}, minmax(0, 1fr))`;
+	return `repeat(${template.categoriesDisplay.length}, 140px)`;
 });
 
 function TDMouseEnter(row: Row, column: Category["id"]): void {
@@ -37,14 +35,16 @@ function TDMouseLeave(): void {
 </script>
 
 <template>
-	<div>
+	<div class="mt-10">
 		<TemplateNameTextBox />
 
-		<table class="m-auto grid grid-cols-[auto,_900px] gap-5">
+		<table class="grid gap-5 overflow-auto w-[100vw] p-8 pt-0">
 			<TRPoints v-if="template.editing" />
 			<TRCategories />
 
-			<div class="col-start-2 row-start-2 flex flex-col gap-3">
+			<div
+				class="row-start-2 flex flex-col gap-3 lg:col-start-2"
+			>
 				<TransitionGroup
 					tag="tr"
 					:name="template.editing ? 'slide' : 'disabled'"
@@ -71,12 +71,6 @@ function TDMouseLeave(): void {
 			</div>
 		</table>
 	</div>
-
-	<ModalWrapper
-		:show="template.activeCellData && template.editing ? true : false"
-	>
-		<TDEditor />
-	</ModalWrapper>
 </template>
 
 <style scoped lang="postcss">
@@ -97,10 +91,6 @@ th,
 td {
 	@apply p-[0.5em];
 }
-
-/* :deep(.textBox) {
-	@apply border-y-2 border-transparent transition-colors focus:border-b-red-400;
-} */
 </style>
 
 <style scoped lang="scss">

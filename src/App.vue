@@ -6,6 +6,7 @@ import MainMenu from "./components/MainMenuModal/Modal.vue";
 import ShowMainMenuBtn from "./components/MainMenuModal/ShowMainMenuBtn.vue";
 import Template from "./components/template/Template.vue";
 import GuestList from "./components/guests/GuestList.vue";
+import TDEditor from "./components/template/TDEditor.vue";
 import TDReveal from "./components/tdreveal/TDReveal.vue";
 import ModalWrapper from "./components/ModalWrapper.vue";
 import TemplateHistory from "./components/template_history/History.vue";
@@ -18,9 +19,15 @@ const template = useTemplateStore();
   <MainMenu />
 
   <TemplateHistory />
-  
+
   <Template />
   <GuestList />
+
+  <ModalWrapper
+    :show="template.activeCellData && template.editing ? true : false"
+  >
+    <TDEditor />
+  </ModalWrapper>
 
   <ModalWrapper
     :show="template.activeCellData && !template.editing ? true : false"
@@ -45,7 +52,7 @@ body {
 }
 
 #app {
-  @apply flex flex-col min-h-screen items-center justify-center;
+  @apply flex min-h-screen flex-col items-center justify-center overflow-auto;
 }
 
 input::-webkit-outer-spin-button,
@@ -124,7 +131,9 @@ input[type="number"] {
 .height-auto {
   &-enter-active,
   &-leave-active {
-    transition: grid-template-rows 1s, opacity 1s;
+    transition:
+      grid-template-rows 1s,
+      opacity 1s;
   }
 
   &-enter-from,
