@@ -38,13 +38,13 @@ function TDMouseLeave(): void {
 	<div class="mt-10">
 		<TemplateNameTextBox />
 
-		<table class="grid gap-5 overflow-auto w-[100vw] justify-items-center p-8 pt-0">
+		<table
+			class="grid w-[100vw] justify-items-center gap-5 overflow-auto p-8 pt-0"
+		>
 			<TRPoints v-if="template.editing" />
 			<TRCategories />
 
-			<div
-				class="row-start-2 flex flex-col gap-3 lg:col-start-2"
-			>
+			<div class="row-start-2 flex flex-col gap-3 lg:col-start-2">
 				<TransitionGroup
 					tag="tr"
 					:name="template.editing ? 'slide' : 'disabled'"
