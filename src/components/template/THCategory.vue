@@ -32,37 +32,36 @@ watch(
 		:class="[
 			{ '!bg-red-400 !text-white': !template.editing },
 			{ '!border-b-red-400': focused },
+			'group relative',
 		]"
 	>
-		<div class="group relative">
-			<span
-				ref="textBox"
-				:contenteditable="template.editing"
-				:class="['block overflow-hidden text-ellipsis outline-none']"
-				@focus="focused = true"
-				@input="textInput = ($event.target as HTMLSpanElement).innerText"
-				@keydown.enter="textBox?.blur()"
-				@blur="
-					() => {
-						focused = false;
-						emit('change-category-name', textInput, props.category.id);
-					}
-				"
-				>{{
-					template.editing
-						? props.category.name
-						: props.category.name || props.category.id
-				}}</span
-			>
+		<span
+			ref="textBox"
+			:contenteditable="template.editing"
+			:class="['block overflow-hidden text-ellipsis outline-none']"
+			@focus="focused = true"
+			@input="textInput = ($event.target as HTMLSpanElement).innerText"
+			@keydown.enter="textBox?.blur()"
+			@blur="
+				() => {
+					focused = false;
+					emit('change-category-name', textInput, props.category.id);
+				}
+			"
+			>{{
+				template.editing
+					? props.category.name
+					: props.category.name || props.category.id
+			}}</span
+		>
 
-			<span
-				v-if="template.editing && !textInput.length"
-				class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-50"
-			>
-				{{ props.category.id }}
-			</span>
+		<span
+			v-if="template.editing && !textInput.length"
+			class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-50"
+		>
+			{{ props.category.id }}
+		</span>
 
-			<DragHandle v-if="template.editing" />
-		</div>
+		<DragHandle v-if="template.editing" />
 	</th>
 </template>
