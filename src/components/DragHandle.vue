@@ -8,7 +8,7 @@ const props = defineProps<{
 	<div
 		:class="[
 			{ 'rotate-90': props.rotate },
-			'handle absolute left-0 top-0 flex -translate-x-1/2 -translate-y-1/2 cursor-grab rounded bg-neutral-300 p-2 opacity-0 shadow shadow-black/30 duration-150 group-hover:opacity-100',
+			'handle absolute left-0 top-0 flex -translate-x-1/2 -translate-y-1/2 cursor-grab rounded bg-neutral-300 p-2 opacity-0 shadow shadow-black/30 transition-opacity group-hover:opacity-100',
 		]"
 		@click.stop
 	>
