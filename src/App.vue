@@ -18,7 +18,7 @@ const template = useTemplateStore();
   <ShowMainMenuBtn />
   <MainMenu />
 
-  <TemplateHistory />
+  <TemplateHistory v-if="template.editing" />
 
   <Template />
   <GuestList />
@@ -52,7 +52,7 @@ body {
 }
 
 #app {
-  @apply flex min-h-screen flex-col items-center justify-center overflow-auto;
+  @apply flex min-h-screen flex-col items-center justify-center my-5;
 }
 
 input::-webkit-outer-spin-button,
