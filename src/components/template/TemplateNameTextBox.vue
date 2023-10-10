@@ -13,7 +13,7 @@ const textInput = ref<string>(template.name);
 		<span
 			ref="textBox"
 			:contenteditable="template.editing"
-			class="border-y-2 border-transparent p-2 outline-none transition-colors focus:border-b-stone-600"
+			class="border-y-2 border-transparent p-2 outline-none transition-colors focus:border-b-red-400"
 			@keydown.enter="textBox?.blur()"
 			@blur="template.name = textInput"
 			@input="textInput = ($event.target as HTMLSpanElement).innerText"
