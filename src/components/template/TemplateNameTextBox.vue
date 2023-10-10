@@ -9,7 +9,7 @@ const textInput = ref<string>(template.name);
 </script>
 
 <template>
-	<div class="relative mx-auto mb-10 w-fit min-w-[9em] text-3xl">
+	<div class="relative mx-auto w-fit min-w-[9em] text-3xl">
 		<span
 			ref="textBox"
 			:contenteditable="template.editing"
