@@ -52,7 +52,7 @@ body {
 }
 
 #app {
-  @apply flex min-h-screen flex-col items-center justify-center my-5;
+  @apply flex min-h-screen flex-col items-center justify-center;
 }
 
 input::-webkit-outer-spin-button,
