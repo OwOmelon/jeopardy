@@ -13,7 +13,7 @@ const textInput = ref<string>(template.name);
 		<span
 			ref="textBox"
 			:contenteditable="template.editing"
-			class="border-y-2 border-transparent p-2 outline-none transition-colors focus:border-b-red-400"
+			class="break-words border-y-2 border-transparent p-2 outline-none transition-colors focus:border-b-red-400"
 			@keydown.enter="textBox?.blur()"
 			@blur="template.name = textInput"
 			@input="textInput = ($event.target as HTMLSpanElement).innerText"
@@ -30,7 +30,7 @@ const textInput = ref<string>(template.name);
 
 		<span
 			v-if="!textInput.length && template.editing"
-			class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-50"
+			class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap opacity-50"
 			>template name</span
 		>
 	</div>
@@ -38,6 +38,6 @@ const textInput = ref<string>(template.name);
 
 <style scoped lang="postcss">
 span {
-	@apply block whitespace-nowrap text-center font-bold;
+	@apply block text-center font-bold;
 }
 </style>
