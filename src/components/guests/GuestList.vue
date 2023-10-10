@@ -9,7 +9,7 @@ const template = useTemplateStore();
 </script>
 
 <template>
-	<div v-if="!template.editing" class="mt-10 flex items-center gap-3">
+	<div v-if="!template.editing" class="flex items-center gap-3">
 		<ul class="flex gap-3">
 			<Guest
 				v-for="guest in guests.list"
