@@ -9,11 +9,11 @@ const textInput = ref<string>(template.name);
 </script>
 
 <template>
-	<div class="relative mx-auto w-fit min-w-[9em] text-3xl">
+	<div class="relative mx-auto w-fit min-w-[8.5em] text-3xl">
 		<span
 			ref="textBox"
 			:contenteditable="template.editing"
-			class="break-words border-y-2 border-transparent p-2 outline-none transition-colors focus:border-b-red-400"
+			class="break-words border-y-2 border-transparent border-b-stone-600 p-2 outline-none transition-colors focus:border-b-red-400"
 			@keydown.enter="textBox?.blur()"
 			@blur="template.name = textInput"
 			@input="textInput = ($event.target as HTMLSpanElement).innerText"
