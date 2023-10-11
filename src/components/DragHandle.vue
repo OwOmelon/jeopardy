@@ -7,12 +7,13 @@ const props = defineProps<{
 <template>
 	<div
 		:class="[
-			{ 'rotate-90': props.rotate },
-			'handle absolute left-0 top-0 flex -translate-x-1/2 -translate-y-1/2 cursor-grab rounded bg-neutral-300 p-2 opacity-0 shadow shadow-black/30 transition-opacity group-hover:opacity-100',
+			{ 'flex-col': props.rotate },
+			'handle absolute left-0 top-0 flex -translate-x-1/2 -translate-y-1/2 cursor-grab rounded bg-neutral-300 p-2 lg:opacity-0 shadow shadow-black/30 transition-opacity group-hover:opacity-100',
 		]"
 		@click.stop
 	>
 		<svg
+			:class="[{'rotate-90': props.rotate}]"
 			xmlns="http://www.w3.org/2000/svg"
 			width="12"
 			height="12"
@@ -25,6 +26,7 @@ const props = defineProps<{
 		</svg>
 
 		<svg
+			:class="[{'-rotate-90': props.rotate}]"
 			xmlns="http://www.w3.org/2000/svg"
 			width="12"
 			height="12"
