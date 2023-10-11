@@ -26,7 +26,7 @@ const props = defineProps<{
 		</svg>
 
 		<svg
-			:class="[{'-rotate-90': props.rotate}]"
+			:class="[{'-rotate-[90deg]': props.rotate}]"
 			xmlns="http://www.w3.org/2000/svg"
 			width="12"
 			height="12"
