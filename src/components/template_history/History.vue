@@ -113,7 +113,7 @@ watch(
 
 		<button
 			type="button"
-			class="absolute left-full top-0 ml-2 grid aspect-square place-items-center rounded-[inherit] bg-[inherit] p-5"
+			class="absolute left-full top-0 ml-2 grid aspect-square place-items-center rounded-[inherit] bg-[inherit] p-5 backdrop-blur"
 			@click="hide = !hide"
 		>
 			|||
