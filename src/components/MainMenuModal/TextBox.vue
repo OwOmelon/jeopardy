@@ -56,7 +56,7 @@ defineExpose({ blur });
 			guests.guestLimitReached
 				? guests.activeGuestID
 					? 'bg-stone-100'
-					: 'bg-neutral-400 placeholder:text-neutral-500'
+					: 'bg-stone-400 placeholder:text-stone-500'
 				: 'bg-stone-100',
 			'mt-3 w-full rounded border-y-2 border-transparent px-2 shadow shadow-black/30 outline-none transition-colors focus:border-b-red-400',
 		]"
