@@ -35,14 +35,14 @@ watch(
 		@click="emit('set-active-item', props.index)"
 		:class="[
 			props.isActive ? 'bg-white/20' : 'hover:bg-white/10',
-			'group cursor-pointer rounded p-1 duration-300',
+			'group cursor-pointer rounded p-1 transition-colors duration-300',
 		]"
 	>
-		<div class="group relative flex items-center">
+		<div class="group relative flex items-center justify-between">
 			<p
 				:class="[
 					props.isCurrentTemplate ? 'text-red-400' : 'text-white',
-					'font-bold duration-150',
+					'font-bold transition-colors',
 				]"
 			>
 				{{ props.template.iteration }} | date modified:
@@ -55,20 +55,20 @@ watch(
 						? 'pointer-events-none opacity-0'
 						: props.isActive
 						? 'oapcity-100'
-						: 'opacity-0 group-hover:opacity-100',
-					'absolute right-0 flex items-center duration-300',
+						: 'group-hover:opacity-100 lg:opacity-0',
+					'order-2 ml-10 flex items-center gap-3 transition-opacity duration-300',
 				]"
 			>
 				<Icon
 					icon="fluent:tab-arrow-left-24-regular"
 					@click.stop="emit('load-save', props.template)"
-					class="peer h-5 w-5 duration-150 hover:scale-125"
+					class="peer order-1 h-5 w-5 transition-transform hover:scale-125"
 				/>
 
 				<p
-					class="absolute -left-[90px] whitespace-nowrap opacity-0 duration-150 peer-hover:opacity-100"
+					class="whitespace-nowrap transition-opacity peer-hover:opacity-100 lg:opacity-0"
 				>
-					load this save
+					load template
 				</p>
 			</div>
 		</div>
@@ -110,7 +110,7 @@ watch(
 							<button
 								type="button"
 								@click.stop="showTableAnswers = !showTableAnswers"
-								class="font-bold duration-150 hover:bg-white/20"
+								class="font-bold transition-colors hover:bg-white/20"
 							>
 								{{ `show table ${showTableAnswers ? "questions" : "answers"}` }}
 							</button>
@@ -119,15 +119,15 @@ watch(
 							<tr
 								v-for="row in props.template.rows"
 								:key="row"
-								class="stretch grid grid-cols-5 gap-2"
+								class="stretch grid-cols-5/ grid grid-cols-[repeat(5,_60px)] gap-2"
 							>
 								<td
 									v-for="column in props.template.columns"
 									:key="column.id"
-									class="flex h-[4rem] w-full items-center justify-center bg-white/20 text-center"
+									class="flex h-[9ex] items-center justify-center bg-white/20 text-center"
 								>
 									<p
-										class="line-clamp-4 max-h-full overflow-hidden text-ellipsis"
+										class="line-clamp-3 max-h-full overflow-hidden text-ellipsis"
 									>
 										{{
 											showTableAnswers
