@@ -41,7 +41,7 @@ function TDMouseLeave(): void {
 		<table
 			:class="[
 				{ 'gap-x-0': !template.editing },
-				'grid gap-5 w-full overflow-auto p-8',
+				'grid w-full gap-5 overflow-auto p-8',
 			]"
 		>
 			<TRPoints v-if="template.editing" />
