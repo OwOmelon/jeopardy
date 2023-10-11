@@ -43,9 +43,9 @@ const currentlyEditing = computed<boolean | "active">(() => {
 				currentlyEditing === 'active'
 					? '!opacity-100'
 					: currentlyEditing === true
-					? 'pointer-events-none'
+					? 'pointer-events-none !opacity-0'
 					: 'group-hover:opacity-100',
-				'flex items-center gap-2 opacity-0 transition-opacity',
+				'flex items-center gap-2 transition-opacity lg:opacity-0',
 			]"
 		>
 			<button
@@ -70,7 +70,15 @@ const currentlyEditing = computed<boolean | "active">(() => {
 					"
 				/>
 			</button>
-			<button type="button" @click="guests.deleteGuest(props.guest.id)">
+			<button
+				type="button"
+				@click="
+					() => {
+						emit('reset-text-box');
+						guests.deleteGuest(props.guest.id);
+					}
+				"
+			>
 				<Icon icon="material-symbols:delete-rounded" />
 			</button>
 		</div>
