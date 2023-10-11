@@ -16,7 +16,7 @@ const template = useTemplateStore();
 
 // ---------------
 
-const show = ref<boolean>(false);
+const hide = ref<boolean>(true);
 const activeHistoryItem = ref<number>(-1);
 
 function setActiveItem(index: number) {
@@ -27,7 +27,7 @@ function setActiveItem(index: number) {
 	}
 }
 
-watch(show, () => {
+watch(hide, () => {
 	activeHistoryItem.value = -1;
 });
 
@@ -96,8 +96,8 @@ watch(
 <template>
 	<ul
 		:class="[
-			{ 'translate-x-full': !show },
-			'fixed right-0 top-0 z-10 w-[80vw] max-w-[450px] rounded bg-black/50 p-2 text-xs text-white backdrop-blur transition-transform duration-300',
+			{ '-translate-x-full': hide },
+			'fixed left-0 top-0 z-10 w-[calc(100%_-_(50.48px_+_8px))] max-w-[450px] rounded bg-black/50 p-2 text-xs text-white backdrop-blur transition-transform duration-300',
 		]"
 	>
 		<HistoryItem
@@ -113,8 +113,8 @@ watch(
 
 		<button
 			type="button"
-			class="absolute right-full top-0 mr-2 grid aspect-square place-items-center rounded-[inherit] bg-[inherit] p-5"
-			@click="show = !show"
+			class="absolute left-full top-0 ml-2 grid aspect-square place-items-center rounded-[inherit] bg-[inherit] p-5"
+			@click="hide = !hide"
 		>
 			|||
 		</button>
