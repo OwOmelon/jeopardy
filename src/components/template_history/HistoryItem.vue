@@ -56,7 +56,7 @@ watch(
 						: props.isActive
 						? 'oapcity-100'
 						: 'group-hover:opacity-100 lg:opacity-0',
-					'order-2 ml-10 flex items-center gap-3 transition-opacity duration-300',
+					'order-2 ml-10 flex items-center gap-2 transition-opacity duration-300',
 				]"
 			>
 				<Icon
@@ -66,7 +66,7 @@ watch(
 				/>
 
 				<p
-					class="whitespace-nowrap transition-opacity peer-hover:opacity-100 lg:opacity-0"
+					class="whitespace-nowrap text-[0.7rem] transition-opacity peer-hover:opacity-100 lg:opacity-0"
 				>
 					load template
 				</p>
@@ -75,29 +75,29 @@ watch(
 
 		<Transition name="grow">
 			<div v-if="props.isActive" class="grid">
-				<div class="flex flex-col gap-2 overflow-hidden">
+				<div class="flex flex-col gap-3 overflow-hidden">
 					<p>template name: {{ props.template.name || "x" }}</p>
 
-					<div class="flex gap-2">
+					<div>
 						<label>points:</label>
 						<ul class="flex gap-2">
 							<li
 								v-for="(point, index) in props.template.points"
 								:key="index"
-								class="bg-white/20 text-center"
+								class="item"
 							>
 								{{ point }}
 							</li>
 						</ul>
 					</div>
 
-					<div class="flex gap-2">
+					<div>
 						<label>columns:</label>
-						<ul class="flex gap-2">
+						<ul class="grid grid-cols-5 gap-2">
 							<li
 								v-for="(column, index) in props.template.columns"
 								:key="index"
-								class="flex items-center bg-white/20 text-center"
+								class="item"
 							>
 								<p>{{ column.name || column.id }}</p>
 							</li>
@@ -119,21 +119,19 @@ watch(
 							<tr
 								v-for="row in props.template.rows"
 								:key="row"
-								class="stretch grid-cols-5/ grid grid-cols-[repeat(5,_60px)] gap-2"
+								class="grid grid-cols-5 gap-2"
 							>
 								<td
 									v-for="column in props.template.columns"
 									:key="column.id"
-									class="flex h-[9ex] items-center justify-center bg-white/20 text-center"
+									class="item h-[9ex]"
 								>
-									<p
-										class="line-clamp-3 max-h-full overflow-hidden text-ellipsis"
-									>
+									<p>
 										{{
 											showTableAnswers
-												? props.template.rawTable[row][column.id].question ||
+												? props.template.rawTable[row][column.id].answer || "x"
+												: props.template.rawTable[row][column.id].question ||
 												  "x"
-												: props.template.rawTable[row][column.id].answer || "x"
 										}}
 									</p>
 								</td>
@@ -146,7 +144,17 @@ watch(
 	</li>
 </template>
 
-<style lang="scss" scoped>
+<style scoped lang="postcss">
+.item {
+	@apply grid place-items-center bg-white/20 text-center;
+}
+
+.item p {
+	@apply line-clamp-3 w-full;
+}
+</style>
+
+<style scoped lang="scss">
 .grow {
 	&-enter-active,
 	&-leave-active {
