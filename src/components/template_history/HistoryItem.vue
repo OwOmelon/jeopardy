@@ -150,7 +150,7 @@ watch(
 }
 
 .item p {
-	@apply line-clamp-3 w-full;
+	@apply line-clamp-3 w-full break-words;
 }
 </style>
 
