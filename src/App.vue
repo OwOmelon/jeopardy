@@ -48,7 +48,7 @@ const template = useTemplateStore();
 }
 
 body {
-  @apply bg-stone-100 font-["Poppins",_sans-serrif] text-stone-500;
+  @apply bg-stone-100 font-["Poppins",_sans-serrif] text-stone-500 text-sm lg:text-base;
 }
 
 #app {
