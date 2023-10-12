@@ -47,7 +47,7 @@ const template = useTemplateStore();
   @apply m-0 box-border p-0;
 }
 
-body {
+html {
   @apply bg-stone-100 font-["Poppins",_sans-serrif] text-stone-500 text-sm lg:text-base;
 }
 
