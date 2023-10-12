@@ -24,7 +24,7 @@ function saveChanges(): void {
 }
 
 function onKeyDown(e: KeyboardEvent) {
-	if (e.code === "Escape") {
+	if (e.key === "Escape") {
 		template.resetActiveCell();
 	}
 }
@@ -53,39 +53,40 @@ onUnmounted(() => {
 		"
 	>
 		<div
-			class="flex items-center justify-between rounded-t border-b-2 border-stone-600 bg-stone-500 p-3 text-sm text-white"
+			class="flex items-center justify-between gap-3 rounded-t border-b-2 border-stone-600 bg-stone-500 p-3 text-sm text-white"
 		>
-			<p class="w-[35%]">
+			<p>
 				Editing
 				<span class="font-bold">{{ template.activeCellData?.category }}</span>
 				for
 				<span class="font-bold">{{ template.activeCellData?.points }}</span>
 			</p>
 
-			<div class="flex flex-wrap justify-end gap-3">
-				<button type="button" class="hover:bg-green-200" @click="saveChanges()">
-					Save
-				</button>
-				<button
-					type="button"
-					class="hover:bg-red-200"
-					@click="template.resetActiveCell"
-				>
-					Close <span class="hidden lg:inline">[Esc]</span>
-				</button>
-			</div>
+			<button
+				type="button"
+				class="hover:bg-red-200"
+				@click="template.resetActiveCell"
+			>
+				Close <span class="hidden lg:inline">[Esc]</span>
+			</button>
 		</div>
 
-		<div class="flex flex-col gap-5 rounded-b bg-stone-300 p-5 md:flex-row">
-			<div class="w-full">
-				<label>Question:</label>
-				<textarea v-model="questionModelValue"></textarea>
+		<div class="rounded-b bg-stone-300 p-5">
+			<div class="flex flex-col gap-5 md:flex-row">
+				<div class="w-full">
+					<label>Question:</label>
+					<textarea v-model="questionModelValue"></textarea>
+				</div>
+
+				<div class="w-full">
+					<label>Answer:</label>
+					<textarea v-model="answerModelValue"></textarea>
+				</div>
 			</div>
 
-			<div class="w-full">
-				<label>Answer:</label>
-				<textarea v-model="answerModelValue"></textarea>
-			</div>
+			<button type="button" class="block mt-5 mx-auto hover:bg-green-200" @click="saveChanges()">
+				Save
+			</button>
 		</div>
 	</div>
 </template>
