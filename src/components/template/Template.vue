@@ -82,16 +82,11 @@ function TDMouseLeave(): void {
 	grid-template-columns: v-bind(horizontalTrTemplateColumns);
 }
 
-:deep(th) {
+:deep(.cell) {
 	@apply rounded border-y-2 border-transparent bg-white shadow !shadow-black/30 transition-colors;
 }
 
-:deep(th, td) {
-	@apply p-[0.5em];
-}
-
-th,
-td {
+:deep(.cell-padding) {
 	@apply p-[0.5em];
 }
 </style>
