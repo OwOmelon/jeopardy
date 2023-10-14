@@ -1,45 +1,55 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, onMounted } from "vue";
 
 const {
 	modelValue,
 	placeholder = "",
+	focusClasses = "",
 	disabled = false,
 } = defineProps<{
 	modelValue: string;
 	placeholder?: string;
+	focusClasses?: string;
 	disabled?: boolean;
 }>();
 
 const emit = defineEmits<{
 	"update:modelValue": [string];
-	"on-blur": [];
 }>();
 
-const spanTextBox = ref<HTMLSpanElement | null>(null);
+const container = ref<HTMLDivElement | null>(null);
+const input = ref<HTMLSpanElement | null>(null);
 
-const textInput = computed({
-	get() {
-		return modelValue;
-	},
+const focused = ref<boolean>(false);
 
-	set(newValue) {
-		emit("update:modelValue", newValue);
-	},
+onMounted(() => {
+	input.value!.innerText = modelValue;
 });
 </script>
 
 <template>
-	<div class="relative">
+	<div
+		ref="container"
+		:class="[focused ? focusClasses : '', 'relative']"
+		@click="input!.focus()"
+	>
 		<span
-			ref="spanTextBox"
+			ref="input"
 			:contenteditable="!disabled"
-			class="block"
-			@keydown.enter="spanTextBox?.blur()"
-			@blur="emit('on-blur')"
-			@input="textInput = ($event.target as HTMLSpanElement).innerText"
+			class="block outline-none"
+			@focus="focused = true"
+			@blur="focused = false"
+			@input="emit('update:modelValue', input!.innerText.trim())"
 		>
-			{{ modelValue }}
 		</span>
+
+		<div
+			v-if="!modelValue.length"
+			class="pointer-events-none absolute bottom-0 left-0 top-0 h-full w-full border-[inherit] p-[inherit] opacity-50"
+		>
+			<span class="block h-full w-full overflow-hidden">
+				{{ placeholder }}
+			</span>
+		</div>
 	</div>
 </template>
