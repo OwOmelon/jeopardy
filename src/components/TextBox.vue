@@ -6,11 +6,13 @@ const {
 	placeholder = "",
 	focusClasses = "",
 	disabled = false,
+	blurOnKeydownEnter = false,
 } = defineProps<{
 	modelValue: string;
 	placeholder?: string;
 	focusClasses?: string;
 	disabled?: boolean;
+	blurOnKeydownEnter?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -48,6 +50,9 @@ onMounted(() => {
 				emit('blur')
 			}"
 			@input="emit('update:modelValue', input!.innerText.trim())"
+			@keydown.enter="() => {
+				if (blurOnKeydownEnter) input!.blur()
+			}"
 		>
 		</span>
 
