@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { useTemplateStore } from "@/stores/template";
-import DragHandle from "@/components/DragHandle.vue";
+
 import type { Category } from "@/stores/template";
+
+import DragHandle from "@/components/DragHandle.vue";
+import TextBox from "@/components/TextBox.vue";
 
 const props = defineProps<{
 	category: Category;
@@ -17,8 +20,6 @@ const template = useTemplateStore();
 const textBox = ref<HTMLSpanElement | null>(null);
 const textInput = ref(props.category.name);
 
-const focused = ref<boolean>(false);
-
 watch(
 	() => props.category,
 	(val) => {
@@ -31,34 +32,18 @@ watch(
 	<th
 		:class="[
 			{ '!bg-red-400 !text-white': !template.editing },
-			{ '!border-b-red-400': focused },
 			'group relative',
 		]"
 	>
-		<span
-			ref="textBox"
-			:contenteditable="template.editing"
-			:class="['block overflow-hidden text-ellipsis outline-none']"
-			@focus="focused = true"
-			@input="textInput = ($event.target as HTMLSpanElement).innerText"
-			@keydown.enter="textBox?.blur()"
-			@blur="
-				() => {
-					focused = false;
-					emit('change-category-name', textInput, props.category.id);
-				}
-			"
-			>{{
-				template.editing
-					? props.category.name
-					: props.category.name || props.category.id
-			}}</span
-		>
+		<TextBox
+			v-model="textInput"
+			:placeholder="props.category.id"
+			:disabled="!template.editing"
+			focus-classes="!border-b-red-400"
+			class="cell cell-padding"
+		/>
 
-		<span
-			v-if="template.editing && !textInput.length"
-			class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-50"
-		>
+		<span v-if="!props.category.name.length && !template.editing">
 			{{ props.category.id }}
 		</span>
 
