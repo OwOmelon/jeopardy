@@ -14,6 +14,8 @@ const {
 }>();
 
 const emit = defineEmits<{
+	blur: [];
+	focus: [];
 	"update:modelValue": [string];
 }>();
 
@@ -37,8 +39,14 @@ onMounted(() => {
 			ref="input"
 			:contenteditable="!disabled"
 			class="block outline-none"
-			@focus="focused = true"
-			@blur="focused = false"
+			@focus="() => {
+				focused = true
+				emit('focus')
+			}"
+			@blur="() => {
+				focused = false
+				emit('blur')
+			}"
 			@input="emit('update:modelValue', input!.innerText.trim())"
 		>
 		</span>
