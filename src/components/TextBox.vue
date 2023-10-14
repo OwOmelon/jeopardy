@@ -26,9 +26,19 @@ const input = ref<HTMLSpanElement | null>(null);
 
 const focused = ref<boolean>(false);
 
-onMounted(() => {
+// FOR WHEN modelValue IS ARIBRITRARILY UPDATED
+function refresh(): void {
 	input.value!.innerText = modelValue;
+	console.log(
+		modelValue,
+	); /*WILL NOT WORK WITHOUT THIS CONSOLE.LOG FOR SOME REASON*/
+}
+
+onMounted(() => {
+	refresh();
 });
+
+defineExpose({ refresh });
 </script>
 
 <template>
@@ -41,18 +51,24 @@ onMounted(() => {
 			ref="input"
 			:contenteditable="!disabled"
 			class="block outline-none"
-			@focus="() => {
-				focused = true
-				emit('focus')
-			}"
-			@blur="() => {
-				focused = false
-				emit('blur')
-			}"
+			@focus="
+				() => {
+					focused = true;
+					emit('focus');
+				}
+			"
+			@blur="
+				() => {
+					focused = false;
+					emit('blur');
+				}
+			"
 			@input="emit('update:modelValue', input!.innerText.trim())"
-			@keydown.enter="() => {
-				if (blurOnKeydownEnter) input!.blur()
-			}"
+			@keydown.enter="
+				() => {
+					if (blurOnKeydownEnter) input!.blur();
+				}
+			"
 		>
 		</span>
 
