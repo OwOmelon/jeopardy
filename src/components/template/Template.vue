@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
-import TemplateNameTextBox from "./TemplateNameTextBox.vue";
+import TemplateName from "./TemplateName.vue";
 import TRPoints from "./TRPoints.vue";
 import TRCategories from "./TRCategories.vue";
 import TD from "./TD.vue";
@@ -36,7 +36,7 @@ function TDMouseLeave(): void {
 
 <template>
 	<div class="mt-10 w-full">
-		<TemplateNameTextBox />
+		<TemplateName />
 
 		<table
 			:class="[
