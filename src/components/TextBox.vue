@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 
-const {
-	modelValue,
-	placeholder = "",
-	focusClasses = "",
-	disabled = false,
-	blurOnKeydownEnter = false,
-} = defineProps<{
-	modelValue: string;
-	placeholder?: string;
-	focusClasses?: string;
-	disabled?: boolean;
-	blurOnKeydownEnter?: boolean;
-}>();
+const props = withDefaults(
+	defineProps<{
+		modelValue: string;
+		placeholder?: string;
+		focusClasses?: string;
+		disabled?: boolean;
+		blurOnKeydownEnter?: boolean;
+	}>(),
+	{
+		placeholder: "",
+		focusClasses: "",
+		disabled: false,
+	},
+);
 
 const emit = defineEmits<{
 	blur: [];
@@ -27,7 +28,7 @@ const input = ref<HTMLSpanElement | null>(null);
 const focused = ref<boolean>(false);
 
 function moveCaretPosition(): void {
-	setTimeout(() => {
+	// setTimeout(() => {
 		const range = document.createRange();
 		const selection = window.getSelection()!;
 		const node = input.value!.lastChild!;
@@ -37,20 +38,38 @@ function moveCaretPosition(): void {
 
 		selection.removeAllRanges();
 		selection.addRange(range);
-	}, 0);
+	// }, 0);
 }
+
+watch(
+	() => props.modelValue,
+	(val) => {
+		if (val !== input.value!.innerText) {
+			input.value!.innerText = val
+		}
+	},
+);
+
+onMounted(() => {
+	input.value!.innerText = props.modelValue;
+});
 </script>
 
 <template>
 	<div
 		ref="container"
 		:class="[focused ? focusClasses : '', 'relative']"
-		@click="input!.focus()"
+		@click="() => {
+			if (focused) return
+
+			input!.focus()
+			moveCaretPosition()
+		}"
 	>
 		<span
 			ref="input"
 			:contenteditable="!disabled"
-			class="block outline-none whitespace-pre-wrap"
+			class="block whitespace-pre-wrap outline-none"
 			@focus="
 				() => {
 					focused = true;
@@ -66,12 +85,12 @@ function moveCaretPosition(): void {
 			@input="emit('update:modelValue', input!.innerText)"
 			@keydown.enter="
 				() => {
-					moveCaretPosition();
+					// moveCaretPosition();
 					if (blurOnKeydownEnter) input!.blur();
 				}
 			"
 		>
-			{{ modelValue }}
+			<!-- {{ modelValue }} -->
 		</span>
 
 		<div
