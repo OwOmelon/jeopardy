@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
-import type { Row, Category, TableDisplayCell } from "../../stores/template";
+import type { Row, Category, TableDisplayCell } from "@/stores/template";
 
 const template = useTemplateStore();
 
@@ -39,7 +39,11 @@ const textDisplay = computed<number | string>(() => {
 
 <template>
 	<td
-		:class="[{ 'td-playing': !template.editing }, missingDataStyles, 'td text-xs']"
+		:class="[
+			{ 'td-playing': !template.editing },
+			missingDataStyles,
+			'cell-padding text-xs',
+		]"
 		@mouseenter="emit('on-mouse-enter', props.rowID, props.columnID)"
 		@mouseleave="emit('on-mouse-leave')"
 		@click="
@@ -49,13 +53,15 @@ const textDisplay = computed<number | string>(() => {
 			}
 		"
 	>
-		<p class="line-clamp-3">{{ textDisplay }}</p>
+		<p :class="[{ 'text-lg': !template.editing }, 'line-clamp-3']">
+			{{ textDisplay }}
+		</p>
 	</td>
 </template>
 
 <style scoped lang="postcss">
 td {
-	@apply h-16 cursor-pointer rounded bg-stone-300 text-stone-600 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100;
+	@apply h-[9.5ex] cursor-pointer rounded bg-stone-300 text-stone-600 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100;
 }
 
 .td-missing-data {
@@ -63,6 +69,6 @@ td {
 }
 
 .td-playing {
-	@apply grid place-items-center !text-lg hover:bg-red-400 hover:text-white;
+	@apply grid place-items-center hover:bg-red-400 hover:text-white;
 }
 </style>

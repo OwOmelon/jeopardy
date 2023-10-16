@@ -28,19 +28,17 @@ watch(
 </script>
 
 <template>
-	<th
-		:class="[
-			{ '!bg-red-400 !text-white': !template.editing },
-			'group relative',
-		]"
-	>
+	<th class="group relative">
 		<TextBox
 			v-model="textInput"
 			:placeholder="props.category.id"
 			:disabled="!template.editing"
 			focus-classes="!border-b-red-400"
 			blur-on-keydown-enter
-			class="cell cell-padding"
+			:class="[
+				{ '!bg-red-400 !text-white': !template.editing },
+				'cell cell-padding',
+			]"
 			@blur="emit('change-category-name', textInput, props.category.id)"
 		/>
 
