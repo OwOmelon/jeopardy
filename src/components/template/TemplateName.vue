@@ -11,7 +11,6 @@ const textInput = ref<string>(template.name);
 watch(
 	() => template.name,
 	(name) => {
-		console.log("name change", name);
 		textInput.value = name;
 	},
 );
@@ -33,13 +32,13 @@ watch(
 <template>
 	<TextBox
 		v-model="textInput"
-		placeholder="template name"
+		placeholder="insert template name"
 		focus-classes="!border-b-red-400"
 		:disabled="!template.editing"
 		blur-on-keydown-enter
 		:class="[
 			{ 'border-y-2 border-transparent border-b-stone-600': template.editing },
-			'mx-auto w-fit min-w-[9em] p-2 text-center text-3xl font-bold transition-colors',
+			'mx-auto w-fit min-w-[12em] p-2 text-center text-3xl font-bold transition-colors',
 		]"
 		@blur="template.name = textInput"
 	/>
