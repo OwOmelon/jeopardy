@@ -42,7 +42,7 @@ const textDisplay = computed<number | string>(() => {
 		:class="[
 			{ 'td-playing': !template.editing },
 			missingDataStyles,
-			'cell-padding text-xs',
+			'cell-padding h-[9.5ex] cursor-pointer rounded bg-stone-300 text-xs text-stone-500 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100',
 		]"
 		@mouseenter="emit('on-mouse-enter', props.rowID, props.columnID)"
 		@mouseleave="emit('on-mouse-leave')"
@@ -53,22 +53,22 @@ const textDisplay = computed<number | string>(() => {
 			}
 		"
 	>
-		<p :class="[{ 'text-lg': !template.editing }, 'line-clamp-3']">
+		<p class="line-clamp-3">
 			{{ textDisplay }}
 		</p>
 	</td>
 </template>
 
 <style scoped lang="postcss">
-td {
-	@apply h-[9.5ex] cursor-pointer rounded bg-stone-300 text-stone-600 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100;
-}
-
 .td-missing-data {
 	@apply !bg-stone-500 !text-stone-100;
 }
 
 .td-playing {
 	@apply grid place-items-center hover:bg-red-400 hover:text-white;
+}
+
+.td-playing p {
+	@apply text-lg font-bold;
 }
 </style>
