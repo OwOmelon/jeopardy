@@ -83,8 +83,6 @@ export const useTemplateStore = defineStore("template", () => {
 		},
 	});
 
-	const playProgressTracker = ref<PlayProgressTracker>({});
-
 	function cellHasMissingData(row: Row, column: Category["id"]): boolean {
 		return rawTable.value[row][column].question ||
 			rawTable.value[row][column].answer
@@ -155,16 +153,20 @@ export const useTemplateStore = defineStore("template", () => {
 
 	const categoriesDisplay = computed<Category[]>({
 		get() {
-			if (editing.value) return columns.value;
-
-			return columns.value.filter(
-				(category) => category.name || !columnIsEmpty(category.id),
-			);
+			return editing.value
+				? columns.value
+				: columns.value.filter(
+						(category) => category.name || !columnIsEmpty(category.id),
+				  );
 		},
 
 		set(newValue) {
 			columns.value = newValue;
 		},
+	});
+
+	const isEmpty = computed<boolean>(() => {
+		return categoriesDisplay.value.length ? false : true;
 	});
 
 	const tableDisplay = computed<TableDisplay>(() => {
@@ -187,9 +189,7 @@ export const useTemplateStore = defineStore("template", () => {
 		}, {});
 	});
 
-	const isEmpty = computed<boolean>(() => {
-		return categoriesDisplay.value.length ? false : true;
-	});
+	// ------------------------------
 
 	const activeCellIndeces = ref<{
 		row: Row | null;
@@ -214,6 +214,14 @@ export const useTemplateStore = defineStore("template", () => {
 	function resetActiveCell(): void {
 		activeCellIndeces.value.row = null;
 		activeCellIndeces.value.column = null;
+	}
+
+	const playProgressTracker = ref<PlayProgressTracker>({});
+
+	function setplayProgressTracker(guestName: Guest["name"] | undefined) {
+		playProgressTracker.value[activeCellIndeces.value.row!] = {
+			[activeCellIndeces.value.column!]: guestName ?? "no one",
+		};
 	}
 
 	// ------------------------------
