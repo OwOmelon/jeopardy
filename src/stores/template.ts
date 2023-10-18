@@ -53,7 +53,7 @@ export type PlayProgressTracker = {
 // ------------------------------
 
 export const useTemplateStore = defineStore("template", () => {
-	const guest = useGuestsStore();
+	const guests = useGuestsStore();
 	const editing = ref<boolean>(true);
 
 	const id = ref<string>(uuidv4());
@@ -180,9 +180,9 @@ export const useTemplateStore = defineStore("template", () => {
 
 	const playProgressTracker = ref<PlayProgressTracker>({});
 
-	function setPlayProgressTracker(guestName: Guest["name"] | undefined) {
+	function setPlayProgressTracker(guestID: Guest["id"] | null) {
 		playProgressTracker.value[activeCellIndeces.value.row!] = {
-			[activeCellIndeces.value.column!]: guestName ?? "no one",
+			[activeCellIndeces.value.column!]: guestID ?? "no one",
 		};
 	}
 
@@ -212,7 +212,7 @@ export const useTemplateStore = defineStore("template", () => {
 				...rows,
 				[row]: categoriesDisplay.value.reduce((categories, category) => {
 					const answeredBy =
-						guest.getGuest(playProgressTracker.value?.[row]?.[category.id])
+						guests.getGuest(playProgressTracker.value?.[row]?.[category.id])
 							?.name ?? null;
 
 					return {
