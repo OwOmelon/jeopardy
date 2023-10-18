@@ -50,9 +50,7 @@ export const useGuestsStore = defineStore("guests", () => {
 
     if (!guest) return;
 
-    guest.points = newPoints
-
-    console.log(guest, newPoints)
+    guest.points = guest.points + newPoints
   }
 
   const getGuest = (id: string): Guest | null => {
