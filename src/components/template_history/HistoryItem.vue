@@ -73,7 +73,7 @@ watch(
 			</div>
 		</div>
 
-		<Transition name="grow">
+		<Transition name="height-auto">
 			<div v-if="props.isActive" class="grid">
 				<div class="flex flex-col gap-3 overflow-hidden">
 					<p>template name: {{ props.template.name || "x" }}</p>
@@ -151,27 +151,5 @@ watch(
 
 .item p {
 	@apply line-clamp-3 w-full break-words;
-}
-</style>
-
-<style scoped lang="scss">
-.grow {
-	&-enter-active,
-	&-leave-active {
-		transition:
-			grid-template-rows 300ms,
-			opacity 300ms;
-	}
-
-	&-enter-from,
-	&-leave-to {
-		grid-template-rows: 0fr;
-		opacity: 0;
-	}
-
-	&-enter-to,
-	&-leave-from {
-		grid-template-rows: 1fr;
-	}
 }
 </style>
