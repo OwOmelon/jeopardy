@@ -10,11 +10,15 @@ const props = defineProps<{
 	<div>
 		<p class="text-xl">{{ props.question }}</p>
 
-		<Transition name="height-auto">
+		<Transition
+			name="height-auto"
+			enter-active-class="duration-1000"
+			leave-active-class="duration-1000"
+		>
 			<div v-if="props.showAnswer" class="grid">
 				<div class="overflow-hidden">
 					<hr class="my-5 border-t-2 border-red-400" />
-					
+
 					<p class="text-3xl font-bold">
 						{{ props.answer }}
 					</p>
