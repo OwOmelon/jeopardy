@@ -132,8 +132,8 @@ input[type="number"] {
   &-enter-active,
   &-leave-active {
     transition:
-      grid-template-rows 1s,
-      opacity 1s;
+      grid-template-rows 300ms,
+      opacity 300ms;
   }
 
   &-enter-from,
