@@ -1,64 +1,111 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
+import { ref } from "vue";
+import { useTemplateStore } from "@/stores/template";
+import { useGuestsStore } from "@/stores/guests";
+
 import type { Guest } from "@/stores/guests";
 
+import { Icon } from "@iconify/vue";
+
 const props = defineProps<{
+	progress: number;
 	guestList: Guest[];
 	cellPoints: number;
 }>();
 
 const emit = defineEmits<{
-	"give-points": [Guest["id"] | null];
+	"advance-progress": [];
+	done: [];
 }>();
+
+const template = useTemplateStore();
+const guests = useGuestsStore();
+
+const guestsPtsDeduct = ref<Guest["id"][]>([]);
+const guestPtsAdd = ref<Guest["id"] | null>(null);
+
+function onGuestBtnClick(id: Guest["id"]): void {
+	if (props.progress < 4) {
+		if (guestsPtsDeduct.value.includes(id)) {
+			guestsPtsDeduct.value = guestsPtsDeduct.value.filter(
+				(guestID) => guestID !== id,
+			);
+		} else {
+			guestsPtsDeduct.value.push(id);
+		}
+	} else {
+		guestPtsAdd.value = guestPtsAdd.value === id ? null : id;
+	}
+}
+
+function confirm(): void {
+	guestsPtsDeduct.value.forEach((guestID) => {
+		guests.editGuestPoints(guestID, -props.cellPoints);
+	});
+
+	if (guestPtsAdd.value) {
+		guests.editGuestPoints(guestPtsAdd.value, props.cellPoints);
+
+		template.setPlayProgressTracker(guestPtsAdd.value);
+	}
+
+	emit('done')
+}
 </script>
 
 <template>
-	<div class="flex flex-col justify-center gap-3 text-2xl font-bold">
-		<span>{{
-			props.guestList.length > 1
-				? `and the ${props.cellPoints} points go to ?`
-				: `does ${props.guestList[0].name} get the ${props.cellPoints} points ?`
-		}}</span>
+	<div class="flex flex-col items-center justify-center text-xl font-bold">
+		<span>who got it {{ props.progress < 4 ? "wrong" : "right" }} ?</span>
 
 		<div
 			v-if="props.guestList.length > 1"
-			class="flex flex-wrap justify-center gap-3"
+			class="my-5 flex flex-wrap justify-center gap-3"
 		>
 			<button
 				v-for="(guest, index) in props.guestList"
 				:key="index"
 				type="button"
-				@click="emit('give-points', guest.id)"
+				:disabled="guestsPtsDeduct.includes(guest.id) && props.progress === 4"
+				:class="[
+					guestsPtsDeduct.includes(guest.id)
+						? `bg-stone-400 text-stone-200 ${
+								props.progress === 4 ? 'pointer-events-none opacity-50' : ''
+						  }`
+						: guestPtsAdd === guest.id
+						? 'bg-red-400 text-white'
+						: 'bg-stone-200 text-stone-400',
+					'rounded p-2 shadow shadow-black/30 transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1',
+				]"
+				@click="onGuestBtnClick(guest.id)"
 			>
 				{{ guest.name }}
 			</button>
 		</div>
 
-		<div class="mx-auto flex gap-3">
-			<button
-				v-if="props.guestList.length === 1"
-				type="button"
-				class="guest-btn"
-				@click="emit('give-points', props.guestList[0].id)"
-			>
-				yup
-			</button>
+		<Transition name="height-auto">
+			<div v-if="props.progress === 4" class="grid">
+				<div class="overflow-hidden">
+					<button
+						v-if="props.progress === 4"
+						type="button"
+						class="group flex items-center text-3xl"
+						@click="confirm"
+					>
+						confirm
 
-			<button
-				type="button"
-				class="guest-btn flex items-center gap-2"
-				@click="emit('give-points', null)"
-			>
-				{{ props.guestList.length > 1 ? "no one" : "nope" }}
-
-				<Icon icon="fa-solid:skull" />
-			</button>
-		</div>
+						<Icon
+							icon="material-symbols:arrow-right-rounded"
+							class="h-16 w-16 transition-transform group-hover:translate-x-2"
+						/>
+					</button>
+				</div>
+			</div>
+		</Transition>
 	</div>
 </template>
 
-<style lang="postcss" scoped>
+<!-- <style lang="postcss" scoped>
 button {
-	@apply rounded bg-neutral-200 p-2 text-neutral-400 shadow shadow-black/30 transition-colors hover:bg-red-400 hover:text-white;
+	@apply rounded p-2 shadow shadow-black/30 transition-[background-color,_color,_transform];
 }
-</style>
+</style> -->

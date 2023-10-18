@@ -17,15 +17,16 @@ const modals = useModalStore();
 
 // 	1 = "show_question"
 // 	2 = "reveal_answer"
-// 	3 = "give_points"
+// 	3 = "deduct_points"
+// 	4 = "add_points"
 const progress = ref<number>(template.activeCellData?.answeredBy ? 2 : 1);
 
 function advanceProgress(): void {
-	if (progress.value === 3) return;
+	if (progress.value === 4) return;
 
 	const closeTDReveal: boolean = template.activeCellData!.answeredBy
 		? true
-		: (progress.value === 2 && !guests.list.length) || progress.value === 3;
+		: progress.value === 2 && !guests.list.length;
 
 	if (closeTDReveal) {
 		template.resetActiveCell();
@@ -44,21 +45,6 @@ function revertProgress(): void {
 	}
 
 	progress.value--;
-}
-
-function givePoints(guestID: Guest["id"] | null) {
-	const guestIndex = guestID
-		? guests.list.findIndex((guest) => guest.id === guestID)
-		: -1;
-	const guest: Guest | null = guests.list?.[guestIndex] ?? null;
-
-	template.playProgressTracker[template.activeCellIndeces.row!] = {
-		[template.activeCellIndeces.column!]: guest?.name ?? "no one",
-	};
-
-	console.log(template.playProgressTracker);
-
-	template.resetActiveCell();
 }
 
 function onKeyDown(e: KeyboardEvent) {
@@ -110,6 +96,18 @@ onUnmounted(() => {
 		<div
 			class="relative grid min-h-[350px] grid-cols-[3rem,_auto,_3rem] items-center gap-5 bg-white p-5 text-center text-red-400"
 		>
+			<div class="absolute left-0 top-0">
+				<p>{{ progress }}</p>
+				<p>{{ progress < 4 }}</p>
+				<p>
+					{{
+						template.activeCellData!.answeredBy
+							? true
+							: progress === 2 && !guests.list.length
+					}}
+				</p>
+			</div>
+
 			<button type="button" @click="revertProgress">
 				<Icon icon="material-symbols:arrow-left-rounded" />
 			</button>
@@ -117,7 +115,7 @@ onUnmounted(() => {
 			<div class="grow">
 				<Transition name="fade" mode="out-in">
 					<QuestionAnswer
-						v-if="progress !== 3"
+						v-if="progress < 3"
 						:question="template.activeCellData!.question"
 						:answer="template.activeCellData!.answer"
 						:show-answer="progress > 1"
@@ -125,9 +123,10 @@ onUnmounted(() => {
 
 					<GiveGuestPoints
 						v-else
+						:progress="progress"
 						:guest-list="guests.list"
 						:cell-points="template.activeCellData!.points"
-						@give-points="givePoints"
+						@done="template.resetActiveCell"
 					/>
 				</Transition>
 
@@ -141,9 +140,9 @@ onUnmounted(() => {
 
 			<button
 				type="button"
-				:disabled="progress === 3"
+				:disabled="progress === 4"
 				:class="{
-					'opacity-0': progress === 3,
+					'opacity-0': progress === 4,
 				}"
 				@click="advanceProgress"
 			>
@@ -155,7 +154,7 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 button {
-	@apply text-red-400 transition-transform hover:scale-110;
+	@apply text-red-400 transition-transform hover:scale-150;
 }
 
 button svg {
