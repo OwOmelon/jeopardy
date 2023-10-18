@@ -18,12 +18,6 @@ export const useGuestsStore = defineStore("guests", () => {
     return list.value.length < guestLimit ? false : true;
   });
 
-  const getGuest = (id: string): Guest | null => {
-    const guestIndex = list.value.findIndex((guest) => guest.id === id);
-
-    return list.value[guestIndex] ?? null;
-  };
-
   function addGuest(name: string): void {
     if (guestLimitReached.value) return;
 
@@ -36,6 +30,13 @@ export const useGuestsStore = defineStore("guests", () => {
     list.value.push(newGuest);
   }
 
+  function deleteGuest(id: string): void {
+    if (activeGuestID.value === id) {
+      activeGuestID.value = "";
+    }
+    list.value = list.value.filter((guest) => guest.id !== id);
+  }
+
   function editGuestName(id: string, newName: string): void {
     const guest = getGuest(id)
 
@@ -44,7 +45,7 @@ export const useGuestsStore = defineStore("guests", () => {
     guest.name = newName;
   }
 
-  function editGuestPoints(id: string, newPoints: number) {
+  function editGuestPoints(id: string, newPoints: number): void {
     const guest = getGuest(id)
 
     if (!guest) return;
@@ -54,12 +55,11 @@ export const useGuestsStore = defineStore("guests", () => {
     console.log(guest, newPoints)
   }
 
-  function deleteGuest(id: string): void {
-    if (activeGuestID.value === id) {
-      activeGuestID.value = "";
-    }
-    list.value = list.value.filter((guest) => guest.id !== id);
-  }
+  const getGuest = (id: string): Guest | null => {
+    const guestIndex = list.value.findIndex((guest) => guest.id === id);
+
+    return list.value[guestIndex] ?? null;
+  };
 
   return {
     list,
