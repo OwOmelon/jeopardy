@@ -218,7 +218,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	const playProgressTracker = ref<PlayProgressTracker>({});
 
-	function setplayProgressTracker(guestName: Guest["name"] | undefined) {
+	function setPlayProgressTracker(guestName: Guest["name"] | undefined) {
 		playProgressTracker.value[activeCellIndeces.value.row!] = {
 			[activeCellIndeces.value.column!]: guestName ?? "no one",
 		};
@@ -248,5 +248,6 @@ export const useTemplateStore = defineStore("template", () => {
 		activeCellIndeces,
 		activeCellData,
 		resetActiveCell,
+		setPlayProgressTracker,
 	};
 });
