@@ -1,5 +1,6 @@
 import { ref, computed, watch, watchEffect, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
+import { useGuestsStore } from "./guests";
 import { v4 as uuidv4 } from "uuid";
 
 import type { Guest } from "./guests";
@@ -46,12 +47,13 @@ export type RawTemplateData = {
 //  ----
 
 export type PlayProgressTracker = {
-	[key: Row]: { [key: Category["id"]]: Guest["name"] };
+	[key: Row]: { [key: Category["id"]]: Guest["id"] };
 };
 
 // ------------------------------
 
 export const useTemplateStore = defineStore("template", () => {
+	const guest = useGuestsStore();
 	const editing = ref<boolean>(true);
 
 	const id = ref<string>(uuidv4());
@@ -151,46 +153,6 @@ export const useTemplateStore = defineStore("template", () => {
 
 	// ------------------------------
 
-	const categoriesDisplay = computed<Category[]>({
-		get() {
-			return editing.value
-				? columns.value
-				: columns.value.filter(
-						(category) => category.name || !columnIsEmpty(category.id),
-				  );
-		},
-
-		set(newValue) {
-			columns.value = newValue;
-		},
-	});
-
-	const isEmpty = computed<boolean>(() => {
-		return categoriesDisplay.value.length ? false : true;
-	});
-
-	const tableDisplay = computed<TableDisplay>(() => {
-		return rows.value.reduce((rows, row, rowIndex) => {
-			return {
-				...rows,
-				[row]: categoriesDisplay.value.reduce((categories, category) => {
-					return {
-						...categories,
-						[category.id]: {
-							...rawTable.value[row][category.id],
-							points: points.value[rowIndex],
-							category: category.name || category.id,
-							answeredBy:
-								playProgressTracker.value?.[row]?.[category.id] ?? null,
-						},
-					};
-				}, {}),
-			};
-		}, {});
-	});
-
-	// ------------------------------
-
 	const activeCellIndeces = ref<{
 		row: Row | null;
 		column: Category["id"] | null;
@@ -223,6 +185,49 @@ export const useTemplateStore = defineStore("template", () => {
 			[activeCellIndeces.value.column!]: guestName ?? "no one",
 		};
 	}
+
+	// ------------------------------
+
+	const categoriesDisplay = computed<Category[]>({
+		get() {
+			return editing.value
+				? columns.value
+				: columns.value.filter(
+						(category) => category.name || !columnIsEmpty(category.id),
+				  );
+		},
+
+		set(newValue) {
+			columns.value = newValue;
+		},
+	});
+
+	const isEmpty = computed<boolean>(() => {
+		return categoriesDisplay.value.length ? false : true;
+	});
+
+	const tableDisplay = computed<TableDisplay>(() => {
+		return rows.value.reduce((rows, row, rowIndex) => {
+			return {
+				...rows,
+				[row]: categoriesDisplay.value.reduce((categories, category) => {
+					const answeredBy =
+						guest.getGuest(playProgressTracker.value?.[row]?.[category.id])
+							?.name ?? null;
+
+					return {
+						...categories,
+						[category.id]: {
+							...rawTable.value[row][category.id],
+							points: points.value[rowIndex],
+							category: category.name || category.id,
+							answeredBy,
+						},
+					};
+				}, {}),
+			};
+		}, {});
+	});
 
 	// ------------------------------
 
