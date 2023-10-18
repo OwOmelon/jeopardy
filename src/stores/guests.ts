@@ -72,5 +72,6 @@ export const useGuestsStore = defineStore("guests", () => {
     editGuestName,
     editGuestPoints,
     deleteGuest,
+    getGuest,
   };
 });
