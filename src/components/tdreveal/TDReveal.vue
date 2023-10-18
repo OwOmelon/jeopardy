@@ -7,6 +7,7 @@ import { vOnClickOutside } from "@vueuse/components";
 
 import type { Guest } from "@/stores/guests";
 
+import { Icon } from "@iconify/vue";
 import QuestionAnswer from "./QuestionAnswer.vue";
 import GiveGuestPoints from "./GiveGuestPoints.vue";
 
@@ -14,21 +15,19 @@ const template = useTemplateStore();
 const guests = useGuestsStore();
 const modals = useModalStore();
 
-const procedure: { [key: number]: string } = {
-	1: "show_question",
-	2: "reveal_answer",
-	3: "give_points",
-};
-
+// 	1 = "show_question"
+// 	2 = "reveal_answer"
+// 	3 = "give_points"
 const progress = ref<number>(template.activeCellData?.answeredBy ? 2 : 1);
 
 function advanceProgress(): void {
-	if (procedure[progress.value] === "give_points") return;
+	if (progress.value === 3) return;
 
-	if (
-		(procedure[progress.value] === "reveal_answer" && !guests.list.length) ||
-		template.activeCellData?.answeredBy
-	) {
+	const closeTDReveal: boolean = template.activeCellData!.answeredBy
+		? true
+		: (progress.value === 2 && !guests.list.length) || progress.value === 3;
+
+	if (closeTDReveal) {
 		template.resetActiveCell();
 
 		return;
@@ -38,7 +37,7 @@ function advanceProgress(): void {
 }
 
 function revertProgress(): void {
-	if (procedure[progress.value] !== "give_points") {
+	if (progress.value === 1 || template.activeCellData!.answeredBy) {
 		template.resetActiveCell();
 
 		return;
@@ -109,31 +108,57 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="relative flex min-h-[350px] flex-col items-center justify-center bg-white p-5 text-center text-red-400"
-			@click="advanceProgress"
+			class="relative grid min-h-[350px] grid-cols-[3rem,_auto,_3rem] items-center gap-5 bg-white p-5 text-center text-red-400"
 		>
-			<Transition name="fade" mode="out-in">
-				<QuestionAnswer
-					v-if="procedure[progress] !== 'give_points'"
-					:question="template.activeCellData!.question"
-					:answer="template.activeCellData!.answer"
-					:show-answer="procedure[progress] === 'reveal_answer'"
-				/>
+			<button type="button" @click="revertProgress">
+				<Icon icon="material-symbols:arrow-left-rounded" />
+			</button>
 
-				<GiveGuestPoints
-					v-else
-					:guest-list="guests.list"
-					:cell-points="template.activeCellData!.points"
-					@give-points="givePoints"
-				/>
-			</Transition>
+			<div class="grow">
+				<Transition name="fade" mode="out-in">
+					<QuestionAnswer
+						v-if="progress !== 3"
+						:question="template.activeCellData!.question"
+						:answer="template.activeCellData!.answer"
+						:show-answer="progress === 2"
+					/>
 
-			<p
-				v-if="template.activeCellData?.answeredBy"
-				class="font-xl mt-10 font-bold"
+					<GiveGuestPoints
+						v-else
+						:guest-list="guests.list"
+						:cell-points="template.activeCellData!.points"
+						@give-points="givePoints"
+					/>
+				</Transition>
+
+				<p
+					v-if="template.activeCellData?.answeredBy"
+					class="font-xl mt-10 font-bold"
+				>
+					answered by: {{ template.activeCellData!.answeredBy }}
+				</p>
+			</div>
+
+			<button
+				type="button"
+				:disabled="progress === 3"
+				:class="{
+					'opacity-0': progress === 3,
+				}"
+				@click="advanceProgress"
 			>
-				answered by: {{ template.activeCellData?.answeredBy }}
-			</p>
+				<Icon icon="material-symbols:arrow-right-rounded" />
+			</button>
 		</div>
 	</div>
 </template>
+
+<style scoped lang="postcss">
+button {
+	@apply text-red-400 transition-transform hover:scale-110;
+}
+
+button svg {
+	@apply h-full w-full;
+}
+</style>
