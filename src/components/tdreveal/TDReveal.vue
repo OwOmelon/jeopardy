@@ -120,7 +120,7 @@ onUnmounted(() => {
 						v-if="progress !== 3"
 						:question="template.activeCellData!.question"
 						:answer="template.activeCellData!.answer"
-						:show-answer="progress === 2"
+						:show-answer="progress > 1"
 					/>
 
 					<GiveGuestPoints
@@ -131,12 +131,12 @@ onUnmounted(() => {
 					/>
 				</Transition>
 
-				<p
+				<span
 					v-if="template.activeCellData?.answeredBy"
 					class="font-xl mt-10 font-bold"
 				>
 					answered by: {{ template.activeCellData!.answeredBy }}
-				</p>
+				</span>
 			</div>
 
 			<button
