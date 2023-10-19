@@ -24,7 +24,9 @@ export type RawTable = {
 //  ----
 
 export type TableDisplayCell = {
+	row: RowID;
 	points: number;
+	column: Category["id"];
 	category: Category["name"];
 	answeredBy: Guest["name"] | null | undefined;
 } & RawTableCell;
@@ -153,42 +155,15 @@ export const useTemplateStore = defineStore("template", () => {
 
 	// ------------------------------
 
-	const activeCellIndeces = ref<{
-		row: RowID | null;
-		column: Category["id"] | null;
-	}>({
-		row: null,
-		column: null,
-	});
-
-	const activeCellData = computed<TableDisplayCell | null>(() => {
-		return activeCellIndeces.value.row && activeCellIndeces.value.column
-			? JSON.parse(
-					JSON.stringify(
-						tableDisplay.value[activeCellIndeces.value.row][
-							activeCellIndeces.value.column
-						],
-					),
-			  )
-			: null;
-	});
-
-	function resetActiveCell(): void {
-		activeCellIndeces.value.row = null;
-		activeCellIndeces.value.column = null;
-	}
-
+	const activeCell = ref<TableDisplayCell | null>(null);
 	const playProgressTracker = ref<PlayProgressTracker>({});
 
 	function setPlayProgressTracker(name: Guest["name"] | null) {
-		const row = playProgressTracker.value?.[activeCellIndeces.value.row!] ?? {}
+		const row = playProgressTracker.value?.[activeCell.value!.row] ?? {};
 
-		row[activeCellIndeces.value.column!] = name
-		playProgressTracker.value[activeCellIndeces.value.row!] = row
-
+		row[activeCell.value!.column!] = name;
+		playProgressTracker.value[activeCell.value!.row] = row;
 	}
-
-	// ------------------------------
 
 	const categoriesDisplay = computed<Category[]>({
 		get() {
@@ -217,9 +192,11 @@ export const useTemplateStore = defineStore("template", () => {
 						...categories,
 						[category.id]: {
 							...rawTable.value[row][category.id],
+							row,
 							points: points.value[rowIndex],
+							column: category.id,
 							category: category.name || category.id,
-							answeredBy: playProgressTracker.value?.[row]?.[category.id]
+							answeredBy: playProgressTracker.value?.[row]?.[category.id],
 						},
 					};
 				}, {}),
@@ -248,9 +225,7 @@ export const useTemplateStore = defineStore("template", () => {
 		tableDisplay,
 		isEmpty,
 		categoriesDisplay,
-		activeCellIndeces,
-		activeCellData,
-		resetActiveCell,
+		activeCell,
 		setPlayProgressTracker,
 	};
 });
