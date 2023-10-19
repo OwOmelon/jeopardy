@@ -38,7 +38,7 @@ const textDisplay = computed<number | string>(() => {
 <template>
 	<td
 		:class="[
-			{ 'hover-rise': !(!template.editing && props.cell.answeredBy) },
+			{ 'hover-rise': !(!template.editing && props.cell.answeredBy !== undefined) },
 			!template.editing
 				? `playing ${props.cell.answeredBy !== undefined ? 'answered' : ''}`
 				: '',
