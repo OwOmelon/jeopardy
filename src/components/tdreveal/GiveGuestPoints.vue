@@ -9,8 +9,6 @@ import { Icon } from "@iconify/vue";
 
 const props = defineProps<{
 	progress: number;
-	guestList: Guest[];
-	cellPoints: number;
 }>();
 
 const emit = defineEmits<{
@@ -21,35 +19,54 @@ const emit = defineEmits<{
 const template = useTemplateStore();
 const guests = useGuestsStore();
 
-const guestsPtsDeduct = ref<Guest["id"][]>([]);
-const guestPtsAdd = ref<Guest["id"] | null>(null);
+const guestsPtsDeduct = ref<Guest[]>([]);
+const guestPtsAdd = ref<Guest | null>(null);
 
-function onGuestBtnClick(id: Guest["id"]): void {
+function guestsPtsDeductIncludesGuest(guest: Guest): boolean {
+	return (
+		guestsPtsDeduct.value.findIndex(
+			(guestDeduct) => guestDeduct.id === guest.id,
+		) > -1
+	);
+}
+
+function onGuestBtnClick(guest: Guest): void {
 	if (props.progress < 4) {
-		if (guestsPtsDeduct.value.includes(id)) {
+		if (guestsPtsDeduct.value.includes(guest)) {
 			guestsPtsDeduct.value = guestsPtsDeduct.value.filter(
-				(guestID) => guestID !== id,
+				(guestDeduct) => guestDeduct.id !== guest.id,
 			);
 		} else {
-			guestsPtsDeduct.value.push(id);
+			if (guest.id === guestPtsAdd.value?.id) {
+				guestPtsAdd.value = null;
+			}
+
+			guestsPtsDeduct.value.push(guest);
 		}
 	} else {
-		guestPtsAdd.value = guestPtsAdd.value === id ? null : id;
+		guestPtsAdd.value = guestPtsAdd.value === guest ? null : guest;
 	}
 }
 
 function confirm(): void {
-	guestsPtsDeduct.value.forEach((guestID) => {
-		guests.editGuestPoints(guestID, -props.cellPoints);
-	});
-
 	if (guestPtsAdd.value) {
-		guests.editGuestPoints(guestPtsAdd.value, props.cellPoints);
-
-		template.setPlayProgressTracker(guestPtsAdd.value);
+		guests.editGuestPoints(
+			guestPtsAdd.value.id,
+			template.activeCellData!.points,
+			true,
+		);
 	}
 
-	emit('done')
+	guestsPtsDeduct.value.forEach((guestDeduct) => {
+		guests.editGuestPoints(
+			guestDeduct.id,
+			-template.activeCellData!.points,
+			true,
+		);
+	});
+
+	template.setPlayProgressTracker(guestPtsAdd.value?.name ?? null);
+	emit("done");
 }
 </script>
 
@@ -58,25 +75,25 @@ function confirm(): void {
 		<span>who got it {{ props.progress < 4 ? "wrong" : "right" }} ?</span>
 
 		<div
-			v-if="props.guestList.length > 1"
+			v-if="guests.list.length > 1"
 			class="my-5 flex flex-wrap justify-center gap-3"
 		>
 			<button
-				v-for="(guest, index) in props.guestList"
+				v-for="(guest, index) in guests.list"
 				:key="index"
 				type="button"
-				:disabled="guestsPtsDeduct.includes(guest.id) && props.progress === 4"
+				:disabled="guestsPtsDeductIncludesGuest(guest) && props.progress === 4"
 				:class="[
-					guestsPtsDeduct.includes(guest.id)
+					guestsPtsDeductIncludesGuest(guest)
 						? `bg-stone-400 text-stone-200 ${
 								props.progress === 4 ? 'pointer-events-none opacity-50' : ''
 						  }`
-						: guestPtsAdd === guest.id
+						: guestPtsAdd?.id === guest.id
 						? 'bg-red-400 text-white'
 						: 'bg-stone-200 text-stone-400',
 					'rounded p-2 shadow shadow-black/30 transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1',
 				]"
-				@click="onGuestBtnClick(guest.id)"
+				@click="onGuestBtnClick(guest)"
 			>
 				{{ guest.name }}
 			</button>
@@ -103,9 +120,3 @@ function confirm(): void {
 		</Transition>
 	</div>
 </template>
-
-<!-- <style lang="postcss" scoped>
-button {
-	@apply rounded p-2 shadow shadow-black/30 transition-[background-color,_color,_transform];
-}
-</style> -->
