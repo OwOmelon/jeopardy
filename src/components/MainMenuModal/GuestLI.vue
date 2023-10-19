@@ -50,6 +50,7 @@ const currentlyEditing = computed<boolean | "active">(() => {
 		>
 			<button
 				type="button"
+				:disabled="currentlyEditing === true"
 				@click="
 					() => {
 						if (guests.activeGuestID === props.guest.id) {
@@ -72,6 +73,7 @@ const currentlyEditing = computed<boolean | "active">(() => {
 			</button>
 			<button
 				type="button"
+				:disabled="currentlyEditing === true"
 				@click="
 					() => {
 						emit('reset-text-box');
