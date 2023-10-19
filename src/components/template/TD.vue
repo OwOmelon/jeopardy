@@ -7,8 +7,6 @@ import type { RowID, Category, TableDisplayCell } from "@/stores/template";
 const template = useTemplateStore();
 
 const props = defineProps<{
-	rowID: RowID;
-	columnID: Category["id"];
 	cell: TableDisplayCell;
 	hovered: boolean;
 }>();
@@ -19,14 +17,14 @@ const emit = defineEmits<{
 }>();
 
 const missingDataStyles = computed<string>(() => {
-	return template.cellHasMissingData(props.rowID, props.columnID)
+	return template.cellHasMissingData(props.cell.row, props.cell.column)
 		? `missing-cell ${template.editing ? "" : "pointer-events-none"}`
 		: "";
 });
 
 const textDisplay = computed<number | string>(() => {
 	if (!template.editing)
-		return template.cellHasMissingData(props.rowID, props.columnID)
+		return template.cellHasMissingData(props.cell.row, props.cell.column)
 			? ""
 			: props.cell.points;
 
@@ -47,7 +45,7 @@ const textDisplay = computed<number | string>(() => {
 			missingDataStyles,
 			'cell-padding h-[9.5ex] cursor-pointer rounded bg-stone-300 text-xs text-stone-500 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_opacity,_transform] active:scale-100',
 		]"
-		@mouseenter="emit('on-mouse-enter', props.rowID, props.columnID)"
+		@mouseenter="emit('on-mouse-enter', props.cell.row, props.cell.column)"
 		@mouseleave="emit('on-mouse-leave')"
 		@click="
 			() => {
