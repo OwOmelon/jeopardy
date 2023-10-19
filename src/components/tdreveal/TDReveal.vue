@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { useGuestsStore } from "@/stores/guests";
 import { useModalStore } from "@/stores/modals";
 import { vOnClickOutside } from "@vueuse/components";
-
-import type { Guest } from "@/stores/guests";
 
 import { Icon } from "@iconify/vue";
 import QuestionAnswer from "./QuestionAnswer.vue";
@@ -19,16 +17,20 @@ const modals = useModalStore();
 // 	2 = "reveal_answer"
 // 	3 = "deduct_points"
 // 	4 = "add_points"
-const progress = ref<number>(template.activeCellData?.answeredBy ? 2 : 1);
+const progress = ref<number>(
+	template.activeCellData?.answeredBy !== undefined ? 2 : 1,
+);
+
+const hideAdvanceProgressBtn = computed<boolean>(() => {
+	return template.activeCellData!.answeredBy !== undefined
+		? true
+		: (progress.value === 2 && !guests.list.length) || progress.value === 4;
+});
 
 function advanceProgress(): void {
 	if (progress.value === 4) return;
 
-	const closeTDReveal: boolean = template.activeCellData!.answeredBy
-		? true
-		: progress.value === 2 && !guests.list.length;
-
-	if (closeTDReveal) {
+	if (hideAdvanceProgressBtn.value) {
 		template.resetActiveCell();
 
 		return;
@@ -38,7 +40,10 @@ function advanceProgress(): void {
 }
 
 function revertProgress(): void {
-	if (progress.value === 1 || template.activeCellData!.answeredBy) {
+	if (
+		progress.value === 1 ||
+		template.activeCellData!.answeredBy !== undefined
+	) {
 		template.resetActiveCell();
 
 		return;
@@ -96,18 +101,6 @@ onUnmounted(() => {
 		<div
 			class="relative grid min-h-[350px] grid-cols-[3rem,_auto,_3rem] items-center gap-5 bg-white p-5 text-center text-red-400"
 		>
-			<div class="absolute left-0 top-0">
-				<p>{{ progress }}</p>
-				<p>{{ progress < 4 }}</p>
-				<p>
-					{{
-						template.activeCellData!.answeredBy
-							? true
-							: progress === 2 && !guests.list.length
-					}}
-				</p>
-			</div>
-
 			<button type="button" @click="revertProgress">
 				<Icon icon="material-symbols:arrow-left-rounded" />
 			</button>
@@ -131,18 +124,18 @@ onUnmounted(() => {
 				</Transition>
 
 				<span
-					v-if="template.activeCellData?.answeredBy"
-					class="font-xl mt-10 font-bold"
+					v-if="template.activeCellData?.answeredBy !== undefined"
+					class="block font-xl mt-10 font-bold text-red"
 				>
-					answered by: {{ template.activeCellData!.answeredBy }}
+					answered by: {{ template.activeCellData!.answeredBy ?? "no one" }}
 				</span>
 			</div>
 
 			<button
 				type="button"
-				:disabled="progress === 4"
+				:disabled="hideAdvanceProgressBtn"
 				:class="{
-					'opacity-0': progress === 4,
+					'opacity-0': hideAdvanceProgressBtn,
 				}"
 				@click="advanceProgress"
 			>
