@@ -21,9 +21,11 @@ watch(
 		if (value) {
 			textInput.value = template.name;
 		} else {
-			textInput.value = template.isEmpty
-				? "your jeopardy template is empty D:"
-				: "template name";
+			if (!template.name.length) {
+				textInput.value = template.isEmpty
+					? "your jeopardy template is empty D:"
+					: "JEOPARDY";
+			}
 		}
 	},
 );
