@@ -20,7 +20,7 @@ const emit = defineEmits<{
 
 const missingDataStyles = computed<string>(() => {
 	return template.cellHasMissingData(props.rowID, props.columnID)
-		? `td-missing-data ${template.editing ? "" : "pointer-events-none"}`
+		? `missing-data ${template.editing ? "" : "pointer-events-none"}`
 		: "";
 });
 
@@ -40,9 +40,12 @@ const textDisplay = computed<number | string>(() => {
 <template>
 	<td
 		:class="[
-			{ 'td-playing': !template.editing },
+			{ 'hover-rise': !(!template.editing && props.data.answeredBy) },
+			!template.editing
+				? `playing ${props.data.answeredBy !== undefined ? 'answered' : ''}`
+				: '',
 			missingDataStyles,
-			'cell-padding h-[9.5ex] cursor-pointer rounded bg-stone-300 text-xs text-stone-500 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_transform] hover:-translate-y-2 hover:scale-105 hover:shadow-lg active:scale-100',
+			'cell-padding h-[9.5ex] cursor-pointer rounded bg-stone-300 text-xs text-stone-500 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_opacity,_transform] active:scale-100',
 		]"
 		@mouseenter="emit('on-mouse-enter', props.rowID, props.columnID)"
 		@mouseleave="emit('on-mouse-leave')"
@@ -60,15 +63,23 @@ const textDisplay = computed<number | string>(() => {
 </template>
 
 <style scoped lang="postcss">
-.td-missing-data {
+.hover-rise {
+	@apply hover:-translate-y-2 hover:scale-105 hover:shadow-lg;
+}
+
+.missing-data {
 	@apply !bg-stone-500 !text-stone-100;
 }
 
-.td-playing {
+.playing {
 	@apply grid place-items-center hover:bg-red-400 hover:text-white;
 }
 
-.td-playing p {
+.playing p {
 	@apply text-lg font-bold;
+}
+
+.answered {
+	@apply opacity-0 hover:opacity-50;
 }
 </style>
