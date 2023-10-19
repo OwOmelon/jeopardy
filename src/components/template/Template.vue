@@ -62,7 +62,7 @@ function TDMouseLeave(): void {
 						<TD
 							:row-i-d="rowKey"
 							:column-i-d="cellKey"
-							:data="cellValue"
+							:cell="cellValue"
 							:hovered="
 								rowKey === TDHovered.row && cellKey === TDHovered.column
 							"

@@ -9,7 +9,7 @@ const template = useTemplateStore();
 const props = defineProps<{
 	rowID: RowID;
 	columnID: Category["id"];
-	data: TableDisplayCell;
+	cell: TableDisplayCell;
 	hovered: boolean;
 }>();
 
@@ -20,7 +20,7 @@ const emit = defineEmits<{
 
 const missingDataStyles = computed<string>(() => {
 	return template.cellHasMissingData(props.rowID, props.columnID)
-		? `missing-data ${template.editing ? "" : "pointer-events-none"}`
+		? `missing-cell ${template.editing ? "" : "pointer-events-none"}`
 		: "";
 });
 
@@ -28,10 +28,10 @@ const textDisplay = computed<number | string>(() => {
 	if (!template.editing)
 		return template.cellHasMissingData(props.rowID, props.columnID)
 			? ""
-			: props.data.points;
+			: props.cell.points;
 
-	const question = props.data.question || "Add Question";
-	const answer = props.data.answer || "Add Answer";
+	const question = props.cell.question || "Add Question";
+	const answer = props.cell.answer || "Add Answer";
 
 	return props.hovered ? answer : question;
 });
@@ -40,9 +40,9 @@ const textDisplay = computed<number | string>(() => {
 <template>
 	<td
 		:class="[
-			{ 'hover-rise': !(!template.editing && props.data.answeredBy) },
+			{ 'hover-rise': !(!template.editing && props.cell.answeredBy) },
 			!template.editing
-				? `playing ${props.data.answeredBy !== undefined ? 'answered' : ''}`
+				? `playing ${props.cell.answeredBy !== undefined ? 'answered' : ''}`
 				: '',
 			missingDataStyles,
 			'cell-padding h-[9.5ex] cursor-pointer rounded bg-stone-300 text-xs text-stone-500 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_opacity,_transform] active:scale-100',
@@ -67,7 +67,7 @@ const textDisplay = computed<number | string>(() => {
 	@apply hover:-translate-y-2 hover:scale-105 hover:shadow-lg;
 }
 
-.missing-data {
+.missing-cell {
 	@apply !bg-stone-500 !text-stone-100;
 }
 
