@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { useTemplateStore } from "@/stores/template";
-import { useModalStore } from "@/stores/modals";
+import { useMainMenuStore } from "@/stores/mainmenu";
 import { vOnClickOutside } from "@vueuse/components";
 
 import TextBox from "@/components/TextBox.vue";
 
 const template = useTemplateStore();
-const modals = useModalStore();
+const mainmenu = useMainMenuStore();
 
 const questionModelValue = ref(template.activeCellData!.question);
 const answerModelValue = ref(template.activeCellData!.answer);
@@ -31,13 +31,13 @@ function onKeyDown(e: KeyboardEvent) {
 }
 
 onMounted(() => {
-	modals.disableMainMenuToggle = true;
+	mainmenu.disableToggle = true;
 
 	window.addEventListener("keydown", onKeyDown);
 });
 
 onUnmounted(() => {
-	modals.disableMainMenuToggle = false;
+	mainmenu.disableToggle = false;
 
 	window.removeEventListener("keydown", onKeyDown);
 });
@@ -120,6 +120,6 @@ label {
 }
 
 .text-box-focus {
-	@apply !border-red-400
+	@apply !border-red-400;
 }
 </style>

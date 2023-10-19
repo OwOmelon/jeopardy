@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { useGuestsStore } from "@/stores/guests";
-import { useModalStore } from "@/stores/modals";
+import { useMainMenuStore } from "@/stores/mainmenu";
 import { vOnClickOutside } from "@vueuse/components";
 
 import { Icon } from "@iconify/vue";
@@ -11,7 +11,7 @@ import GiveGuestPoints from "./GiveGuestPoints.vue";
 
 const template = useTemplateStore();
 const guests = useGuestsStore();
-const modals = useModalStore();
+const mainmenu = useMainMenuStore();
 
 // 	1 = "show_question"
 // 	2 = "reveal_answer"
@@ -65,13 +65,13 @@ function onKeyDown(e: KeyboardEvent) {
 }
 
 onMounted(() => {
-	modals.disableMainMenuToggle = true;
+	mainmenu.disableToggle = true;
 
 	window.addEventListener("keydown", onKeyDown);
 });
 
 onUnmounted(() => {
-	modals.disableMainMenuToggle = false;
+	mainmenu.disableToggle = false;
 
 	window.removeEventListener("keydown", onKeyDown);
 });

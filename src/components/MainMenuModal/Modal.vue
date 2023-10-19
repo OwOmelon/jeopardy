@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useModalStore } from "@/stores/modals";
+import { useMainMenuStore } from "@/stores/mainmenu";
 import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
 import { vOnClickOutside } from "@vueuse/components";
@@ -10,7 +10,7 @@ import TextBox from "./TextBox.vue";
 import SaveChangesBtn from "./SaveChangesBtn.vue";
 import GuestLI from "./GuestLI.vue";
 
-const modal = useModalStore();
+const mainmenu = useMainMenuStore();
 const guests = useGuestsStore();
 const template = useTemplateStore();
 
@@ -34,17 +34,17 @@ function saveChanges(): void {
 
 function changeEditMode(mode: boolean) {
 	template.editing = mode
-	modal.mainMenu = false
+	mainmenu.show = false
 }
 </script>
 
 <template>
-	<ModalWrapper :show="modal.mainMenu">
+	<ModalWrapper :show="mainmenu.show">
 		<div
 			class="component z-100 w-[260px] rounded bg-stone-300 p-5 shadow-[0_10px_40px] shadow-black/40"
 			v-on-click-outside="
 				() => {
-					modal.mainMenu = false;
+					mainmenu.show = false;
 				}
 			"
 		>
