@@ -85,12 +85,12 @@ function confirm(): void {
 				:disabled="guestsPtsDeductIncludesGuest(guest) && props.progress === 4"
 				:class="[
 					guestsPtsDeductIncludesGuest(guest)
-						? `bg-stone-400 text-stone-200 ${
+						? `bg-stone-500 text-stone-300 ${
 								props.progress === 4 ? 'pointer-events-none opacity-50' : ''
 						  }`
 						: guestPtsAdd?.id === guest.id
 						? 'bg-red-400 text-white'
-						: 'bg-stone-200 text-stone-400',
+						: 'bg-stone-300 text-stone-500',
 					'rounded p-2 shadow shadow-black/30 transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1',
 				]"
 				@click="onGuestBtnClick(guest)"
