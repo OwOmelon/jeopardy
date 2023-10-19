@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import type { Guest } from "./guests";
 
-export type Row = `row${number}`; /* row1 - row-5 */
+export type RowID = `row${number}`; /* row1 - row-5 */
 
 export type Category = {
 	id: `column${number}` /* column1 - column-5 */;
@@ -18,7 +18,7 @@ export type RawTableCell = {
 };
 
 export type RawTable = {
-	[key: Row]: { [key: Category["id"]]: RawTableCell };
+	[key: RowID]: { [key: Category["id"]]: RawTableCell };
 };
 
 //  ----
@@ -30,7 +30,7 @@ export type TableDisplayCell = {
 } & RawTableCell;
 
 export type TableDisplay = {
-	[key: Row]: { [key: Category["id"]]: TableDisplayCell };
+	[key: RowID]: { [key: Category["id"]]: TableDisplayCell };
 };
 
 //  ----
@@ -39,7 +39,7 @@ export type RawTemplateData = {
 	id: string;
 	name: string;
 	points: number[];
-	rows: Row[];
+	rows: RowID[];
 	columns: Category[];
 	rawTable: RawTable;
 };
@@ -47,7 +47,7 @@ export type RawTemplateData = {
 //  ----
 
 export type PlayProgressTracker = {
-	[key: Row]: { [key: Category["id"]]: Guest["name"] | null };
+	[key: RowID]: { [key: Category["id"]]: Guest["name"] | null };
 };
 
 // ------------------------------
@@ -59,7 +59,7 @@ export const useTemplateStore = defineStore("template", () => {
 	const id = ref<string>(uuidv4());
 	const name = ref<string>("");
 	const points = ref<number[]>([]);
-	const rows = ref<Row[]>([]);
+	const rows = ref<RowID[]>([]);
 	const columns = ref<Category[]>([]);
 	const rawTable = ref<RawTable>({});
 
@@ -85,7 +85,7 @@ export const useTemplateStore = defineStore("template", () => {
 		},
 	});
 
-	function cellHasMissingData(row: Row, column: Category["id"]): boolean {
+	function cellHasMissingData(row: RowID, column: Category["id"]): boolean {
 		return rawTable.value[row][column].question ||
 			rawTable.value[row][column].answer
 			? false
@@ -106,7 +106,7 @@ export const useTemplateStore = defineStore("template", () => {
 		console.log("create template");
 
 		const points: number[] = [];
-		const rows: Row[] = [];
+		const rows: RowID[] = [];
 		const columns: Category[] = [];
 
 		for (let i = 0; i < 5; i++) {
@@ -154,7 +154,7 @@ export const useTemplateStore = defineStore("template", () => {
 	// ------------------------------
 
 	const activeCellIndeces = ref<{
-		row: Row | null;
+		row: RowID | null;
 		column: Category["id"] | null;
 	}>({
 		row: null,

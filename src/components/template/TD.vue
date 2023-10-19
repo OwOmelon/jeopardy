@@ -2,19 +2,19 @@
 import { computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
-import type { Row, Category, TableDisplayCell } from "@/stores/template";
+import type { RowID, Category, TableDisplayCell } from "@/stores/template";
 
 const template = useTemplateStore();
 
 const props = defineProps<{
-	rowID: Row;
+	rowID: RowID;
 	columnID: Category["id"];
 	data: TableDisplayCell;
 	hovered: boolean;
 }>();
 
 const emit = defineEmits<{
-	"on-mouse-enter": [Row, Category["id"]];
+	"on-mouse-enter": [RowID, Category["id"]];
 	"on-mouse-leave": [];
 }>();
 
