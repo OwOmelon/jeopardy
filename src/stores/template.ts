@@ -180,7 +180,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	const playProgressTracker = ref<PlayProgressTracker>({});
 
-	function setPlayProgressTracker(name: Guest["name"]) {
+	function setPlayProgressTracker(name: Guest["name"] | null) {
 		playProgressTracker.value[activeCellIndeces.value.row!] = {
 			[activeCellIndeces.value.column!]: name,
 		};
