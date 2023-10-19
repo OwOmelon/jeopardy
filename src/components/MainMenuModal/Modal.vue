@@ -33,8 +33,8 @@ function saveChanges(): void {
 }
 
 function changeEditMode(mode: boolean) {
-	template.editing = mode
-	mainmenu.show = false
+	template.editing = mode;
+	mainmenu.show = false;
 }
 </script>
 
@@ -50,11 +50,7 @@ function changeEditMode(mode: boolean) {
 		>
 			<h1 class="text-3xl font-bold">JEOPARDY</h1>
 
-			<TextBox
-				ref="textBox"
-				v-model="textInput"
-				@save-changes="saveChanges"
-			/>
+			<TextBox ref="textBox" v-model="textInput" @save-changes="saveChanges" />
 
 			<SaveChangesBtn
 				:text-input-length="textInput.length"
@@ -64,9 +60,7 @@ function changeEditMode(mode: boolean) {
 			<h2 class="mt-3 text-xl font-semibold">guests:</h2>
 
 			<Transition name="fade" leave-active-class="absolute duration-150">
-				<p v-if="!guests.list.length" class="text-sm">
-					nobody to play with :(
-				</p>
+				<p v-if="!guests.list.length" class="text-sm">nobody to play with :(</p>
 			</Transition>
 
 			<TransitionGroup tag="ul" name="list-slide-left" class="relative mb-3">
@@ -100,6 +94,6 @@ function changeEditMode(mode: boolean) {
 
 <style scoped lang="postcss">
 .mode-btn {
-	@apply bg-red-400 hover:bg-red-300 shadow shadow-black/30 transition-colors text-white px-2 rounded text-xl;
+	@apply rounded bg-red-400 px-2 text-xl text-white shadow shadow-black/30 transition-colors hover:bg-red-300;
 }
 </style>
