@@ -1,9 +1,10 @@
-\
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { useModalStore } from "@/stores/modals";
 import { vOnClickOutside } from "@vueuse/components";
+
+import TextBox from "@/components/TextBox.vue";
 
 const template = useTemplateStore();
 const modals = useModalStore();
@@ -75,16 +76,30 @@ onUnmounted(() => {
 			<div class="flex flex-col gap-5 md:flex-row">
 				<div class="w-full">
 					<label>Question:</label>
-					<textarea v-model="questionModelValue"></textarea>
+					<TextBox
+						v-model="questionModelValue"
+						placeholder="enter a question"
+						focus-classes="text-box-focus"
+						class="text-box"
+					/>
 				</div>
 
 				<div class="w-full">
 					<label>Answer:</label>
-					<textarea v-model="answerModelValue"></textarea>
+					<TextBox
+						v-model="answerModelValue"
+						placeholder="enter an answer"
+						focus-classes="text-box-focus"
+						class="text-box"
+					/>
 				</div>
 			</div>
 
-			<button type="button" class="block mt-5 mx-auto hover:bg-green-200" @click="saveChanges()">
+			<button
+				type="button"
+				class="mx-auto mt-5 block hover:bg-green-200"
+				@click="saveChanges()"
+			>
 				Save
 			</button>
 		</div>
@@ -100,7 +115,11 @@ label {
 	@apply text-stone-600;
 }
 
-textarea {
-	@apply mt-3 h-[10.3ex] w-full resize-none rounded border-b-2 border-transparent bg-stone-50 p-[0.5em] shadow shadow-black/30 outline-none transition-colors focus:border-red-400 md:h-[18.2ex];
+.text-box {
+	@apply mt-3 min-h-[10.3ex] w-full resize-none rounded border-b-2 border-transparent bg-stone-50 p-[0.5em] shadow shadow-black/30 outline-none transition-colors md:min-h-[18.2ex];
+}
+
+.text-box-focus {
+	@apply !border-red-400
 }
 </style>
