@@ -26,7 +26,7 @@ export type RawTable = {
 export type TableDisplayCell = {
 	points: number;
 	category: Category["name"];
-	answeredBy: Guest["id"] | null;
+	answeredBy: Guest["name"] | null | undefined;
 } & RawTableCell;
 
 export type TableDisplay = {
@@ -47,7 +47,7 @@ export type RawTemplateData = {
 //  ----
 
 export type PlayProgressTracker = {
-	[key: Row]: { [key: Category["id"]]: Guest["id"] };
+	[key: Row]: { [key: Category["id"]]: Guest["name"] | null };
 };
 
 // ------------------------------
@@ -180,9 +180,9 @@ export const useTemplateStore = defineStore("template", () => {
 
 	const playProgressTracker = ref<PlayProgressTracker>({});
 
-	function setPlayProgressTracker(guestID: Guest["id"] | null) {
+	function setPlayProgressTracker(name: Guest["name"]) {
 		playProgressTracker.value[activeCellIndeces.value.row!] = {
-			[activeCellIndeces.value.column!]: guestID ?? "no one",
+			[activeCellIndeces.value.column!]: name,
 		};
 	}
 
@@ -211,17 +211,13 @@ export const useTemplateStore = defineStore("template", () => {
 			return {
 				...rows,
 				[row]: categoriesDisplay.value.reduce((categories, category) => {
-					const answeredBy =
-						guests.getGuest(playProgressTracker.value?.[row]?.[category.id])
-							?.name ?? null;
-
 					return {
 						...categories,
 						[category.id]: {
 							...rawTable.value[row][category.id],
 							points: points.value[rowIndex],
 							category: category.name || category.id,
-							answeredBy,
+							answeredBy: playProgressTracker.value?.[row]?.[category.id]
 						},
 					};
 				}, {}),
