@@ -28,24 +28,24 @@ const input = ref<HTMLSpanElement | null>(null);
 const focused = ref<boolean>(false);
 
 function moveCaretPosition(): void {
-	// setTimeout(() => {
-		const range = document.createRange();
-		const selection = window.getSelection()!;
-		const node = input.value!.lastChild!;
+	if (!input.value!.hasChildNodes()) return;
 
-		range.setStart(node, node.textContent?.length ?? 0);
-		range.collapse(true);
+	const range = document.createRange();
+	const selection = window.getSelection()!;
+	const node = input.value!.lastChild!;
 
-		selection.removeAllRanges();
-		selection.addRange(range);
-	// }, 0);
+	range.setStart(node, node.textContent?.length ?? 0);
+	range.collapse(true);
+
+	selection.removeAllRanges();
+	selection.addRange(range);
 }
 
 watch(
 	() => props.modelValue,
 	(val) => {
 		if (val !== input.value!.innerText) {
-			input.value!.innerText = val
+			input.value!.innerText = val;
 		}
 	},
 );
@@ -58,18 +58,20 @@ onMounted(() => {
 <template>
 	<div
 		ref="container"
-		:class="[focused ? focusClasses : '', 'relative']"
-		@click="() => {
-			if (focused) return
+		:class="[focused ? focusClasses : '', 'relative flex']"
+		@click="
+			() => {
+				if (focused) return;
 
-			input!.focus()
-			moveCaretPosition()
-		}"
+				input!.focus();
+				moveCaretPosition();
+			}
+		"
 	>
 		<span
 			ref="input"
 			:contenteditable="!disabled"
-			class="block whitespace-pre-wrap outline-none"
+			class="block h-full w-full whitespace-pre-wrap outline-none"
 			@focus="
 				() => {
 					focused = true;
@@ -85,13 +87,10 @@ onMounted(() => {
 			@input="emit('update:modelValue', input!.innerText)"
 			@keydown.enter="
 				() => {
-					// moveCaretPosition();
 					if (blurOnKeydownEnter) input!.blur();
 				}
 			"
-		>
-			<!-- {{ modelValue }} -->
-		</span>
+		/>
 
 		<div
 			v-if="!modelValue.trim().length"
