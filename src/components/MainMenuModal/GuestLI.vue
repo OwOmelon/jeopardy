@@ -31,8 +31,8 @@ const currentlyEditing = computed<boolean | "active">(() => {
 			currentlyEditing === 'active'
 				? 'bg-red-400 text-white'
 				: currentlyEditing === true
-				? 'bg-neutral-400'
-				: 'hover:bg-neutral-200',
+				? 'bg-stone-400'
+				: 'hover:bg-stone-200',
 			'transition-color group flex items-center justify-between rounded px-2 duration-150',
 		]"
 	>
