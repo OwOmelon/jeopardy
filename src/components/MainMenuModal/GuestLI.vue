@@ -43,7 +43,7 @@ const currentlyEditing = computed<boolean | "active">(() => {
 				currentlyEditing === 'active'
 					? '!opacity-100'
 					: currentlyEditing === true
-					? 'pointer-events-none !opacity-0'
+					? '!opacity-0'
 					: 'group-hover:opacity-100',
 				'flex items-center gap-2 transition-opacity lg:opacity-0',
 			]"
