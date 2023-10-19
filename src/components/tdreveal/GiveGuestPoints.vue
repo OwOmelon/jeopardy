@@ -52,7 +52,7 @@ function confirm(): void {
 	if (guestPtsAdd.value) {
 		guests.editGuestPoints(
 			guestPtsAdd.value.id,
-			template.activeCellData!.points,
+			template.activeCell!.points,
 			true,
 		);
 	}
@@ -60,7 +60,7 @@ function confirm(): void {
 	guestsPtsDeduct.value.forEach((guestDeduct) => {
 		guests.editGuestPoints(
 			guestDeduct.id,
-			-template.activeCellData!.points,
+			-template.activeCell!.points,
 			true,
 		);
 	});

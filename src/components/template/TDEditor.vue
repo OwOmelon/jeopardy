@@ -9,24 +9,24 @@ import TextBox from "@/components/TextBox.vue";
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
 
-const questionModelValue = ref(template.activeCellData!.question);
-const answerModelValue = ref(template.activeCellData!.answer);
+const questionModelValue = ref(template.activeCell!.question);
+const answerModelValue = ref(template.activeCell!.answer);
 
 function saveChanges(): void {
 	const td =
-		template.rawTable[template.activeCellIndeces.row!][
-			template.activeCellIndeces.column!
+		template.rawTable[template.activeCell!.row][
+			template.activeCell!.column
 		];
 
 	td.question = questionModelValue.value;
 	td.answer = answerModelValue.value;
 
-	template.resetActiveCell();
+	template.activeCell = null;
 }
 
 function onKeyDown(e: KeyboardEvent) {
 	if (e.key === "Escape") {
-		template.resetActiveCell();
+		template.activeCell = null;
 	}
 }
 
@@ -49,7 +49,7 @@ onUnmounted(() => {
 		class="component w-[80vw] max-w-[900px]"
 		v-on-click-outside="
 			() => {
-				template.resetActiveCell();
+				template.activeCell = null;
 			}
 		"
 	>
@@ -58,15 +58,15 @@ onUnmounted(() => {
 		>
 			<p>
 				Editing
-				<span class="font-bold">{{ template.activeCellData?.category }}</span>
+				<span class="font-bold">{{ template.activeCell?.category }}</span>
 				for
-				<span class="font-bold">{{ template.activeCellData?.points }}</span>
+				<span class="font-bold">{{ template.activeCell?.points }}</span>
 			</p>
 
 			<button
 				type="button"
 				class="hover:bg-red-200"
-				@click="template.resetActiveCell"
+				@click="template.activeCell = null"
 			>
 				Close <span class="hidden lg:inline">[Esc]</span>
 			</button>

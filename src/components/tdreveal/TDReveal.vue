@@ -18,11 +18,11 @@ const mainmenu = useMainMenuStore();
 // 	3 = "deduct_points"
 // 	4 = "add_points"
 const progress = ref<number>(
-	template.activeCellData?.answeredBy !== undefined ? 2 : 1,
+	template.activeCell?.answeredBy !== undefined ? 2 : 1,
 );
 
 const hideAdvanceProgressBtn = computed<boolean>(() => {
-	return template.activeCellData!.answeredBy !== undefined
+	return template.activeCell!.answeredBy !== undefined
 		? true
 		: (progress.value === 2 && !guests.list.length) || progress.value === 4;
 });
@@ -31,7 +31,7 @@ function advanceProgress(): void {
 	if (progress.value === 4) return;
 
 	if (hideAdvanceProgressBtn.value) {
-		template.resetActiveCell();
+		template.activeCell = null;
 
 		return;
 	}
@@ -42,9 +42,9 @@ function advanceProgress(): void {
 function revertProgress(): void {
 	if (
 		progress.value === 1 ||
-		template.activeCellData!.answeredBy !== undefined
+		template.activeCell!.answeredBy !== undefined
 	) {
-		template.resetActiveCell();
+		template.activeCell = null;
 
 		return;
 	}
@@ -82,7 +82,7 @@ onUnmounted(() => {
 		class="component w-[80vw] max-w-[900px] overflow-hidden rounded shadow-[0_10px_40px] shadow-black/40"
 		v-on-click-outside="
 			() => {
-				template.resetActiveCell();
+				template.activeCell = null;
 			}
 		"
 	>
@@ -90,9 +90,9 @@ onUnmounted(() => {
 			class="relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-sm text-white"
 		>
 			<p class="text-center">
-				<span class="font-bold">{{ template.activeCellData?.category }}</span>
+				<span class="font-bold">{{ template.activeCell!.category }}</span>
 				for
-				<span class="font-bold">{{ template.activeCellData?.points }}</span>
+				<span class="font-bold">{{ template.activeCell!.points }}</span>
 			</p>
 		</div>
 
@@ -109,8 +109,8 @@ onUnmounted(() => {
 				<Transition name="fade" mode="out-in">
 					<QuestionAnswer
 						v-if="progress < 3"
-						:question="template.activeCellData!.question"
-						:answer="template.activeCellData!.answer"
+						:question="template.activeCell!.question"
+						:answer="template.activeCell!.answer"
 						:show-answer="progress > 1"
 					/>
 
@@ -118,16 +118,16 @@ onUnmounted(() => {
 						v-else
 						:progress="progress"
 						:guest-list="guests.list"
-						:cell-points="template.activeCellData!.points"
-						@done="template.resetActiveCell"
+						:cell-points="template.activeCell!.points"
+						@done="template.activeCell = null;"
 					/>
 				</Transition>
 
 				<span
-					v-if="template.activeCellData?.answeredBy !== undefined"
+					v-if="template.activeCell!.answeredBy !== undefined"
 					class="block font-xl mt-10 font-bold text-red"
 				>
-					answered by: {{ template.activeCellData!.answeredBy ?? "no one" }}
+					answered by: {{ template.activeCell!.answeredBy ?? "no one" }}
 				</span>
 			</div>
 

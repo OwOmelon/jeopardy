@@ -24,13 +24,13 @@ const template = useTemplateStore();
   <GuestList />
 
   <ModalWrapper
-    :show="template.activeCellData && template.editing ? true : false"
+    :show="template.activeCell && template.editing ? true : false"
   >
     <TDEditor />
   </ModalWrapper>
 
   <ModalWrapper
-    :show="template.activeCellData && !template.editing ? true : false"
+    :show="template.activeCell && !template.editing ? true : false"
   >
     <TDReveal />
   </ModalWrapper>

@@ -51,8 +51,7 @@ const textDisplay = computed<number | string>(() => {
 		@mouseleave="emit('on-mouse-leave')"
 		@click="
 			() => {
-				template.activeCellIndeces.row = props.rowID;
-				template.activeCellIndeces.column = props.columnID;
+				template.activeCell = JSON.parse(JSON.stringify(props.cell));
 			}
 		"
 	>
