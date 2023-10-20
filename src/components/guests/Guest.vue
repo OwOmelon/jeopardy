@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { Guest } from "@/stores/guests";
 
 const props = defineProps<Guest>();
@@ -19,17 +19,24 @@ function onBlur(): void {
 
 	emit("edit-points", props.id, textInput.value);
 }
+
+watch(
+	() => props.points,
+	(val) => {
+		textInput.value = val;
+	},
+);
 </script>
 
 <template>
 	<li class="group relative flex flex-col items-center">
-		<span contenteditable class="font-bold text-red-400">{{ name }}</span>
+		<span class="font-bold text-red-400">{{ name }}</span>
 
 		<input
 			ref="textBox"
 			v-model="textInput"
 			type="number"
-			class="focus: w-14 rounded border-2 border-transparent bg-red-400 bg-transparent text-center outline-none transition-colors hover:border-red-400 focus:bg-red-400 focus:text-white"
+			class="w-20 rounded border-2 border-transparent bg-red-400 bg-transparent px-2 text-center outline-none transition-colors hover:border-red-400 focus:bg-red-400 focus:text-white"
 			@keydown.enter="textBox?.blur()"
 			@blur="onBlur"
 		/>
