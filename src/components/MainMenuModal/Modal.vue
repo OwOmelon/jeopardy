@@ -39,57 +39,51 @@ function changeEditMode(mode: boolean) {
 </script>
 
 <template>
-	<ModalWrapper :show="mainmenu.show">
-		<div
-			class="component z-100 w-[260px] rounded bg-stone-300 p-5 shadow-[0_10px_40px] shadow-black/40"
-			v-on-click-outside="
-				() => {
-					mainmenu.show = false;
-				}
-			"
-		>
-			<h1 class="text-3xl font-bold">JEOPARDY</h1>
+	<div
+		class="component z-100 w-[260px] rounded bg-stone-300 p-5 shadow-[0_10px_40px] shadow-black/40"
+		v-on-click-outside="
+			() => {
+				mainmenu.show = false;
+			}
+		"
+	>
+		<h1 class="text-3xl font-bold">JEOPARDY</h1>
 
-			<TextBox ref="textBox" v-model="textInput" @save-changes="saveChanges" />
+		<TextBox ref="textBox" v-model="textInput" @save-changes="saveChanges" />
 
-			<SaveChangesBtn
-				:text-input-length="textInput.length"
-				@save-changes="saveChanges"
+		<SaveChangesBtn
+			:text-input-length="textInput.length"
+			@save-changes="saveChanges"
+		/>
+
+		<h2 class="mt-3 text-xl font-semibold">guests:</h2>
+
+		<Transition name="fade" leave-active-class="absolute duration-150">
+			<p v-if="!guests.list.length" class="text-sm">nobody to play with :(</p>
+		</Transition>
+
+		<TransitionGroup tag="ul" name="list-slide-left" class="relative mb-3">
+			<GuestLI
+				v-for="guest in guests.list"
+				:key="guest.id"
+				:guest="guest"
+				@set-text-input-to-guest-name="textInput = guest.name"
+				@reset-text-box="
+					() => {
+						textBox?.blur();
+						textInput = '';
+					}
+				"
 			/>
+		</TransitionGroup>
 
-			<h2 class="mt-3 text-xl font-semibold">guests:</h2>
-
-			<Transition name="fade" leave-active-class="absolute duration-150">
-				<p v-if="!guests.list.length" class="text-sm">nobody to play with :(</p>
-			</Transition>
-
-			<TransitionGroup tag="ul" name="list-slide-left" class="relative mb-3">
-				<GuestLI
-					v-for="guest in guests.list"
-					:key="guest.id"
-					:guest="guest"
-					@set-text-input-to-guest-name="textInput = guest.name"
-					@reset-text-box="
-						() => {
-							textBox?.blur();
-							textInput = '';
-						}
-					"
-				/>
-			</TransitionGroup>
-
-			<button type="button" class="mode-btn" @click="changeEditMode(true)">
-				edit
-			</button>
-			<button
-				type="button"
-				class="mode-btn ml-3"
-				@click="changeEditMode(false)"
-			>
-				play
-			</button>
-		</div>
-	</ModalWrapper>
+		<button type="button" class="mode-btn" @click="changeEditMode(true)">
+			edit
+		</button>
+		<button type="button" class="mode-btn ml-3" @click="changeEditMode(false)">
+			play
+		</button>
+	</div>
 </template>
 
 <style scoped lang="postcss">
