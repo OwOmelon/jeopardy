@@ -55,11 +55,7 @@ function revertProgress(): void {
 function onKeyDown(e: KeyboardEvent) {
 	switch (e.code) {
 		case "Escape":
-			revertProgress();
-			break;
-
-		case "Space":
-			advanceProgress();
+			template.activeCell = null
 			break;
 	}
 }
