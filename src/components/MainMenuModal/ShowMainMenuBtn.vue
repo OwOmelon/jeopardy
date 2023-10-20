@@ -1,13 +1,23 @@
 <script setup lang="ts">
+import { useTemplateStore } from "@/stores/template";
 import { useMainMenuStore } from "@/stores/mainmenu";
+import { Icon } from "@iconify/vue";
 
+const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
 </script>
 
 <template>
-	<button type="button" class="fixed right-2 top-2 grid aspect-square place-items-center rounded bg-black/50 p-5 text-xl text-white transition-transform hover:scale-110"
+	<button
+		type="button"
+		:class="[
+			template.editing
+				? 'bg-red-400 text-white'
+				: 'bg-stone-500 text-stone-300',
+			'fixed right-2 top-2 grid aspect-square place-items-center rounded p-3 text-xl transition-[background-color,_color,_transform] hover:scale-110',
+		]"
 		@click="mainmenu.show = !mainmenu.show"
 	>
-		<span class="absolute">||</span>
+		<Icon icon="solar:pause-bold" />
 	</button>
 </template>
