@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onUnmounted } from "vue";
 import { useMainMenuStore } from "@/stores/mainmenu";
 import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
 import { vOnClickOutside } from "@vueuse/components";
 
-import ModalWrapper from "../ModalWrapper.vue";
 import TextBox from "./TextBox.vue";
 import SaveChangesBtn from "./SaveChangesBtn.vue";
 import GuestLI from "./GuestLI.vue";
@@ -36,6 +35,10 @@ function changeEditMode(mode: boolean) {
 	template.editing = mode;
 	mainmenu.show = false;
 }
+
+onUnmounted(() => {
+	guests.activeGuestID = ""
+})
 </script>
 
 <template>
