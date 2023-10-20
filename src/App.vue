@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useTemplateStore } from "./stores/template";
+import { useMainMenuStore } from "./stores/mainmenu";
 
 import debug from "./components/debug.vue";
 import MainMenu from "./components/MainMenuModal/Modal.vue";
@@ -12,26 +13,25 @@ import ModalWrapper from "./components/ModalWrapper.vue";
 import TemplateHistory from "./components/template_history/History.vue";
 
 const template = useTemplateStore();
+const mainmenu = useMainMenuStore();
 </script>
 
 <template>
   <ShowMainMenuBtn />
-  <MainMenu />
-
   <TemplateHistory v-if="template.editing" />
 
   <Template />
   <GuestList />
 
-  <ModalWrapper
-    :show="template.activeCell && template.editing ? true : false"
-  >
+  <ModalWrapper :show="mainmenu.show">
+    <MainMenu />
+  </ModalWrapper>
+
+  <ModalWrapper :show="template.activeCell && template.editing ? true : false">
     <TDEditor />
   </ModalWrapper>
 
-  <ModalWrapper
-    :show="template.activeCell && !template.editing ? true : false"
-  >
+  <ModalWrapper :show="template.activeCell && !template.editing ? true : false">
     <TDReveal />
   </ModalWrapper>
 
@@ -48,7 +48,7 @@ const template = useTemplateStore();
 }
 
 html {
-  @apply bg-stone-100 font-["Poppins",_sans-serrif] text-stone-500 text-sm lg:text-base;
+  @apply bg-stone-100 font-["Poppins",_sans-serrif] text-sm text-stone-500 lg:text-base;
 }
 
 #app {
