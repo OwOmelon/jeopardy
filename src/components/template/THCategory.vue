@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, computed, watch } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
 import DragHandle from "@/components/DragHandle.vue";
@@ -18,6 +18,24 @@ const emit = defineEmits<{
 const template = useTemplateStore();
 
 const textInput = ref(props.column.category);
+
+const hrColor = computed<string>(() => {
+	let emptyCells = 0;
+
+	template.rows.forEach((row) => {
+		const cell = template.rawTable[row][props.column.id];
+
+		if (!cell.question || !cell.answer) {
+			emptyCells++;
+		}
+	});
+
+	return emptyCells === 0
+		? "border-green-400"
+		: emptyCells === 5
+		? "border-red-400"
+		: "border-yellow-400";
+});
 
 watch(
 	() => props.column,
@@ -41,6 +59,8 @@ watch(
 			]"
 			@blur="emit('change-column-category', textInput, props.column.id)"
 		/>
+
+		<hr :class="[hrColor, 'my-3 border-t-2 rounded-full']" />
 
 		<DragHandle v-if="template.editing" />
 	</th>
