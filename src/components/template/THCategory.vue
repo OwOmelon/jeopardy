@@ -5,24 +5,24 @@ import { useTemplateStore } from "@/stores/template";
 import DragHandle from "@/components/DragHandle.vue";
 import TextBox from "@/components/TextBox.vue";
 
-import type { Category } from "@/stores/template";
+import type { Column } from "@/stores/template";
 
 const props = defineProps<{
-	category: Category;
+	column: Column;
 }>();
 
 const emit = defineEmits<{
-	"change-category-name": [string, Category["id"]];
+	"change-column-category": [string, Column["id"]];
 }>();
 
 const template = useTemplateStore();
 
-const textInput = ref(props.category.name);
+const textInput = ref(props.column.category);
 
 watch(
-	() => props.category,
+	() => props.column,
 	(val) => {
-		textInput.value = val.name;
+		textInput.value = val.category;
 	},
 );
 </script>
@@ -31,7 +31,7 @@ watch(
 	<th class="group relative">
 		<TextBox
 			v-model="textInput"
-			:placeholder="props.category.id"
+			:placeholder="props.column.id"
 			:disabled="!template.editing"
 			focus-classes="!border-b-red-400"
 			blur-on-keydown-enter
@@ -39,11 +39,11 @@ watch(
 				{ '!bg-red-400 !text-white': !template.editing },
 				'cell cell-padding',
 			]"
-			@blur="emit('change-category-name', textInput, props.category.id)"
+			@blur="emit('change-column-category', textInput, props.column.id)"
 		/>
 
-		<span v-if="!props.category.name.length && !template.editing">
-			{{ props.category.id }}
+		<span v-if="!props.column.category.length && !template.editing">
+			{{ props.column.id }}
 		</span>
 
 		<DragHandle v-if="template.editing" />

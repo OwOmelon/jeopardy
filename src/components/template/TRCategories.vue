@@ -1,23 +1,22 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
 import THCategory from "./THCategory.vue";
 import draggable from "vuedraggable";
 
-import type { Category } from "@/stores/template";
+import type { Column } from "@/stores/template";
 
 const template = useTemplateStore();
 
-function changeCategoryName(newName: string, id: Category["id"]): void {
-	const categoryIndex = template.columns.findIndex(
+function changeColumnCategory(newName: string, id: Column["id"]): void {
+	const columnIndex = template.columns.findIndex(
 		(column) => column.id === id,
 	);
-	const category = template.columns[categoryIndex];
+	const column = template.columns[columnIndex];
 
-	if (category.name === newName) return;
+	if (column.category === newName) return;
 
-	category.name = newName;
+	column.category = newName;
 }
 </script>
 
@@ -33,8 +32,8 @@ function changeCategoryName(newName: string, id: Category["id"]): void {
 	>
 		<template #item="{ element }">
 			<THCategory
-				:category="element"
-				@change-category-name="changeCategoryName"
+				:column="element"
+				@change-column-cateogyr="changeColumnCategory"
 			/>
 		</template>
 	</draggable>

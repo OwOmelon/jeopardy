@@ -7,13 +7,13 @@ import TRPoints from "./TRPoints.vue";
 import TRCategories from "./TRCategories.vue";
 import TD from "./TD.vue";
 
-import type { RowID, Category } from "@/stores/template";
+import type { RowID, Column } from "@/stores/template";
 
 const template = useTemplateStore();
 
 const TDHovered = ref<{
 	row: RowID | null;
-	column: Category["id"] | null;
+	column: Column["id"] | null;
 }>({
 	row: null,
 	column: null,
@@ -23,7 +23,7 @@ const horizontalTrTemplateColumns = computed<string>(() => {
 	return `repeat(${template.categoriesDisplay.length}, 140px)`;
 });
 
-function TDMouseEnter(row: RowID, column: Category["id"]): void {
+function TDMouseEnter(row: RowID, column: Column["id"]): void {
 	TDHovered.value.row = row;
 	TDHovered.value.column = column;
 }

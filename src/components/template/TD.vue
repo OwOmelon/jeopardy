@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
-import type { RowID, Category, TableDisplayCell } from "@/stores/template";
+import type { RowID, Column, TableDisplayCell } from "@/stores/template";
 
 const template = useTemplateStore();
 
@@ -12,7 +12,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	"on-mouse-enter": [RowID, Category["id"]];
+	"on-mouse-enter": [RowID, Column["id"]];
 	"on-mouse-leave": [];
 }>();
 
