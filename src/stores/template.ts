@@ -7,9 +7,9 @@ import type { Guest } from "./guests";
 
 export type RowID = `row${number}`; /* row1 - row-5 */
 
-export type Category = {
+export type Column = {
 	id: `column${number}` /* column1 - column-5 */;
-	name: string;
+	category: string;
 };
 
 export type RawTableCell = {
@@ -18,7 +18,7 @@ export type RawTableCell = {
 };
 
 export type RawTable = {
-	[key: RowID]: { [key: Category["id"]]: RawTableCell };
+	[key: RowID]: { [key: Column["id"]]: RawTableCell };
 };
 
 //  ----
@@ -26,13 +26,13 @@ export type RawTable = {
 export type TableDisplayCell = {
 	row: RowID;
 	points: number;
-	column: Category["id"];
-	category: Category["name"];
+	column: Column["id"];
+	category: Column["category"];
 	answeredBy: Guest["name"] | null | undefined;
 } & RawTableCell;
 
 export type TableDisplay = {
-	[key: RowID]: { [key: Category["id"]]: TableDisplayCell };
+	[key: RowID]: { [key: Column["id"]]: TableDisplayCell };
 };
 
 //  ----
@@ -42,14 +42,14 @@ export type RawTemplateData = {
 	name: string;
 	points: number[];
 	rows: RowID[];
-	columns: Category[];
+	columns: Column[];
 	rawTable: RawTable;
 };
 
 //  ----
 
 export type PlayProgressTracker = {
-	[key: RowID]: { [key: Category["id"]]: Guest["name"] | null };
+	[key: RowID]: { [key: Column["id"]]: Guest["name"] | null };
 };
 
 // ------------------------------
@@ -62,7 +62,7 @@ export const useTemplateStore = defineStore("template", () => {
 	const name = ref<string>("");
 	const points = ref<number[]>([]);
 	const rows = ref<RowID[]>([]);
-	const columns = ref<Category[]>([]);
+	const columns = ref<Column[]>([]);
 	const rawTable = ref<RawTable>({});
 
 	const rawTemplateData = computed<RawTemplateData>({
@@ -87,14 +87,14 @@ export const useTemplateStore = defineStore("template", () => {
 		},
 	});
 
-	function cellHasMissingData(row: RowID, column: Category["id"]): boolean {
+	function cellHasMissingData(row: RowID, column: Column["id"]): boolean {
 		return rawTable.value[row][column].question ||
 			rawTable.value[row][column].answer
 			? false
 			: true;
 	}
 
-	function columnIsEmpty(column: Category["id"]): boolean {
+	function columnIsEmpty(column: Column["id"]): boolean {
 		const arr: boolean[] = [];
 
 		for (let i = 0; i < rows.value.length; i++) {
@@ -109,12 +109,12 @@ export const useTemplateStore = defineStore("template", () => {
 
 		const points: number[] = [];
 		const rows: RowID[] = [];
-		const columns: Category[] = [];
+		const columns: Column[] = [];
 
 		for (let i = 0; i < 5; i++) {
 			points.push((i + 1) * 100);
 			rows.push(`row${i + 1}`);
-			columns.push({ id: `column${i + 1}`, name: `` });
+			columns.push({ id: `column${i + 1}`, category: `` });
 		}
 
 		const rawTable: RawTable = rows.reduce((rows, row) => {
@@ -165,12 +165,12 @@ export const useTemplateStore = defineStore("template", () => {
 		playProgressTracker.value[activeCell.value!.row] = row;
 	}
 
-	const categoriesDisplay = computed<Category[]>({
+	const categoriesDisplay = computed<Column[]>({
 		get() {
 			return editing.value
 				? columns.value
 				: columns.value.filter(
-						(category) => category.name || !columnIsEmpty(category.id),
+						(column) => column.category || !columnIsEmpty(column.id),
 				  );
 		},
 
@@ -187,16 +187,16 @@ export const useTemplateStore = defineStore("template", () => {
 		return rows.value.reduce((rows, row, rowIndex) => {
 			return {
 				...rows,
-				[row]: categoriesDisplay.value.reduce((categories, category) => {
+				[row]: categoriesDisplay.value.reduce((columns, column) => {
 					return {
-						...categories,
-						[category.id]: {
-							...rawTable.value[row][category.id],
+						...columns,
+						[column.id]: {
+							...rawTable.value[row][column.id],
 							row,
 							points: points.value[rowIndex],
-							column: category.id,
-							category: category.name || category.id,
-							answeredBy: playProgressTracker.value?.[row]?.[category.id],
+							column: column.id,
+							category: column.category || column.id,
+							answeredBy: playProgressTracker.value?.[row]?.[column.id],
 						},
 					};
 				}, {}),
