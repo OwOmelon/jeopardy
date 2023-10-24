@@ -92,6 +92,8 @@ onMounted(() => {
 			"
 		/>
 
+		<span v-if="props.disabled && !input!.innerText.length">&nbsp</span>
+
 		<div
 			v-if="!modelValue.trim().length"
 			class="pointer-events-none absolute bottom-0 left-0 top-0 h-full w-full border-[inherit] p-[inherit] opacity-50"
