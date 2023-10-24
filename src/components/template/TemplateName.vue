@@ -14,21 +14,6 @@ watch(
 		textInput.value = name;
 	},
 );
-
-watch(
-	() => template.editing,
-	(value) => {
-		if (value) {
-			textInput.value = template.name;
-		} else {
-			if (!template.name.length) {
-				textInput.value = template.isEmpty
-					? "your jeopardy template is empty D:"
-					: "JEOPARDY";
-			}
-		}
-	},
-);
 </script>
 
 <template>
