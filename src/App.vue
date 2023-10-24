@@ -6,6 +6,7 @@ import debug from "./components/debug.vue";
 import MainMenu from "./components/MainMenuModal/Modal.vue";
 import ShowMainMenuBtn from "./components/MainMenuModal/ShowMainMenuBtn.vue";
 import Template from "./components/template/Template.vue";
+import TemplateIsEmptyFallBack from "./components/template/IsEmptyFallBack.vue";
 import GuestList from "./components/guests/GuestList.vue";
 import TDEditor from "./components/template/TDEditor.vue";
 import TDReveal from "./components/tdreveal/TDReveal.vue";
@@ -20,7 +21,9 @@ const mainmenu = useMainMenuStore();
   <ShowMainMenuBtn />
   <TemplateHistory v-if="template.editing" />
 
-  <Template />
+  <TemplateIsEmptyFallBack v-if="!template.editing && template.isEmpty" />
+  <Template v-else />
+
   <GuestList />
 
   <ModalWrapper :show="mainmenu.show">
