@@ -33,7 +33,7 @@ function changeColumnCategory(newName: string, id: Column["id"]): void {
 		<template #item="{ element }">
 			<THCategory
 				:column="element"
-				@change-column-cateogyr="changeColumnCategory"
+				@change-column-category="changeColumnCategory"
 			/>
 		</template>
 	</draggable>
