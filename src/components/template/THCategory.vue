@@ -42,10 +42,6 @@ watch(
 			@blur="emit('change-column-category', textInput, props.column.id)"
 		/>
 
-		<span v-if="!props.column.category.length && !template.editing">
-			{{ props.column.id }}
-		</span>
-
 		<DragHandle v-if="template.editing" />
 	</th>
 </template>
