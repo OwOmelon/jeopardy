@@ -7,6 +7,10 @@ import Table_Edit from "./edit/Table.vue";
 import Table_Play from "./play/Table.vue";
 
 const template = useTemplateStore();
+
+const horizontalTrTemplateColumns = computed<string>(() => {
+	return `repeat(${template.categoriesDisplay.length}, 140px)`;
+});
 </script>
 
 <template>
@@ -21,6 +25,15 @@ const template = useTemplateStore();
 <style scoped lang="postcss">
 :deep(table) {
 	@apply grid w-full overflow-auto p-8
+}
+
+:deep(tr) {
+	@apply grid gap-3;
+	grid-template-columns: v-bind(horizontalTrTemplateColumns);
+}
+
+:deep(.cell) {
+	@apply rounded border-y-2 border-transparent bg-white shadow !shadow-black/30 transition-colors;
 }
 
 :deep(.cell-padding) {
