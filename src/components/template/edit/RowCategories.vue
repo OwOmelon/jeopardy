@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTemplateStore } from "@/stores/template";
 
-import CellCategory from "./CellCategory.vue";
+import HeaderCategory from "./HeaderCategory.vue";
 import draggable from "vuedraggable";
 
 import type { Column } from "@/stores/template";
@@ -31,7 +31,7 @@ function changeColumnCategory(newName: string, id: Column["id"]): void {
 		class="row-start-1 items-end gap-3 col-start-2"
 	>
 		<template #item="{ element }">
-			<CellCategory
+			<HeaderCategory
 				:column="element"
 				@change-column-category="changeColumnCategory"
 			/>
