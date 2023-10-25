@@ -17,22 +17,22 @@ const emit = defineEmits<{
 }>();
 
 const dynamicStyles = computed<string>(() => {
-	const playStyles = !template.editing
-		? `playing ${props.cell.answeredBy !== undefined ? "answered" : ""}`
-		: "";
-
-	const missingDataStyles = template.cellHasMissingData(
+	const isMissingData = template.cellHasMissingData(
 		props.cell.row,
 		props.cell.column,
-	)
-		? `missing-data ${template.editing ? "" : "pointer-events-none"}`
+	);
+
+	const playStyles = !template.editing
+		? `playing ${props.cell.answeredBy !== undefined ? "answered" : ""} ${
+				isMissingData ? "pointer-events-none" : ""
+		  }`
 		: "";
 
 	const rise = !(!template.editing && props.cell.answeredBy !== undefined)
 		? "hover-rise"
 		: "";
 
-	return `${playStyles} ${missingDataStyles} ${rise}`;
+	return `${playStyles} ${isMissingData ? "missing-data" : ""} ${rise}`;
 });
 
 const textDisplay = computed<number | string>(() => {
