@@ -18,7 +18,7 @@ const emit = defineEmits<{
 
 const missingDataStyles = computed<string>(() => {
 	return template.cellHasMissingData(props.cell.row, props.cell.column)
-		? `missing-cell ${template.editing ? "" : "pointer-events-none"}`
+		? `missing-data ${template.editing ? "" : "pointer-events-none"}`
 		: "";
 });
 
@@ -64,7 +64,7 @@ const textDisplay = computed<number | string>(() => {
 	@apply hover:-translate-y-2 hover:scale-105 hover:shadow-lg;
 }
 
-.missing-cell {
+.missing-data {
 	@apply !bg-stone-500 !text-stone-100;
 }
 
