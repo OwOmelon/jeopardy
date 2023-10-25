@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
 import RowPoints from "./RowPoints.vue";
-import TRCategories from "./TRCategories.vue";
+import RowCategories from "./RowCategories.vue";
 import Cell from "./Cell.vue";
 import TDEditor from "./TDEditor.vue";
 import ModalWrapper from '@/components/ModalWrapper.vue'
@@ -38,7 +38,7 @@ function TDMouseLeave(): void {
 <template>
 	<table class="grid w-full overflow-auto p-8">
 		<RowPoints v-if="template.editing" />
-		<TRCategories />
+		<RowCategories />
 
 		<div class="col-start-2 row-start-2 flex flex-col gap-3">
 			<TransitionGroup
