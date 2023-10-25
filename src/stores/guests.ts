@@ -1,4 +1,4 @@
-import { ref, computed, onBeforeMount } from "vue";
+import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 
@@ -58,6 +58,22 @@ export const useGuestsStore = defineStore("guests", () => {
 
     return list.value[guestIndex] ?? null;
   };
+
+  const fetchGuestListFromLocalStorage = (): Guest[] => {
+    const list = localStorage.getItem("guestList");
+
+    return list ? JSON.parse(list) : [];
+  };
+
+  watch(
+    list,
+    (guestList) => {
+      localStorage.setItem("guestList", JSON.stringify(guestList));
+    },
+    { deep: true },
+  );
+
+  list.value = fetchGuestListFromLocalStorage();
 
   return {
     list,
