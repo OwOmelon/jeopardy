@@ -36,7 +36,7 @@ function TDMouseLeave(): void {
 </script>
 
 <template>
-	<table :class="['grid w-full overflow-auto p-8']">
+	<table class="grid w-full overflow-auto p-8">
 		<TRPoints v-if="template.editing" />
 		<TRCategories />
 
