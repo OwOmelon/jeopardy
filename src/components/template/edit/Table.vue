@@ -37,7 +37,7 @@ function TDMouseLeave(): void {
 
 <template>
 	<table class="grid w-full overflow-auto p-8">
-		<RowPoints v-if="template.editing" />
+		<RowPoints />
 		<RowCategories />
 
 		<div class="col-start-2 row-start-2 flex flex-col gap-3">
