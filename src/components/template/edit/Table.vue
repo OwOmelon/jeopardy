@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
-import TRPoints from "./TRPoints.vue";
+import RowPoints from "./RowPoints.vue";
 import TRCategories from "./TRCategories.vue";
 import Cell from "./Cell.vue";
 import TDEditor from "./TDEditor.vue";
@@ -37,7 +37,7 @@ function TDMouseLeave(): void {
 
 <template>
 	<table class="grid w-full overflow-auto p-8">
-		<TRPoints v-if="template.editing" />
+		<RowPoints v-if="template.editing" />
 		<TRCategories />
 
 		<div class="col-start-2 row-start-2 flex flex-col gap-3">
