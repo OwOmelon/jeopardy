@@ -5,7 +5,7 @@ import { useTemplateStore } from "@/stores/template";
 import RowPoints from "./RowPoints.vue";
 import RowCategories from "./RowCategories.vue";
 import Cell from "./Cell.vue";
-import TDEditor from "./TDEditor.vue";
+import CellEditor from "./CellEditor.vue";
 import ModalWrapper from '@/components/ModalWrapper.vue'
 
 import type { RowID, Column } from "@/stores/template";
@@ -64,7 +64,7 @@ function TDMouseLeave(): void {
 	</table>
 
 	<ModalWrapper :show="template.activeCell ? true : false">
-		<TDEditor />
+		<CellEditor />
 	</ModalWrapper>
 </template>
 
