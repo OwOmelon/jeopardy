@@ -16,10 +16,23 @@ const emit = defineEmits<{
 	"on-mouse-leave": [];
 }>();
 
-const missingDataStyles = computed<string>(() => {
-	return template.cellHasMissingData(props.cell.row, props.cell.column)
+const dynamicStyles = computed<string>(() => {
+	const playStyles = !template.editing
+		? `playing ${props.cell.answeredBy !== undefined ? "answered" : ""}`
+		: "";
+
+	const missingDataStyles = template.cellHasMissingData(
+		props.cell.row,
+		props.cell.column,
+	)
 		? `missing-data ${template.editing ? "" : "pointer-events-none"}`
 		: "";
+
+	const rise = !(!template.editing && props.cell.answeredBy !== undefined)
+		? "hover-rise"
+		: "";
+
+	return `${playStyles} ${missingDataStyles} ${rise}`;
 });
 
 const textDisplay = computed<number | string>(() => {
@@ -38,11 +51,7 @@ const textDisplay = computed<number | string>(() => {
 <template>
 	<td
 		:class="[
-			{ 'hover-rise': !(!template.editing && props.cell.answeredBy !== undefined) },
-			!template.editing
-				? `playing ${props.cell.answeredBy !== undefined ? 'answered' : ''}`
-				: '',
-			missingDataStyles,
+			dynamicStyles,
 			'cell-padding h-[9.5ex] cursor-pointer rounded bg-stone-300 text-xs text-stone-500 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_opacity,_transform] active:scale-100',
 		]"
 		@mouseenter="emit('on-mouse-enter', props.cell.row, props.cell.column)"
