@@ -27,8 +27,16 @@ const template = useTemplateStore();
 	@apply flex gap-3;
 }
 
+:deep(td) {
+	@apply h-[9.5ex] cursor-pointer text-xs;
+}
+
+:deep(.td-rise) {
+	@apply hover:-translate-y-2 hover:scale-105 hover:shadow-lg;
+}
+
 :deep(.cell) {
-	@apply rounded border-y-2 border-transparent bg-white shadow !shadow-black/30 transition-colors;
+	@apply rounded border-y-2 border-transparent shadow !shadow-black/30 transition-[background-color,_border_color,_color,_box-shadow,_opacity,_transform];
 }
 
 :deep(.cell-width) {
