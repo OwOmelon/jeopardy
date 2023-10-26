@@ -49,7 +49,7 @@ function TDMouseLeave(): void {
 					:key="cellKey"
 				>
 					<Cell
-						:cell="cellValue"
+						v-bind="cellValue"
 						:hovered="rowKey === TDHovered.row && cellKey === TDHovered.column"
 						@on-mouse-enter="TDMouseEnter"
 						@on-mouse-leave="TDMouseLeave"

@@ -6,10 +6,11 @@ import type { RowID, Column, CompleteTableCell } from "@/stores/template";
 
 const template = useTemplateStore();
 
-const props = defineProps<{
-	cell: CompleteTableCell;
-	hovered: boolean;
-}>();
+const props = defineProps<
+	{
+		hovered: boolean;
+	} & CompleteTableCell
+>();
 
 const emit = defineEmits<{
 	"on-mouse-enter": [RowID, Column["id"]];
@@ -17,18 +18,15 @@ const emit = defineEmits<{
 }>();
 
 const dynamicStyles = computed<string>(() => {
-	const isMissingData = template.cellHasMissingData(
-		props.cell.row,
-		props.cell.column,
-	);
+	const isMissingData = template.cellHasMissingData(props.row, props.column);
 
 	const playStyles = !template.editing
-		? `playing ${props.cell.answeredBy !== undefined ? "answered" : ""} ${
+		? `playing ${props.answeredBy !== undefined ? "answered" : ""} ${
 				isMissingData ? "pointer-events-none" : ""
 		  }`
 		: "";
 
-	const rise = !(!template.editing && props.cell.answeredBy !== undefined)
+	const rise = !(!template.editing && props.answeredBy !== undefined)
 		? "hover-rise"
 		: "";
 
@@ -37,12 +35,12 @@ const dynamicStyles = computed<string>(() => {
 
 const textDisplay = computed<number | string>(() => {
 	if (!template.editing)
-		return template.cellHasMissingData(props.cell.row, props.cell.column)
+		return template.cellHasMissingData(props.row, props.column)
 			? ""
-			: props.cell.points;
+			: props.points;
 
-	const question = props.cell.question || "Add Question";
-	const answer = props.cell.answer || "Add Answer";
+	const question = props.question || "Add Question";
+	const answer = props.answer || "Add Answer";
 
 	return props.hovered ? answer : question;
 });
@@ -50,15 +48,12 @@ const textDisplay = computed<number | string>(() => {
 
 <template>
 	<td
-		:class="[
-			dynamicStyles,
-			'cell cell-width cell-padding td-rise',
-		]"
-		@mouseenter="emit('on-mouse-enter', props.cell.row, props.cell.column)"
+		:class="[dynamicStyles, 'cell cell-width cell-padding td-rise']"
+		@mouseenter="emit('on-mouse-enter', props.row, props.column)"
 		@mouseleave="emit('on-mouse-leave')"
 		@click="
 			() => {
-				template.activeCell = JSON.parse(JSON.stringify(props.cell));
+				template.activeCell = JSON.parse(JSON.stringify(props));
 			}
 		"
 	>
