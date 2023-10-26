@@ -46,7 +46,7 @@ watch(
 </script>
 
 <template>
-	<th class="group relative">
+	<th class="cell-width group relative">
 		<TextBox
 			v-model="textInput"
 			:placeholder="props.column.id"
@@ -60,7 +60,7 @@ watch(
 			@blur="emit('change-column-category', textInput, props.column.id)"
 		/>
 
-		<hr :class="[hrColor, 'my-3 border-t-2 rounded-full']" />
+		<hr :class="[hrColor, 'my-3 rounded-full border-t-2']" />
 
 		<DragHandle v-if="template.editing" />
 	</th>

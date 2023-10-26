@@ -20,10 +20,6 @@ const TDHovered = ref<{
 	column: null,
 });
 
-const horizontalTrTemplateColumns = computed<string>(() => {
-	return `repeat(${template.categoriesDisplay.length}, 140px)`;
-});
-
 function TDMouseEnter(row: RowID, column: Column["id"]): void {
 	TDHovered.value.row = row;
 	TDHovered.value.column = column;
@@ -46,7 +42,7 @@ function TDMouseLeave(): void {
 				:name="template.editing ? 'slide' : 'disabled'"
 				v-for="(rowValue, rowKey, rowIndex) in template.tableDisplay"
 				:key="rowKey"
-				class="relative grid gap-3"
+				class="relative"
 			>
 				<template
 					v-for="(cellValue, cellKey, columnIndex) in rowValue"
@@ -67,14 +63,3 @@ function TDMouseLeave(): void {
 		<CellEditor />
 	</ModalWrapper>
 </template>
-
-<style scoped lang="postcss">
-:deep(tr) {
-	@apply grid;
-	grid-template-columns: v-bind(horizontalTrTemplateColumns);
-}
-
-:deep(.cell) {
-	@apply rounded border-y-2 border-transparent bg-white shadow !shadow-black/30 transition-colors;
-}
-</style>

@@ -52,7 +52,7 @@ const textDisplay = computed<number | string>(() => {
 	<td
 		:class="[
 			dynamicStyles,
-			'cell-padding h-[9.5ex] cursor-pointer rounded bg-stone-300 text-xs text-stone-500 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_opacity,_transform] active:scale-100',
+			'cell-width cell-padding h-[9.5ex] cursor-pointer rounded bg-stone-300 text-xs text-stone-500 shadow !shadow-black/30 transition-[background-color,_color,_box-shadow,_opacity,_transform] active:scale-100',
 		]"
 		@mouseenter="emit('on-mouse-enter', props.cell.row, props.cell.column)"
 		@mouseleave="emit('on-mouse-leave')"
