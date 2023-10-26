@@ -40,7 +40,7 @@ function TDMouseLeave(): void {
 			<TransitionGroup
 				tag="tr"
 				:name="template.editing ? 'slide' : 'disabled'"
-				v-for="(rowValue, rowKey, rowIndex) in template.completeTable"
+				v-for="(rowValue, rowKey, rowIndex) in template.getCompleteTable()"
 				:key="rowKey"
 				class="relative"
 			>
