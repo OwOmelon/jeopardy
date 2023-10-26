@@ -2,7 +2,7 @@
 import { useTemplateStore } from "@/stores/template";
 
 import RowCategories from "./RowCategories.vue";
-import Cell from "./Cell.vue";
+import TableData from "./TableData.vue";
 
 const template = useTemplateStore();
 </script>
@@ -15,7 +15,7 @@ const template = useTemplateStore();
 			v-for="(rowValue, rowKey, rowIndex) in template.completeTable"
 			:key="rowKey"
 		>
-			<Cell
+			<TableData
 				v-for="(cellValue, cellKey, cellIndex) in rowValue"
 				:key="cellKey"
 				v-bind="cellValue"
