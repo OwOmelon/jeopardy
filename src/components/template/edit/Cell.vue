@@ -52,7 +52,7 @@ const textDisplay = computed<number | string>(() => {
 	<td
 		:class="[
 			dynamicStyles,
-			'cell cell-width cell-padding bg-stone-300 text-stone-500',
+			'cell cell-width cell-padding td-rise',
 		]"
 		@mouseenter="emit('on-mouse-enter', props.cell.row, props.cell.column)"
 		@mouseleave="emit('on-mouse-leave')"
@@ -69,10 +69,6 @@ const textDisplay = computed<number | string>(() => {
 </template>
 
 <style scoped lang="postcss">
-.hover-rise {
-	@apply hover:-translate-y-2 hover:scale-105 hover:shadow-lg;
-}
-
 .missing-data {
 	@apply !bg-stone-500 !text-stone-100;
 }
