@@ -100,7 +100,7 @@ export const useTemplateStore = defineStore("template", () => {
 			: "partial";
 	};
 
-	function columnIsEmpty(column: Column["id"]): boolean {
+	const columnIsEmpty = (column: Column["id"]): boolean => {
 		const arr: string[] = [];
 
 		for (let i = 0; i < rows.value.length; i++) {
@@ -110,7 +110,7 @@ export const useTemplateStore = defineStore("template", () => {
 		return arr.every((a) => a === 'empty');
 	}
 
-	function createTemplate(): TemplateData {
+	const createTemplate = (): TemplateData => {
 		console.log("create template");
 
 		const points: number[] = [];
@@ -141,7 +141,7 @@ export const useTemplateStore = defineStore("template", () => {
 		return { id: "", name: "", points, rows, columns, rawTable };
 	}
 
-	function fetchTemplateFromLocalStorage(): TemplateData | null {
+	const fetchTemplateFromLocalStorage = (): TemplateData | null => {
 		const template = localStorage.getItem("template");
 
 		return template ? JSON.parse(template) : null;
