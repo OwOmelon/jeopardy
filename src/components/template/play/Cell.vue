@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import type { CompleteTableCell } from "@/stores/template";
 
-const props = defineProps<{
-	cell: CompleteTableCell;
-}>();
+defineProps<CompleteTableCell>();
 
 const emit = defineEmits<{
 	reveal: [];
@@ -15,6 +13,6 @@ const emit = defineEmits<{
 		class="cell cell-width cell-padding td-rise grid place-items-center hover:bg-red-400 hover:text-white"
 		@click="emit('reveal')"
 	>
-		<span class="text-lg font-bold">{{ cell.points }}</span>
+		<span class="text-lg font-bold">{{ points }}</span>
 	</td>
 </template>

@@ -18,7 +18,7 @@ const template = useTemplateStore();
 			<Cell
 				v-for="(cellValue, cellKey, cellIndex) in rowValue"
 				:key="cellKey"
-				:cell="cellValue"
+				v-bind="cellValue"
 				class="cell cell-width cell-padding td-rise"
 			/>
 		</tr>
