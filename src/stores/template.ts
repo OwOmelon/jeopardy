@@ -87,12 +87,18 @@ export const useTemplateStore = defineStore("template", () => {
 		},
 	});
 
-	function cellHasMissingData(row: RowID, column: Column["id"]): boolean {
-		return !rawTable.value[row][column].question ||
-			!rawTable.value[row][column].answer
-			? true
-			: false;
-	}
+	const checkTableData = (
+		row: RowID,
+		column: Column["id"],
+	): "complete" | "empty" | "partial" => {
+		const tableData = rawTable.value[row][column];
+
+		return tableData.question && tableData.answer
+			? "complete"
+			: !tableData.question && !tableData.answer
+			? "empty"
+			: "partial";
+	};
 
 	function columnIsEmpty(column: Column["id"]): boolean {
 		const arr: boolean[] = [];
