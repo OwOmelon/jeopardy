@@ -63,3 +63,9 @@ function TDMouseLeave(): void {
 		<CellEditor />
 	</ModalWrapper>
 </template>
+
+<style scoped lang="postcss">
+:deep(.th-bg) {
+	@apply bg-white
+}
+</style>

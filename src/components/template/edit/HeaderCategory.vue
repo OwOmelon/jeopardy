@@ -55,7 +55,7 @@ watch(
 			blur-on-keydown-enter
 			:class="[
 				{ '!bg-red-400 !text-white': !template.editing },
-				'cell cell-padding',
+				'cell cell-padding th-bg',
 			]"
 			@blur="emit('change-column-category', textInput, props.column.id)"
 		/>
