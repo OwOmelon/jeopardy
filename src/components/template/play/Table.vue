@@ -20,6 +20,7 @@ const template = useTemplateStore();
 				:key="cellKey"
 				v-bind="cellValue"
 				class="cell cell-width cell-padding td-rise"
+				@reveal="template.activeCell = cellValue"
 			/>
 		</tr>
 	</table>
