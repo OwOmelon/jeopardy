@@ -107,8 +107,8 @@ export const useTemplateStore = defineStore("template", () => {
 			arr.push(checkTableData(`row${i + 1}`, column));
 		}
 
-		return arr.every((a) => a === 'empty');
-	}
+		return arr.every((a) => a === "empty");
+	};
 
 	const createTemplate = (): TemplateData => {
 		console.log("create template");
@@ -139,13 +139,13 @@ export const useTemplateStore = defineStore("template", () => {
 		}, {});
 
 		return { id: "", name: "", points, rows, columns, rawTable };
-	}
+	};
 
 	const fetchTemplateFromLocalStorage = (): TemplateData | null => {
 		const template = localStorage.getItem("template");
 
 		return template ? JSON.parse(template) : null;
-	}
+	};
 
 	watch(
 		templateData,
@@ -176,19 +176,11 @@ export const useTemplateStore = defineStore("template", () => {
 		return false;
 	});
 
-	const getCompleteTable = (filter: boolean = false): CompleteTable => {
-		let columnsToFilter = columns.value;
-
-		if (filter) {
-			columnsToFilter = columnsToFilter.filter(
-				(column) => column.category.trim() || !columnIsEmpty(column.id),
-			);
-		}
-
+	const completeTable = computed<CompleteTable>(() => {
 		return rows.value.reduce((rows, row, rowIndex) => {
 			return {
 				...rows,
-				[row]: columnsToFilter.reduce((columns, column) => {
+				[row]: columns.value.reduce((columns, column) => {
 					return {
 						...columns,
 						[column.id]: {
@@ -203,7 +195,7 @@ export const useTemplateStore = defineStore("template", () => {
 				}, {}),
 			};
 		}, {});
-	};
+	});
 
 	// ------------------------------
 
@@ -223,7 +215,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 		//  ----
 
-		getCompleteTable,
+		completeTable,
 		isEmpty,
 		activeCell,
 		setPlayProgressTracker,
