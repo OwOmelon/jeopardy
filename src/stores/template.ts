@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 
 import type { Guest } from "./guests";
 
+//  ----
+
 export type RowID = `row${number}`; /* row1 - row-5 */
 
 export type Column = {
@@ -21,9 +23,7 @@ export type RawTable = {
 	[key: RowID]: { [key: Column["id"]]: RawTableCell };
 };
 
-//  ----
-
-export type TableDisplayCell = {
+export type CompleteTableCell = {
 	row: RowID;
 	points: number;
 	column: Column["id"];
@@ -31,13 +31,13 @@ export type TableDisplayCell = {
 	answeredBy: Guest["name"] | null | undefined;
 } & RawTableCell;
 
-export type TableDisplay = {
-	[key: RowID]: { [key: Column["id"]]: TableDisplayCell };
+export type CompleteTable = {
+	[key: RowID]: { [key: Column["id"]]: CompleteTableCell };
 };
 
 //  ----
 
-export type RawTemplateData = {
+export type TemplateData = {
 	id: string;
 	name: string;
 	points: number[];
@@ -65,7 +65,7 @@ export const useTemplateStore = defineStore("template", () => {
 	const columns = ref<Column[]>([]);
 	const rawTable = ref<RawTable>({});
 
-	const rawTemplateData = computed<RawTemplateData>({
+	const rawTemplateData = computed<TemplateData>({
 		get() {
 			return {
 				id: id.value,
@@ -104,7 +104,7 @@ export const useTemplateStore = defineStore("template", () => {
 		return arr.every((a) => a === true);
 	}
 
-	function createTemplate(): RawTemplateData {
+	function createTemplate(): TemplateData {
 		console.log("create template");
 
 		const points: number[] = [];
@@ -135,7 +135,7 @@ export const useTemplateStore = defineStore("template", () => {
 		return { id: "", name: "", points, rows, columns, rawTable };
 	}
 
-	function fetchTemplateFromLocalStorage(): RawTemplateData | null {
+	function fetchTemplateFromLocalStorage(): TemplateData | null {
 		const template = localStorage.getItem("template");
 
 		return template ? JSON.parse(template) : null;
@@ -155,7 +155,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	// ------------------------------
 
-	const activeCell = ref<TableDisplayCell | null>(null);
+	const activeCell = ref<CompleteTableCell | null>(null);
 	const playProgressTracker = ref<PlayProgressTracker>({});
 
 	function setPlayProgressTracker(name: Guest["name"] | null) {
@@ -183,7 +183,7 @@ export const useTemplateStore = defineStore("template", () => {
 		return categoriesDisplay.value.length ? false : true;
 	});
 
-	const tableDisplay = computed<TableDisplay>(() => {
+	const tableDisplay = computed<CompleteTable>(() => {
 		return rows.value.reduce((rows, row, rowIndex) => {
 			return {
 				...rows,
