@@ -167,14 +167,22 @@ export const useTemplateStore = defineStore("template", () => {
 
 	const isEmpty = computed<boolean>(() => {
 		// return categoriesDisplay.value.length ? false : true;
-		return false
+		return false;
 	});
 
-	const completeTable = computed<CompleteTable>(() => {
+	const getCompleteTable = (filter: boolean = false): CompleteTable => {
+		let columnsToFilter = columns.value;
+
+		if (filter) {
+			columnsToFilter = columnsToFilter.filter(
+				(column) => column.category.trim() || columnIsEmpty(column.id),
+			);
+		}
+
 		return rows.value.reduce((rows, row, rowIndex) => {
 			return {
 				...rows,
-				[row]: columns.value.reduce((columns, column) => {
+				[row]: columnsToFilter.reduce((columns, column) => {
 					return {
 						...columns,
 						[column.id]: {
@@ -189,7 +197,7 @@ export const useTemplateStore = defineStore("template", () => {
 				}, {}),
 			};
 		}, {});
-	});
+	};
 
 	// ------------------------------
 
@@ -209,7 +217,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 		//  ----
 
-		completeTable,
+		getCompleteTable,
 		isEmpty,
 		activeCell,
 		setPlayProgressTracker,
