@@ -101,13 +101,13 @@ export const useTemplateStore = defineStore("template", () => {
 	};
 
 	function columnIsEmpty(column: Column["id"]): boolean {
-		const arr: boolean[] = [];
+		const arr: string[] = [];
 
 		for (let i = 0; i < rows.value.length; i++) {
-			arr.push(cellHasMissingData(`row${i + 1}`, column));
+			arr.push(checkTableData(`row${i + 1}`, column));
 		}
 
-		return arr.every((a) => a === true);
+		return arr.every((a) => a === 'empty');
 	}
 
 	function createTemplate(): TemplateData {
