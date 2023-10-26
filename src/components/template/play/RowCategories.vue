@@ -6,7 +6,10 @@ const template = useTemplateStore();
 
 <template>
 	<tr>
-		<th v-for="column in template.columns" class="cell cell-width cell-padding">
+		<th
+			v-for="column in template.columns"
+			class="cell cell-width cell-padding bg-red-400 text-white"
+		>
 			{{ column.category || column.id }}
 		</th>
 	</tr>
