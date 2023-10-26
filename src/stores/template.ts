@@ -65,7 +65,7 @@ export const useTemplateStore = defineStore("template", () => {
 	const columns = ref<Column[]>([]);
 	const rawTable = ref<RawTable>({});
 
-	const rawTemplateData = computed<TemplateData>({
+	const templateData = computed<TemplateData>({
 		get() {
 			return {
 				id: id.value,
@@ -142,7 +142,7 @@ export const useTemplateStore = defineStore("template", () => {
 	}
 
 	watch(
-		rawTemplateData,
+		templateData,
 		(template) => {
 			localStorage.setItem("template", JSON.stringify(template));
 		},
@@ -150,7 +150,7 @@ export const useTemplateStore = defineStore("template", () => {
 	);
 
 	onBeforeMount(() => {
-		rawTemplateData.value = fetchTemplateFromLocalStorage() ?? createTemplate();
+		templateData.value = fetchTemplateFromLocalStorage() ?? createTemplate();
 	});
 
 	// ------------------------------
@@ -201,7 +201,7 @@ export const useTemplateStore = defineStore("template", () => {
 		rows,
 		columns,
 		rawTable,
-		rawTemplateData,
+		templateData,
 		playProgressTracker,
 		cellHasMissingData,
 		columnIsEmpty,
