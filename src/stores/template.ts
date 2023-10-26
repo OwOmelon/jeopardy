@@ -181,7 +181,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 		if (filter) {
 			columnsToFilter = columnsToFilter.filter(
-				(column) => column.category.trim() || columnIsEmpty(column.id),
+				(column) => column.category.trim() || !columnIsEmpty(column.id),
 			);
 		}
 
