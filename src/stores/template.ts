@@ -165,29 +165,16 @@ export const useTemplateStore = defineStore("template", () => {
 		playProgressTracker.value[activeCell.value!.row] = row;
 	}
 
-	const categoriesDisplay = computed<Column[]>({
-		get() {
-			return editing.value
-				? columns.value
-				: columns.value.filter(
-						(column) => column.category || !columnIsEmpty(column.id),
-				  );
-		},
-
-		set(newValue) {
-			columns.value = newValue;
-		},
-	});
-
 	const isEmpty = computed<boolean>(() => {
-		return categoriesDisplay.value.length ? false : true;
+		// return categoriesDisplay.value.length ? false : true;
+		return false
 	});
 
-	const tableDisplay = computed<CompleteTable>(() => {
+	const completeTable = computed<CompleteTable>(() => {
 		return rows.value.reduce((rows, row, rowIndex) => {
 			return {
 				...rows,
-				[row]: categoriesDisplay.value.reduce((columns, column) => {
+				[row]: columns.value.reduce((columns, column) => {
 					return {
 						...columns,
 						[column.id]: {
@@ -222,9 +209,8 @@ export const useTemplateStore = defineStore("template", () => {
 
 		//  ----
 
-		tableDisplay,
+		completeTable,
 		isEmpty,
-		categoriesDisplay,
 		activeCell,
 		setPlayProgressTracker,
 	};
