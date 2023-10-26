@@ -8,7 +8,7 @@ const template = useTemplateStore();
 </script>
 
 <template>
-	<table class="gap-3">
+	<table class="grid gap-3">
 		<RowCategories />
 
 		<tr

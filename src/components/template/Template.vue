@@ -13,16 +13,14 @@ const template = useTemplateStore();
 	<div class="mt-10 w-full">
 		<TemplateName />
 
-		<Table_Edit v-if="template.editing" />
-		<Table_Play v-else />
+		<div class="grid place-items-center overflow-auto p-8">
+			<Table_Edit v-if="template.editing" />
+			<Table_Play v-else />
+		</div>
 	</div>
 </template>
 
 <style scoped lang="postcss">
-:deep(table) {
-	@apply grid w-full overflow-auto p-8;
-}
-
 :deep(tr) {
 	@apply flex gap-3;
 }

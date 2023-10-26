@@ -32,7 +32,7 @@ function TDMouseLeave(): void {
 </script>
 
 <template>
-	<table>
+	<table class="grid">
 		<RowPoints />
 		<RowCategories />
 
