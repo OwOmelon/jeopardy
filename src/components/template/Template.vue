@@ -28,7 +28,7 @@ const template = useTemplateStore();
 }
 
 :deep(td) {
-	@apply h-[9.5ex] cursor-pointer text-xs;
+	@apply h-[9.5ex] cursor-pointer bg-stone-300 text-xs text-stone-500;
 }
 
 :deep(.td-rise) {
