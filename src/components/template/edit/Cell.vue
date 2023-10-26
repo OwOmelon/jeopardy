@@ -15,6 +15,7 @@ const props = defineProps<
 const emit = defineEmits<{
 	"on-mouse-enter": [RowID, Column["id"]];
 	"on-mouse-leave": [];
+	edit: [];
 }>();
 
 const dynamicStyles = computed<string>(() => {
@@ -51,11 +52,7 @@ const textDisplay = computed<number | string>(() => {
 		:class="[dynamicStyles, 'cell cell-width cell-padding td-rise']"
 		@mouseenter="emit('on-mouse-enter', props.row, props.column)"
 		@mouseleave="emit('on-mouse-leave')"
-		@click="
-			() => {
-				template.activeCell = JSON.parse(JSON.stringify(props));
-			}
-		"
+		@click="emit('edit')"
 	>
 		<p class="line-clamp-3">
 			{{ textDisplay }}

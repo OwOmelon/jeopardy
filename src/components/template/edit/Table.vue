@@ -6,7 +6,7 @@ import RowPoints from "./RowPoints.vue";
 import RowCategories from "./RowCategories.vue";
 import Cell from "./Cell.vue";
 import CellEditor from "./CellEditor.vue";
-import ModalWrapper from '@/components/ModalWrapper.vue'
+import ModalWrapper from "@/components/ModalWrapper.vue";
 
 import type { RowID, Column } from "@/stores/template";
 
@@ -53,6 +53,7 @@ function TDMouseLeave(): void {
 						:hovered="rowKey === TDHovered.row && cellKey === TDHovered.column"
 						@on-mouse-enter="TDMouseEnter"
 						@on-mouse-leave="TDMouseLeave"
+						@edit="template.activeCell = cellValue"
 					/>
 				</template>
 			</TransitionGroup>
@@ -66,6 +67,6 @@ function TDMouseLeave(): void {
 
 <style scoped lang="postcss">
 :deep(.th-bg) {
-	@apply bg-white
+	@apply bg-white;
 }
 </style>
