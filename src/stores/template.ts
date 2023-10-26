@@ -217,7 +217,7 @@ export const useTemplateStore = defineStore("template", () => {
 		rawTable,
 		templateData,
 		playProgressTracker,
-		cellHasMissingData,
+		checkTableData,
 		columnIsEmpty,
 		createTemplate,
 
