@@ -11,7 +11,10 @@ const emit = defineEmits<{
 </script>
 
 <template>
-	<td class="cell cell-width cell-padding td-rise" @click="emit('reveal')">
+	<td
+		class="cell cell-width cell-padding td-rise grid place-items-center hover:bg-red-400 hover:text-white"
+		@click="emit('reveal')"
+	>
 		<span class="text-lg font-bold">{{ cell.points }}</span>
 	</td>
 </template>
