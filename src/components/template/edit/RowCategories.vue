@@ -22,7 +22,7 @@ function changeColumnCategory(newName: string, id: Column["id"]): void {
 
 <template>
 	<draggable
-		v-model="template.categoriesDisplay"
+		v-model="template.columns"
 		item-key="element"
 		tag="tr"
 		handle=".handle"

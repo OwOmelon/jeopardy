@@ -2,12 +2,12 @@
 import { computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
-import type { RowID, Column, TableDisplayCell } from "@/stores/template";
+import type { RowID, Column, CompleteTableCell } from "@/stores/template";
 
 const template = useTemplateStore();
 
 const props = defineProps<{
-	cell: TableDisplayCell;
+	cell: CompleteTableCell;
 	hovered: boolean;
 }>();
 

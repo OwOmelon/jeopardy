@@ -5,9 +5,9 @@ import { v4 as uuidv4 } from "uuid";
 
 import HistoryItem from "./HistoryItem.vue";
 
-import type { RawTemplateData } from "@/stores/template";
+import type { TemplateData } from "@/stores/template";
 
-export type HistoryTemplate = RawTemplateData & {
+export type HistoryTemplate = TemplateData & {
 	iteration: number;
 	dateModified: Date;
 };
@@ -41,10 +41,10 @@ const historyIndexOfCurrentTemplate = computed<number>(() => {
 	return history.value.findIndex((temp) => temp.id === template.id);
 });
 
-function loadTemplate(save: RawTemplateData) {
+function loadTemplate(save: TemplateData) {
 	allowHistoryLog.value = false;
 
-	template.rawTemplateData = save;
+	template.templateData = save;
 }
 
 function pushTemplateToHistory(): void {
@@ -70,7 +70,7 @@ function pushTemplateToHistory(): void {
 	history.value.push(
 		JSON.parse(
 			JSON.stringify({
-				...template.rawTemplateData,
+				...template.templateData,
 				iteration: historyPushIteration.value,
 				dateModified: new Date(),
 			}),
