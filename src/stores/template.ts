@@ -188,7 +188,7 @@ export const useTemplateStore = defineStore("template", () => {
 							row,
 							points: points.value[rowIndex],
 							column: column.id,
-							category: column.category || column.id,
+							category: column.category,
 							answeredBy: playProgressTracker.value?.[row]?.[column.id],
 						},
 					};
