@@ -11,9 +11,9 @@ const emit = defineEmits<{
 <template>
 	<td
 		:class="[
-			{ '!bg-stone-500': isEmpty },
-			{ 'td-rise': answeredBy === undefined },
-			'cell cell-width cell-padding td-rise grid place-items-center hover:bg-red-400 hover:text-white',
+			{ 'pointer-events-none !bg-stone-500': isEmpty },
+			answeredBy === undefined ? 'td-rise' : 'opacity-0 hover:opacity-50',
+			'cell cell-width cell-padding grid place-items-center hover:bg-red-400 hover:text-white',
 		]"
 		@click="emit('reveal')"
 	>
