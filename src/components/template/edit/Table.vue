@@ -50,6 +50,7 @@ function TDMouseLeave(): void {
 				>
 					<TableData
 						v-bind="cellValue"
+						:incomplete="template.checkTableDataValues(rowKey, cellKey) !== 'complete'"
 						:hovered="rowKey === TDHovered.row && cellKey === TDHovered.column"
 						@on-mouse-enter="TDMouseEnter"
 						@on-mouse-leave="TDMouseLeave"

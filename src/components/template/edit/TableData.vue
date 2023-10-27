@@ -8,6 +8,7 @@ const template = useTemplateStore();
 
 const props = defineProps<
 	{
+		incomplete: boolean;
 		hovered: boolean;
 	} & CompleteTableCell
 >();
@@ -30,8 +31,7 @@ const textDisplay = computed<number | string>(() => {
 	<td
 		:class="[
 			{
-				'!bg-stone-500 !text-stone-100':
-					template.checkTableDataValues(props.row, props.column) !== 'complete',
+				'!bg-stone-500 !text-stone-100': props.incomplete,
 			},
 			'cell cell-width cell-padding td-rise',
 		]"
