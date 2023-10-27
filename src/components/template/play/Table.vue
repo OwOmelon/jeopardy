@@ -48,9 +48,9 @@ const filteredCompleteTable = computed<CompleteTable>(() => {
 				@reveal="template.activeCell = cellValue"
 			/>
 		</tr>
-	</table>
 
-	<ModalWrapper :show="template.activeCell ? true : false">
-		<TableDataReveal />
-	</ModalWrapper>
+		<ModalWrapper :show="template.activeCell ? true : false">
+			<TableDataReveal />
+		</ModalWrapper>
+	</table>
 </template>

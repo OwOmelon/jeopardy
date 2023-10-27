@@ -58,11 +58,11 @@ function TDMouseLeave(): void {
 				</template>
 			</TransitionGroup>
 		</div>
-	</table>
 
-	<ModalWrapper :show="template.activeCell ? true : false">
-		<TableDataEditor />
-	</ModalWrapper>
+		<ModalWrapper :show="template.activeCell ? true : false">
+			<TableDataEditor />
+		</ModalWrapper>
+	</table>
 </template>
 
 <style scoped lang="postcss">
