@@ -44,8 +44,7 @@ onBeforeMount(() => {
 
 const stuff = computed(() => {
 	return {
-		activeCellIndeces: template.activeCellIndeces,
-		activeCellData: template.activeCellData,
+		activeCell: template.activeCell
 	};
 });
 
@@ -77,18 +76,18 @@ function func() {
 			<!-- --- -->
 
 			<div class="relative grid grid-cols-5 grid-rows-2 text-center">
-				<template v-for="category in template.columns">
+				<template v-for="column in template.columns">
 					<div
 						:class="[
-							{ 'text-red-400': template.columnIsEmpty(category.id) },
+							{ 'text-red-400': template.columnIsEmpty(column.id) },
 							'row-start-1 grid items-end',
 						]"
 					>
-						<p>{{ category.id }}</p>
+						<p>{{ column.id }}</p>
 					</div>
 
 					<div class="row-start-2 grid items-start">
-						<p>{{ category.name || "x" }}</p>
+						<p>{{ column.category || "x" }}</p>
 					</div>
 				</template>
 
