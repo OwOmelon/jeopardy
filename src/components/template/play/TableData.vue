@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CompleteTableCell } from "@/stores/template";
 
-defineProps<CompleteTableCell>();
+defineProps<{ isEmpty: boolean } & CompleteTableCell>();
 
 const emit = defineEmits<{
 	reveal: [];
@@ -10,9 +10,13 @@ const emit = defineEmits<{
 
 <template>
 	<td
-		class="cell cell-width cell-padding td-rise grid place-items-center hover:bg-red-400 hover:text-white"
+		:class="[
+			{ '!bg-stone-500': isEmpty },
+			{ 'td-rise': answeredBy === undefined },
+			'cell cell-width cell-padding td-rise grid place-items-center hover:bg-red-400 hover:text-white',
+		]"
 		@click="emit('reveal')"
 	>
-		<span class="text-lg font-bold">{{ points }}</span>
+		<span v-if="!isEmpty" class="text-lg font-bold">{{ points }}</span>
 	</td>
 </template>

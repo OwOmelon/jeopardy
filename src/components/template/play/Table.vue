@@ -42,8 +42,9 @@ const filteredCompleteTable = computed<CompleteTable>(() => {
 		>
 			<TableData
 				v-for="(cellValue, cellKey, cellIndex) in rowValue"
-				:key="cellKey"
 				v-bind="cellValue"
+				:is-empty="template.checkTableDataValues(rowKey, cellKey) === 'empty'"
+				:key="cellKey"
 				class="cell cell-width cell-padding td-rise"
 				@reveal="template.activeCell = cellValue"
 			/>
