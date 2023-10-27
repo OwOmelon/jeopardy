@@ -53,21 +53,3 @@ const template = useTemplateStore();
 	@apply p-[0.5em];
 }
 </style>
-
-<style scoped lang="scss">
-.slide {
-	&-move,
-	&-enter-active,
-	&-leave-active {
-		transition: all 0.25s cubic-bezier(0.55, 0, 0.1, 1);
-	}
-}
-
-.disabled {
-	&-move,
-	&-enter-active,
-	&-leave-active {
-		transition: all 0s;
-	}
-}
-</style>
