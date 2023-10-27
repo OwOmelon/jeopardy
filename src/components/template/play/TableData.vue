@@ -1,0 +1,22 @@
+<script setup lang="ts">
+import type { CompleteTableCell } from "@/stores/template";
+
+defineProps<{ isEmpty: boolean } & CompleteTableCell>();
+
+const emit = defineEmits<{
+	reveal: [];
+}>();
+</script>
+
+<template>
+	<td
+		:class="[
+			{ 'pointer-events-none !bg-stone-500': isEmpty },
+			answeredBy === undefined ? 'td-rise' : 'opacity-0 hover:opacity-50',
+			'cell cell-width cell-padding grid place-items-center hover:bg-red-400 hover:text-white',
+		]"
+		@click="emit('reveal')"
+	>
+		<span v-if="!isEmpty" class="text-lg font-bold">{{ points }}</span>
+	</td>
+</template>

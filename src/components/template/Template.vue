@@ -3,84 +3,47 @@ import { ref, computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
 import TemplateName from "./TemplateName.vue";
-import TRPoints from "./TRPoints.vue";
-import TRCategories from "./TRCategories.vue";
-import TD from "./TD.vue";
-
-import type { RowID, Column } from "@/stores/template";
+import Table_Edit from "./edit/Table.vue";
+import Table_Play from "./play/Table.vue";
 
 const template = useTemplateStore();
-
-const TDHovered = ref<{
-	row: RowID | null;
-	column: Column["id"] | null;
-}>({
-	row: null,
-	column: null,
-});
-
-const horizontalTrTemplateColumns = computed<string>(() => {
-	return `repeat(${template.categoriesDisplay.length}, 140px)`;
-});
-
-function TDMouseEnter(row: RowID, column: Column["id"]): void {
-	TDHovered.value.row = row;
-	TDHovered.value.column = column;
-}
-
-function TDMouseLeave(): void {
-	TDHovered.value.row = null;
-	TDHovered.value.column = null;
-}
 </script>
 
 <template>
 	<div class="mt-10 w-full">
 		<TemplateName />
 
-		<table
-			:class="[
-				'grid w-full overflow-auto p-8',
-			]"
-		>
-			<TRPoints v-if="template.editing" />
-			<TRCategories />
-
-			<div class="col-start-2 row-start-2 flex flex-col gap-3">
-				<TransitionGroup
-					tag="tr"
-					:name="template.editing ? 'slide' : 'disabled'"
-					v-for="(rowValue, rowKey, rowIndex) in template.tableDisplay"
-					:key="rowKey"
-					class="relative grid gap-3"
-				>
-					<template
-						v-for="(cellValue, cellKey, columnIndex) in rowValue"
-						:key="cellKey"
-					>
-						<TD
-							:cell="cellValue"
-							:hovered="
-								rowKey === TDHovered.row && cellKey === TDHovered.column
-							"
-							@on-mouse-enter="TDMouseEnter"
-							@on-mouse-leave="TDMouseLeave"
-						/>
-					</template>
-				</TransitionGroup>
-			</div>
-		</table>
+		<div class="grid place-items-center overflow-auto p-8">
+			<Transition
+				:name="template.editing ? 'fade-slide-right' : 'fade-slide-left'"
+				mode="out-in"
+			>
+				<Table_Edit v-if="template.editing" />
+				<Table_Play v-else />
+			</Transition>
+		</div>
 	</div>
 </template>
 
 <style scoped lang="postcss">
 :deep(tr) {
-	@apply grid;
-	grid-template-columns: v-bind(horizontalTrTemplateColumns);
+	@apply flex gap-3;
+}
+
+:deep(td) {
+	@apply h-[9.5ex] cursor-pointer bg-stone-300 text-xs text-stone-500;
+}
+
+:deep(.td-rise) {
+	@apply hover:-translate-y-2 hover:scale-105 hover:shadow-lg;
 }
 
 :deep(.cell) {
-	@apply rounded border-y-2 border-transparent bg-white shadow !shadow-black/30 transition-colors;
+	@apply rounded border-y-2 border-transparent shadow !shadow-black/30 transition-[background-color,_border_color,_color,_box-shadow,_opacity,_transform];
+}
+
+:deep(.cell-width) {
+	@apply w-[140px];
 }
 
 :deep(.cell-padding) {

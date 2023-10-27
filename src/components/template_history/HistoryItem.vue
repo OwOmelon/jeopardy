@@ -3,7 +3,7 @@ import { ref, watch } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { Icon } from "@iconify/vue";
 
-import type { RawTemplateData } from "@/stores/template";
+import type { TemplateData } from "@/stores/template";
 import type { HistoryTemplate } from "./History.vue";
 
 const props = defineProps<{
@@ -14,7 +14,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	(e: "load-save", save: RawTemplateData): void;
+	(e: "load-save", save: TemplateData): void;
 	(e: "set-active-item", index: number): void;
 }>();
 
@@ -99,7 +99,7 @@ watch(
 								:key="index"
 								class="item"
 							>
-								<p>{{ column.name || column.id }}</p>
+								<p>{{ column.category || column.id }}</p>
 							</li>
 						</ul>
 					</div>

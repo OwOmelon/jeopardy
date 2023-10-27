@@ -5,11 +5,7 @@ import { useMainMenuStore } from "./stores/mainmenu";
 import debug from "./components/debug.vue";
 import MainMenu from "./components/MainMenuModal/Modal.vue";
 import ShowMainMenuBtn from "./components/MainMenuModal/ShowMainMenuBtn.vue";
-import Template from "./components/template/Template.vue";
-import TemplateIsEmptyFallBack from "./components/template/IsEmptyFallBack.vue";
-import GuestList from "./components/guests/GuestList.vue";
-import TDEditor from "./components/template/TDEditor.vue";
-import TDReveal from "./components/tdreveal/TDReveal.vue";
+import JeopardyTemplate from "./components/template/Template.vue";
 import ModalWrapper from "./components/ModalWrapper.vue";
 import TemplateHistory from "./components/template_history/History.vue";
 
@@ -21,21 +17,10 @@ const mainmenu = useMainMenuStore();
   <ShowMainMenuBtn />
   <TemplateHistory v-if="template.editing" />
 
-  <TemplateIsEmptyFallBack v-if="!template.editing && template.isEmpty" />
-  <Template v-else />
-
-  <GuestList />
+  <JeopardyTemplate />
 
   <ModalWrapper :show="mainmenu.show">
     <MainMenu />
-  </ModalWrapper>
-
-  <ModalWrapper :show="template.activeCell && template.editing ? true : false">
-    <TDEditor />
-  </ModalWrapper>
-
-  <ModalWrapper :show="template.activeCell && !template.editing ? true : false">
-    <TDReveal />
   </ModalWrapper>
 
   <debug />
@@ -83,6 +68,44 @@ input[type="number"] {
   &-enter-from,
   &-leave-to {
     opacity: 0;
+  }
+}
+
+.fade-slide-left {
+  &-enter-active,
+  &-leave-active {
+    transition:
+      opacity 150ms,
+      transform 150ms;
+  }
+
+  &-enter-from {
+    opacity: 1;
+    transform: translateX(15px);
+  }
+
+  &-leave-to {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+}
+
+.fade-slide-right {
+  &-enter-active,
+  &-leave-active {
+    transition:
+      opacity 150ms,
+      transform 150ms;
+  }
+
+  &-enter-from {
+    opacity: 1;
+    transform: translateX(-15px);
+  }
+
+  &-leave-to {
+    opacity: 0;
+    transform: translateX(15px);
   }
 }
 

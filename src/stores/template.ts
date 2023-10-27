@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 
 import type { Guest } from "./guests";
 
+//  ----
+
 export type RowID = `row${number}`; /* row1 - row-5 */
 
 export type Column = {
@@ -21,9 +23,7 @@ export type RawTable = {
 	[key: RowID]: { [key: Column["id"]]: RawTableCell };
 };
 
-//  ----
-
-export type TableDisplayCell = {
+export type CompleteTableCell = {
 	row: RowID;
 	points: number;
 	column: Column["id"];
@@ -31,13 +31,13 @@ export type TableDisplayCell = {
 	answeredBy: Guest["name"] | null | undefined;
 } & RawTableCell;
 
-export type TableDisplay = {
-	[key: RowID]: { [key: Column["id"]]: TableDisplayCell };
+export type CompleteTable = {
+	[key: RowID]: { [key: Column["id"]]: CompleteTableCell };
 };
 
 //  ----
 
-export type RawTemplateData = {
+export type TemplateData = {
 	id: string;
 	name: string;
 	points: number[];
@@ -65,7 +65,7 @@ export const useTemplateStore = defineStore("template", () => {
 	const columns = ref<Column[]>([]);
 	const rawTable = ref<RawTable>({});
 
-	const rawTemplateData = computed<RawTemplateData>({
+	const templateData = computed<TemplateData>({
 		get() {
 			return {
 				id: id.value,
@@ -87,24 +87,30 @@ export const useTemplateStore = defineStore("template", () => {
 		},
 	});
 
-	function cellHasMissingData(row: RowID, column: Column["id"]): boolean {
-		return !rawTable.value[row][column].question ||
-			!rawTable.value[row][column].answer
-			? true
-			: false;
-	}
+	const checkTableDataValues = (
+		row: RowID,
+		column: Column["id"],
+	): "complete" | "empty" | "partial" => {
+		const tableData = rawTable.value[row][column];
 
-	function columnIsEmpty(column: Column["id"]): boolean {
-		const arr: boolean[] = [];
+		return tableData.question && tableData.answer
+			? "complete"
+			: !tableData.question && !tableData.answer
+			? "empty"
+			: "partial";
+	};
+
+	const columnIsEmpty = (column: Column["id"]): boolean => {
+		const arr: string[] = [];
 
 		for (let i = 0; i < rows.value.length; i++) {
-			arr.push(cellHasMissingData(`row${i + 1}`, column));
+			arr.push(checkTableDataValues(`row${i + 1}`, column));
 		}
 
-		return arr.every((a) => a === true);
-	}
+		return arr.every((a) => a === "empty");
+	};
 
-	function createTemplate(): RawTemplateData {
+	const createTemplate = (): TemplateData => {
 		console.log("create template");
 
 		const points: number[] = [];
@@ -133,16 +139,16 @@ export const useTemplateStore = defineStore("template", () => {
 		}, {});
 
 		return { id: "", name: "", points, rows, columns, rawTable };
-	}
+	};
 
-	function fetchTemplateFromLocalStorage(): RawTemplateData | null {
+	const fetchTemplateFromLocalStorage = (): TemplateData | null => {
 		const template = localStorage.getItem("template");
 
 		return template ? JSON.parse(template) : null;
-	}
+	};
 
 	watch(
-		rawTemplateData,
+		templateData,
 		(template) => {
 			localStorage.setItem("template", JSON.stringify(template));
 		},
@@ -150,12 +156,12 @@ export const useTemplateStore = defineStore("template", () => {
 	);
 
 	onBeforeMount(() => {
-		rawTemplateData.value = fetchTemplateFromLocalStorage() ?? createTemplate();
+		templateData.value = fetchTemplateFromLocalStorage() ?? createTemplate();
 	});
 
 	// ------------------------------
 
-	const activeCell = ref<TableDisplayCell | null>(null);
+	const activeCell = ref<CompleteTableCell | null>(null);
 	const playProgressTracker = ref<PlayProgressTracker>({});
 
 	function setPlayProgressTracker(name: Guest["name"] | null) {
@@ -165,29 +171,16 @@ export const useTemplateStore = defineStore("template", () => {
 		playProgressTracker.value[activeCell.value!.row] = row;
 	}
 
-	const categoriesDisplay = computed<Column[]>({
-		get() {
-			return editing.value
-				? columns.value
-				: columns.value.filter(
-						(column) => column.category || !columnIsEmpty(column.id),
-				  );
-		},
-
-		set(newValue) {
-			columns.value = newValue;
-		},
-	});
-
 	const isEmpty = computed<boolean>(() => {
-		return categoriesDisplay.value.length ? false : true;
+		// return categoriesDisplay.value.length ? false : true;
+		return false;
 	});
 
-	const tableDisplay = computed<TableDisplay>(() => {
+	const completeTable = computed<CompleteTable>(() => {
 		return rows.value.reduce((rows, row, rowIndex) => {
 			return {
 				...rows,
-				[row]: categoriesDisplay.value.reduce((columns, column) => {
+				[row]: columns.value.reduce((columns, column) => {
 					return {
 						...columns,
 						[column.id]: {
@@ -214,17 +207,16 @@ export const useTemplateStore = defineStore("template", () => {
 		rows,
 		columns,
 		rawTable,
-		rawTemplateData,
+		templateData,
 		playProgressTracker,
-		cellHasMissingData,
+		checkTableDataValues,
 		columnIsEmpty,
 		createTemplate,
 
 		//  ----
 
-		tableDisplay,
+		completeTable,
 		isEmpty,
-		categoriesDisplay,
 		activeCell,
 		setPlayProgressTracker,
 	};

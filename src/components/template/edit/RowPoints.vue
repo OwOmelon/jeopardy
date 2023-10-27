@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
-import THPoints from "./THPoints.vue";
+import HeaderPoints from "./HeaderPoints.vue";
 import draggable from "vuedraggable";
 
 const template = useTemplateStore();
@@ -24,10 +24,10 @@ function updatePoints(newPoints: number, rowIndex: number) {
 		handle=".handle"
 		:animation="200"
 		:disabled="!template.editing"
-		class="col-start-1 row-start-2 w-20 !grid-cols-none items-center gap-3 justify-self-end mr-5"
+		class="col-start-1 row-start-2 mr-5 w-20 flex-col justify-around gap-3 justify-self-end"
 	>
 		<template #item="{ element, index }">
-			<THPoints
+			<HeaderPoints
 				:row-index="index"
 				:points="template.points[index]"
 				@update-points="updatePoints"
