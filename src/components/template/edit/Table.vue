@@ -4,7 +4,7 @@ import { useTemplateStore } from "@/stores/template";
 
 import RowPoints from "./RowPoints.vue";
 import RowCategories from "./RowCategories.vue";
-import Cell from "./Cell.vue";
+import TableData from "./TableData.vue";
 import CellEditor from "./CellEditor.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
@@ -48,7 +48,7 @@ function TDMouseLeave(): void {
 					v-for="(cellValue, cellKey, columnIndex) in rowValue"
 					:key="cellKey"
 				>
-					<Cell
+					<TableData
 						v-bind="cellValue"
 						:hovered="rowKey === TDHovered.row && cellKey === TDHovered.column"
 						@on-mouse-enter="TDMouseEnter"
