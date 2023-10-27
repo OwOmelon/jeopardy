@@ -14,8 +14,13 @@ const template = useTemplateStore();
 		<TemplateName />
 
 		<div class="grid place-items-center overflow-auto p-8">
-			<Table_Edit v-if="template.editing" />
-			<Table_Play v-else />
+			<Transition
+				:name="template.editing ? 'fade-slide-right' : 'fade-slide-left'"
+				mode="out-in"
+			>
+				<Table_Edit v-if="template.editing" />
+				<Table_Play v-else />
+			</Transition>
 		</div>
 	</div>
 </template>
