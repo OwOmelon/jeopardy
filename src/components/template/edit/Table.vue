@@ -39,7 +39,7 @@ function TDMouseLeave(): void {
 		<div class="col-start-2 row-start-2 flex flex-col gap-3">
 			<TransitionGroup
 				tag="tr"
-				:name="template.editing ? 'slide' : 'disabled'"
+				name="list-slide-left"
 				v-for="(rowValue, rowKey, rowIndex) in template.completeTable"
 				:key="rowKey"
 				class="relative"
@@ -50,7 +50,9 @@ function TDMouseLeave(): void {
 				>
 					<TableData
 						v-bind="cellValue"
-						:incomplete="template.checkTableDataValues(rowKey, cellKey) !== 'complete'"
+						:incomplete="
+							template.checkTableDataValues(rowKey, cellKey) !== 'complete'
+						"
 						:hovered="rowKey === TDHovered.row && cellKey === TDHovered.column"
 						@on-mouse-enter="TDMouseEnter"
 						@on-mouse-leave="TDMouseLeave"
