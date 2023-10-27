@@ -171,11 +171,6 @@ export const useTemplateStore = defineStore("template", () => {
 		playProgressTracker.value[activeCell.value!.row] = row;
 	}
 
-	const isEmpty = computed<boolean>(() => {
-		// return categoriesDisplay.value.length ? false : true;
-		return false;
-	});
-
 	const completeTable = computed<CompleteTable>(() => {
 		return rows.value.reduce((rows, row, rowIndex) => {
 			return {
@@ -216,7 +211,6 @@ export const useTemplateStore = defineStore("template", () => {
 		//  ----
 
 		completeTable,
-		isEmpty,
 		activeCell,
 		setPlayProgressTracker,
 	};
