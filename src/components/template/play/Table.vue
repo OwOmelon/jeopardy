@@ -1,10 +1,33 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
+
+import type { Column, CompleteTable } from "@/stores/template";
 
 import RowCategories from "./RowCategories.vue";
 import TableData from "./TableData.vue";
 
 const template = useTemplateStore();
+
+const filteredColumns = computed<Column[]>(() => {
+	return template.columns.filter(
+		(column) => column.category || !template.columnIsEmpty(column.id),
+	);
+});
+
+const filteredCompleteTable = computed<CompleteTable>(() => {
+	return template.rows.reduce((rows, row) => {
+		return {
+			...rows,
+			[row]: filteredColumns.value.reduce((columns, column) => {
+				return {
+					...columns,
+					[column.id]: template.completeTable[row][column.id],
+				};
+			}, {}),
+		};
+	}, {});
+});
 </script>
 
 <template>
@@ -12,7 +35,7 @@ const template = useTemplateStore();
 		<RowCategories />
 
 		<tr
-			v-for="(rowValue, rowKey, rowIndex) in template.completeTable"
+			v-for="(rowValue, rowKey, rowIndex) in filteredCompleteTable"
 			:key="rowKey"
 		>
 			<TableData
