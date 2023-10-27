@@ -28,9 +28,9 @@ watch(
 			blur-on-keydown-enter
 			:class="[
 				{
-					'border-y-2 border-transparent border-b-stone-600': template.editing,
+					'border-b-stone-600': template.editing,
 				},
-				'p-2 transition-colors',
+				'border-y-2 border-transparent p-2 transition-colors',
 			]"
 			@blur="template.name = textInput"
 		/>
