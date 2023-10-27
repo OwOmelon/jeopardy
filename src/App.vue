@@ -113,7 +113,7 @@ input[type="number"] {
   &-move,
   &-enter-active,
   &-leave-active {
-    transition: all 300ms ease-out;
+    transition: all 150ms cubic-bezier(0.55, 0, 0.1, 1);
   }
 
   &-leave-active {
