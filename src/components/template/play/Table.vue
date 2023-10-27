@@ -32,7 +32,7 @@ const filteredCompleteTable = computed<CompleteTable>(() => {
 
 <template>
 	<table class="grid gap-3">
-		<RowCategories />
+		<RowCategories :columns="filteredColumns" />
 
 		<tr
 			v-for="(rowValue, rowKey, rowIndex) in filteredCompleteTable"
