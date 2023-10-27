@@ -6,6 +6,8 @@ import type { Column, CompleteTable } from "@/stores/template";
 
 import RowCategories from "./RowCategories.vue";
 import TableData from "./TableData.vue";
+import TableDataReveal from "./td_reveal/TableDataReveal.vue";
+import ModalWrapper from "@/components/ModalWrapper.vue";
 
 const template = useTemplateStore();
 
@@ -47,4 +49,8 @@ const filteredCompleteTable = computed<CompleteTable>(() => {
 			/>
 		</tr>
 	</table>
+
+	<ModalWrapper :show="template.activeCell ? true : false">
+		<TableDataReveal />
+	</ModalWrapper>
 </template>
