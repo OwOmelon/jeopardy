@@ -4,6 +4,7 @@ import { useTemplateStore } from "@/stores/template";
 
 import type { Column, CompleteTable } from "@/stores/template";
 
+import { Icon } from "@iconify/vue";
 import RowCategories from "./RowCategories.vue";
 import TableData from "./TableData.vue";
 import TableDataReveal from "./td_reveal/TableDataReveal.vue";
@@ -33,7 +34,7 @@ const filteredCompleteTable = computed<CompleteTable>(() => {
 </script>
 
 <template>
-	<table class="grid gap-3">
+	<table class="grid gap-3" v-if="filteredColumns.length">
 		<RowCategories :columns="filteredColumns" />
 
 		<tr
@@ -53,4 +54,16 @@ const filteredCompleteTable = computed<CompleteTable>(() => {
 			<TableDataReveal />
 		</ModalWrapper>
 	</table>
+
+	<div class="my-10 rounded bg-stone-50 p-3 shadow-md" v-else>
+		<p class="text-xl font-bold">your table is empty D:</p>
+		<button
+			type="button"
+			class="mx-auto mt-5 flex items-center gap-2 rounded bg-red-400 p-2 text-sm text-white transition-transform hover:-translate-y-1"
+			@click="template.editing = true"
+		>
+			go work on it
+			<Icon icon="material-symbols:edit-rounded" class="h-6 w-6" />
+		</button>
+	</div>
 </template>
