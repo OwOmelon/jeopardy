@@ -4,6 +4,7 @@ import { useTemplateStore } from "@/stores/template";
 
 import RowPoints from "./RowPoints.vue";
 import RowCategories from "./RowCategories.vue";
+import RowHRs from './RowHRs.vue'
 import TableData from "./TableData.vue";
 import TableDataEditor from "./TableDataEditor.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
@@ -33,8 +34,11 @@ function TDMouseLeave(): void {
 
 <template>
 	<table class="grid">
+		<th class="col-start-2 row-start-1">
+			<RowCategories />
+			<RowHRs />
+		</th>
 		<RowPoints />
-		<RowCategories />
 
 		<div class="col-start-2 row-start-2 flex flex-col gap-3">
 			<TransitionGroup
