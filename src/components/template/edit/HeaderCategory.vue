@@ -19,24 +19,6 @@ const template = useTemplateStore();
 
 const textInput = ref(props.column.category);
 
-const hrColor = computed<string>(() => {
-	let emptyCells = 0;
-
-	template.rows.forEach((row) => {
-		const cell = template.rawTable[row][props.column.id];
-
-		if (!cell.question || !cell.answer) {
-			emptyCells++;
-		}
-	});
-
-	return emptyCells === 0
-		? "border-green-400"
-		: emptyCells === 5
-		? "border-red-400"
-		: "border-yellow-400";
-});
-
 watch(
 	() => props.column,
 	(val) => {
@@ -59,8 +41,6 @@ watch(
 			]"
 			@blur="emit('change-column-category', textInput, props.column.id)"
 		/>
-
-		<hr :class="[hrColor, 'my-3 rounded-full border-t-2']" />
 
 		<DragHandle v-if="template.editing" />
 	</th>
