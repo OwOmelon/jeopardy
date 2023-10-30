@@ -20,21 +20,20 @@ function changeColumnCategory(newName: string, id: Column["id"]): void {
 </script>
 
 <template>
-	<thead class="col-start-2 row-start-1 items-end">
-		<draggable
-			v-model="template.columns"
-			item-key="element"
-			tag="tr"
-			handle=".handle"
-			:animation="200"
-			:disabled="!template.editing"
-		>
-			<template #item="{ element }">
-				<HeaderCategory
-					:column="element"
-					@change-column-category="changeColumnCategory"
-				/>
-			</template>
-		</draggable>
-	</thead>
+	<draggable
+		v-model="template.columns"
+		item-key="element"
+		tag="tr"
+		handle=".handle"
+		:animation="200"
+		:disabled="!template.editing"
+		class="col-start-2 row-start-1 items-end"
+	>
+		<template #item="{ element }">
+			<HeaderCategory
+				:column="element"
+				@change-column-category="changeColumnCategory"
+			/>
+		</template>
+	</draggable>
 </template>
