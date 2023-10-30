@@ -53,9 +53,9 @@ const hrColors = computed<{ id: Column["id"]; color: string; text: string }[]>(
 			<hr :class="[hr.color, 'my-1 grow rounded-full border-t-2']" />
 
 			<div
-				class="pointer-events-none absolute -top-9 w-full rounded bg-stone-700 p-1 opacity-0 transition-opacity group-hover:opacity-100"
+				class="pointer-events-none absolute -top-9 rounded bg-stone-700 p-1 opacity-0 transition-opacity group-hover:opacity-100"
 			>
-				<span class="text-xs text-stone-50">{{ hr.text }}</span>
+				<span class="text-[0.6rem] text-stone-50">{{ hr.text }}</span>
 
 				<div
 					class="absolute left-1/2 top-6 z-[-5] aspect-square w-3 -translate-x-1/2 rotate-45 rounded-sm bg-[inherit]"
