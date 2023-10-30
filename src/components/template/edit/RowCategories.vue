@@ -27,7 +27,7 @@ function changeColumnCategory(newName: string, id: Column["id"]): void {
 		handle=".handle"
 		:animation="200"
 		:disabled="!template.editing"
-		class="col-start-2 row-start-1 items-end"
+		class="items-end"
 	>
 		<template #item="{ element }">
 			<HeaderCategory
