@@ -24,7 +24,11 @@ const template = useTemplateStore();
 			</Transition>
 		</div>
 
-		<GuestList />
+		<Transition name="height-auto">
+			<div v-if="!template.editing" class="grid">
+				<GuestList />
+			</div>
+		</Transition>
 	</div>
 </template>
 
