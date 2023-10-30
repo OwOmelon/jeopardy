@@ -9,18 +9,14 @@ const template = useTemplateStore();
 const hrColors = computed<{ id: Column["id"]; color: string; text: string }[]>(
 	() => {
 		return template.columns.map((column) => {
-			let emptyCells = 0;
-
-			template.rows.forEach((row) => {
-				if (template.checkTableDataValues(row, column.id) === "empty") {
-					emptyCells++;
-				}
-			});
+			let missingDataCellCount = template.rows.filter(
+				(row) => template.checkTableDataValues(row, column.id) !== "complete",
+			).length;
 
 			let color = "";
 			let text = "";
 
-			switch (emptyCells) {
+			switch (missingDataCellCount) {
 				case 0:
 					color = "border-green-400";
 					text = "this column is complete";
