@@ -5,7 +5,7 @@ import { useTemplateStore } from "@/stores/template";
 import TemplateName from "./TemplateName.vue";
 import Table_Edit from "./edit/Table.vue";
 import Table_Play from "./play/Table.vue";
-import GuestList from "./play/guests/GuestList.vue";
+import GuestList from "../guests/GuestList.vue";
 
 const template = useTemplateStore();
 </script>
