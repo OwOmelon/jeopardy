@@ -12,7 +12,6 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	"advance-progress": [];
 	done: [];
 }>();
 
