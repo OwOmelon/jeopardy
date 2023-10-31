@@ -102,13 +102,13 @@ watch(
 	>
 		<HistoryItem
 			v-for="(template, index) in history"
-			:key="template.id"
-			:template="template"
+			v-bind="template"
 			:index="index"
 			:is-current-template="index === historyIndexOfCurrentTemplate"
 			:is-active="index === activeHistoryItem"
-			@set-active-item="setActiveItem"
-			@load-save="loadTemplate"
+			:key="template.id"
+			@set-active-item="setActiveItem(index)"
+			@load-save="loadTemplate(template)"
 		/>
 
 		<button

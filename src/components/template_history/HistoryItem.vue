@@ -2,19 +2,16 @@
 import { ref, watch } from "vue";
 import { Icon } from "@iconify/vue";
 
-import type { TemplateData } from "@/stores/template";
 import type { HistoryTemplate } from "./History.vue";
 
 const props = defineProps<{
-	template: HistoryTemplate;
-	index: number;
 	isCurrentTemplate: boolean;
 	isActive: boolean;
-}>();
+} & HistoryTemplate>();
 
 const emit = defineEmits<{
-	(e: "load-save", save: TemplateData): void;
-	(e: "set-active-item", index: number): void;
+	(e: "load-save"): void;
+	(e: "set-active-item"): void;
 }>();
 
 const showTableAnswers = ref<boolean>(false);
@@ -29,28 +26,28 @@ watch(
 
 <template>
 	<li
-		@click="emit('set-active-item', props.index)"
+		@click="emit('set-active-item')"
 		:class="[
-			props.isActive ? 'bg-white/20' : 'hover:bg-white/10',
+			isActive ? 'bg-white/20' : 'hover:bg-white/10',
 			'group cursor-pointer rounded p-1 transition-colors duration-300',
 		]"
 	>
 		<div class="group relative flex items-center justify-between">
 			<p
 				:class="[
-					props.isCurrentTemplate ? 'text-red-400' : 'text-white',
+					isCurrentTemplate ? 'text-red-400' : 'text-white',
 					'font-bold transition-colors',
 				]"
 			>
-				{{ props.template.iteration }} | date modified:
-				{{ new Date(props.template.dateModified).toLocaleTimeString("en-US") }}
+				{{ iteration }} | date modified:
+				{{ new Date(dateModified).toLocaleTimeString("en-US") }}
 			</p>
 
 			<div
 				:class="[
-					props.isCurrentTemplate
+					isCurrentTemplate
 						? 'pointer-events-none opacity-0'
-						: props.isActive
+						: isActive
 						? 'oapcity-100'
 						: 'group-hover:opacity-100 lg:opacity-0',
 					'order-2 ml-10 flex items-center gap-2 transition-opacity duration-300',
@@ -58,7 +55,7 @@ watch(
 			>
 				<Icon
 					icon="fluent:tab-arrow-left-24-regular"
-					@click.stop="emit('load-save', props.template)"
+					@click.stop="emit('load-save')"
 					class="peer order-1 h-5 w-5 transition-transform hover:scale-125"
 				/>
 
@@ -71,15 +68,15 @@ watch(
 		</div>
 
 		<Transition name="height-auto">
-			<div v-if="props.isActive" class="grid">
+			<div v-if="isActive" class="grid">
 				<div class="flex flex-col gap-3 overflow-hidden">
-					<p>template name: {{ props.template.name || "x" }}</p>
+					<p>template name: {{ name || "x" }}</p>
 
 					<div>
 						<label>points:</label>
 						<ul class="flex gap-2">
 							<li
-								v-for="(point, index) in props.template.points"
+								v-for="(point, index) in points"
 								:key="index"
 								class="item"
 							>
@@ -92,7 +89,7 @@ watch(
 						<label>columns:</label>
 						<ul class="grid grid-cols-5 gap-2">
 							<li
-								v-for="(column, index) in props.template.columns"
+								v-for="(column, index) in columns"
 								:key="index"
 								class="item"
 							>
@@ -114,20 +111,20 @@ watch(
 						</div>
 						<table class="flex w-full flex-col gap-2 text-[0.65rem]">
 							<tr
-								v-for="row in props.template.rows"
+								v-for="row in rows"
 								:key="row"
 								class="grid grid-cols-5 gap-2"
 							>
 								<td
-									v-for="column in props.template.columns"
+									v-for="column in columns"
 									:key="column.id"
 									class="item h-[9ex]"
 								>
 									<p>
 										{{
 											showTableAnswers
-												? props.template.rawTable[row][column.id].answer || "x"
-												: props.template.rawTable[row][column.id].question ||
+												? rawTable[row][column.id].answer || "x"
+												: rawTable[row][column.id].question ||
 												  "x"
 										}}
 									</p>
