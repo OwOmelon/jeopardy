@@ -57,11 +57,7 @@ function confirm(): void {
 	}
 
 	guestsPtsDeduct.value.forEach((guestDeduct) => {
-		guests.editGuestPoints(
-			guestDeduct.id,
-			-template.activeCell!.points,
-			true,
-		);
+		guests.editGuestPoints(guestDeduct.id, -template.activeCell!.points, true);
 	});
 
 	template.setPlayProgressTracker(guestPtsAdd.value?.name ?? null);
@@ -84,11 +80,11 @@ function confirm(): void {
 				:disabled="guestsPtsDeductIncludesGuest(guest) && props.progress === 4"
 				:class="[
 					guestsPtsDeductIncludesGuest(guest)
-						? `bg-stone-500 text-stone-300 ${
+						? `lose-points ${
 								props.progress === 4 ? 'pointer-events-none opacity-50' : ''
 						  }`
 						: guestPtsAdd?.id === guest.id
-						? 'bg-red-400 text-white'
+						? 'gain-points'
 						: 'bg-stone-300 text-stone-500',
 					'rounded p-2 shadow shadow-black/30 transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1',
 				]"
@@ -119,3 +115,49 @@ function confirm(): void {
 		</Transition>
 	</div>
 </template>
+
+<style scoped lang="postcss">
+.lose-points {
+	animation: lose-points 0.5s;
+	@apply bg-stone-500 text-stone-300;
+}
+
+@keyframes lose-points {
+	0%,
+	25%,
+	50%,
+	75%,
+	100% {
+		rotate: -3deg;
+	}
+
+	12.5%,
+	37.5%,
+	62.5%,
+	87.5% {
+		rotate: 3deg;
+	}
+
+	25%,
+	75% {
+		translate: 0 -0.5rem;
+	}
+}
+
+.gain-points {
+	animation: gain-points 0.75s;
+	@apply bg-red-400 text-white;
+}
+
+@keyframes gain-points {
+	0% {
+		@apply bg-stone-300 text-stone-500;
+	}
+
+	25%,
+	75% {
+		scale: 1.1;
+		@apply bg-white text-amber-300 shadow-[0_0_50px] shadow-amber-300;
+	}
+}
+</style>
