@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useTemplateStore } from "@/stores/template";
 
 import type { RowID, Column, CompleteTableCell } from "@/stores/template";
-
-const template = useTemplateStore();
 
 const props = defineProps<
 	{
