@@ -67,15 +67,11 @@ function pushTemplateToHistory(): void {
 	historyPushIteration.value++;
 	template.id = uuidv4();
 
-	history.value.push(
-		JSON.parse(
-			JSON.stringify({
-				...template.templateData,
-				iteration: historyPushIteration.value,
-				dateModified: new Date(),
-			}),
-		),
-	);
+	history.value.push({
+		...JSON.parse(JSON.stringify(template.templateData)),
+		iteration: historyPushIteration.value,
+		dateModified: new Date(),
+	});
 }
 
 watch(
