@@ -5,6 +5,8 @@ import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
 import { vOnClickOutside } from "@vueuse/components";
 
+import type { Guest } from "@/stores/guests";
+
 import TextBox from "./TextBox.vue";
 import SaveChangesBtn from "./SaveChangesBtn.vue";
 import GuestLI from "./GuestLI.vue";
@@ -13,8 +15,24 @@ const mainmenu = useMainMenuStore();
 const guests = useGuestsStore();
 const template = useTemplateStore();
 
-const textBox = ref<HTMLInputElement | null>(null);
+const textBox = ref<InstanceType<typeof TextBox> | null>(null);
 const textInput = ref<string>("");
+
+function startGuestRename(guest: Guest) {
+	guests.activeGuestID = guest.id;
+	textInput.value = guest.name;
+
+	// WAIT FOR TEXTBOX'S disabled ATTRIBUTE TO TURN TO false, THEN FOCUS,
+	setTimeout(() => {
+		textBox.value!.focus();
+	});
+}
+
+function cancelGuestRename() {
+	guests.activeGuestID = "";
+	textInput.value = "";
+	textBox.value!.blur();
+}
 
 function saveChanges(): void {
 	if (guests.activeGuestID) {
@@ -31,14 +49,14 @@ function saveChanges(): void {
 	textInput.value = "";
 }
 
-function changeEditMode(mode: boolean) {
-	template.editing = mode;
+function onModeBtnClick(edit: boolean) {
+	template.editing = edit;
 	mainmenu.show = false;
 }
 
 onUnmounted(() => {
-	guests.activeGuestID = ""
-})
+	guests.activeGuestID = "";
+});
 </script>
 
 <template>
@@ -68,22 +86,25 @@ onUnmounted(() => {
 		<TransitionGroup tag="ul" name="list-slide-left" class="relative mb-3">
 			<GuestLI
 				v-for="guest in guests.list"
-				:key="guest.id"
-				:guest="guest"
-				@rename="textInput = guest.name"
-				@reset-text-box="
-					() => {
-						textBox?.blur();
-						textInput = '';
-					}
+				v-bind="guest"
+				:currently-editing="
+					guests.activeGuestID
+						? guests.activeGuestID === guest.id
+							? 'active'
+							: true
+						: false
 				"
+				:key="guest.id"
+				@rename="startGuestRename(guest)"
+				@rename-cancel="cancelGuestRename"
+				@delete="guests.deleteGuest(guest.id)"
 			/>
 		</TransitionGroup>
 
-		<button type="button" class="mode-btn" @click="changeEditMode(true)">
+		<button type="button" class="mode-btn" @click="onModeBtnClick(true)">
 			edit
 		</button>
-		<button type="button" class="mode-btn ml-3" @click="changeEditMode(false)">
+		<button type="button" class="mode-btn ml-3" @click="onModeBtnClick(false)">
 			play
 		</button>
 	</div>

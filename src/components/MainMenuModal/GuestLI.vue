@@ -1,28 +1,19 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { useGuestsStore } from "../../stores/guests";
 import { Icon } from "@iconify/vue";
 
-import type { Guest } from "../../stores/guests";
+import type { Guest } from "@/stores/guests";
 
-const props = defineProps<{
-	guest: Guest;
-}>();
+const props = defineProps<
+	{
+		currentlyEditing: boolean | "active";
+	} & Guest
+>();
 
 const emit = defineEmits<{
-	"rename": [];
-	"reset-text-box": [];
+	rename: [];
+	'rename-cancel': [];
+	delete: [];
 }>();
-
-const guests = useGuestsStore();
-
-const currentlyEditing = computed<boolean | "active">(() => {
-	return guests.activeGuestID
-		? guests.activeGuestID === props.guest.id
-			? "active"
-			: true
-		: false;
-});
 </script>
 
 <template>
@@ -30,19 +21,19 @@ const currentlyEditing = computed<boolean | "active">(() => {
 		:class="[
 			currentlyEditing === 'active'
 				? 'bg-red-400 text-white'
-				: currentlyEditing === true
+				: currentlyEditing
 				? 'bg-stone-400'
 				: 'hover:bg-stone-200',
-			'transition-color group flex items-center justify-between rounded px-2 duration-150',
+			'transition-color group flex items-center justify-between rounded px-2',
 		]"
 	>
-		<span>{{ guest.name }}</span>
+		<span>{{ name }}</span>
 
 		<div
 			:class="[
 				currentlyEditing === 'active'
 					? '!opacity-100'
-					: currentlyEditing === true
+					: currentlyEditing
 					? '!opacity-0'
 					: 'group-hover:opacity-100',
 				'flex items-center gap-2 transition-opacity lg:opacity-0',
@@ -53,11 +44,9 @@ const currentlyEditing = computed<boolean | "active">(() => {
 				:disabled="currentlyEditing === true"
 				@click="
 					() => {
-						if (guests.activeGuestID === props.guest.id) {
-							guests.activeGuestID = '';
-							emit('reset-text-box');
+						if (props.currentlyEditing === 'active') {
+							emit('rename-cancel');
 						} else {
-							guests.activeGuestID = props.guest.id;
 							emit('rename');
 						}
 					}
@@ -76,8 +65,8 @@ const currentlyEditing = computed<boolean | "active">(() => {
 				:disabled="currentlyEditing === true"
 				@click="
 					() => {
-						emit('reset-text-box');
-						guests.deleteGuest(props.guest.id);
+						emit('rename-cancel');
+						emit('delete');
 					}
 				"
 			>
