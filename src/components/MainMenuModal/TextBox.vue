@@ -24,11 +24,15 @@ const writableModalValue = computed<string>({
 	},
 });
 
+function focus(): void {
+	textBox.value?.focus();
+}
+
 function blur(): void {
 	textBox.value?.blur();
 }
 
-defineExpose({ blur });
+defineExpose({ focus, blur });
 </script>
 
 <template>
@@ -45,11 +49,7 @@ defineExpose({ blur });
 		"
 		maxlength="12"
 		:disabled="
-			guests.guestLimitReached
-				? guests.activeGuestID
-					? false
-					: true
-				: false
+			guests.guestLimitReached ? (guests.activeGuestID ? false : true) : false
 		"
 		@keydown.enter="emit('save-changes')"
 		:class="[
