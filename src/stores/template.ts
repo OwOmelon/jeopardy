@@ -192,6 +192,23 @@ export const useTemplateStore = defineStore("template", () => {
 		}, {});
 	});
 
+	watch(
+		playProgressTracker,
+		(progress) => {
+			localStorage.setItem("playProgressTracker", JSON.stringify(progress));
+		},
+		{ deep: true },
+	);
+
+	const fetchplayProgressTrackerFromLocalStorage =
+		(): PlayProgressTracker | null => {
+			const savedProgress = localStorage.getItem("playProgressTracker");
+
+			return savedProgress ? JSON.parse(savedProgress) : null;
+		};
+
+	playProgressTracker.value = fetchplayProgressTrackerFromLocalStorage() || {};
+
 	// ------------------------------
 
 	return {
