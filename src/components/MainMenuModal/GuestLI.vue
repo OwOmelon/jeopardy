@@ -10,7 +10,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	"set-text-input-to-guest-name": [];
+	"rename": [];
 	"reset-text-box": [];
 }>();
 
@@ -58,7 +58,7 @@ const currentlyEditing = computed<boolean | "active">(() => {
 							emit('reset-text-box');
 						} else {
 							guests.activeGuestID = props.guest.id;
-							emit('set-text-input-to-guest-name');
+							emit('rename');
 						}
 					}
 				"

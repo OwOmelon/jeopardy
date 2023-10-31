@@ -70,7 +70,7 @@ onUnmounted(() => {
 				v-for="guest in guests.list"
 				:key="guest.id"
 				:guest="guest"
-				@set-text-input-to-guest-name="textInput = guest.name"
+				@rename="textInput = guest.name"
 				@reset-text-box="
 					() => {
 						textBox?.blur();
