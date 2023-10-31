@@ -9,28 +9,21 @@ const template = useTemplateStore();
 const hrColors = computed<{ id: Column["id"]; color: string; text: string }[]>(
 	() => {
 		return template.columns.map((column) => {
-			let missingDataCellCount = template.rows.filter(
-				(row) => template.checkTableDataValues(row, column.id) !== "complete",
-			).length;
+			const columnDataValues = template.rows.map((row) =>
+				template.checkTableDataValues(row, column.id),
+			);
 
-			let color = "";
-			let text = "";
+			let color = "border-red-400";
+			let text = "this column empty";
 
-			switch (missingDataCellCount) {
-				case 0:
+			if (columnDataValues.some((check1) => check1 !== "empty")) {
+				if (columnDataValues.every((check2) => check2 === "complete")) {
 					color = "border-green-400";
 					text = "this column is complete";
-					break;
-
-				case 5:
-					color = "border-red-400";
-					text = "this column is empty";
-					break;
-
-				default:
+				} else {
 					color = "border-yellow-400";
 					text = "this column is incomplete";
-					break;
+				}
 			}
 
 			return { id: column.id, color, text };
