@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { useTemplateStore } from "@/stores/template";
 import { Icon } from "@iconify/vue";
 
 import type { TemplateData } from "@/stores/template";
@@ -17,8 +16,6 @@ const emit = defineEmits<{
 	(e: "load-save", save: TemplateData): void;
 	(e: "set-active-item", index: number): void;
 }>();
-
-const template = useTemplateStore();
 
 const showTableAnswers = ref<boolean>(false);
 
@@ -51,7 +48,7 @@ watch(
 
 			<div
 				:class="[
-					template.id === props.template.id
+					props.isCurrentTemplate
 						? 'pointer-events-none opacity-0'
 						: props.isActive
 						? 'oapcity-100'
