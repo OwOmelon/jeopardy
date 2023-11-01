@@ -40,7 +40,7 @@ watch(
 			ref="textBox"
 			v-model="textInput"
 			type="number"
-			class="cell cell-padding w-full bg-transparent text-center outline-none focus:!border-b-red-400"
+			class="cell cell-padding w-full bg-transparent text-center outline-none focus:!border-stone-100"
 			@blur="onBlur"
 			@keydown.enter="textBox?.blur()"
 		/>

@@ -33,7 +33,7 @@ watch(
 			v-model="textInput"
 			:placeholder="props.column.id"
 			:disabled="!template.editing"
-			focus-classes="!border-b-red-400"
+			focus-classes="!border-stone-100"
 			blur-on-keydown-enter
 			:class="[
 				{ '!bg-red-400 !text-white': !template.editing },
