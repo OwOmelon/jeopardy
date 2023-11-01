@@ -4,7 +4,7 @@ import { useTemplateStore } from "@/stores/template";
 
 import RowPoints from "./RowPoints.vue";
 import RowCategories from "./RowCategories.vue";
-import RowHRs from './RowHRs.vue'
+import RowHRs from "./RowHRs.vue";
 import TableData from "./TableData.vue";
 import TableDataEditor from "./TableDataEditor.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
@@ -54,9 +54,7 @@ function TDMouseLeave(): void {
 				>
 					<TableData
 						v-bind="cellValue"
-						:incomplete="
-							template.checkTableDataValues(rowKey, cellKey) !== 'complete'
-						"
+						:data-values="template.checkTableDataValues(rowKey, cellKey)"
 						:hovered="rowKey === TDHovered.row && cellKey === TDHovered.column"
 						@on-mouse-enter="TDMouseEnter"
 						@on-mouse-leave="TDMouseLeave"
@@ -74,7 +72,7 @@ function TDMouseLeave(): void {
 
 <style scoped lang="postcss">
 :deep(td) {
-	@apply bg-stone-700 text-stone-300
+	@apply bg-stone-700 text-stone-300;
 }
 
 :deep(.th-bg) {

@@ -5,7 +5,7 @@ import type { RowID, Column, CompleteTableCell } from "@/stores/template";
 
 const props = defineProps<
 	{
-		incomplete: boolean;
+		dataValues: string;
 		hovered: boolean;
 	} & CompleteTableCell
 >();
