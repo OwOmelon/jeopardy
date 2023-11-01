@@ -48,7 +48,7 @@ export type TemplateData = {
 
 //  ----
 
-export type PlayProgressTracker = {
+export type CellsAnswered = {
 	[key: RowID]: { [key: Column["id"]]: Guest["name"] | null };
 };
 
@@ -162,13 +162,13 @@ export const useTemplateStore = defineStore("template", () => {
 	// ------------------------------
 
 	const activeCell = ref<CompleteTableCell | null>(null);
-	const playProgressTracker = ref<PlayProgressTracker>({});
+	const cellsAnswered = ref<CellsAnswered>({});
 
 	function setPlayProgressTracker(name: Guest["name"] | null) {
-		const row = playProgressTracker.value?.[activeCell.value!.row] ?? {};
+		const row = cellsAnswered.value?.[activeCell.value!.row] ?? {};
 
 		row[activeCell.value!.column!] = name;
-		playProgressTracker.value[activeCell.value!.row] = row;
+		cellsAnswered.value[activeCell.value!.row] = row;
 	}
 
 	const completeTable = computed<CompleteTable>(() => {
@@ -184,7 +184,7 @@ export const useTemplateStore = defineStore("template", () => {
 							points: points.value[rowIndex],
 							column: column.id,
 							category: column.category,
-							answeredBy: playProgressTracker.value?.[row]?.[column.id],
+							answeredBy: cellsAnswered.value?.[row]?.[column.id],
 						},
 					};
 				}, {}),
@@ -193,21 +193,21 @@ export const useTemplateStore = defineStore("template", () => {
 	});
 
 	watch(
-		playProgressTracker,
+		cellsAnswered,
 		(progress) => {
-			localStorage.setItem("playProgressTracker", JSON.stringify(progress));
+			localStorage.setItem("cellsAnswered", JSON.stringify(progress));
 		},
 		{ deep: true },
 	);
 
 	const fetchplayProgressTrackerFromLocalStorage =
-		(): PlayProgressTracker | null => {
-			const savedProgress = localStorage.getItem("playProgressTracker");
+		(): CellsAnswered | null => {
+			const savedProgress = localStorage.getItem("cellsAnswered");
 
 			return savedProgress ? JSON.parse(savedProgress) : null;
 		};
 
-	playProgressTracker.value = fetchplayProgressTrackerFromLocalStorage() || {};
+	cellsAnswered.value = fetchplayProgressTrackerFromLocalStorage() || {};
 
 	// ------------------------------
 
@@ -220,7 +220,7 @@ export const useTemplateStore = defineStore("template", () => {
 		columns,
 		rawTable,
 		templateData,
-		playProgressTracker,
+		cellsAnswered,
 		checkTableDataValues,
 		columnIsEmpty,
 		createTemplate,
