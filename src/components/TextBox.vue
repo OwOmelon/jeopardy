@@ -92,7 +92,7 @@ onMounted(() => {
 			"
 		/>
 
-		<span v-if="props.disabled && !input!.innerText.length">&nbsp</span>
+		<span v-if="props.disabled && !modelValue.length">&nbsp</span>
 
 		<div
 			v-if="!modelValue.trim().length"
