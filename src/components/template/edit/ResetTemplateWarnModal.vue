@@ -10,10 +10,10 @@ const emit = defineEmits<{
 		<h1 class="text-3xl font-bold">!! TEMPLATE RESET</h1>
 
 		<p class="my-3">
-			Are you sure you want to reset your template ?
+			Are you sure you want to reset your template?
 			<br />
 			You can always undo this by loading a previously saved template on the
-			<span class="font-bold">template history</span> located on the top left
+			<span class="font-bold">template history</span> located on the top left.
 		</p>
 
 		<button type="button" @click="emit('cancel')">CANCEL</button>
