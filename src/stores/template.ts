@@ -57,6 +57,7 @@ export type CellsAnswered = {
 export const useTemplateStore = defineStore("template", () => {
 	const guests = useGuestsStore();
 	const editing = ref<boolean>(true);
+	const resetTemplateWarning = ref<boolean>(true)
 
 	const id = ref<string>(uuidv4());
 	const name = ref<string>("");
@@ -163,6 +164,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	const activeCell = ref<CompleteTableCell | null>(null);
 	const cellsAnswered = ref<CellsAnswered>({});
+	const resetCellsAnsweredWarning = ref<boolean>(false)
 
 	function setPlayProgressTracker(name: Guest["name"] | null) {
 		const row = cellsAnswered.value?.[activeCell.value!.row] ?? {};
@@ -213,6 +215,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	return {
 		editing,
+		resetTemplateWarning,
 		id,
 		name,
 		points,
@@ -221,6 +224,7 @@ export const useTemplateStore = defineStore("template", () => {
 		rawTable,
 		templateData,
 		cellsAnswered,
+		resetCellsAnsweredWarning,
 		checkTableDataValues,
 		columnIsEmpty,
 		createTemplate,
