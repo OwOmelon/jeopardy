@@ -23,7 +23,7 @@ watch(
     } else {
       body.style.backgroundColor = '#f5f5f4'
     }
-  }, { immediate: true },
+  },
 )
 </script>
 
