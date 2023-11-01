@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from 'vue'
+import { watch } from "vue";
 import { useTemplateStore } from "./stores/template";
 import { useMainMenuStore } from "./stores/mainmenu";
 
@@ -16,15 +16,15 @@ const mainmenu = useMainMenuStore();
 watch(
   () => template.editing,
   (is) => {
-      const body = document.getElementsByTagName("body")[0]
+    const body = document.getElementsByTagName("body")[0];
 
     if (is) {
-      body.style.backgroundColor = '#292524'
+      body.style.backgroundColor = "#292524";
     } else {
-      body.style.backgroundColor = '#f5f5f4'
+      body.style.backgroundColor = "#f5f5f4";
     }
   },
-)
+);
 </script>
 
 <template>
@@ -49,12 +49,8 @@ watch(
   @apply m-0 box-border p-0;
 }
 
-html {
-  @apply font-["Poppins",_sans-serrif] text-sm text-stone-500 lg:text-base;
-}
-
 body {
-  @apply transition-colors
+  @apply bg-stone-800 font-["Poppins",_sans-serrif] text-sm text-stone-500 transition-colors lg:text-base;
 }
 
 #app {
