@@ -71,7 +71,7 @@ function TDMouseLeave(): void {
 
 		<ModalWrapper :show="template.resetTemplateWarning">
 			<ResetTemplateWarnModal
-				@confim="template.templateData = template.createTemplate()"
+				@confirm="template.templateData = template.createTemplate()"
 				@close="template.resetTemplateWarning = false"
 			/>
 		</ModalWrapper>
