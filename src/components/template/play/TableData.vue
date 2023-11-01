@@ -11,7 +11,7 @@ const emit = defineEmits<{
 <template>
 	<td
 		:class="[
-			{ 'pointer-events-none !bg-stone-500': isEmpty },
+			isEmpty ? 'pointer-events-none bg-stone-500' : 'bg-stone-300',
 			answeredBy === undefined ? 'td-rise' : 'opacity-0 hover:opacity-50',
 			'cell cell-width cell-padding grid place-items-center hover:bg-red-400 hover:text-white',
 		]"
