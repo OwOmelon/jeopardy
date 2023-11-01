@@ -19,7 +19,7 @@ watch(
       const body = document.getElementsByTagName("body")[0]
 
     if (is) {
-      body.style.backgroundColor = '#a8a29e'
+      body.style.backgroundColor = '#292524'
     } else {
       body.style.backgroundColor = '#f5f5f4'
     }
