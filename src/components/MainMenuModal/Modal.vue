@@ -49,11 +49,6 @@ function saveChanges(): void {
 	textInput.value = "";
 }
 
-function onModeBtnClick(edit: boolean) {
-	template.editing = edit;
-	mainmenu.show = false;
-}
-
 onUnmounted(() => {
 	guests.activeGuestID = "";
 });
@@ -111,32 +106,49 @@ onUnmounted(() => {
 			/>
 		</TransitionGroup>
 
-		<button
-			type="button"
-			:class="[
-				template.editing ? 'mode-btn-dark' : 'mode-btn-light',
-				'mode-btn',
-			]"
-			@click="onModeBtnClick(true)"
-		>
-			edit
-		</button>
-		<button
-			type="button"
-			:class="[
-				template.editing ? 'mode-btn-dark' : 'mode-btn-light',
-				'mode-btn ml-3',
-			]"
-			@click="onModeBtnClick(false)"
-		>
-			play
-		</button>
+		<div class="flex items-center justify-between">
+			<button
+				type="button"
+				:class="[
+					template.editing ? 'mode-btn-dark' : 'mode-btn-light',
+					'mode-btn',
+				]"
+				@click="
+					() => {
+						template.editing = !template.editing;
+						mainmenu.show = false;
+					}
+				"
+			>
+				{{ template.editing ? "play" : "edit" }}
+			</button>
+			<button
+				type="button"
+				:class="[
+					template.editing ? 'mode-btn-dark' : 'mode-btn-light',
+					'mode-btn',
+				]"
+				@click="
+					() => {
+						if (template.editing) {
+							template.resetTemplateWarning = true;
+						} else {
+							template.resetCellsAnsweredWarning = true;
+						}
+
+						mainmenu.show = false;
+					}
+				"
+			>
+				{{ template.editing ? "reset template" : "reset progress" }}
+			</button>
+		</div>
 	</div>
 </template>
 
 <style scoped lang="postcss">
 .mode-btn {
-	@apply rounded px-2 text-xl shadow shadow-black/30 transition-colors;
+	@apply rounded px-2 text-lg shadow shadow-black/30 transition-colors;
 }
 
 .mode-btn-light {
