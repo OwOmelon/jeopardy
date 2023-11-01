@@ -36,7 +36,7 @@ const textDisplay = computed<number | string>(() => {
 					? '!border-b-red-400'
 					: ''
 				: '',
-			'cell cell-width cell-padding td-rise',
+			'cell cell-width cell-padding td-rise !border-x-0',
 		]"
 		@mouseenter="emit('on-mouse-enter', props.row, props.column)"
 		@mouseleave="emit('on-mouse-leave')"
