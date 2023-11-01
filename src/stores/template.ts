@@ -1,7 +1,6 @@
 import { ref, computed, watch, watchEffect, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 import { useGuestsStore } from "./guests";
-import { v4 as uuidv4 } from "uuid";
 
 import type { Guest } from "./guests";
 
@@ -38,7 +37,6 @@ export type CompleteTable = {
 //  ----
 
 export type TemplateData = {
-	id: string;
 	name: string;
 	points: number[];
 	rows: RowID[];
@@ -59,7 +57,6 @@ export const useTemplateStore = defineStore("template", () => {
 	const editing = ref<boolean>(true);
 	const resetTemplateWarning = ref<boolean>(false)
 
-	const id = ref<string>("");
 	const name = ref<string>("");
 	const points = ref<number[]>([]);
 	const rows = ref<RowID[]>([]);
@@ -69,7 +66,6 @@ export const useTemplateStore = defineStore("template", () => {
 	const templateData = computed<TemplateData>({
 		get() {
 			return {
-				id: id.value,
 				name: name.value,
 				rows: rows.value,
 				points: points.value,
@@ -79,7 +75,6 @@ export const useTemplateStore = defineStore("template", () => {
 		},
 
 		set(newValue) {
-			id.value = newValue.id;
 			name.value = newValue.name;
 			rows.value = newValue.rows;
 			points.value = newValue.points;
@@ -137,7 +132,7 @@ export const useTemplateStore = defineStore("template", () => {
 			};
 		}, {});
 
-		return { id: uuidv4(), name: "", points, rows, columns, rawTable };
+		return { name: "", points, rows, columns, rawTable };
 	};
 
 	const fetchTemplateFromLocalStorage = (): TemplateData | null => {
@@ -214,7 +209,6 @@ export const useTemplateStore = defineStore("template", () => {
 	return {
 		editing,
 		resetTemplateWarning,
-		id,
 		name,
 		points,
 		rows,

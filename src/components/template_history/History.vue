@@ -8,6 +8,7 @@ import HistoryItem from "./HistoryItem.vue";
 import type { TemplateData } from "@/stores/template";
 
 export type HistoryTemplate = TemplateData & {
+	id: string;
 	iteration: number;
 	dateModified: Date;
 };
@@ -33,17 +34,20 @@ watch(hide, () => {
 
 // ---------------
 
+const currentTemplateID = ref<string>('')
+
 const history = ref<HistoryTemplate[]>([]);
 const historyPushIteration = ref<number>(0);
 const allowHistoryLog = ref<boolean>(true);
 
 const historyIndexOfCurrentTemplate = computed<number>(() => {
-	return history.value.findIndex((temp) => temp.id === template.id);
+	return history.value.findIndex((temp) => temp.id === currentTemplateID.value);
 });
 
-function loadTemplate(save: TemplateData) {
+function loadTemplate(save: HistoryTemplate) {
 	allowHistoryLog.value = false;
 
+	currentTemplateID.value = save.id
 	template.templateData = save;
 }
 
@@ -65,23 +69,18 @@ function pushTemplateToHistory(): void {
 	}
 
 	historyPushIteration.value++;
-	template.id = uuidv4();
+	currentTemplateID.value = uuidv4();
 
 	history.value.push({
 		...JSON.parse(JSON.stringify(template.templateData)),
+		id: currentTemplateID.value,
 		iteration: historyPushIteration.value,
 		dateModified: new Date(),
 	});
 }
 
 watch(
-	() => [
-		template.name,
-		template.points,
-		template.rows,
-		template.columns,
-		template.rawTable,
-	],
+	() => template.templateData,
 	() => {
 		pushTemplateToHistory();
 	},
