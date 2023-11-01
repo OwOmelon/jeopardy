@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { watch } from 'vue'
 import { useTemplateStore } from "./stores/template";
 import { useMainMenuStore } from "./stores/mainmenu";
 
@@ -11,6 +12,19 @@ import TemplateHistory from "./components/template_history/History.vue";
 
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
+
+watch(
+  () => template.editing,
+  (is) => {
+      const body = document.getElementsByTagName("body")[0]
+
+    if (is) {
+      body.style.backgroundColor = '#a8a29e'
+    } else {
+      body.style.backgroundColor = '#f5f5f4'
+    }
+  }, { immediate: true },
+)
 </script>
 
 <template>
@@ -36,7 +50,11 @@ const mainmenu = useMainMenuStore();
 }
 
 html {
-  @apply bg-stone-100 font-["Poppins",_sans-serrif] text-sm text-stone-500 lg:text-base;
+  @apply font-["Poppins",_sans-serrif] text-sm text-stone-500 lg:text-base;
+}
+
+body {
+  @apply transition-colors
 }
 
 #app {
