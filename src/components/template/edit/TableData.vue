@@ -27,9 +27,15 @@ const textDisplay = computed<number | string>(() => {
 <template>
 	<td
 		:class="[
-			{
-				'!bg-stone-500 !text-stone-100': props.incomplete,
-			},
+			hovered
+				? dataValues === 'complete'
+					? '!border-b-green-400'
+					: dataValues === 'partial'
+					? '!border-b-yellow-400'
+					: dataValues === 'empty'
+					? '!border-b-red-400'
+					: ''
+				: '',
 			'cell cell-width cell-padding td-rise',
 		]"
 		@mouseenter="emit('on-mouse-enter', props.row, props.column)"
