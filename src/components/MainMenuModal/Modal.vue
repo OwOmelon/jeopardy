@@ -61,7 +61,10 @@ onUnmounted(() => {
 
 <template>
 	<div
-		class="component z-100 w-[260px] rounded bg-stone-300 p-5 shadow-[0_10px_40px] shadow-black/40"
+		:class="[
+			template.editing ? 'bg-stone-600 text-stone-300' : 'bg-stone-300',
+			'component z-100 w-[260px] rounded bg-stone-300 p-5 shadow-[0_10px_40px] shadow-black/40',
+		]"
 		v-on-click-outside="
 			() => {
 				mainmenu.show = false;
@@ -70,9 +73,15 @@ onUnmounted(() => {
 	>
 		<h1 class="text-3xl font-bold">JEOPARDY</h1>
 
-		<TextBox ref="textBox" v-model="textInput" @save-changes="saveChanges" />
+		<TextBox
+			ref="textBox"
+			v-model="textInput"
+			:editing="template.editing"
+			@save-changes="saveChanges"
+		/>
 
 		<SaveChangesBtn
+			:editing="template.editing"
 			:text-input-length="textInput.length"
 			@save-changes="saveChanges"
 		/>
@@ -87,6 +96,7 @@ onUnmounted(() => {
 			<GuestLI
 				v-for="guest in guests.list"
 				v-bind="guest"
+				:editing="template.editing"
 				:currently-editing="
 					guests.activeGuestID
 						? guests.activeGuestID === guest.id
@@ -101,10 +111,24 @@ onUnmounted(() => {
 			/>
 		</TransitionGroup>
 
-		<button type="button" class="mode-btn" @click="onModeBtnClick(true)">
+		<button
+			type="button"
+			:class="[
+				template.editing ? 'mode-btn-dark' : 'mode-btn-light',
+				'mode-btn',
+			]"
+			@click="onModeBtnClick(true)"
+		>
 			edit
 		</button>
-		<button type="button" class="mode-btn ml-3" @click="onModeBtnClick(false)">
+		<button
+			type="button"
+			:class="[
+				template.editing ? 'mode-btn-dark' : 'mode-btn-light',
+				'mode-btn ml-3',
+			]"
+			@click="onModeBtnClick(false)"
+		>
 			play
 		</button>
 	</div>
@@ -112,6 +136,14 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 .mode-btn {
-	@apply rounded bg-red-400 px-2 text-xl text-white shadow shadow-black/30 transition-colors hover:bg-red-300;
+	@apply rounded px-2 text-xl shadow shadow-black/30 transition-colors;
+}
+
+.mode-btn-light {
+	@apply bg-red-400 text-white hover:bg-red-300;
+}
+
+.mode-btn-dark {
+	@apply bg-stone-300 text-stone-600 hover:bg-stone-400;
 }
 </style>

@@ -3,6 +3,7 @@ import { Icon } from "@iconify/vue";
 import { useGuestsStore } from "../../stores/guests";
 
 const props = defineProps<{
+	editing: boolean;
 	textInputLength: number;
 }>();
 
@@ -18,9 +19,7 @@ const guests = useGuestsStore();
 		type="button"
 		:disabled="!props.textInputLength"
 		:class="[
-			props.textInputLength
-				? 'bg-red-400 text-white hover:bg-red-300'
-				: 'cursor-not-allowed bg-stone-400',
+			editing ? 'dark' : 'light',
 			'mt-2 flex items-center justify-center gap-2 rounded px-2 text-xl shadow shadow-black/30 transition-colors',
 		]"
 		@click="emit('save-changes')"
@@ -31,3 +30,21 @@ const guests = useGuestsStore();
 		/>
 	</button>
 </template>
+
+<style scoped lang="postcss">
+.light {
+	@apply bg-red-400 text-white hover:bg-red-300;
+}
+
+.light:disabled {
+	@apply cursor-not-allowed bg-stone-400 text-stone-500;
+}
+
+.dark {
+	@apply bg-stone-300 text-stone-600 hover:bg-stone-400;
+}
+
+.dark:disabled {
+	@apply cursor-not-allowed bg-stone-700 text-stone-500;
+}
+</style>

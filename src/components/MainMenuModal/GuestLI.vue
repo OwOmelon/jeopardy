@@ -5,13 +5,14 @@ import type { Guest } from "@/stores/guests";
 
 const props = defineProps<
 	{
+		editing: boolean;
 		currentlyEditing: boolean | "active";
 	} & Guest
 >();
 
 const emit = defineEmits<{
 	rename: [];
-	'rename-cancel': [];
+	"rename-cancel": [];
 	delete: [];
 }>();
 </script>
@@ -19,12 +20,14 @@ const emit = defineEmits<{
 <template>
 	<li
 		:class="[
-			currentlyEditing === 'active'
-				? 'bg-red-400 text-white'
-				: currentlyEditing
-				? 'bg-stone-400'
-				: 'hover:bg-stone-200',
-			'transition-colors group flex items-center justify-between rounded px-2',
+			`${editing ? 'dark' : 'light'}${
+				currentlyEditing === 'active'
+					? '-active'
+					: currentlyEditing
+					? '-disabled'
+					: ''
+			}`,
+			'group flex items-center justify-between rounded px-2 transition-colors',
 		]"
 	>
 		<span>{{ name }}</span>
@@ -79,5 +82,31 @@ const emit = defineEmits<{
 <style scoped lang="postcss">
 button {
 	@apply transition-transform hover:scale-150 active:scale-100;
+}
+</style>
+
+<style scoped lang="postcss">
+.light {
+	@apply hover:bg-stone-200;
+}
+
+.light-active {
+	@apply bg-red-400 text-white;
+}
+
+.light-disabled {
+	@apply bg-stone-400;
+}
+
+.dark {
+	@apply hover:bg-stone-500;
+}
+
+.dark-active {
+	@apply bg-stone-300 text-stone-600;
+}
+
+.dark-disabled {
+	@apply bg-stone-700 text-stone-500;
 }
 </style>

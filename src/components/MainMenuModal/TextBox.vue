@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import { useGuestsStore } from "../../stores/guests";
 
 const props = defineProps<{
+	editing: boolean;
 	modelValue: string;
 }>();
 
@@ -53,12 +54,26 @@ defineExpose({ focus, blur });
 		"
 		@keydown.enter="emit('save-changes')"
 		:class="[
-			guests.guestLimitReached
-				? guests.activeGuestID
-					? 'bg-stone-100'
-					: 'bg-stone-400 placeholder:text-stone-500'
-				: 'bg-stone-100',
-			'mt-3 w-full rounded border-y-2 border-transparent px-2 shadow shadow-black/30 outline-none transition-colors focus:border-b-red-400',
+			editing ? 'dark' : 'light',
+			'mt-3 w-full rounded border-y-2 border-transparent px-2 shadow shadow-black/30 outline-none transition-colors',
 		]"
 	/>
 </template>
+
+<style scoped lang="postcss">
+.light {
+	@apply bg-stone-100 focus:border-b-red-400;
+}
+
+.light:disabled {
+	@apply cursor-not-allowed bg-stone-400 placeholder:text-stone-500;
+}
+
+.dark {
+	@apply bg-stone-500 text-stone-100 placeholder:text-stone-400 focus:border-b-stone-100;
+}
+
+.dark:disabled {
+	@apply cursor-not-allowed bg-stone-700 placeholder:text-stone-500;
+}
+</style>
