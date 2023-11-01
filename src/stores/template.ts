@@ -57,7 +57,7 @@ export type CellsAnswered = {
 export const useTemplateStore = defineStore("template", () => {
 	const guests = useGuestsStore();
 	const editing = ref<boolean>(true);
-	const resetTemplateWarning = ref<boolean>(true)
+	const resetTemplateWarning = ref<boolean>(false)
 
 	const id = ref<string>("");
 	const name = ref<string>("");
