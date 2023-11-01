@@ -112,8 +112,6 @@ export const useTemplateStore = defineStore("template", () => {
 	};
 
 	const createTemplate = (): TemplateData => {
-		console.log("create template");
-
 		const points: number[] = [];
 		const rows: RowID[] = [];
 		const columns: Column[] = [];
