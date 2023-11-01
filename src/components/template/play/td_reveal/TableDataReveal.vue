@@ -86,7 +86,7 @@ onUnmounted(() => {
 			class="relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-sm text-white"
 		>
 			<p class="text-center">
-				<span class="font-bold">{{ template.activeCell!.category }}</span>
+				<span class="font-bold">{{ template.activeCell!.category || template.activeCell?.column }}</span>
 				for
 				<span class="font-bold">{{ template.activeCell!.points }}</span>
 			</p>

@@ -56,9 +56,9 @@ onUnmounted(() => {
 		>
 			<p>
 				Editing
-				<span class="font-bold">{{ template.activeCell?.category }}</span>
+				<span class="font-bold">{{ template.activeCell!.category || template.activeCell!.column }}</span>
 				for
-				<span class="font-bold">{{ template.activeCell?.points }}</span>
+				<span class="font-bold">{{ template.activeCell!.points }}</span>
 			</p>
 
 			<button
