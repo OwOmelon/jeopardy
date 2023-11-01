@@ -24,7 +24,7 @@ const emit = defineEmits<{
 				: currentlyEditing
 				? 'bg-stone-400'
 				: 'hover:bg-stone-200',
-			'transition-color group flex items-center justify-between rounded px-2',
+			'transition-colors group flex items-center justify-between rounded px-2',
 		]"
 	>
 		<span>{{ name }}</span>
