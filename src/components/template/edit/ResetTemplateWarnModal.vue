@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const emit = defineEmits<{
 	confirm: [];
-	cancel: [];
+	close: [];
 }>();
 </script>
 
@@ -16,7 +16,7 @@ const emit = defineEmits<{
 			<span class="font-bold">template history</span> located on the top left.
 		</p>
 
-		<button type="button" @click="emit('cancel')">CANCEL</button>
+		<button type="button" @click="emit('close')">CANCEL</button>
 		<button type="button" class="ml-3" @click="emit('confirm')">CONFIRM</button>
 	</div>
 </template>
