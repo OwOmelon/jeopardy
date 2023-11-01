@@ -7,6 +7,7 @@ import RowCategories from "./RowCategories.vue";
 import RowHRs from "./RowHRs.vue";
 import TableData from "./TableData.vue";
 import TableDataEditor from "./TableDataEditor.vue";
+import ResetTemplateWarnModal from "./ResetTemplateWarnModal.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
 import type { RowID, Column } from "@/stores/template";
@@ -66,6 +67,10 @@ function TDMouseLeave(): void {
 
 		<ModalWrapper :show="template.activeCell ? true : false">
 			<TableDataEditor />
+		</ModalWrapper>
+
+		<ModalWrapper :show="template.resetTemplateWarning">
+			<ResetTemplateWarnModal />
 		</ModalWrapper>
 	</table>
 </template>
