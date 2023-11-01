@@ -17,7 +17,18 @@ const emit = defineEmits<{
 		</p>
 
 		<button type="button" @click="emit('close')">CANCEL</button>
-		<button type="button" class="ml-3" @click="emit('confirm')">CONFIRM</button>
+		<button
+			type="button"
+			class="ml-3"
+			@click="
+				() => {
+					emit('confirm');
+					emit('close');
+				}
+			"
+		>
+			CONFIRM
+		</button>
 	</div>
 </template>
 
