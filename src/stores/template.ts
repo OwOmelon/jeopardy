@@ -59,7 +59,7 @@ export const useTemplateStore = defineStore("template", () => {
 	const editing = ref<boolean>(true);
 	const resetTemplateWarning = ref<boolean>(true)
 
-	const id = ref<string>(uuidv4());
+	const id = ref<string>("");
 	const name = ref<string>("");
 	const points = ref<number[]>([]);
 	const rows = ref<RowID[]>([]);
@@ -139,7 +139,7 @@ export const useTemplateStore = defineStore("template", () => {
 			};
 		}, {});
 
-		return { id: "", name: "", points, rows, columns, rawTable };
+		return { id: uuidv4(), name: "", points, rows, columns, rawTable };
 	};
 
 	const fetchTemplateFromLocalStorage = (): TemplateData | null => {
