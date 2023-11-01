@@ -35,7 +35,7 @@ watch(
 </script>
 
 <template>
-	<th :class="['th-bg group relative grid w-full place-items-center']">
+	<th :class="['th-bg group relative grid w-full place-items-center rounded']">
 		<input
 			ref="textBox"
 			v-model="textInput"
