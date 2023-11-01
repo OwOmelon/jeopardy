@@ -14,9 +14,7 @@ const answerModelValue = ref(template.activeCell!.answer);
 
 function saveChanges(): void {
 	const td =
-		template.rawTable[template.activeCell!.row][
-			template.activeCell!.column
-		];
+		template.rawTable[template.activeCell!.row][template.activeCell!.column];
 
 	td.question = questionModelValue.value;
 	td.answer = answerModelValue.value;
@@ -54,7 +52,7 @@ onUnmounted(() => {
 		"
 	>
 		<div
-			class="flex items-center justify-between gap-3 rounded-t border-b-2 border-stone-600 bg-stone-500 p-3 text-sm text-white"
+			class="flex items-center justify-between gap-3 rounded-t border-b-2 border-stone-500 bg-stone-800 p-3 text-sm text-stone-400"
 		>
 			<p>
 				Editing
@@ -65,14 +63,14 @@ onUnmounted(() => {
 
 			<button
 				type="button"
-				class="hover:bg-red-200"
+				class="hover:bg-rose-700"
 				@click="template.activeCell = null"
 			>
 				Close <span class="hidden lg:inline">[Esc]</span>
 			</button>
 		</div>
 
-		<div class="rounded-b bg-stone-300 p-5">
+		<div class="rounded-b bg-stone-700 p-5 text-stone-300">
 			<div class="flex flex-col gap-5 md:flex-row">
 				<div class="w-full">
 					<label>Question:</label>
@@ -97,7 +95,7 @@ onUnmounted(() => {
 
 			<button
 				type="button"
-				class="mx-auto mt-5 block hover:bg-green-200"
+				class="mx-auto mt-5 block hover:bg-emerald-700"
 				@click="saveChanges()"
 			>
 				Save
@@ -108,18 +106,14 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 button {
-	@apply rounded bg-stone-100 px-2 py-1 text-stone-800 shadow shadow-black/30 transition-colors;
-}
-
-label {
-	@apply text-stone-600;
+	@apply rounded bg-stone-500 px-2 py-1 text-stone-100 shadow shadow-black/30 transition-colors;
 }
 
 .text-box {
-	@apply mt-3 min-h-[10.3ex] w-full resize-none rounded border-b-2 border-transparent bg-stone-50 p-[0.5em] shadow shadow-black/30 outline-none transition-colors md:min-h-[18.2ex];
+	@apply mt-3 min-h-[10.3ex] w-full resize-none rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors md:min-h-[18.2ex];
 }
 
 .text-box-focus {
-	@apply !border-red-400;
+	@apply !border-stone-100;
 }
 </style>

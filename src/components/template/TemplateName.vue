@@ -23,10 +23,11 @@ watch(
 		<TextBox
 			v-model="textInput"
 			placeholder="insert template name"
-			focus-classes="!border-b-red-400"
+			focus-classes="!border-b-stone-300"
 			:disabled="!template.editing"
 			blur-on-keydown-enter
 			:class="[
+				template.editing ? 'text-stone-400' : '',
 				{
 					'border-b-stone-600': template.editing,
 				},
