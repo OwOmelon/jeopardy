@@ -36,7 +36,7 @@ const template = useTemplateStore();
 		<p class="text-xl font-bold">your table is empty D:</p>
 		<button
 			type="button"
-			class="mx-auto mt-5 flex items-center gap-2 rounded bg-red-400 p-2 text-sm text-white transition-transform hover:-translate-y-1"
+			class="mx-auto mt-5 flex items-center gap-2 rounded bg-red-400 p-2 text-sm text-white shadow transition-transform hover:-translate-y-1"
 			@click="template.editing = true"
 		>
 			go work on it
