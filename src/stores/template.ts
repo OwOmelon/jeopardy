@@ -55,7 +55,7 @@ export type CellsAnswered = {
 export const useTemplateStore = defineStore("template", () => {
 	const guests = useGuestsStore();
 	const editing = ref<boolean>(true);
-	const resetTemplateWarning = ref<boolean>(false)
+	const resetTemplateWarning = ref<boolean>(false);
 
 	const name = ref<string>("");
 	const points = ref<number[]>([]);
@@ -157,7 +157,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	const activeCell = ref<CompleteTableCell | null>(null);
 	const cellsAnswered = ref<CellsAnswered>({});
-	const resetCellsAnsweredWarning = ref<boolean>(false)
+	const resetCellsAnsweredWarning = ref<boolean>(false);
 
 	function setPlayProgressTracker(name: Guest["name"] | null) {
 		const row = cellsAnswered.value?.[activeCell.value!.row] ?? {};
@@ -187,6 +187,26 @@ export const useTemplateStore = defineStore("template", () => {
 		}, {});
 	});
 
+	const filteredColumns = computed<Column[]>(() => {
+		return columns.value.filter(
+			(column) => column.category || !columnIsEmpty(column.id),
+		);
+	});
+
+	const filteredCompleteTable = computed<CompleteTable>(() => {
+		return rows.value.reduce((rows, row) => {
+			return {
+				...rows,
+				[row]: filteredColumns.value.reduce((columns, column) => {
+					return {
+						...columns,
+						[column.id]: completeTable.value[row][column.id],
+					};
+				}, {}),
+			};
+		}, {});
+	});
+
 	watch(
 		cellsAnswered,
 		(progress) => {
@@ -195,12 +215,11 @@ export const useTemplateStore = defineStore("template", () => {
 		{ deep: true },
 	);
 
-	const fetchplayProgressTrackerFromLocalStorage =
-		(): CellsAnswered | null => {
-			const savedProgress = localStorage.getItem("cellsAnswered");
+	const fetchplayProgressTrackerFromLocalStorage = (): CellsAnswered | null => {
+		const savedProgress = localStorage.getItem("cellsAnswered");
 
-			return savedProgress ? JSON.parse(savedProgress) : null;
-		};
+		return savedProgress ? JSON.parse(savedProgress) : null;
+	};
 
 	cellsAnswered.value = fetchplayProgressTrackerFromLocalStorage() || {};
 
@@ -225,6 +244,8 @@ export const useTemplateStore = defineStore("template", () => {
 
 		completeTable,
 		activeCell,
+		filteredColumns,
+		filteredCompleteTable,
 		setPlayProgressTracker,
 	};
 });
