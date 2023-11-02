@@ -7,7 +7,7 @@ import RowCategories from "./RowCategories.vue";
 import RowHRs from "./RowHRs.vue";
 import TableData from "./TableData.vue";
 import TableDataEditor from "./TableDataEditor.vue";
-import ResetTemplateWarnModal from "./ResetTemplateWarnModal.vue";
+import WarningModal from "@/components/WarningModal.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
 const template = useTemplateStore();
@@ -47,7 +47,7 @@ const template = useTemplateStore();
 		</ModalWrapper>
 
 		<ModalWrapper :show="template.resetTemplateWarning">
-			<ResetTemplateWarnModal
+			<WarningModal
 				@confirm="template.templateData = template.createTemplate()"
 				@close="template.resetTemplateWarning = false"
 			/>
