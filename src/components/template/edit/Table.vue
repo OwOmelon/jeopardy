@@ -48,6 +48,11 @@ const template = useTemplateStore();
 
 		<ModalWrapper :show="template.resetTemplateWarning">
 			<WarningModal
+				header="!! TEMPLATE RESET"
+				:paragraph="[
+					'Are you sure you want to reset your template?',
+					'You can always undo this by loading a previously saved template on the template history located on the top left.',
+				]"
 				@confirm="template.templateData = template.createTemplate()"
 				@close="template.resetTemplateWarning = false"
 			/>
