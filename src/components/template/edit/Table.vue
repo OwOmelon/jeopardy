@@ -10,27 +10,7 @@ import TableDataEditor from "./TableDataEditor.vue";
 import ResetTemplateWarnModal from "./ResetTemplateWarnModal.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
-import type { RowID, Column } from "@/stores/template";
-
 const template = useTemplateStore();
-
-const TDHovered = ref<{
-	row: RowID | null;
-	column: Column["id"] | null;
-}>({
-	row: null,
-	column: null,
-});
-
-function TDMouseEnter(row: RowID, column: Column["id"]): void {
-	TDHovered.value.row = row;
-	TDHovered.value.column = column;
-}
-
-function TDMouseLeave(): void {
-	TDHovered.value.row = null;
-	TDHovered.value.column = null;
-}
 </script>
 
 <template>
@@ -56,9 +36,6 @@ function TDMouseLeave(): void {
 					<TableData
 						v-bind="cellValue"
 						:data-values="template.checkTableDataValues(rowKey, cellKey)"
-						:hovered="rowKey === TDHovered.row && cellKey === TDHovered.column"
-						@on-mouse-enter="TDMouseEnter"
-						@on-mouse-leave="TDMouseLeave"
 						@edit="template.activeCell = cellValue"
 					/>
 				</template>

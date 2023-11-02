@@ -1,49 +1,37 @@
 <script setup lang="ts">
-import { computed } from "vue";
-
-import type { RowID, Column, CompleteTableCell } from "@/stores/template";
+import type { CompleteTableCell } from "@/stores/template";
 
 const props = defineProps<
 	{
 		dataValues: string;
-		hovered: boolean;
 	} & CompleteTableCell
 >();
 
 const emit = defineEmits<{
-	"on-mouse-enter": [RowID, Column["id"]];
-	"on-mouse-leave": [];
 	edit: [];
 }>();
-
-const textDisplay = computed<number | string>(() => {
-	const question = props.question || "Add Question";
-	const answer = props.answer || "Add Answer";
-
-	return props.hovered ? answer : question;
-});
 </script>
 
 <template>
 	<td
 		:class="[
-			hovered
-				? dataValues === 'complete'
-					? '!border-b-green-400'
-					: dataValues === 'partial'
-					? '!border-b-yellow-400'
-					: dataValues === 'empty'
-					? '!border-b-red-400'
-					: ''
+			dataValues === 'complete'
+				? 'hover:!border-b-green-400'
+				: dataValues === 'partial'
+				? 'hover:!border-b-yellow-400'
+				: dataValues === 'empty'
+				? 'hover:!border-b-red-400'
 				: '',
-			'cell cell-width cell-padding td-rise !border-x-0',
+			'cell cell-width cell-padding td-rise group !border-x-0',
 		]"
-		@mouseenter="emit('on-mouse-enter', props.row, props.column)"
-		@mouseleave="emit('on-mouse-leave')"
 		@click="emit('edit')"
 	>
-		<p class="line-clamp-3">
-			{{ textDisplay }}
+		<p class="line-clamp-3 group-hover:hidden">
+			{{ question || "Add Question" }}
+		</p>
+
+		<p class="line-clamp-3 hidden group-hover:block">
+			{{ answer || "Add Answer" }}
 		</p>
 	</td>
 </template>
