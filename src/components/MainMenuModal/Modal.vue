@@ -166,7 +166,15 @@ onUnmounted(() => {
 	@apply bg-red-400 text-white hover:bg-red-300;
 }
 
+.mode-btn-light:disabled {
+	@apply cursor-not-allowed bg-stone-400 text-stone-500;
+}
+
 .mode-btn-dark {
 	@apply bg-stone-300 text-stone-600 hover:bg-stone-400;
+}
+
+.mode-btn-dark:disabled {
+	@apply cursor-not-allowed bg-stone-700 text-stone-500;
 }
 </style>
