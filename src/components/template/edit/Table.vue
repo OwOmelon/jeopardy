@@ -56,10 +56,6 @@ const template = useTemplateStore();
 </template>
 
 <style scoped lang="postcss">
-:deep(td) {
-	@apply bg-stone-700 text-stone-300;
-}
-
 :deep(.th-bg) {
 	@apply bg-stone-500 text-stone-100;
 }
