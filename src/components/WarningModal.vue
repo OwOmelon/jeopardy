@@ -1,4 +1,9 @@
 <script setup lang="ts">
+const props = defineProps<{
+	header: string;
+	paragraph: string[];
+}>();
+
 const emit = defineEmits<{
 	confirm: [];
 	close: [];
@@ -7,14 +12,11 @@ const emit = defineEmits<{
 
 <template>
 	<div class="component w-[500px] rounded bg-red-400 p-5 text-white">
-		<h1 class="text-3xl font-bold">!! TEMPLATE RESET</h1>
+		<h1 class="text-3xl font-bold">{{ header }}</h1>
 
-		<p class="my-3">
-			Are you sure you want to reset your template?
-			<br />
-			You can always undo this by loading a previously saved template on the
-			<span class="font-bold">template history</span> located on the top left.
-		</p>
+		<div class="my-3">
+			<p v-for="(text, key) in paragraph" :key="key">{{ text }}</p>
+		</div>
 
 		<button type="button" @click="emit('close')">CANCEL</button>
 		<button
