@@ -20,7 +20,7 @@ const textInput = ref<string>("");
 
 const disableResetButton = computed<boolean>(() => {
 	return template.editing
-		? template.filteredColumns.length
+		? template.filteredColumns.length || template.name
 			? false
 			: true
 		: Object.keys(template.cellsAnswered).length
