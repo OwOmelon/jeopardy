@@ -151,7 +151,7 @@ onUnmounted(() => {
 					}
 				"
 			>
-				{{ template.editing ? "reset template" : "reset progress" }}
+				reset {{ template.editing ? "template" : "progress" }}
 			</button>
 		</div>
 	</div>
