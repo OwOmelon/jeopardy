@@ -51,9 +51,14 @@ const template = useTemplateStore();
 				header="!! TEMPLATE RESET"
 				:paragraph="[
 					'Are you sure you want to reset your template?',
-					'You can always undo this by loading a previously saved template on the template history located on the top left.',
+					'Make sure to save your template before doing so. This action cannot be undone.',
 				]"
-				@confirm="template.templateData = template.createTemplate()"
+				@confirm="
+					() => {
+						template.history = [];
+						template.templateData = template.createTemplate();
+					}
+				"
 				@close="template.resetTemplateWarning = false"
 			/>
 		</ModalWrapper>
