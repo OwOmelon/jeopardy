@@ -270,15 +270,15 @@ export const useTemplateStore = defineStore("template", () => {
 			history.value.splice(0, 1);
 		}
 
-		historyPushIteration.value++;
-		currentID.value = uuidv4();
-
 		history.value.push({
 			...JSON.parse(JSON.stringify(template)),
 			id: currentID.value,
 			iteration: historyPushIteration.value,
 			dateModified: new Date(),
 		});
+
+		historyPushIteration.value++;
+		currentID.value = uuidv4();
 	}
 
 	watch(
