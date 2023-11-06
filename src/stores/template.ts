@@ -249,10 +249,6 @@ export const useTemplateStore = defineStore("template", () => {
 		templateData.value = save;
 	}
 
-	function deleteLogsAheadOfCurrentTemplate(): void {
-		history.value.splice(historyIndexOfCurrentTemplate.value + 1);
-	}
-
 	function logHistory(template: TemplateData): void {
 		if (forceDisableHistoryLog.value) {
 			forceDisableHistoryLog.value = false;
@@ -263,7 +259,7 @@ export const useTemplateStore = defineStore("template", () => {
 		const historyLengthLimit = 15;
 
 		if (historyIndexOfCurrentTemplate.value !== history.value.length - 1) {
-			deleteLogsAheadOfCurrentTemplate();
+			history.value.splice(historyIndexOfCurrentTemplate.value + 1);
 		}
 
 		if (history.value.length >= historyLengthLimit) {
