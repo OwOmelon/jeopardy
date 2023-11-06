@@ -5,6 +5,7 @@ import { useTemplateStore } from "@/stores/template";
 import TemplateName from "./TemplateName.vue";
 import Table_Edit from "./edit/Table.vue";
 import Table_Play from "./play/Table.vue";
+import EmptyTable_PlayFallback from "./play/EmptyTableFallback.vue";
 import GuestList from "../guests/GuestList.vue";
 
 const template = useTemplateStore();
@@ -20,7 +21,11 @@ const template = useTemplateStore();
 				mode="out-in"
 			>
 				<Table_Edit v-if="template.editing" />
-				<Table_Play v-else />
+
+				<template v-else>
+					<Table_Play v-if="template.filteredColumns.length" />
+					<EmptyTable_PlayFallback v-else />
+				</template>
 			</Transition>
 		</div>
 
