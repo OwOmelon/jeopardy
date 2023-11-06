@@ -166,14 +166,14 @@ export const useTemplateStore = defineStore("template", () => {
 
 	const history = ref<HistoryTemplate[]>([]);
 	const historyPushIteration = ref<number>(0);
-	const allowHistoryLog = ref<boolean>(true);
+	const forceDisableHistoryLog = ref<boolean>(false);
 
 	const historyIndexOfCurrentTemplate = computed<number>(() => {
 		return history.value.findIndex((temp) => temp.id === currentID.value);
 	});
 
 	function loadTemplate(save: HistoryTemplate) {
-		allowHistoryLog.value = false;
+		forceDisableHistoryLog.value = true;
 
 		currentID.value = save.id;
 		templateData.value = save;
@@ -184,8 +184,8 @@ export const useTemplateStore = defineStore("template", () => {
 	}
 
 	function logTemplateToHistory(template: TemplateData): void {
-		if (!allowHistoryLog.value) {
-			allowHistoryLog.value = true;
+		if (forceDisableHistoryLog.value) {
+			forceDisableHistoryLog.value = false;
 
 			return;
 		}
@@ -202,7 +202,7 @@ export const useTemplateStore = defineStore("template", () => {
 		const historyLengthLimit = 15;
 
 		if (historyIndexOfCurrentTemplate.value !== history.value.length - 1) {
-			deleteLogsAheadOfCurrentTemplate()
+			deleteLogsAheadOfCurrentTemplate();
 		}
 
 		if (history.value.length >= historyLengthLimit) {
