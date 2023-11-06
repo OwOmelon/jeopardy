@@ -253,7 +253,7 @@ export const useTemplateStore = defineStore("template", () => {
 		history.value.splice(historyIndexOfCurrentTemplate.value + 1);
 	}
 
-	function logTemplateToHistory(template: TemplateData): void {
+	function logHistory(template: TemplateData): void {
 		if (forceDisableHistoryLog.value) {
 			forceDisableHistoryLog.value = false;
 
@@ -284,7 +284,7 @@ export const useTemplateStore = defineStore("template", () => {
 	watch(
 		templateData,
 		(template) => {
-			logTemplateToHistory(template);
+			logHistory(template);
 		},
 		{ deep: true },
 	);
