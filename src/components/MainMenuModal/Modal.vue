@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onUnmounted } from "vue";
+import { ref, onUnmounted } from "vue";
 import { useMainMenuStore } from "@/stores/mainmenu";
 import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
@@ -17,16 +17,6 @@ const template = useTemplateStore();
 
 const textBox = ref<InstanceType<typeof TextBox> | null>(null);
 const textInput = ref<string>("");
-
-const disableResetButton = computed<boolean>(() => {
-	return template.editing
-		? template.filteredColumns.length || template.name
-			? false
-			: true
-		: Object.keys(template.cellsAnswered).length
-		? false
-		: true;
-});
 
 function startGuestRename(guest: Guest) {
 	guests.activeGuestID = guest.id;
@@ -134,7 +124,7 @@ onUnmounted(() => {
 			</button>
 			<button
 				type="button"
-				:disabled="disableResetButton"
+				:disabled="template.history.length <= 1"
 				:class="[
 					template.editing ? 'mode-btn-dark' : 'mode-btn-light',
 					'mode-btn',
