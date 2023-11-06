@@ -260,15 +260,6 @@ export const useTemplateStore = defineStore("template", () => {
 			return;
 		}
 
-		if (
-			!template.columns.filter(
-				(column) => column.category || !columnIsEmpty(column.id),
-			).length &&
-			!template.name &&
-			history.value.length
-		)
-			return;
-
 		const historyLengthLimit = 15;
 
 		if (historyIndexOfCurrentTemplate.value !== history.value.length - 1) {
