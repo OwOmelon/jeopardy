@@ -1,6 +1,7 @@
 import { ref, computed, watch, watchEffect, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 import { useGuestsStore } from "./guests";
+import { v4 as uuidv4 } from "uuid";
 
 import type { Guest } from "./guests";
 
@@ -48,6 +49,12 @@ export type TemplateData = {
 
 export type CellsAnswered = {
 	[key: RowID]: { [key: Column["id"]]: Guest["name"] | null };
+};
+
+export type HistoryTemplate = TemplateData & {
+	id: string;
+	iteration: number;
+	dateModified: Date;
 };
 
 // ------------------------------
@@ -153,6 +160,70 @@ export const useTemplateStore = defineStore("template", () => {
 		templateData.value = fetchTemplateFromLocalStorage() ?? createTemplate();
 	});
 
+	// ---------- HISTORY ----------
+
+	const currentID = ref<string>("");
+
+	const history = ref<HistoryTemplate[]>([]);
+	const historyPushIteration = ref<number>(0);
+	const allowHistoryLog = ref<boolean>(true);
+
+	const historyIndexOfCurrentTemplate = computed<number>(() => {
+		return history.value.findIndex((temp) => temp.id === currentID.value);
+	});
+
+	function loadTemplate(save: HistoryTemplate) {
+		allowHistoryLog.value = false;
+
+		currentID.value = save.id;
+		templateData.value = save;
+	}
+
+	function logTemplateToHistory(template: TemplateData): void {
+		if (!allowHistoryLog.value) {
+			allowHistoryLog.value = true;
+
+			return;
+		}
+
+		if (
+			!template.columns.filter(
+				(column) => column.category || !columnIsEmpty(column.id),
+			).length &&
+			!template.name &&
+			history.value.length
+		)
+			return;
+
+		const historyLengthLimit = 15;
+
+		if (historyIndexOfCurrentTemplate.value !== history.value.length - 1) {
+			history.value.splice(historyIndexOfCurrentTemplate.value + 1);
+		}
+
+		if (history.value.length >= historyLengthLimit) {
+			history.value.splice(0, 1);
+		}
+
+		historyPushIteration.value++;
+		currentID.value = uuidv4();
+
+		history.value.push({
+			...JSON.parse(JSON.stringify(template)),
+			id: currentID.value,
+			iteration: historyPushIteration.value,
+			dateModified: new Date(),
+		});
+	}
+
+	watch(
+		templateData,
+		(template) => {
+			logTemplateToHistory(template);
+		},
+		{ deep: true },
+	);
+
 	// ------------------------------
 
 	const activeCell = ref<CompleteTableCell | null>(null);
@@ -247,5 +318,11 @@ export const useTemplateStore = defineStore("template", () => {
 		filteredColumns,
 		filteredCompleteTable,
 		setPlayProgressTracker,
+
+		//  ----
+
+		history,
+		historyIndexOfCurrentTemplate,
+		loadTemplate,
 	};
 });

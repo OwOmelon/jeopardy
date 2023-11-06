@@ -1,21 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, watch } from "vue";
 import { useTemplateStore } from "@/stores/template";
-import { v4 as uuidv4 } from "uuid";
 
 import HistoryItem from "./HistoryItem.vue";
 
-import type { TemplateData } from "@/stores/template";
-
-export type HistoryTemplate = TemplateData & {
-	id: string;
-	iteration: number;
-	dateModified: Date;
-};
-
 const template = useTemplateStore();
-
-// ---------------
 
 const hide = ref<boolean>(true);
 const activeHistoryItem = ref<number>(-1);
@@ -31,61 +20,6 @@ function setActiveItem(index: number) {
 watch(hide, () => {
 	activeHistoryItem.value = -1;
 });
-
-// ---------------
-
-const currentTemplateID = ref<string>('')
-
-const history = ref<HistoryTemplate[]>([]);
-const historyPushIteration = ref<number>(0);
-const allowHistoryLog = ref<boolean>(true);
-
-const historyIndexOfCurrentTemplate = computed<number>(() => {
-	return history.value.findIndex((temp) => temp.id === currentTemplateID.value);
-});
-
-function loadTemplate(save: HistoryTemplate) {
-	allowHistoryLog.value = false;
-
-	currentTemplateID.value = save.id
-	template.templateData = save;
-}
-
-function pushTemplateToHistory(): void {
-	if (!allowHistoryLog.value) {
-		allowHistoryLog.value = true;
-
-		return;
-	}
-
-	const historyLengthLimit = 15;
-
-	if (historyIndexOfCurrentTemplate.value !== history.value.length - 1) {
-		history.value.splice(historyIndexOfCurrentTemplate.value + 1);
-	}
-
-	if (history.value.length >= historyLengthLimit) {
-		history.value.splice(0, 1);
-	}
-
-	historyPushIteration.value++;
-	currentTemplateID.value = uuidv4();
-
-	history.value.push({
-		...JSON.parse(JSON.stringify(template.templateData)),
-		id: currentTemplateID.value,
-		iteration: historyPushIteration.value,
-		dateModified: new Date(),
-	});
-}
-
-watch(
-	() => template.templateData,
-	() => {
-		pushTemplateToHistory();
-	},
-	{ deep: true, immediate: true },
-);
 </script>
 
 <template>
@@ -96,14 +30,14 @@ watch(
 		]"
 	>
 		<HistoryItem
-			v-for="(template, index) in history"
-			v-bind="template"
+			v-for="(historyTemplate, index) in template.history"
+			v-bind="historyTemplate"
 			:index="index"
-			:is-current-template="index === historyIndexOfCurrentTemplate"
+			:is-current-template="index === template.historyIndexOfCurrentTemplate"
 			:is-active="index === activeHistoryItem"
-			:key="template.id"
+			:key="historyTemplate.id"
 			@set-active-item="setActiveItem(index)"
-			@load-save="loadTemplate(template)"
+			@load-save="template.loadTemplate(historyTemplate)"
 		/>
 
 		<button

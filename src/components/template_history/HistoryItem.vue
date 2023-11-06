@@ -2,7 +2,7 @@
 import { ref, watch } from "vue";
 import { Icon } from "@iconify/vue";
 
-import type { HistoryTemplate } from "./History.vue";
+import type { HistoryTemplate } from "@/stores/template";
 
 const props = defineProps<{
 	isCurrentTemplate: boolean;
