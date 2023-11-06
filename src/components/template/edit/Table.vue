@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
 import RowPoints from "./RowPoints.vue";
