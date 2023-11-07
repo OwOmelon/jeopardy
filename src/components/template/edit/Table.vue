@@ -50,7 +50,7 @@ const template = useTemplateStore();
 				header="!! TEMPLATE RESET"
 				:paragraph="[
 					'Are you sure you want to reset your template?',
-					'Make sure to save your template before doing so. This action cannot be undone.',
+					'Your template history will be wiped upon doing so.',
 				]"
 				@confirm="
 					() => {
