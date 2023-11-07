@@ -40,10 +40,7 @@ function advanceProgress(): void {
 }
 
 function revertProgress(): void {
-	if (
-		progress.value === 1 ||
-		template.activeCell!.answeredBy !== undefined
-	) {
+	if (progress.value === 1 || template.activeCell!.answeredBy !== undefined) {
 		template.activeCell = null;
 
 		return;
@@ -55,7 +52,7 @@ function revertProgress(): void {
 function onKeyDown(e: KeyboardEvent) {
 	switch (e.code) {
 		case "Escape":
-			template.activeCell = null
+			template.activeCell = null;
 			break;
 	}
 }
@@ -86,7 +83,9 @@ onUnmounted(() => {
 			class="relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-sm text-white"
 		>
 			<p class="text-center">
-				<span class="font-bold">{{ template.activeCell!.category || template.activeCell?.column }}</span>
+				<span class="font-bold">{{
+					template.activeCell!.category || template.activeCell?.column
+				}}</span>
 				for
 				<span class="font-bold">{{ template.activeCell!.points }}</span>
 			</p>
@@ -105,8 +104,6 @@ onUnmounted(() => {
 				<Transition name="fade" mode="out-in">
 					<QuestionAnswer
 						v-if="progress < 3"
-						:question="template.activeCell!.question"
-						:answer="template.activeCell!.answer"
 						:show-answer="progress > 1"
 					/>
 
@@ -115,16 +112,9 @@ onUnmounted(() => {
 						:progress="progress"
 						:guest-list="guests.list"
 						:cell-points="template.activeCell!.points"
-						@done="template.activeCell = null;"
+						@done="template.activeCell = null"
 					/>
 				</Transition>
-
-				<span
-					v-if="template.activeCell!.answeredBy !== undefined"
-					class="block font-xl mt-10 font-bold text-red"
-				>
-					answered by: {{ template.activeCell!.answeredBy ?? "no one" }}
-				</span>
 			</div>
 
 			<button
