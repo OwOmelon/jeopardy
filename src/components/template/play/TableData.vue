@@ -17,6 +17,9 @@ const emit = defineEmits<{
 		]"
 		@click="emit('reveal')"
 	>
-		<span v-if="!isEmpty" class="text-lg font-bold">{{ points }}</span>
+		<template v-if="!isEmpty">
+			<span class="text-lg font-bold">{{ points }}</span>
+			<span v-if="answeredBy">{{ answeredBy }}</span>
+		</template>
 	</td>
 </template>
