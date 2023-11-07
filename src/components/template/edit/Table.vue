@@ -55,6 +55,7 @@ const template = useTemplateStore();
 				@confirm="
 					() => {
 						template.history = [];
+						template.historyPushIteration = 0;
 						template.templateData = template.createTemplate();
 					}
 				"
