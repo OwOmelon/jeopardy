@@ -50,10 +50,11 @@ const template = useTemplateStore();
 				header="!! TEMPLATE RESET"
 				:paragraph="[
 					'Are you sure you want to reset your template?',
-					'Your template history will be wiped upon doing so.',
+					'Your template history and play progress will be wiped upon doing so.',
 				]"
 				@confirm="
 					() => {
+						template.cellsAnswered = {}
 						template.history = [];
 						template.historyPushIteration = 0;
 						template.templateData = template.createTemplate();
