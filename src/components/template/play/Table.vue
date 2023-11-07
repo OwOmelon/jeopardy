@@ -4,6 +4,7 @@ import { useTemplateStore } from "@/stores/template";
 import RowCategories from "./RowCategories.vue";
 import TableData from "./TableData.vue";
 import TableDataReveal from "./td_reveal/TableDataReveal.vue";
+import WarningModal from "@/components/WarningModal.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
 const template = useTemplateStore();
@@ -28,6 +29,20 @@ const template = useTemplateStore();
 
 		<ModalWrapper :show="template.activeCell ? true : false">
 			<TableDataReveal />
+		</ModalWrapper>
+
+		<ModalWrapper :show="template.resetCellsAnsweredWarning">
+			<WarningModal
+				header="!! PROGRESS RESET"
+				:paragraph="[
+					'Are you sure you want to reset your play progress?',
+					'Your progress cannot be restored. This action cannot be undone.',
+				]"
+				@confirm="
+					() => {}
+				"
+				@close="template.resetCellsAnsweredWarning = false"
+			/>
 		</ModalWrapper>
 	</table>
 </template>
