@@ -313,6 +313,7 @@ export const useTemplateStore = defineStore("template", () => {
 		//  ----
 
 		history,
+		historyPushIteration,
 		historyIndexOfCurrentTemplate,
 		loadTemplate,
 	};
