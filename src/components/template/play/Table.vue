@@ -39,7 +39,9 @@ const template = useTemplateStore();
 					'Your progress cannot be restored. This action cannot be undone.',
 				]"
 				@confirm="
-					() => {}
+					() => {
+						template.cellsAnswered = {}
+					}
 				"
 				@close="template.resetCellsAnsweredWarning = false"
 			/>
