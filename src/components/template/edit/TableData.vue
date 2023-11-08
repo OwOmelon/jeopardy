@@ -26,19 +26,22 @@ const emit = defineEmits<{
 		]"
 		@click="emit('edit')"
 	>
-		<p
-			:class="[{ 'opacity-50': !question }, 'line-clamp-3 group-hover:hidden']"
-		>
-			{{ question || "Add Question" }}
-		</p>
+		<div :class="[{ 'opacity-50': !question }, 'group-hover:hidden']">
+			<p>
+				{{ question || "Add Question" }}
+			</p>
+		</div>
 
-		<p
-			:class="[
-				{ 'opacity-50': !answer },
-				'line-clamp-3 hidden group-hover:block',
-			]"
-		>
-			{{ answer || "Add Answer" }}
-		</p>
+		<div :class="[{ 'opacity-50': !answer }, '!hidden group-hover:!block']">
+			<p>
+				{{ answer || "Add Answer" }}
+			</p>
+		</div>
 	</td>
 </template>
+
+<style scoped lang="postcss">
+p {
+	@apply line-clamp-3 break-words;
+}
+</style>
