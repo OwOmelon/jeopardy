@@ -5,7 +5,7 @@ const template = useTemplateStore();
 </script>
 
 <template>
-	<tr>
+	<tr class="items-end">
 		<th
 			v-for="column in template.filteredColumns"
 			class="cell cell-width cell-padding bg-red-400 text-white"
