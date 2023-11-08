@@ -72,7 +72,7 @@ onUnmounted(() => {
 
 <template>
 	<div
-		class="component w-[80vw] max-w-[900px] overflow-hidden rounded shadow-[0_10px_40px] shadow-black/40"
+		class="component w-[80vw] max-w-[900px] rounded shadow-[0_10px_40px] shadow-black/40"
 		v-on-click-outside="
 			() => {
 				template.activeCell = null;
