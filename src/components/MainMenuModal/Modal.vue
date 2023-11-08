@@ -109,21 +109,6 @@ onUnmounted(() => {
 		<div class="flex items-center justify-between">
 			<button
 				type="button"
-				:class="[
-					template.editing ? 'mode-btn-dark' : 'mode-btn-light',
-					'mode-btn',
-				]"
-				@click="
-					() => {
-						template.editing = !template.editing;
-						mainmenu.show = false;
-					}
-				"
-			>
-				{{ template.editing ? "play" : "edit" }}
-			</button>
-			<button
-				type="button"
 				:disabled="template.history.length <= 1"
 				:class="[
 					template.editing ? 'mode-btn-dark' : 'mode-btn-light',
@@ -142,6 +127,22 @@ onUnmounted(() => {
 				"
 			>
 				reset {{ template.editing ? "template" : "progress" }}
+			</button>
+
+			<button
+				type="button"
+				:class="[
+					template.editing ? 'mode-btn-dark' : 'mode-btn-light',
+					'mode-btn',
+				]"
+				@click="
+					() => {
+						template.editing = !template.editing;
+						mainmenu.show = false;
+					}
+				"
+			>
+				{{ template.editing ? "play" : "edit" }}
 			</button>
 		</div>
 	</div>
