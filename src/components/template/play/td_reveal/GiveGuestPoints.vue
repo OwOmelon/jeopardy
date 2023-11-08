@@ -105,14 +105,14 @@ function confirm(): void {
 						<button
 							v-if="props.progress === 4"
 							type="button"
-							class="group flex items-center text-3xl"
+							class="group flex items-center text-3xl mt-3"
 							@click="confirm"
 						>
 							confirm
 
 							<Icon
 								icon="material-symbols:arrow-right-rounded"
-								class="h-16 w-16 transition-transform group-hover:translate-x-2"
+								class="ml-3 scale-[2] transition-transform group-hover:translate-x-2"
 							/>
 						</button>
 					</div>
