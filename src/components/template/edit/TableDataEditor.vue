@@ -76,8 +76,8 @@ onUnmounted(() => {
 			class="rounded-b bg-stone-700 p-5 text-stone-300"
 			@submit.prevent="saveChanges()"
 		>
-			<div class="flex flex-col gap-5 md:flex-row">
-				<div class="w-full">
+			<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+				<div>
 					<label>Question:</label>
 					<TextBox
 						v-model="questionModelValue"
@@ -87,7 +87,7 @@ onUnmounted(() => {
 					/>
 				</div>
 
-				<div class="w-full">
+				<div>
 					<label>Answer:</label>
 					<TextBox
 						v-model="answerModelValue"
@@ -111,7 +111,7 @@ button {
 }
 
 .text-box {
-	@apply mt-3 min-h-[10.3ex] w-full resize-none rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors md:min-h-[18.2ex];
+	@apply mt-3 min-h-[10.3ex] resize-none rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors md:min-h-[18.2ex];
 }
 
 .text-box-focus {
