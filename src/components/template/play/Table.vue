@@ -36,11 +36,11 @@ const template = useTemplateStore();
 				header="!! PROGRESS RESET"
 				:paragraph="[
 					'Are you sure you want to reset your play progress?',
-					'Your progress cannot be restored. This action cannot be undone.',
+					`Your progress as well as every guests' score will be reset. This action cannot be undone.`,
 				]"
 				@confirm="
 					() => {
-						template.cellsAnswered = {}
+						template.cellsAnswered = {};
 					}
 				"
 				@close="template.resetCellsAnsweredWarning = false"
