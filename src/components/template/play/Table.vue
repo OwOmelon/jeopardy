@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useTemplateStore } from "@/stores/template";
+import { useGuestsStore } from "@/stores/guests";
 
 import RowCategories from "./RowCategories.vue";
 import TableData from "./TableData.vue";
@@ -8,6 +9,7 @@ import WarningModal from "@/components/WarningModal.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
 const template = useTemplateStore();
+const guests = useGuestsStore();
 </script>
 
 <template>
@@ -41,6 +43,8 @@ const template = useTemplateStore();
 				@confirm="
 					() => {
 						template.cellsAnswered = {};
+
+						guests.list.forEach((guest) => guests.editGuestPoints(guest.id, 0));
 					}
 				"
 				@close="template.resetCellsAnsweredWarning = false"
