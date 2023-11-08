@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { vOnClickOutside } from "@vueuse/components";
+
 const props = defineProps<{
 	header: string;
 	paragraph: string[];
@@ -11,7 +13,14 @@ const emit = defineEmits<{
 </script>
 
 <template>
-	<div class="component w-[500px] rounded bg-red-400 p-5 text-white">
+	<div
+		class="component w-[500px] rounded bg-red-400 p-5 text-white"
+		v-on-click-outside="
+			() => {
+				emit('close');
+			}
+		"
+	>
 		<h1 class="text-3xl font-bold">{{ header }}</h1>
 
 		<div class="my-3">
