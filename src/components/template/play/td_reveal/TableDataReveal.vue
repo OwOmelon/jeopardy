@@ -94,7 +94,7 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="relative grid min-h-[350px] grid-cols-[2rem,_auto,_2rem] items-center gap-5 rounded-b bg-stone-100 p-5 text-center text-red-400"
+			class="relative grid min-h-[350px] grid-cols-[2rem,_auto,_2rem] items-center gap-3 rounded-b bg-stone-100 p-3 text-center text-red-400"
 		>
 			<button type="button" @click="revertProgress">
 				<Icon icon="material-symbols:arrow-left-rounded" />
