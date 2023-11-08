@@ -26,11 +26,18 @@ const emit = defineEmits<{
 		]"
 		@click="emit('edit')"
 	>
-		<p class="line-clamp-3 group-hover:hidden">
+		<p
+			:class="[{ 'opacity-50': !question }, 'line-clamp-3 group-hover:hidden']"
+		>
 			{{ question || "Add Question" }}
 		</p>
 
-		<p class="line-clamp-3 hidden group-hover:block">
+		<p
+			:class="[
+				{ 'opacity-50': !answer },
+				'line-clamp-3 hidden group-hover:block',
+			]"
+		>
 			{{ answer || "Add Answer" }}
 		</p>
 	</td>
