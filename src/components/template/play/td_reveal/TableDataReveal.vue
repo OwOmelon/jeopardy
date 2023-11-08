@@ -110,8 +110,6 @@ onUnmounted(() => {
 					<GiveGuestPoints
 						v-else
 						:progress="progress"
-						:guest-list="guests.list"
-						:cell-points="template.activeCell!.points"
 						@done="template.activeCell = null"
 					/>
 				</Transition>
