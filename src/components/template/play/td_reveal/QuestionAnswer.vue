@@ -38,3 +38,9 @@ const { activeCell } = useTemplateStore();
 		</div>
 	</div>
 </template>
+
+<style scoped lang="postcss">
+p {
+	@apply break-words;
+}
+</style>
