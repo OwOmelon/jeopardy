@@ -80,7 +80,7 @@ onUnmounted(() => {
 		"
 	>
 		<div
-			class="relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-sm text-white"
+			class="relative flex justify-center rounded-t border-b-4 border-red-300 bg-red-400 p-2 text-sm text-white"
 		>
 			<p class="text-center">
 				<span class="font-bold">{{
@@ -94,7 +94,7 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="relative grid min-h-[350px] grid-cols-[3rem,_auto,_3rem] items-center gap-5 bg-stone-100 p-5 text-center text-red-400"
+			class="relative grid min-h-[350px] grid-cols-[3rem,_auto,_3rem] items-center gap-5 rounded-b bg-stone-100 p-5 text-center text-red-400"
 		>
 			<button type="button" @click="revertProgress">
 				<Icon icon="material-symbols:arrow-left-rounded" />
