@@ -101,11 +101,13 @@ onUnmounted(() => {
 			</button>
 
 			<div class="grow">
-				<Transition name="fade" mode="out-in">
-					<QuestionAnswer
-						v-if="progress < 3"
-						:show-answer="progress > 1"
-					/>
+				<Transition
+					name="height-auto"
+					enter-active-class="duration-500"
+					leave-active-class="duration-500"
+					mode="out-in"
+				>
+					<QuestionAnswer v-if="progress < 3" :show-answer="progress > 1" />
 
 					<GiveGuestPoints
 						v-else

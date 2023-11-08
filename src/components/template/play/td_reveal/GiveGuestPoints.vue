@@ -66,53 +66,59 @@ function confirm(): void {
 </script>
 
 <template>
-	<div class="flex flex-col items-center justify-center text-xl font-bold">
-		<span>who got it {{ props.progress < 4 ? "wrong" : "right" }} ?</span>
-
+	<div class="grid">
 		<div
-			v-if="guests.list.length > 1"
-			class="my-5 flex flex-wrap justify-center gap-3"
+			class="flex flex-col items-center justify-center overflow-hidden text-xl font-bold"
 		>
-			<button
-				v-for="(guest, index) in guests.list"
-				:key="index"
-				type="button"
-				:disabled="guestsPtsDeductIncludesGuest(guest) && props.progress === 4"
-				:class="[
-					guestsPtsDeductIncludesGuest(guest)
-						? `lose-points ${
-								props.progress === 4 ? 'pointer-events-none opacity-50' : ''
-						  }`
-						: guestPtsAdd?.id === guest.id
-						? 'gain-points'
-						: 'bg-stone-300 text-stone-500',
-					'rounded p-2 shadow shadow-black/30 transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1',
-				]"
-				@click="onGuestBtnClick(guest)"
+			<span>who got it {{ props.progress < 4 ? "wrong" : "right" }} ?</span>
+
+			<div
+				v-if="guests.list.length > 1"
+				class="my-5 flex flex-wrap justify-center gap-3"
 			>
-				{{ guest.name }}
-			</button>
-		</div>
-
-		<Transition name="height-auto">
-			<div v-if="props.progress === 4" class="grid">
-				<div class="overflow-hidden">
-					<button
-						v-if="props.progress === 4"
-						type="button"
-						class="group flex items-center text-3xl"
-						@click="confirm"
-					>
-						confirm
-
-						<Icon
-							icon="material-symbols:arrow-right-rounded"
-							class="h-16 w-16 transition-transform group-hover:translate-x-2"
-						/>
-					</button>
-				</div>
+				<button
+					v-for="(guest, index) in guests.list"
+					:key="index"
+					type="button"
+					:disabled="
+						guestsPtsDeductIncludesGuest(guest) && props.progress === 4
+					"
+					:class="[
+						guestsPtsDeductIncludesGuest(guest)
+							? `lose-points ${
+									props.progress === 4 ? 'pointer-events-none opacity-50' : ''
+							  }`
+							: guestPtsAdd?.id === guest.id
+							? 'gain-points'
+							: 'bg-stone-300 text-stone-500',
+						'rounded p-2 shadow shadow-black/30 transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1',
+					]"
+					@click="onGuestBtnClick(guest)"
+				>
+					{{ guest.name }}
+				</button>
 			</div>
-		</Transition>
+
+			<Transition name="height-auto">
+				<div v-if="props.progress === 4" class="grid">
+					<div class="overflow-hidden">
+						<button
+							v-if="props.progress === 4"
+							type="button"
+							class="group flex items-center text-3xl"
+							@click="confirm"
+						>
+							confirm
+
+							<Icon
+								icon="material-symbols:arrow-right-rounded"
+								class="h-16 w-16 transition-transform group-hover:translate-x-2"
+							/>
+						</button>
+					</div>
+				</div>
+			</Transition>
+		</div>
 	</div>
 </template>
 
