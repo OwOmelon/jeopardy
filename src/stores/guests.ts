@@ -45,7 +45,7 @@ export const useGuestsStore = defineStore("guests", () => {
     guest.name = newName;
   }
 
-  function editGuestPoints(id: string, newPoints: number, add: boolean): void {
+  function editGuestPoints(id: string, newPoints: number, add: boolean = false): void {
     const guest = getGuest(id);
 
     if (!guest) return;
