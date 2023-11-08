@@ -56,7 +56,9 @@ onUnmounted(() => {
 		>
 			<p>
 				Editing
-				<span class="font-bold">{{ template.activeCell!.category || template.activeCell!.column }}</span>
+				<span class="font-bold">{{
+					template.activeCell!.category || template.activeCell!.column
+				}}</span>
 				for
 				<span class="font-bold">{{ template.activeCell!.points }}</span>
 			</p>
@@ -70,7 +72,10 @@ onUnmounted(() => {
 			</button>
 		</div>
 
-		<div class="rounded-b bg-stone-700 p-5 text-stone-300">
+		<form
+			class="rounded-b bg-stone-700 p-5 text-stone-300"
+			@submit.prevent="saveChanges()"
+		>
 			<div class="flex flex-col gap-5 md:flex-row">
 				<div class="w-full">
 					<label>Question:</label>
@@ -93,14 +98,10 @@ onUnmounted(() => {
 				</div>
 			</div>
 
-			<button
-				type="button"
-				class="mx-auto mt-5 block hover:bg-emerald-700"
-				@click="saveChanges()"
-			>
+			<button type="submit" class="mx-auto mt-5 block hover:bg-emerald-700">
 				Save
 			</button>
-		</div>
+		</form>
 	</div>
 </template>
 
