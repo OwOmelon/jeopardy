@@ -108,26 +108,36 @@ onUnmounted(() => {
 
 		<div class="flex items-center justify-between">
 			<button
+				v-if="template.editing"
 				type="button"
 				:disabled="template.history.length <= 1"
-				:class="[
-					template.editing ? 'mode-btn-dark' : 'mode-btn-light',
-					'mode-btn',
-				]"
+				class="mode-btn mode-btn-dark"
 				@click="
 					() => {
-						if (template.editing) {
-							template.resetTemplateWarning = true;
-						} else {
-							template.resetCellsAnsweredWarning = true;
-						}
-
+						template.resetTemplateWarning = true;
 						mainmenu.show = false;
 					}
 				"
 			>
-				reset {{ template.editing ? "template" : "progress" }}
+				reset template
 			</button>
+
+			<button
+				v-else
+				type="button"
+				:disabled="!Object.keys(template.cellsAnswered).length"
+				class="mode-btn mode-btn-light"
+				@click="
+					() => {
+						template.resetCellsAnsweredWarning = true;
+						mainmenu.show = false;
+					}
+				"
+			>
+				reset progress
+			</button>
+
+			<!-- --- -->
 
 			<button
 				type="button"
