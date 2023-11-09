@@ -25,7 +25,6 @@ function saveChanges(): void {
 	td.answer.text = answerText.value;
 	td.answer.image = answerImage.value;
 
-
 	template.activeCell = null;
 }
 
@@ -83,13 +82,27 @@ onUnmounted(() => {
 			class="rounded-b bg-stone-700 p-3 text-stone-300"
 			@submit.prevent="saveChanges()"
 		>
-			<div class="grid grid-cols-1 items-start gap-3 md:grid-cols-2">
+			<div
+				class="grid grid-cols-1 items-start gap-3 md:grid-cols-[minmax(0,_1fr)_min-content_minmax(0,_1fr)]"
+			>
 				<InputArea
 					v-model:text="questionText"
 					v-model:image="questionImage"
 					label="Question:"
 					text-box-placeholder="enter a question"
 				/>
+
+				<div
+					class="flex flex-row items-center justify-center gap-2 md:h-full md:flex-col"
+				>
+					<div
+						class="h-1 w-[30%] rounded-full bg-stone-500 md:h-[30%] md:w-1"
+					/>
+					<div class="aspect-square h-2 rounded-full bg-stone-500" />
+					<div
+						class="h-1 w-[30%] rounded-full bg-stone-500 md:h-[30%] md:w-1"
+					/>
+				</div>
 
 				<InputArea
 					v-model:text="answerText"
