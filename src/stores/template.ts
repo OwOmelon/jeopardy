@@ -100,11 +100,13 @@ export const useTemplateStore = defineStore("template", () => {
 		row: RowID,
 		column: Column["id"],
 	): "complete" | "empty" | "partial" => {
-		const tableData = rawTable.value[row][column];
+		const td = rawTable.value[row][column];
 
-		return tableData.question && tableData.answer
+		return (td.question.text || td.question.image) &&
+			(td.answer.text || td.answer.image)
 			? "complete"
-			: !tableData.question && !tableData.answer
+			: !(td.question.text || td.question.image) &&
+			  !(td.answer.text || td.answer.image)
 			? "empty"
 			: "partial";
 	};
