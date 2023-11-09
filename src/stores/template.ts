@@ -15,8 +15,14 @@ export type Column = {
 };
 
 export type RawTableCell = {
-	question: string;
-	answer: string;
+	question: {
+		text: string;
+		image: string;
+	};
+	answer: {
+		text: string;
+		image: string;
+	};
 };
 
 export type RawTable = {
@@ -128,12 +134,20 @@ export const useTemplateStore = defineStore("template", () => {
 			return {
 				...rows,
 				[row]: columns.reduce((columns, column) => {
+					const cell: RawTableCell = {
+						question: {
+							text: "",
+							image: "",
+						},
+						answer: {
+							text: "",
+							image: "",
+						},
+					};
+
 					return {
 						...columns,
-						[column.id]: {
-							question: "",
-							answer: "",
-						},
+						[column.id]: cell,
 					};
 				}, {}),
 			};
