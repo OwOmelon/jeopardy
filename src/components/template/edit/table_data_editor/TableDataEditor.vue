@@ -20,7 +20,11 @@ function saveChanges(): void {
 		template.rawTable[template.activeCell!.row][template.activeCell!.column];
 
 	td.question.text = questionText.value;
+	td.question.image = questionImage.value;
+
 	td.answer.text = answerText.value;
+	td.answer.image = answerImage.value;
+
 
 	template.activeCell = null;
 }
