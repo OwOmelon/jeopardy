@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref, computed } from "vue";
 
 import { Icon } from "@iconify/vue";
 import TextBox from "@/components/TextBox.vue";
@@ -15,6 +15,8 @@ const emit = defineEmits<{
 	"update:text": [string];
 	"update:image": [string];
 }>();
+
+const imgInput = ref<HTMLInputElement | null>(null)
 
 const computedModelValue = computed<string>({
 	get() {
@@ -59,9 +61,10 @@ const computedModelValue = computed<string>({
 			</label>
 
 			<input
-				class="input grow placeholder:text-white/50 focus:!border-stone-100"
+				ref="imgInput"
 				placeholder="paste image link"
 				size="1"
+				class="input grow placeholder:text-white/50 focus:!border-stone-100"
 			/>
 		</div>
 	</div>
