@@ -11,7 +11,16 @@ const { activeCell } = useTemplateStore();
 <template>
 	<div class="grid">
 		<div class="overflow-hidden">
-			<p class="text-xl">{{ activeCell!.question }}</p>
+			<p class="text-xl">{{ activeCell!.question.text }}</p>
+
+			<img
+				v-if="activeCell!.question.image"
+				:src="activeCell!.question.image"
+				:alt="`image for question of ${
+					activeCell!.category || activeCell!.column
+				} for ${activeCell!.points}`"
+				class="mx-auto"
+			/>
 
 			<Transition
 				name="height-auto"
@@ -23,8 +32,17 @@ const { activeCell } = useTemplateStore();
 						<hr class="my-5 border-t-2 border-red-400" />
 
 						<p class="text-3xl font-bold">
-							{{ activeCell!.answer }}
+							{{ activeCell!.answer.text }}
 						</p>
+
+						<img
+							v-if="activeCell!.answer.image"
+							:src="activeCell!.answer.image"
+							:alt="`image for answer of ${
+								activeCell!.category || activeCell!.column
+							} for ${activeCell!.points}`"
+							class="mx-auto"
+						/>
 					</div>
 				</div>
 			</Transition>
@@ -42,5 +60,9 @@ const { activeCell } = useTemplateStore();
 <style scoped lang="postcss">
 p {
 	@apply break-words;
+}
+
+img {
+	@apply mx-auto mt-3 rounded shadow shadow-black/30;
 }
 </style>
