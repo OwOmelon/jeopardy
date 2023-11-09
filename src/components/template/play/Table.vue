@@ -23,7 +23,7 @@ const guests = useGuestsStore();
 			<TableData
 				v-for="(cellValue, cellKey, cellIndex) in rowValue"
 				v-bind="cellValue"
-				:is-empty="template.checkTableDataValues(rowKey, cellKey) === 'empty'"
+				:is-empty="template.checkTableDataProperties(rowKey, cellKey) === 'empty'"
 				:key="cellKey"
 				@reveal="template.activeCell = cellValue"
 			/>

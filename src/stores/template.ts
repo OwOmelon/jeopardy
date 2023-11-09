@@ -96,7 +96,7 @@ export const useTemplateStore = defineStore("template", () => {
 		},
 	});
 
-	const checkTableDataValues = (
+	const checkTableDataProperties = (
 		row: RowID,
 		column: Column["id"],
 	): "complete" | "empty" | "partial" => {
@@ -115,7 +115,7 @@ export const useTemplateStore = defineStore("template", () => {
 		const arr: string[] = [];
 
 		for (let i = 0; i < rows.value.length; i++) {
-			arr.push(checkTableDataValues(`row${i + 1}`, column));
+			arr.push(checkTableDataProperties(`row${i + 1}`, column));
 		}
 
 		return arr.every((a) => a === "empty");
@@ -314,7 +314,7 @@ export const useTemplateStore = defineStore("template", () => {
 		templateData,
 		cellsAnswered,
 		resetCellsAnsweredWarning,
-		checkTableDataValues,
+		checkTableDataProperties,
 		columnIsEmpty,
 		createTemplate,
 

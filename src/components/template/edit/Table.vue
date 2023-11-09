@@ -34,7 +34,7 @@ const template = useTemplateStore();
 				>
 					<TableData
 						v-bind="cellValue"
-						:data-values="template.checkTableDataValues(rowKey, cellKey)"
+						:data-values="template.checkTableDataProperties(rowKey, cellKey)"
 						@edit="template.activeCell = cellValue"
 					/>
 				</template>

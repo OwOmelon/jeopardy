@@ -10,7 +10,7 @@ const hrColors = computed<{ id: Column["id"]; color: string; text: string }[]>(
 	() => {
 		return template.columns.map((column) => {
 			const columnDataValues = template.rows.map((row) =>
-				template.checkTableDataValues(row, column.id),
+				template.checkTableDataProperties(row, column.id),
 			);
 
 			let color = "border-red-400";
