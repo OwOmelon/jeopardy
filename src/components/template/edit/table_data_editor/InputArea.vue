@@ -27,6 +27,21 @@ const computedModelValue = computed<string>({
 		emit("update:text", newText);
 	},
 });
+
+function onImageUpload(e: any): void {
+	const file = e.target!.files[0];
+	const reader = new FileReader();
+
+	if (!file.type.startsWith("image/")) return;
+
+	reader.addEventListener("load", () => {
+		emit("update:image", reader.result as string);
+	});
+
+	if (file) {
+		reader.readAsDataURL(file);
+	}
+}
 </script>
 
 <template>
@@ -73,7 +88,11 @@ const computedModelValue = computed<string>({
 				/>
 				<span class="ml-2">upload</span>
 
-				<input type="file" class="fixed -top-full opacity-0" />
+				<input
+					type="file"
+					class="fixed -top-full opacity-0"
+					@change="onImageUpload"
+				/>
 			</label>
 
 			<input
