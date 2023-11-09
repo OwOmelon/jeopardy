@@ -68,7 +68,7 @@ onUnmounted(() => {
 
 			<button
 				type="button"
-				class="hover:bg-rose-700"
+				class="btn hover:bg-rose-700"
 				@click="template.activeCell = null"
 			>
 				Close <span class="hidden lg:inline">[Esc]</span>
@@ -95,7 +95,7 @@ onUnmounted(() => {
 				/>
 			</div>
 
-			<button type="submit" class="mx-auto mt-5 block hover:bg-emerald-700">
+			<button type="submit" class="btn mx-auto mt-5 block hover:bg-emerald-700">
 				Save
 			</button>
 		</form>
@@ -103,8 +103,8 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="postcss">
-button {
-	@apply rounded bg-stone-500 px-2 py-1 text-stone-100 shadow shadow-black/30 transition-colors;
+:deep(.btn) {
+	@apply rounded bg-stone-300 font-semibold px-2 py-1 text-stone-100 text-stone-600 shadow shadow-black/30 transition-colors hover:bg-stone-400;
 }
 
 .text-box {
