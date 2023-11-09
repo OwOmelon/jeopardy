@@ -62,9 +62,12 @@ const computedModelValue = computed<string>({
 
 			<input
 				ref="imgInput"
+				type="text"
 				placeholder="paste image link"
 				size="1"
 				class="input grow placeholder:text-white/50 focus:!border-stone-100"
+				@keydown.enter="imgInput!.blur()"
+				@blur="emit('update:image', imgInput!.value)"
 			/>
 		</div>
 	</div>
