@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
+
+import { Icon } from "@iconify/vue";
 import TextBox from "@/components/TextBox.vue";
 
 const props = defineProps<{
@@ -26,19 +28,47 @@ const computedModelValue = computed<string>({
 </script>
 
 <template>
-	<div>
+	<div
+		class="flex flex-col gap-3 rounded bg-stone-600 p-3 shadow shadow-black/30"
+	>
 		<label>{{ label }}</label>
 		<TextBox
 			v-model="computedModelValue"
 			:placeholder="textBoxPlaceholder"
 			focus-classes="!border-stone-100"
-			class="input mt-3 min-h-[10.3ex] md:min-h-[18.2ex]"
+			class="input min-h-[10.3ex] md:min-h-[18.2ex]"
 		/>
+
+		<div class="flex items-center gap-3">
+			<div class="h-px grow bg-stone-500" />
+			<span class="text-center text-sm text-stone-400">add an image</span>
+			<div class="h-px grow bg-stone-500" />
+		</div>
+
+		<div class="flex gap-3">
+			<label
+				class="input flex cursor-pointer items-center hover:!border-stone-100"
+			>
+				<Icon
+					icon="material-symbols:add-a-photo-outline-rounded"
+					class="scale-125"
+				/>
+				<span class="ml-2">upload</span>
+
+				<input type="file" class="fixed -top-full opacity-0" />
+			</label>
+
+			<input
+				class="input grow placeholder:text-white/50 focus:!border-stone-100"
+				placeholder="paste image link"
+				size="1"
+			/>
+		</div>
 	</div>
 </template>
 
 <style scoped lang="postcss">
 .input {
-	@apply rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors;
+	@apply rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors focus:border-stone-100;
 }
 </style>
