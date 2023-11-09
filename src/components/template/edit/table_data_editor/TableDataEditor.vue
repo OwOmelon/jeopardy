@@ -10,7 +10,10 @@ const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
 
 const questionText = ref<string>(template.activeCell!.question.text);
+const questionImage = ref<string>(template.activeCell!.question.image);
+
 const answerText = ref<string>(template.activeCell!.answer.text);
+const answerImage = ref<string>(template.activeCell!.answer.image);
 
 function saveChanges(): void {
 	const td =
@@ -78,13 +81,15 @@ onUnmounted(() => {
 		>
 			<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
 				<InputArea
-					v-model="questionText"
+					v-model:text="questionText"
+					v-model:image="questionImage"
 					label="Question:"
 					text-box-placeholder="enter a question"
 				/>
 
 				<InputArea
-					v-model="answerText"
+					v-model:text="answerText"
+					v-model:image="answerImage"
 					label="Answer:"
 					text-box-placeholder="enter an answer"
 				/>

@@ -3,22 +3,24 @@ import { computed } from "vue";
 import TextBox from "@/components/TextBox.vue";
 
 const props = defineProps<{
-	modelValue: string;
+	text: string;
+	image: string;
 	label: string;
 	textBoxPlaceholder: string;
 }>();
 
 const emit = defineEmits<{
-	"update:modelValue": [string];
+	"update:text": [string];
+	"update:image": [string];
 }>();
 
 const computedModelValue = computed<string>({
 	get() {
-		return props.modelValue;
+		return props.text;
 	},
 
-	set(newVal) {
-		emit("update:modelValue", newVal);
+	set(newText) {
+		emit("update:text", newText);
 	},
 });
 </script>
