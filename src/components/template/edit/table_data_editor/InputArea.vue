@@ -31,18 +31,14 @@ const computedModelValue = computed<string>({
 		<TextBox
 			v-model="computedModelValue"
 			:placeholder="textBoxPlaceholder"
-			focus-classes="text-box-focus"
-			class="text-box"
+			focus-classes="!border-stone-100"
+			class="input mt-3 min-h-[10.3ex] md:min-h-[18.2ex]"
 		/>
 	</div>
 </template>
 
 <style scoped lang="postcss">
-.text-box {
-	@apply mt-3 min-h-[10.3ex] resize-none rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors md:min-h-[18.2ex];
-}
-
-.text-box-focus {
-	@apply !border-stone-100;
+.input {
+	@apply rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors;
 }
 </style>
