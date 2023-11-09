@@ -95,7 +95,7 @@ onUnmounted(() => {
 				/>
 			</div>
 
-			<button type="submit" class="btn mx-auto mt-5 block hover:bg-emerald-700">
+			<button type="submit" class="btn mt-5 block w-full hover:bg-emerald-700">
 				Save
 			</button>
 		</form>
@@ -104,7 +104,7 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 :deep(.btn) {
-	@apply rounded bg-stone-300 font-semibold px-2 py-1 text-stone-100 text-stone-600 shadow shadow-black/30 transition-colors hover:bg-stone-400;
+	@apply rounded bg-stone-300 px-2 py-1 font-semibold text-stone-100 text-stone-600 shadow shadow-black/30 transition-colors hover:bg-stone-400;
 }
 
 .text-box {
