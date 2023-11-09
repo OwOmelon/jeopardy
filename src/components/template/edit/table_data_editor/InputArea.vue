@@ -82,7 +82,7 @@ function onImageUpload(e: any): void {
 		<img
 			v-if="image.trim()"
 			:src="image"
-			class="rounded shadow shadow-black/30"
+			class="rounded self-center shadow shadow-black/30"
 		/>
 
 		<div v-else class="flex gap-3">
