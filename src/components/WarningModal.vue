@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { onMounted, onUnmounted } from "vue";
 import { vOnClickOutside } from "@vueuse/components";
+import { useMainMenuStore } from "@/stores/mainmenu";
 
 const props = defineProps<{
 	header: string;
@@ -10,6 +12,16 @@ const emit = defineEmits<{
 	confirm: [];
 	close: [];
 }>();
+
+const mainemenu = useMainMenuStore();
+
+onMounted(() => {
+	mainemenu.disableToggle = true;
+});
+
+onUnmounted(() => {
+	mainemenu.disableToggle = false;
+});
 </script>
 
 <template>
