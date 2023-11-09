@@ -1,3 +1,46 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { computed } from "vue";
+import TextBox from "@/components/TextBox.vue";
 
-<template></template>
+const props = defineProps<{
+	modelValue: string;
+	label: string;
+	textBoxPlaceholder: string;
+}>();
+
+const emit = defineEmits<{
+	"update:modelValue": [string];
+}>();
+
+const computedModelValue = computed<string>({
+	get() {
+		return props.modelValue;
+	},
+
+	set(newVal) {
+		emit("update:modelValue", newVal);
+	},
+});
+</script>
+
+<template>
+	<div>
+		<label>{{ label }}</label>
+		<TextBox
+			v-model="computedModelValue"
+			:placeholder="textBoxPlaceholder"
+			focus-classes="text-box-focus"
+			class="text-box"
+		/>
+	</div>
+</template>
+
+<style scoped lang="postcss">
+.text-box {
+	@apply mt-3 min-h-[10.3ex] resize-none rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors md:min-h-[18.2ex];
+}
+
+.text-box-focus {
+	@apply !border-stone-100;
+}
+</style>
