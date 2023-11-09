@@ -17,6 +17,7 @@ const emit = defineEmits<{
 }>();
 
 const imgInput = ref<HTMLInputElement | null>(null);
+const notAnImageWarning = ref<number>(0);
 
 const computedModelValue = computed<string>({
 	get() {
@@ -32,7 +33,11 @@ function onImageUpload(e: any): void {
 	const file = e.target!.files[0];
 	const reader = new FileReader();
 
-	if (!file.type.startsWith("image/")) return;
+	if (!file.type.startsWith("image/")) {
+		notAnImageWarning.value++;
+
+		return;
+	}
 
 	reader.addEventListener("load", () => {
 		emit("update:image", reader.result as string);
@@ -80,7 +85,7 @@ function onImageUpload(e: any): void {
 
 		<div v-else class="flex gap-3">
 			<label
-				class="input flex cursor-pointer items-center hover:!border-stone-100"
+				class="input relative flex cursor-pointer items-center justify-center hover:!border-stone-100"
 			>
 				<Icon
 					icon="material-symbols:add-a-photo-outline-rounded"
@@ -93,6 +98,14 @@ function onImageUpload(e: any): void {
 					class="fixed -top-full opacity-0"
 					@change="onImageUpload"
 				/>
+
+				<span
+					v-if="notAnImageWarning"
+					:key="notAnImageWarning"
+					class="not-an-image-warning-anim absolute whitespace-nowrap rounded bg-yellow-400 p-2 text-sm text-black pointer-events-none"
+				>
+					that's not an image, silly !
+				</span>
 			</label>
 
 			<input
@@ -111,5 +124,21 @@ function onImageUpload(e: any): void {
 <style scoped lang="postcss">
 .input {
 	@apply rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors focus:border-stone-100;
+}
+
+.not-an-image-warning-anim {
+	animation: fade-slide-up 5s forwards;
+}
+
+@keyframes fade-slide-up {
+	0%,
+	100% {
+		@apply -top-5 opacity-0;
+	}
+
+	20%,
+	80% {
+		@apply -top-12 opacity-100;
+	}
 }
 </style>
