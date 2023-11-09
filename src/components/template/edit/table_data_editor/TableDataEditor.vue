@@ -79,7 +79,7 @@ onUnmounted(() => {
 			class="rounded-b bg-stone-700 p-3 text-stone-300"
 			@submit.prevent="saveChanges()"
 		>
-			<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+			<div class="grid grid-cols-1 gap-3 md:grid-cols-2">
 				<InputArea
 					v-model:text="questionText"
 					v-model:image="questionImage"
