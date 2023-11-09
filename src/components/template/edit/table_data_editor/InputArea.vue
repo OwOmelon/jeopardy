@@ -67,8 +67,10 @@ function onImageUpload(e: any): void {
 				type="button"
 				:disabled="!image.trim()"
 				:class="[
-					image.trim() ? 'bg-stone-500 text-stone-300' : 'text-stone-400',
-					'rounded px-2 text-center text-sm',
+					image.trim()
+						? 'bg-stone-500 text-stone-300 hover:brightness-125'
+						: 'text-stone-400',
+					'rounded px-2 text-center text-sm transition-[filter]',
 				]"
 				@click="emit('update:image', '')"
 			>
@@ -102,7 +104,7 @@ function onImageUpload(e: any): void {
 				<span
 					v-if="notAnImageWarning"
 					:key="notAnImageWarning"
-					class="not-an-image-warning-anim absolute whitespace-nowrap rounded bg-yellow-400 p-2 text-sm text-black pointer-events-none"
+					class="not-an-image-warning-anim pointer-events-none absolute whitespace-nowrap rounded bg-yellow-400 p-2 text-sm text-black"
 				>
 					that's not an image, silly !
 				</span>
