@@ -4,7 +4,7 @@ import { useTemplateStore } from "@/stores/template";
 import { useMainMenuStore } from "@/stores/mainmenu";
 import { vOnClickOutside } from "@vueuse/components";
 
-import TextBox from "@/components/TextBox.vue";
+import InputArea from "./InputArea.vue";
 
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
@@ -77,25 +77,17 @@ onUnmounted(() => {
 			@submit.prevent="saveChanges()"
 		>
 			<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-				<div>
-					<label>Question:</label>
-					<TextBox
-						v-model="questionText"
-						placeholder="enter a question"
-						focus-classes="text-box-focus"
-						class="text-box"
-					/>
-				</div>
+				<InputArea
+					v-model="questionText"
+					label="Question:"
+					text-box-placeholder="enter a question"
+				/>
 
-				<div>
-					<label>Answer:</label>
-					<TextBox
-						v-model="answerText"
-						placeholder="enter an answer"
-						focus-classes="text-box-focus"
-						class="text-box"
-					/>
-				</div>
+				<InputArea
+					v-model="answerText"
+					label="Answer:"
+					text-box-placeholder="enter an answer"
+				/>
 			</div>
 
 			<button type="submit" class="mx-auto mt-5 block hover:bg-emerald-700">
