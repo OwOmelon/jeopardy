@@ -16,7 +16,7 @@ const emit = defineEmits<{
 	"update:image": [string];
 }>();
 
-const imgInput = ref<HTMLInputElement | null>(null)
+const imgInput = ref<HTMLInputElement | null>(null);
 
 const computedModelValue = computed<string>({
 	get() {
@@ -47,7 +47,13 @@ const computedModelValue = computed<string>({
 			<div class="h-px grow bg-stone-500" />
 		</div>
 
-		<div class="flex gap-3">
+		<img
+			v-if="image.trim()"
+			:src="image"
+			class="rounded shadow shadow-black/30"
+		/>
+
+		<div v-else class="flex gap-3">
 			<label
 				class="input flex cursor-pointer items-center hover:!border-stone-100"
 			>
