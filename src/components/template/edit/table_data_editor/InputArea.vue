@@ -43,7 +43,17 @@ const computedModelValue = computed<string>({
 
 		<div class="flex items-center gap-3">
 			<div class="h-px grow bg-stone-500" />
-			<span class="text-center text-sm text-stone-400">add an image</span>
+			<button
+				type="button"
+				:disabled="!image.trim()"
+				:class="[
+					image.trim() ? 'bg-stone-500 text-stone-300' : 'text-stone-400',
+					'rounded px-2 text-center text-sm',
+				]"
+				@click="emit('update:image', '')"
+			>
+				{{ image.trim() ? "remove" : "add an" }} image
+			</button>
 			<div class="h-px grow bg-stone-500" />
 		</div>
 
