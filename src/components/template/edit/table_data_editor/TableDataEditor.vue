@@ -76,7 +76,7 @@ onUnmounted(() => {
 		</div>
 
 		<form
-			class="rounded-b bg-stone-700 p-5 text-stone-300"
+			class="rounded-b bg-stone-700 p-3 text-stone-300"
 			@submit.prevent="saveChanges()"
 		>
 			<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
