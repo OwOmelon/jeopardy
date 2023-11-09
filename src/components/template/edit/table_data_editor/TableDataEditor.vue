@@ -71,7 +71,7 @@ onUnmounted(() => {
 				class="btn hover:bg-rose-700"
 				@click="template.activeCell = null"
 			>
-				Close <span class="hidden lg:inline">[Esc]</span>
+				CLOSE <span class="hidden lg:inline">[ESC]</span>
 			</button>
 		</div>
 
@@ -96,7 +96,7 @@ onUnmounted(() => {
 			</div>
 
 			<button type="submit" class="btn mt-5 block w-full hover:bg-emerald-700">
-				Save
+				SAVE
 			</button>
 		</form>
 	</div>
