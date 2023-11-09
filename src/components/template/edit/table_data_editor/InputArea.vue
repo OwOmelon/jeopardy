@@ -87,7 +87,7 @@ function onImageUpload(e: any): void {
 
 		<div v-else class="flex gap-3">
 			<label
-				class="input relative flex cursor-pointer items-center justify-center hover:!border-stone-100"
+				class="btn relative flex cursor-pointer items-center justify-center hover:!border-stone-100"
 			>
 				<Icon
 					icon="material-symbols:add-a-photo-outline-rounded"
