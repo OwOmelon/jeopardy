@@ -9,15 +9,15 @@ import TextBox from "@/components/TextBox.vue";
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
 
-const questionModelValue = ref(template.activeCell!.question);
-const answerModelValue = ref(template.activeCell!.answer);
+const questionModelValue = ref<string>(template.activeCell!.question.text);
+const answerModelValue = ref<string>(template.activeCell!.answer.text);
 
 function saveChanges(): void {
 	const td =
 		template.rawTable[template.activeCell!.row][template.activeCell!.column];
 
-	td.question = questionModelValue.value;
-	td.answer = answerModelValue.value;
+	td.question.text = questionModelValue.value;
+	td.answer.text = answerModelValue.value;
 
 	template.activeCell = null;
 }
