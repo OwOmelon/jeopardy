@@ -9,15 +9,15 @@ import TextBox from "@/components/TextBox.vue";
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
 
-const questionModelValue = ref<string>(template.activeCell!.question.text);
-const answerModelValue = ref<string>(template.activeCell!.answer.text);
+const questionText = ref<string>(template.activeCell!.question.text);
+const answerText = ref<string>(template.activeCell!.answer.text);
 
 function saveChanges(): void {
 	const td =
 		template.rawTable[template.activeCell!.row][template.activeCell!.column];
 
-	td.question.text = questionModelValue.value;
-	td.answer.text = answerModelValue.value;
+	td.question.text = questionText.value;
+	td.answer.text = answerText.value;
 
 	template.activeCell = null;
 }
@@ -80,7 +80,7 @@ onUnmounted(() => {
 				<div>
 					<label>Question:</label>
 					<TextBox
-						v-model="questionModelValue"
+						v-model="questionText"
 						placeholder="enter a question"
 						focus-classes="text-box-focus"
 						class="text-box"
@@ -90,7 +90,7 @@ onUnmounted(() => {
 				<div>
 					<label>Answer:</label>
 					<TextBox
-						v-model="answerModelValue"
+						v-model="answerText"
 						placeholder="enter an answer"
 						focus-classes="text-box-focus"
 						class="text-box"
