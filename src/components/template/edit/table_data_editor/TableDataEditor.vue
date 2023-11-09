@@ -50,7 +50,7 @@ onUnmounted(() => {
 <template>
 	<div
 		ref="el"
-		class="component w-[80vw] max-w-[900px]"
+		class="component modal"
 		v-on-click-outside="
 			() => {
 				template.activeCell = null;
