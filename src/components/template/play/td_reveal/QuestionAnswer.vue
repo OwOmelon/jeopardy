@@ -6,6 +6,12 @@ const props = defineProps<{
 }>();
 
 const { activeCell } = useTemplateStore();
+
+const ImgAltTxt = (type: string) => {
+	return `image for ${type} of ${
+		activeCell!.category || activeCell!.column
+	} for ${activeCell!.points} points`;
+};
 </script>
 
 <template>
@@ -16,9 +22,7 @@ const { activeCell } = useTemplateStore();
 			<div v-if="activeCell!.question.image" class="image-wrapper">
 				<img
 					:src="activeCell!.question.image"
-					:alt="`image for question of ${
-						activeCell!.category || activeCell!.column
-					} for ${activeCell!.points}`"
+					:alt="ImgAltTxt('question')"
 				/>
 			</div>
 
@@ -38,9 +42,7 @@ const { activeCell } = useTemplateStore();
 						<div v-if="activeCell!.answer.image" class="image-wrapper">
 							<img
 								:src="activeCell!.answer.image"
-								:alt="`image for answer of ${
-									activeCell!.category || activeCell!.column
-								} for ${activeCell!.points}`"
+								:alt="ImgAltTxt('answer')"
 							/>
 						</div>
 					</div>
