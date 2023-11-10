@@ -13,14 +13,14 @@ const { activeCell } = useTemplateStore();
 		<div class="overflow-hidden">
 			<p class="text-xl">{{ activeCell!.question.text }}</p>
 
-			<img
-				v-if="activeCell!.question.image"
-				:src="activeCell!.question.image"
-				:alt="`image for question of ${
-					activeCell!.category || activeCell!.column
-				} for ${activeCell!.points}`"
-				class="mx-auto"
-			/>
+			<div v-if="activeCell!.question.image" class="image-wrapper">
+				<img
+					:src="activeCell!.question.image"
+					:alt="`image for question of ${
+						activeCell!.category || activeCell!.column
+					} for ${activeCell!.points}`"
+				/>
+			</div>
 
 			<Transition
 				name="height-auto"
@@ -35,14 +35,14 @@ const { activeCell } = useTemplateStore();
 							{{ activeCell!.answer.text }}
 						</p>
 
-						<img
-							v-if="activeCell!.answer.image"
-							:src="activeCell!.answer.image"
-							:alt="`image for answer of ${
-								activeCell!.category || activeCell!.column
-							} for ${activeCell!.points}`"
-							class="mx-auto"
-						/>
+						<div v-if="activeCell!.answer.image" class="image-wrapper">
+							<img
+								:src="activeCell!.answer.image"
+								:alt="`image for answer of ${
+									activeCell!.category || activeCell!.column
+								} for ${activeCell!.points}`"
+							/>
+						</div>
 					</div>
 				</div>
 			</Transition>
@@ -62,7 +62,11 @@ p {
 	@apply break-words;
 }
 
+.image-wrapper {
+	@apply mx-auto mt-3 w-fit p-2;
+}
+
 img {
-	@apply mx-auto mt-3 rounded shadow shadow-black/30;
+	@apply rounded shadow shadow-black/30;
 }
 </style>
