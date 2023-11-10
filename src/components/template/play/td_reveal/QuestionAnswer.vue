@@ -17,14 +17,11 @@ const ImgAltTxt = (type: string) => {
 <template>
 	<div class="grid">
 		<div class="overflow-hidden">
-			<p class="text-xl">{{ activeCell!.question.text }}</p>
-
 			<div v-if="activeCell!.question.image" class="image-wrapper">
-				<img
-					:src="activeCell!.question.image"
-					:alt="ImgAltTxt('question')"
-				/>
+				<img :src="activeCell!.question.image" :alt="ImgAltTxt('question')" />
 			</div>
+
+			<p class="text-xl">{{ activeCell!.question.text }}</p>
 
 			<Transition
 				name="height-auto"
@@ -35,16 +32,13 @@ const ImgAltTxt = (type: string) => {
 					<div class="overflow-hidden">
 						<hr class="my-5 border-t-2 border-red-400" />
 
+						<div v-if="activeCell!.answer.image" class="image-wrapper">
+							<img :src="activeCell!.answer.image" :alt="ImgAltTxt('answer')" />
+						</div>
+
 						<p class="text-3xl font-bold">
 							{{ activeCell!.answer.text }}
 						</p>
-
-						<div v-if="activeCell!.answer.image" class="image-wrapper">
-							<img
-								:src="activeCell!.answer.image"
-								:alt="ImgAltTxt('answer')"
-							/>
-						</div>
 					</div>
 				</div>
 			</Transition>
@@ -65,7 +59,7 @@ p {
 }
 
 .image-wrapper {
-	@apply mx-auto mt-3 w-fit p-2;
+	@apply mx-auto mb-6 w-fit p-2;
 }
 
 img {
