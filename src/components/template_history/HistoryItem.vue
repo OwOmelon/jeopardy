@@ -4,22 +4,26 @@ import { Icon } from "@iconify/vue";
 
 import type { HistoryTemplate } from "@/stores/template";
 
-const props = defineProps<{
-	isCurrentTemplate: boolean;
-	isActive: boolean;
-} & HistoryTemplate>();
+const props = defineProps<
+	{
+		isCurrentTemplate: boolean;
+		isActive: boolean;
+	} & HistoryTemplate
+>();
 
 const emit = defineEmits<{
 	(e: "load-save"): void;
 	(e: "set-active-item"): void;
 }>();
 
-const showTableAnswers = ref<boolean>(false);
+const showAnswers = ref<boolean>(false);
+const showImages = ref<boolean>(false);
 
 watch(
 	() => props.isActive,
 	() => {
-		showTableAnswers.value = false;
+		showAnswers.value = false;
+		showImages.value = false;
 	},
 );
 </script>
@@ -75,11 +79,7 @@ watch(
 					<div>
 						<label>points:</label>
 						<ul class="flex gap-2">
-							<li
-								v-for="(point, index) in points"
-								:key="index"
-								class="item"
-							>
+							<li v-for="(point, index) in points" :key="index" class="item">
 								{{ point }}
 							</li>
 						</ul>
@@ -88,11 +88,7 @@ watch(
 					<div>
 						<label>columns:</label>
 						<ul class="grid grid-cols-5 gap-2">
-							<li
-								v-for="(column, index) in columns"
-								:key="index"
-								class="item"
-							>
+							<li v-for="(column, index) in columns" :key="index" class="item">
 								<p>{{ column.category || column.id }}</p>
 							</li>
 						</ul>
@@ -103,29 +99,54 @@ watch(
 							<label>table:</label>
 							<button
 								type="button"
-								@click.stop="showTableAnswers = !showTableAnswers"
+								@click.stop="showAnswers = !showAnswers"
 								class="font-bold transition-colors hover:bg-white/20"
 							>
-								{{ `show table ${showTableAnswers ? "questions" : "answers"}` }}
+								{{ `show table ${showAnswers ? "questions" : "answers"}` }}
+							</button>
+
+							<button
+								type="button"
+								@click.stop="showImages = !showImages"
+								class="font-bold transition-colors hover:bg-white/20"
+							>
+								{{ `${showImages ? "hide" : "show"} images` }}
 							</button>
 						</div>
 						<table class="flex w-full flex-col gap-2 text-[0.65rem]">
-							<tr
-								v-for="row in rows"
-								:key="row"
-								class="grid grid-cols-5 gap-2"
-							>
+							<tr v-for="row in rows" :key="row" class="grid grid-cols-5 gap-2">
 								<td
 									v-for="column in columns"
 									:key="column.id"
 									class="item h-[9ex]"
 								>
-									<p>
+									<template v-if="showImages">
+										<img
+											v-if="
+												showAnswers
+													? rawTable[row][column.id].answer.image
+													: rawTable[row][column.id].question.image
+											"
+											:src="
+												showAnswers
+													? rawTable[row][column.id].answer.image
+													: rawTable[row][column.id].question.image
+											"
+											class="h-full object-contain"
+										/>
+
+										<Icon
+											v-else
+											icon="material-symbols:no-photography"
+											class="scale-125"
+										/>
+									</template>
+
+									<p v-else>
 										{{
-											showTableAnswers
-												? rawTable[row][column.id].answer || "x"
-												: rawTable[row][column.id].question ||
-												  "x"
+											showAnswers
+												? rawTable[row][column.id].answer.text || "x"
+												: rawTable[row][column.id].question.text || "x"
 										}}
 									</p>
 								</td>
@@ -140,7 +161,7 @@ watch(
 
 <style scoped lang="postcss">
 .item {
-	@apply grid place-items-center bg-white/20 text-center;
+	@apply flex items-center justify-center overflow-hidden bg-white/20 text-center;
 }
 
 .item p {
