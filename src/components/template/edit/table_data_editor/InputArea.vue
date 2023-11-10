@@ -86,7 +86,7 @@ function onImageUpload(e: any): void {
 		/>
 
 		<div v-else class="flex gap-3">
-			<label
+			<!-- <label
 				class="btn relative flex cursor-pointer items-center justify-center hover:!border-stone-100"
 			>
 				<Icon
@@ -108,7 +108,7 @@ function onImageUpload(e: any): void {
 				>
 					that's not an image, silly !
 				</span>
-			</label>
+			</label> -->
 
 			<input
 				ref="imgInput"
