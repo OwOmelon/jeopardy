@@ -9,7 +9,7 @@ const props = defineProps<{
 		<Transition name="nested-fade-slide-down">
 			<div
 				v-if="props.show"
-				class="component fixed left-0 top-0 z-50 grid h-screen w-screen flex-col place-items-center overflow-auto bg-black/50 p-5 backdrop-blur-sm"
+				class="component fixed left-0 top-0 z-50 grid h-screen w-screen place-items-center overflow-auto bg-black/50 p-5 backdrop-blur-sm"
 			>
 				<slot></slot>
 			</div>
