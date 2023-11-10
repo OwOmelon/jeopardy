@@ -3,6 +3,7 @@ import { watch } from "vue";
 import { useTemplateStore } from "./stores/template";
 import { useMainMenuStore } from "./stores/mainmenu";
 
+import debug from './components/debug.vue'
 import MainMenu from "./components/MainMenuModal/Modal.vue";
 import ShowMainMenuBtn from "./components/MainMenuModal/ShowMainMenuBtn.vue";
 import JeopardyTemplate from "./components/template/Template.vue";
@@ -35,6 +36,8 @@ watch(
   <ModalWrapper :show="mainmenu.show">
     <MainMenu />
   </ModalWrapper>
+
+  <debug />
 </template>
 
 <style lang="postcss">
