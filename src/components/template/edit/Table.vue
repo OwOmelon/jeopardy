@@ -5,7 +5,7 @@ import RowPoints from "./RowPoints.vue";
 import RowCategories from "./RowCategories.vue";
 import RowHRs from "./RowHRs.vue";
 import TableData from "./TableData.vue";
-import TableDataEditor from "./TableDataEditor.vue";
+import TableDataEditor from "./table_data_editor/TableDataEditor.vue";
 import WarningModal from "@/components/WarningModal.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
@@ -34,7 +34,7 @@ const template = useTemplateStore();
 				>
 					<TableData
 						v-bind="cellValue"
-						:data-values="template.checkTableDataValues(rowKey, cellKey)"
+						:data-values="template.checkTableDataProperties(rowKey, cellKey)"
 						@edit="template.activeCell = cellValue"
 					/>
 				</template>

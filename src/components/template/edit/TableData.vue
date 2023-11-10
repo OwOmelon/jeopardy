@@ -26,15 +26,15 @@ const emit = defineEmits<{
 		]"
 		@click="emit('edit')"
 	>
-		<div :class="[{ 'opacity-50': !question }, 'group-hover:hidden']">
+		<div :class="[{ 'opacity-50': !question.text }, 'group-hover:hidden']">
 			<p>
-				{{ question || "Add Question" }}
+				{{ question.text || "Add Question" }}
 			</p>
 		</div>
 
-		<div :class="[{ 'opacity-50': !answer }, '!hidden group-hover:!block']">
+		<div :class="[{ 'opacity-50': !answer.text }, '!hidden group-hover:!block']">
 			<p>
-				{{ answer || "Add Answer" }}
+				{{ answer.text || "Add Answer" }}
 			</p>
 		</div>
 	</td>

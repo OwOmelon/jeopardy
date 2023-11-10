@@ -15,8 +15,14 @@ export type Column = {
 };
 
 export type RawTableCell = {
-	question: string;
-	answer: string;
+	question: {
+		text: string;
+		image: string;
+	};
+	answer: {
+		text: string;
+		image: string;
+	};
 };
 
 export type RawTable = {
@@ -90,15 +96,17 @@ export const useTemplateStore = defineStore("template", () => {
 		},
 	});
 
-	const checkTableDataValues = (
+	const checkTableDataProperties = (
 		row: RowID,
 		column: Column["id"],
 	): "complete" | "empty" | "partial" => {
-		const tableData = rawTable.value[row][column];
+		const td = rawTable.value[row][column];
 
-		return tableData.question && tableData.answer
+		return (td.question.text || td.question.image) &&
+			(td.answer.text || td.answer.image)
 			? "complete"
-			: !tableData.question && !tableData.answer
+			: !(td.question.text || td.question.image) &&
+			  !(td.answer.text || td.answer.image)
 			? "empty"
 			: "partial";
 	};
@@ -107,7 +115,7 @@ export const useTemplateStore = defineStore("template", () => {
 		const arr: string[] = [];
 
 		for (let i = 0; i < rows.value.length; i++) {
-			arr.push(checkTableDataValues(`row${i + 1}`, column));
+			arr.push(checkTableDataProperties(`row${i + 1}`, column));
 		}
 
 		return arr.every((a) => a === "empty");
@@ -128,12 +136,20 @@ export const useTemplateStore = defineStore("template", () => {
 			return {
 				...rows,
 				[row]: columns.reduce((columns, column) => {
+					const cell: RawTableCell = {
+						question: {
+							text: "",
+							image: "",
+						},
+						answer: {
+							text: "",
+							image: "",
+						},
+					};
+
 					return {
 						...columns,
-						[column.id]: {
-							question: "",
-							answer: "",
-						},
+						[column.id]: cell,
 					};
 				}, {}),
 			};
@@ -298,7 +314,7 @@ export const useTemplateStore = defineStore("template", () => {
 		templateData,
 		cellsAnswered,
 		resetCellsAnsweredWarning,
-		checkTableDataValues,
+		checkTableDataProperties,
 		columnIsEmpty,
 		createTemplate,
 

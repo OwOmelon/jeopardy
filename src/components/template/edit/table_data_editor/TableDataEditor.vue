@@ -4,20 +4,26 @@ import { useTemplateStore } from "@/stores/template";
 import { useMainMenuStore } from "@/stores/mainmenu";
 import { vOnClickOutside } from "@vueuse/components";
 
-import TextBox from "@/components/TextBox.vue";
+import InputArea from "./InputArea.vue";
 
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
 
-const questionModelValue = ref(template.activeCell!.question);
-const answerModelValue = ref(template.activeCell!.answer);
+const questionText = ref<string>(template.activeCell!.question.text);
+const questionImage = ref<string>(template.activeCell!.question.image);
+
+const answerText = ref<string>(template.activeCell!.answer.text);
+const answerImage = ref<string>(template.activeCell!.answer.image);
 
 function saveChanges(): void {
 	const td =
 		template.rawTable[template.activeCell!.row][template.activeCell!.column];
 
-	td.question = questionModelValue.value;
-	td.answer = answerModelValue.value;
+	td.question.text = questionText.value;
+	td.question.image = questionImage.value;
+
+	td.answer.text = answerText.value;
+	td.answer.image = answerImage.value;
 
 	template.activeCell = null;
 }
@@ -44,7 +50,7 @@ onUnmounted(() => {
 <template>
 	<div
 		ref="el"
-		class="component w-[80vw] max-w-[900px]"
+		class="component modal"
 		v-on-click-outside="
 			() => {
 				template.activeCell = null;
@@ -65,49 +71,57 @@ onUnmounted(() => {
 
 			<button
 				type="button"
-				class="hover:bg-rose-700"
+				class="btn hover:bg-rose-700"
 				@click="template.activeCell = null"
 			>
-				Close <span class="hidden lg:inline">[Esc]</span>
+				CLOSE <span class="hidden lg:inline">[ESC]</span>
 			</button>
 		</div>
 
 		<form
-			class="rounded-b bg-stone-700 p-5 text-stone-300"
+			class="rounded-b bg-stone-700 p-3 text-stone-300"
 			@submit.prevent="saveChanges()"
 		>
-			<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-				<div>
-					<label>Question:</label>
-					<TextBox
-						v-model="questionModelValue"
-						placeholder="enter a question"
-						focus-classes="text-box-focus"
-						class="text-box"
+			<div
+				class="grid grid-cols-1 items-start gap-3 md:grid-cols-[minmax(0,_1fr)_min-content_minmax(0,_1fr)]"
+			>
+				<InputArea
+					v-model:text="questionText"
+					v-model:image="questionImage"
+					label="Question:"
+					text-box-placeholder="enter a question"
+				/>
+
+				<div
+					class="flex flex-row items-center justify-center gap-2 md:h-full md:flex-col"
+				>
+					<div
+						class="h-1 w-[30%] rounded-full bg-stone-500 md:h-[30%] md:w-1"
+					/>
+					<div class="aspect-square h-2 rounded-full bg-stone-500" />
+					<div
+						class="h-1 w-[30%] rounded-full bg-stone-500 md:h-[30%] md:w-1"
 					/>
 				</div>
 
-				<div>
-					<label>Answer:</label>
-					<TextBox
-						v-model="answerModelValue"
-						placeholder="enter an answer"
-						focus-classes="text-box-focus"
-						class="text-box"
-					/>
-				</div>
+				<InputArea
+					v-model:text="answerText"
+					v-model:image="answerImage"
+					label="Answer:"
+					text-box-placeholder="enter an answer"
+				/>
 			</div>
 
-			<button type="submit" class="mx-auto mt-5 block hover:bg-emerald-700">
-				Save
+			<button type="submit" class="btn mt-3 block w-full hover:bg-emerald-700">
+				SAVE
 			</button>
 		</form>
 	</div>
 </template>
 
 <style scoped lang="postcss">
-button {
-	@apply rounded bg-stone-500 px-2 py-1 text-stone-100 shadow shadow-black/30 transition-colors;
+:deep(.btn) {
+	@apply rounded bg-stone-300 px-2 py-1 font-semibold text-stone-100 text-stone-600 shadow shadow-black/30 transition-colors hover:bg-stone-400;
 }
 
 .text-box {

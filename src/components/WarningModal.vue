@@ -26,7 +26,7 @@ onUnmounted(() => {
 
 <template>
 	<div
-		class="component w-[500px] rounded bg-red-400 p-5 text-white"
+		class="component modal !max-w-[500px] bg-red-400 p-5 text-white"
 		v-on-click-outside="
 			() => {
 				emit('close');
