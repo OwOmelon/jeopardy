@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
 import { Icon } from "@iconify/vue";
 
 import type { HistoryTemplate } from "@/stores/template";
@@ -8,24 +7,17 @@ const props = defineProps<
 	{
 		isCurrentTemplate: boolean;
 		isActive: boolean;
+		showAnswers: boolean;
+		showImages: boolean;
 	} & HistoryTemplate
 >();
 
 const emit = defineEmits<{
-	(e: "load-save"): void;
-	(e: "set-active-item"): void;
+	"load-save": [];
+	"set-active-item": [];
+	"toggle-show-answers": [];
+	"toggle-show-images": [];
 }>();
-
-const showAnswers = ref<boolean>(false);
-const showImages = ref<boolean>(false);
-
-watch(
-	() => props.isActive,
-	() => {
-		showAnswers.value = false;
-		showImages.value = false;
-	},
-);
 </script>
 
 <template>
@@ -99,7 +91,7 @@ watch(
 							<label>table:</label>
 							<button
 								type="button"
-								@click.stop="showAnswers = !showAnswers"
+								@click.stop="emit('toggle-show-answers')"
 								class="font-bold transition-colors hover:bg-white/20"
 							>
 								{{ `show table ${showAnswers ? "questions" : "answers"}` }}
@@ -107,7 +99,7 @@ watch(
 
 							<button
 								type="button"
-								@click.stop="showImages = !showImages"
+								@click.stop="emit('toggle-show-images')"
 								class="font-bold transition-colors hover:bg-white/20"
 							>
 								{{ `${showImages ? "hide" : "show"} images` }}

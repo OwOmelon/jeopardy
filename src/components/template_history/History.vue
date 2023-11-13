@@ -9,6 +9,9 @@ const template = useTemplateStore();
 const hide = ref<boolean>(true);
 const activeHistoryItem = ref<number>(-1);
 
+const showAnswers = ref<boolean>(false);
+const showImages = ref<boolean>(false);
+
 function setActiveItem(index: number) {
 	if (index === activeHistoryItem.value) {
 		activeHistoryItem.value = -1;
@@ -19,6 +22,8 @@ function setActiveItem(index: number) {
 
 watch(hide, () => {
 	activeHistoryItem.value = -1;
+	showAnswers.value = false;
+	showImages.value = false;
 });
 </script>
 
@@ -35,9 +40,13 @@ watch(hide, () => {
 			:index="index"
 			:is-current-template="index === template.historyIndexOfCurrentTemplate"
 			:is-active="index === activeHistoryItem"
+			:show-answers="showAnswers"
+			:show-images="showImages"
 			:key="historyTemplate.id"
 			@set-active-item="setActiveItem(index)"
 			@load-save="template.loadTemplate(historyTemplate)"
+			@toggle-show-answers="showAnswers = !showAnswers"
+			@toggle-show-images="showImages = !showImages"
 		/>
 
 		<button
