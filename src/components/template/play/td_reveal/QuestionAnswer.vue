@@ -1,27 +1,36 @@
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
+import { Icon } from "@iconify/vue";
 
 const props = defineProps<{
 	showAnswer: boolean;
 }>();
 
-const { activeCell } = useTemplateStore();
+const emit = defineEmits<{
+	"change-answeree": [];
+}>();
+
+const { activeCell: ActiveTemplateCell } = storeToRefs(useTemplateStore());
 
 const ImgAltTxt = (type: string) => {
 	return `image for ${type} of ${
-		activeCell!.category || activeCell!.column
-	} for ${activeCell!.points} points`;
+		ActiveTemplateCell.value!.category || ActiveTemplateCell.value!.column
+	} for ${ActiveTemplateCell.value!.points} points`;
 };
 </script>
 
 <template>
 	<div class="grid">
 		<div class="overflow-hidden">
-			<div v-if="activeCell!.question.image" class="image-wrapper">
-				<img :src="activeCell!.question.image" :alt="ImgAltTxt('question')" />
+			<div v-if="ActiveTemplateCell!.question.image" class="image-wrapper">
+				<img
+					:src="ActiveTemplateCell!.question.image"
+					:alt="ImgAltTxt('question')"
+				/>
 			</div>
 
-			<p class="text-xl">{{ activeCell!.question.text }}</p>
+			<p class="text-xl">{{ ActiveTemplateCell!.question.text }}</p>
 
 			<Transition
 				name="height-auto"
@@ -32,23 +41,34 @@ const ImgAltTxt = (type: string) => {
 					<div class="overflow-hidden">
 						<hr class="my-5 border-t-2 border-red-400" />
 
-						<div v-if="activeCell!.answer.image" class="image-wrapper">
-							<img :src="activeCell!.answer.image" :alt="ImgAltTxt('answer')" />
+						<div v-if="ActiveTemplateCell!.answer.image" class="image-wrapper">
+							<img
+								:src="ActiveTemplateCell!.answer.image"
+								:alt="ImgAltTxt('answer')"
+							/>
 						</div>
 
 						<p class="text-3xl font-bold">
-							{{ activeCell!.answer.text }}
+							{{ ActiveTemplateCell!.answer.text }}
 						</p>
 					</div>
 				</div>
 			</Transition>
 
-			<span
-				v-if="activeCell!.answeredBy !== undefined"
-				class="font-xl text-red mt-10 block font-bold"
+			<div
+				v-if="ActiveTemplateCell!.answeredBy"
+				class="font-xl text-red mx-auto mb-1 mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white shadow shadow-black/30"
 			>
-				answered by: {{ activeCell!.answeredBy ?? "no one" }}
-			</span>
+				answered by: {{ ActiveTemplateCell!.answeredBy ?? "no one" }}
+
+				<button
+					type="button"
+					class="rounded bg-white p-2 text-red-400 shadow shadow-black/30 transition-[box-shadow,_transform] hover:-translate-y-1 hover:shadow-md"
+					@click="emit('change-answeree')"
+				>
+					<Icon icon="material-symbols:edit-rounded" />
+				</button>
+			</div>
 		</div>
 	</div>
 </template>
