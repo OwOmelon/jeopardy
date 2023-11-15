@@ -1,6 +1,7 @@
 import { ref, computed, watch, watchEffect, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 import { useGuestsStore } from "./guests";
+import { useGameProgressStore } from "./game_progress";
 import { v4 as uuidv4 } from "uuid";
 
 import type { Guest } from "./guests";
@@ -34,7 +35,7 @@ export type CompleteTableCell = {
 	points: number;
 	column: Column["id"];
 	category: Column["category"];
-	answeredBy: Guest["name"] | null | undefined;
+	answeredBy: Guest["name"] | "no one";
 } & RawTableCell;
 
 export type CompleteTable = {
@@ -53,10 +54,6 @@ export type TemplateData = {
 
 //  ----
 
-export type CellsAnswered = {
-	[key: RowID]: { [key: Column["id"]]: Guest["name"] | null };
-};
-
 export type HistoryTemplate = TemplateData & {
 	id: string;
 	iteration: number;
@@ -67,6 +64,7 @@ export type HistoryTemplate = TemplateData & {
 
 export const useTemplateStore = defineStore("template", () => {
 	const guests = useGuestsStore();
+	const gameProgress = useGameProgressStore();
 	const editing = ref<boolean>(true);
 	const resetTemplateWarning = ref<boolean>(false);
 
@@ -177,23 +175,15 @@ export const useTemplateStore = defineStore("template", () => {
 	// ------------------------------
 
 	const activeCell = ref<CompleteTableCell | null>(null);
-	const cellsAnswered = ref<CellsAnswered>(
-		fetchplayProgressTrackerFromLocalStorage() || {},
-	);
-	const resetCellsAnsweredWarning = ref<boolean>(false);
-
-	function setPlayProgressTracker(name: Guest["name"] | null) {
-		const row = cellsAnswered.value?.[activeCell.value!.row] ?? {};
-
-		row[activeCell.value!.column!] = name;
-		cellsAnswered.value[activeCell.value!.row] = row;
-	}
 
 	const completeTable = computed<CompleteTable>(() => {
 		return rows.value.reduce((rows, row, rowIndex) => {
 			return {
 				...rows,
 				[row]: columns.value.reduce((columns, column) => {
+					const answeredBy =
+						gameProgress.progress?.[row]?.[column.id]?.successfullyAnswered;
+
 					return {
 						...columns,
 						[column.id]: {
@@ -202,7 +192,10 @@ export const useTemplateStore = defineStore("template", () => {
 							points: points.value[rowIndex],
 							column: column.id,
 							category: column.category,
-							answeredBy: cellsAnswered.value?.[row]?.[column.id],
+							answeredBy:
+								answeredBy === undefined
+									? ""
+									: guests.getGuest(answeredBy ?? "")?.name ?? "no one",
 						},
 					};
 				}, {}),
@@ -229,20 +222,6 @@ export const useTemplateStore = defineStore("template", () => {
 			};
 		}, {});
 	});
-
-	watch(
-		cellsAnswered,
-		(progress) => {
-			localStorage.setItem("cellsAnswered", JSON.stringify(progress));
-		},
-		{ deep: true },
-	);
-
-	function fetchplayProgressTrackerFromLocalStorage(): CellsAnswered | null {
-		const savedProgress = localStorage.getItem("cellsAnswered");
-
-		return savedProgress ? JSON.parse(savedProgress) : null;
-	}
 
 	// ---------- HISTORY ----------
 
@@ -310,8 +289,6 @@ export const useTemplateStore = defineStore("template", () => {
 		columns,
 		rawTable,
 		templateData,
-		cellsAnswered,
-		resetCellsAnsweredWarning,
 		checkTableDataProperties,
 		columnIsEmpty,
 		createTemplate,
@@ -322,7 +299,6 @@ export const useTemplateStore = defineStore("template", () => {
 		activeCell,
 		filteredColumns,
 		filteredCompleteTable,
-		setPlayProgressTracker,
 
 		//  ----
 
