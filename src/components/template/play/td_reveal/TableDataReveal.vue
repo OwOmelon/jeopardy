@@ -133,7 +133,7 @@ onUnmounted(() => {
 
 					<GiveGuestPoints
 						v-else
-						:progress="revealProgress"
+						:reveal-progress="revealProgress"
 						@done="activeTemplateCell = null"
 					/>
 				</Transition>

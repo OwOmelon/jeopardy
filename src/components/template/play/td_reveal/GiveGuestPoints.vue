@@ -8,7 +8,7 @@ import type { Guest } from "@/stores/guests";
 import { Icon } from "@iconify/vue";
 
 const props = defineProps<{
-	progress: number;
+	revealProgress: number;
 }>();
 
 const emit = defineEmits<{
@@ -30,7 +30,7 @@ function guestsPtsDeductIncludesGuest(guest: Guest): boolean {
 }
 
 function onGuestBtnClick(guest: Guest): void {
-	if (props.progress < 4) {
+	if (props.revealProgress < 4) {
 		if (guestsPtsDeduct.value.includes(guest)) {
 			guestsPtsDeduct.value = guestsPtsDeduct.value.filter(
 				(guestDeduct) => guestDeduct.id !== guest.id,
@@ -70,7 +70,7 @@ function confirm(): void {
 		<div
 			class="flex flex-col items-center justify-center overflow-hidden text-xl font-bold"
 		>
-			<span>who got it {{ props.progress < 4 ? "wrong" : "right" }} ?</span>
+			<span>who got it {{ props.revealProgress < 4 ? "wrong" : "right" }} ?</span>
 
 			<div
 				v-if="guests.list.length > 1"
@@ -81,12 +81,12 @@ function confirm(): void {
 					:key="index"
 					type="button"
 					:disabled="
-						guestsPtsDeductIncludesGuest(guest) && props.progress === 4
+						guestsPtsDeductIncludesGuest(guest) && props.revealProgress === 4
 					"
 					:class="[
 						guestsPtsDeductIncludesGuest(guest)
 							? `lose-points ${
-									props.progress === 4 ? 'pointer-events-none opacity-50' : ''
+									props.revealProgress === 4 ? 'pointer-events-none opacity-50' : ''
 							  }`
 							: guestPtsAdd?.id === guest.id
 							? 'gain-points'
@@ -100,10 +100,10 @@ function confirm(): void {
 			</div>
 
 			<Transition name="height-auto">
-				<div v-if="props.progress === 4" class="grid">
+				<div v-if="props.revealProgress === 4" class="grid">
 					<div class="overflow-hidden">
 						<button
-							v-if="props.progress === 4"
+							v-if="props.revealProgress === 4"
 							type="button"
 							class="group flex items-center text-3xl mt-3"
 							@click="confirm"
