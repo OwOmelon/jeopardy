@@ -5,7 +5,10 @@ import { v4 as uuidv4 } from "uuid";
 export type Guest = {
 	id: string;
 	name: string;
-	points: number;
+	points: {
+		legitimate: number /* POINTS EARNED THROUGH ANSWERED CELLS */;
+		illegitimate: number /* MANUALLY ADDED POINTS */;
+	};
 };
 
 export const useGuestsStore = defineStore("guests", () => {
@@ -24,7 +27,10 @@ export const useGuestsStore = defineStore("guests", () => {
 		const newGuest: Guest = {
 			id: uuidv4(),
 			name: name,
-			points: 0,
+			points: {
+				legitimate: 0,
+				illegitimate: 0,
+			},
 		};
 
 		list.value.push(newGuest);
@@ -48,13 +54,14 @@ export const useGuestsStore = defineStore("guests", () => {
 	function editGuestPoints(
 		id: string,
 		newPoints: number,
+		type: "legitimate" | "illegitimate",
 		add: boolean = false,
 	): void {
 		const guest = getGuest(id);
 
 		if (!guest) return;
 
-		guest.points = (add ? guest.points : 0) + newPoints;
+		guest.points[type] = (add ? guest.points[type] : 0) + newPoints;
 	}
 
 	function getGuest(id: string): Guest | null {

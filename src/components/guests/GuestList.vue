@@ -9,17 +9,14 @@ const template = useTemplateStore();
 </script>
 
 <template>
-	<div
-		v-if="!template.editing && guests.list.length"
-		class="overflow-hidden"
-	>
+	<div v-if="!template.editing && guests.list.length" class="overflow-hidden">
 		<ul class="flex flex-wrap justify-center gap-3">
 			<Guest
 				v-for="guest in guests.list"
 				:id="guest.id"
 				:name="guest.name"
 				:points="guest.points"
-				@edit-points="guests.editGuestPoints"
+				@edit-points="guests.editGuestPoints(guest.id, $event, 'illegitimate')"
 			/>
 		</ul>
 	</div>

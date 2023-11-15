@@ -1,31 +1,32 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, computed, watch } from "vue";
 import type { Guest } from "@/stores/guests";
 
 const props = defineProps<Guest>();
 
 const emit = defineEmits<{
-	"edit-points": [Guest["id"], number];
+	"edit-points": [number];
 }>();
 
+const totalPoints = computed<number>(() => {
+	return props.points.legitimate + props.points.illegitimate;
+});
+
 const textBox = ref<HTMLInputElement | null>(null);
-const textInput = ref<number>(props.points);
+const textInput = ref<number>(totalPoints.value);
 
 function onBlur(): void {
 	if (!textInput.value.toString().length) {
-		textInput.value = props.points;
+		textInput.value = totalPoints.value;
 		return;
 	}
 
-	emit("edit-points", props.id, textInput.value);
+	emit("edit-points", textInput.value - props.points.legitimate);
 }
 
-watch(
-	() => props.points,
-	(val) => {
-		textInput.value = val;
-	},
-);
+watch(totalPoints, (val) => {
+	textInput.value = val;
+});
 </script>
 
 <template>
