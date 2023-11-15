@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
+import { useGameProgressStore } from "@/stores/game_progress";
 import { useGuestsStore } from "@/stores/guests";
 
 import RowCategories from "./RowCategories.vue";
@@ -8,8 +10,20 @@ import TableDataReveal from "./td_reveal/TableDataReveal.vue";
 import WarningModal from "@/components/WarningModal.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
-const template = useTemplateStore();
-const guests = useGuestsStore();
+const {
+	activeCell: activeTemplateCell,
+	filteredCompleteTable: filteredTemplateCompleteTable,
+} = storeToRefs(useTemplateStore());
+
+const { checkTableDataProperties: checkTemplateTableDataProperties } =
+	useTemplateStore();
+
+const { progress: gameProgress, resetGameProgressWarning } = storeToRefs(
+	useGameProgressStore(),
+);
+
+const { list: guestList } = storeToRefs(useGuestsStore());
+const { editGuestPoints } = useGuestsStore();
 </script>
 
 <template>
@@ -17,23 +31,25 @@ const guests = useGuestsStore();
 		<RowCategories />
 
 		<tr
-			v-for="(rowValue, rowKey, rowIndex) in template.filteredCompleteTable"
+			v-for="(rowValue, rowKey, rowIndex) in filteredTemplateCompleteTable"
 			:key="rowKey"
 		>
 			<TableData
 				v-for="(cellValue, cellKey, cellIndex) in rowValue"
 				v-bind="cellValue"
-				:is-empty="template.checkTableDataProperties(rowKey, cellKey) === 'empty'"
+				:is-empty="
+					checkTemplateTableDataProperties(rowKey, cellKey) === 'empty'
+				"
 				:key="cellKey"
-				@reveal="template.activeCell = cellValue"
+				@reveal="activeTemplateCell = cellValue"
 			/>
 		</tr>
 
-		<ModalWrapper :show="template.activeCell ? true : false">
+		<ModalWrapper :show="activeTemplateCell ? true : false">
 			<TableDataReveal />
 		</ModalWrapper>
 
-		<ModalWrapper :show="template.resetCellsAnsweredWarning">
+		<ModalWrapper :show="resetGameProgressWarning">
 			<WarningModal
 				header="!! PROGRESS RESET"
 				:paragraph="[
@@ -42,12 +58,15 @@ const guests = useGuestsStore();
 				]"
 				@confirm="
 					() => {
-						template.cellsAnswered = {};
+						gameProgress = {};
 
-						guests.list.forEach((guest) => guests.editGuestPoints(guest.id, 0));
+						guestList.forEach((guest) => {
+							editGuestPoints(guest.id, 0, 'legitimate');
+							editGuestPoints(guest.id, 0, 'illegitimate');
+						});
 					}
 				"
-				@close="template.resetCellsAnsweredWarning = false"
+				@close="resetGameProgressWarning = false"
 			/>
 		</ModalWrapper>
 	</table>
