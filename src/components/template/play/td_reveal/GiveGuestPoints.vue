@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
+import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
+import { useGameProgressStore } from "@/stores/game_progress";
 import { useGuestsStore } from "@/stores/guests";
 
 import type { Guest } from "@/stores/guests";
+type MappedGuestList = (Guest & { answered: "no" | "failed" | "succeeded" })[];
 
 import { Icon } from "@iconify/vue";
 
@@ -15,54 +18,74 @@ const emit = defineEmits<{
 	done: [];
 }>();
 
-const template = useTemplateStore();
-const guests = useGuestsStore();
+const { activeCell: activeTemplateCell } = storeToRefs(useTemplateStore());
 
-const guestsPtsDeduct = ref<Guest[]>([]);
-const guestPtsAdd = ref<Guest | null>(null);
+const { list: guestList } = storeToRefs(useGuestsStore());
 
-function guestsPtsDeductIncludesGuest(guest: Guest): boolean {
-	return (
-		guestsPtsDeduct.value.findIndex(
-			(guestDeduct) => guestDeduct.id === guest.id,
-		) > -1
-	);
-}
+const { progress: gameProgress } = storeToRefs(useGameProgressStore());
+const { updateGameProgress } = useGameProgressStore();
 
-function onGuestBtnClick(guest: Guest): void {
+// !!! rename this variable
+const mappedGuestList = ref<MappedGuestList>([]);
+
+function onGuestBtnClick(guest: (typeof mappedGuestList.value)[number]): void {
+	if (guest.answered !== "no") {
+		guest.answered = "no";
+
+		return;
+	}
+
 	if (props.revealProgress < 4) {
-		if (guestsPtsDeduct.value.includes(guest)) {
-			guestsPtsDeduct.value = guestsPtsDeduct.value.filter(
-				(guestDeduct) => guestDeduct.id !== guest.id,
-			);
-		} else {
-			if (guest.id === guestPtsAdd.value?.id) {
-				guestPtsAdd.value = null;
-			}
-
-			guestsPtsDeduct.value.push(guest);
-		}
+		guest.answered = "failed";
 	} else {
-		guestPtsAdd.value = guestPtsAdd.value === guest ? null : guest;
+		mappedGuestList.value.forEach((guest) => {
+			if (guest.answered === "succeeded") {
+				guest.answered = "no";
+			}
+		});
+
+		guest.answered = "succeeded";
 	}
 }
 
 function confirm(): void {
-	if (guestPtsAdd.value) {
-		guests.editGuestPoints(
-			guestPtsAdd.value.id,
-			template.activeCell!.points,
-			true,
-		);
-	}
+	const failedToAnswer: Guest["id"][] = [];
+	let successfulyAnswered: Guest["id"] | null = null;
 
-	guestsPtsDeduct.value.forEach((guestDeduct) => {
-		guests.editGuestPoints(guestDeduct.id, -template.activeCell!.points, true);
+	mappedGuestList.value.forEach((guest) => {
+		switch (guest.answered) {
+			case "failed":
+				failedToAnswer.push(guest.id);
+				break;
+
+			case "succeeded":
+				successfulyAnswered = guest.id;
+				break;
+		}
 	});
 
-	template.setPlayProgressTracker(guestPtsAdd.value?.name ?? null);
+	updateGameProgress(failedToAnswer, successfulyAnswered);
+
 	emit("done");
 }
+
+onBeforeMount(() => {
+	const gameProgressValue =
+		gameProgress.value?.[activeTemplateCell.value!.row]?.[
+			activeTemplateCell.value!.column
+		];
+
+	mappedGuestList.value = guestList.value.map((guest) => {
+		return {
+			...guest,
+			answered: gameProgressValue?.failedToAnswer?.includes(guest.id)
+				? "failed"
+				: guest.id === gameProgressValue?.successfullyAnswered
+				? "succeeded"
+				: "no",
+		};
+	});
+});
 </script>
 
 <template>
@@ -70,25 +93,27 @@ function confirm(): void {
 		<div
 			class="flex flex-col items-center justify-center overflow-hidden text-xl font-bold"
 		>
-			<span>who got it {{ props.revealProgress < 4 ? "wrong" : "right" }} ?</span>
+			<span
+				>who got it {{ props.revealProgress < 4 ? "wrong" : "right" }} ?</span
+			>
 
 			<div
-				v-if="guests.list.length > 1"
+				v-if="mappedGuestList.length > 1"
 				class="my-5 flex flex-wrap justify-center gap-3"
 			>
 				<button
-					v-for="(guest, index) in guests.list"
-					:key="index"
+					v-for="guest in mappedGuestList"
+					:key="guest.id"
 					type="button"
-					:disabled="
-						guestsPtsDeductIncludesGuest(guest) && props.revealProgress === 4
-					"
+					:disabled="guest.answered === 'failed' && props.revealProgress === 4"
 					:class="[
-						guestsPtsDeductIncludesGuest(guest)
+						guest.answered === 'failed'
 							? `lose-points ${
-									props.revealProgress === 4 ? 'pointer-events-none opacity-50' : ''
+									props.revealProgress === 4
+										? 'pointer-events-none opacity-50'
+										: ''
 							  }`
-							: guestPtsAdd?.id === guest.id
+							: guest.answered === 'succeeded'
 							? 'gain-points'
 							: 'bg-stone-300 text-stone-500',
 						'rounded p-2 shadow shadow-black/30 transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1',
@@ -105,7 +130,7 @@ function confirm(): void {
 						<button
 							v-if="props.revealProgress === 4"
 							type="button"
-							class="group flex items-center text-3xl mt-3"
+							class="group mt-3 flex items-center text-3xl"
 							@click="confirm"
 						>
 							confirm
