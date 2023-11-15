@@ -129,6 +129,7 @@ onUnmounted(() => {
 					<QuestionAnswer
 						v-if="revealProgress < 3"
 						:show-answer="revealProgress > 1"
+						@change-answeree="revealProgress = 3"
 					/>
 
 					<GiveGuestPoints
