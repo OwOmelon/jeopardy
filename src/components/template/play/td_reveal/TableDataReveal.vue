@@ -155,10 +155,10 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 button {
-	@apply grid aspect-square place-items-center text-red-400 transition-transform hover:scale-150;
+	@apply grid aspect-square place-items-center text-red-400 transition-[opacity,_transform] hover:scale-150;
 }
 
 button svg {
-	@apply scale-[5];
+	@apply pointer-events-none scale-[5];
 }
 </style>
