@@ -53,13 +53,13 @@ export const useGuestsStore = defineStore("guests", () => {
     guest.points = (add ? guest.points : 0) + newPoints;
   }
 
-  const getGuest = (id: string): Guest | null => {
+  function getGuest(id: string): Guest | null {
     const guestIndex = list.value.findIndex((guest) => guest.id === id);
 
     return list.value[guestIndex] ?? null;
   };
 
-  const fetchGuestListFromLocalStorage = (): Guest[] => {
+  function fetchGuestListFromLocalStorage(): Guest[] {
     const list = localStorage.getItem("guestList");
 
     return list ? JSON.parse(list) : [];

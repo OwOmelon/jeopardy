@@ -96,10 +96,10 @@ export const useTemplateStore = defineStore("template", () => {
 		},
 	});
 
-	const checkTableDataProperties = (
+	function checkTableDataProperties(
 		row: RowID,
 		column: Column["id"],
-	): "complete" | "empty" | "partial" => {
+	): "complete" | "empty" | "partial" {
 		const td = rawTable.value[row][column];
 
 		return (td.question.text || td.question.image) &&
@@ -111,7 +111,7 @@ export const useTemplateStore = defineStore("template", () => {
 			: "partial";
 	};
 
-	const columnIsEmpty = (column: Column["id"]): boolean => {
+	function columnIsEmpty(column: Column["id"]): boolean {
 		const arr: string[] = [];
 
 		for (let i = 0; i < rows.value.length; i++) {
@@ -121,7 +121,7 @@ export const useTemplateStore = defineStore("template", () => {
 		return arr.every((a) => a === "empty");
 	};
 
-	const createTemplate = (): TemplateData => {
+	function createTemplate(): TemplateData {
 		const points: number[] = [];
 		const rows: RowID[] = [];
 		const columns: Column[] = [];
@@ -158,7 +158,7 @@ export const useTemplateStore = defineStore("template", () => {
 		return { name: "", points, rows, columns, rawTable };
 	};
 
-	const fetchTemplateFromLocalStorage = (): TemplateData | null => {
+	function fetchTemplateFromLocalStorage(): TemplateData | null {
 		const template = localStorage.getItem("template");
 
 		return template ? JSON.parse(template) : null;
@@ -238,7 +238,7 @@ export const useTemplateStore = defineStore("template", () => {
 		{ deep: true },
 	);
 
-	const fetchplayProgressTrackerFromLocalStorage = (): CellsAnswered | null => {
+	function fetchplayProgressTrackerFromLocalStorage(): CellsAnswered | null {
 		const savedProgress = localStorage.getItem("cellsAnswered");
 
 		return savedProgress ? JSON.parse(savedProgress) : null;
