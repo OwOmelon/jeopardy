@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
+import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
-import { useGuestsStore } from "@/stores/guests";
 import { useMainMenuStore } from "@/stores/mainmenu";
 import { vOnClickOutside } from "@vueuse/components";
 
@@ -9,62 +9,74 @@ import { Icon } from "@iconify/vue";
 import QuestionAnswer from "./QuestionAnswer.vue";
 import GiveGuestPoints from "./GiveGuestPoints.vue";
 
-const template = useTemplateStore();
-const guests = useGuestsStore();
-const mainmenu = useMainMenuStore();
+const { activeCell: activeTemplateCell } = storeToRefs(useTemplateStore());
+const { disableToggle: disableMainMenuToggle } = storeToRefs(
+	useMainMenuStore(),
+);
 
 // 	1 = "show_question"
 // 	2 = "reveal_answer"
 // 	3 = "deduct_points"
 // 	4 = "add_points"
-const progress = ref<number>(
-	template.activeCell?.answeredBy !== undefined ? 2 : 1,
+const revealProgress = ref<number>(
+	activeTemplateCell.value!.answeredBy ? 2 : 1,
 );
 
-const hideAdvanceProgressBtn = computed<boolean>(() => {
-	return template.activeCell!.answeredBy !== undefined
+const cancelRevertProgress = computed<boolean>(() => {
+	return activeTemplateCell.value!.answeredBy &&
+		revealProgress.value !== 2 &&
+		revealProgress.value !== 4
 		? true
-		: (progress.value === 2 && !guests.list.length) || progress.value === 4;
+		: false;
+});
+
+function revertProgress(): void {
+	if (
+		revealProgress.value === 1 ||
+		(activeTemplateCell.value!.answeredBy && revealProgress.value === 2)
+	) {
+		activeTemplateCell.value = null;
+
+		return;
+	}
+
+	revealProgress.value--;
+}
+
+const cancelAdvanceProgress = computed<boolean>(() => {
+	if (revealProgress.value === 4) return true;
+
+	return activeTemplateCell.value!.answeredBy
+		? revealProgress.value !== 3
+		: false;
 });
 
 function advanceProgress(): void {
-	if (progress.value === 4) return;
-
-	if (hideAdvanceProgressBtn.value) {
-		template.activeCell = null;
+	if (cancelAdvanceProgress.value) {
+		activeTemplateCell.value = null;
 
 		return;
 	}
 
-	progress.value++;
-}
-
-function revertProgress(): void {
-	if (progress.value === 1 || template.activeCell!.answeredBy !== undefined) {
-		template.activeCell = null;
-
-		return;
-	}
-
-	progress.value--;
+	revealProgress.value++;
 }
 
 function onKeyDown(e: KeyboardEvent) {
 	switch (e.code) {
 		case "Escape":
-			template.activeCell = null;
+			activeTemplateCell.value = null;
 			break;
 	}
 }
 
 onMounted(() => {
-	mainmenu.disableToggle = true;
+	disableMainMenuToggle.value = true;
 
 	window.addEventListener("keydown", onKeyDown);
 });
 
 onUnmounted(() => {
-	mainmenu.disableToggle = false;
+	disableMainMenuToggle.value = false;
 
 	window.removeEventListener("keydown", onKeyDown);
 });
@@ -75,7 +87,7 @@ onUnmounted(() => {
 		class="component modal"
 		v-on-click-outside="
 			() => {
-				template.activeCell = null;
+				activeTemplateCell = null;
 			}
 		"
 	>
@@ -84,10 +96,10 @@ onUnmounted(() => {
 		>
 			<p class="text-center">
 				<span class="font-bold">{{
-					template.activeCell!.category || template.activeCell?.column
+					activeTemplateCell!.category || activeTemplateCell?.column
 				}}</span>
 				for
-				<span class="font-bold">{{ template.activeCell!.points }}</span>
+				<span class="font-bold">{{ activeTemplateCell!.points }}</span>
 			</p>
 		</div>
 
@@ -107,21 +119,24 @@ onUnmounted(() => {
 					leave-active-class="duration-500"
 					mode="out-in"
 				>
-					<QuestionAnswer v-if="progress < 3" :show-answer="progress > 1" />
+					<QuestionAnswer
+						v-if="revealProgress < 3"
+						:show-answer="revealProgress > 1"
+					/>
 
 					<GiveGuestPoints
 						v-else
-						:progress="progress"
-						@done="template.activeCell = null"
+						:progress="revealProgress"
+						@done="activeTemplateCell = null"
 					/>
 				</Transition>
 			</div>
 
 			<button
 				type="button"
-				:disabled="hideAdvanceProgressBtn"
+				:disabled="cancelAdvanceProgress"
 				:class="{
-					'opacity-0': hideAdvanceProgressBtn,
+					'opacity-0': cancelAdvanceProgress,
 				}"
 				@click="advanceProgress"
 			>
@@ -133,7 +148,7 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 button {
-	@apply grid place-items-center aspect-square text-red-400 transition-transform hover:scale-150;
+	@apply grid aspect-square place-items-center text-red-400 transition-transform hover:scale-150;
 }
 
 button svg {
