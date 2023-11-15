@@ -109,7 +109,7 @@ export const useTemplateStore = defineStore("template", () => {
 			  !(td.answer.text || td.answer.image)
 			? "empty"
 			: "partial";
-	};
+	}
 
 	function columnIsEmpty(column: Column["id"]): boolean {
 		const arr: string[] = [];
@@ -119,7 +119,7 @@ export const useTemplateStore = defineStore("template", () => {
 		}
 
 		return arr.every((a) => a === "empty");
-	};
+	}
 
 	function createTemplate(): TemplateData {
 		const points: number[] = [];
@@ -156,13 +156,13 @@ export const useTemplateStore = defineStore("template", () => {
 		}, {});
 
 		return { name: "", points, rows, columns, rawTable };
-	};
+	}
 
 	function fetchTemplateFromLocalStorage(): TemplateData | null {
 		const template = localStorage.getItem("template");
 
 		return template ? JSON.parse(template) : null;
-	};
+	}
 
 	watch(
 		templateData,
@@ -172,14 +172,14 @@ export const useTemplateStore = defineStore("template", () => {
 		{ deep: true },
 	);
 
-	onBeforeMount(() => {
-		templateData.value = fetchTemplateFromLocalStorage() ?? createTemplate();
-	});
+	templateData.value = fetchTemplateFromLocalStorage() ?? createTemplate();
 
 	// ------------------------------
 
 	const activeCell = ref<CompleteTableCell | null>(null);
-	const cellsAnswered = ref<CellsAnswered>({});
+	const cellsAnswered = ref<CellsAnswered>(
+		fetchplayProgressTrackerFromLocalStorage() || {},
+	);
 	const resetCellsAnsweredWarning = ref<boolean>(false);
 
 	function setPlayProgressTracker(name: Guest["name"] | null) {
@@ -242,9 +242,7 @@ export const useTemplateStore = defineStore("template", () => {
 		const savedProgress = localStorage.getItem("cellsAnswered");
 
 		return savedProgress ? JSON.parse(savedProgress) : null;
-	};
-
-	cellsAnswered.value = fetchplayProgressTrackerFromLocalStorage() || {};
+	}
 
 	// ---------- HISTORY ----------
 
