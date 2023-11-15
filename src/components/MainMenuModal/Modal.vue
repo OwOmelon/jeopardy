@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from "vue";
 import { useMainMenuStore } from "@/stores/mainmenu";
-import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
+import { useGameProgressStore } from "@/stores/game_progress";
+import { useGuestsStore } from "@/stores/guests";
 import { vOnClickOutside } from "@vueuse/components";
 
 import type { Guest } from "@/stores/guests";
@@ -12,8 +13,9 @@ import SaveChangesBtn from "./SaveChangesBtn.vue";
 import GuestLI from "./GuestLI.vue";
 
 const mainmenu = useMainMenuStore();
-const guests = useGuestsStore();
 const template = useTemplateStore();
+const gameProgress = useGameProgressStore();
+const guests = useGuestsStore();
 
 const textBox = ref<InstanceType<typeof TextBox> | null>(null);
 const textInput = ref<string>("");
@@ -125,16 +127,16 @@ onUnmounted(() => {
 			<button
 				v-else
 				type="button"
-				:disabled="!Object.keys(template.cellsAnswered).length"
+				:disabled="!Object.keys(gameProgress.progress).length"
 				class="mode-btn mode-btn-light"
 				@click="
 					() => {
-						template.resetCellsAnsweredWarning = true;
+						gameProgress.resetGameProgressWarning = true;
 						mainmenu.show = false;
 					}
 				"
 			>
-				reset progress
+				restart
 			</button>
 
 			<!-- --- -->
