@@ -6,7 +6,7 @@ export type Guest = {
 	id: string;
 	name: string;
 	points: {
-		legitimate: number /* POINTS EARNED THROUGH ANSWERED CELLS */;
+		legitimate: number /* POINTS EARNED THROUGH ANSWERING CELLS */;
 		illegitimate: number /* MANUALLY ADDED POINTS */;
 	};
 };
