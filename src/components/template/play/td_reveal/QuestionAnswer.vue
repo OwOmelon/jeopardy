@@ -57,7 +57,7 @@ const ImgAltTxt = (type: string) => {
 
 			<div
 				v-if="ActiveTemplateCell!.answeredBy"
-				class="font-xl text-red mx-auto mb-1 mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white shadow shadow-black/30"
+				class="mx-auto mb-1 mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white shadow shadow-black/30"
 			>
 				answered by: {{ ActiveTemplateCell!.answeredBy ?? "no one" }}
 
