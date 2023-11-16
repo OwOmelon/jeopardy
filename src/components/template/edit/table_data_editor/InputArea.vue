@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
+import type { ImageModelValue } from "./TableDataEditor.vue";
+
 import { Icon } from "@iconify/vue";
 import TextBox from "@/components/TextBox.vue";
 
@@ -13,7 +15,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
 	"update:text": [string];
-	"update:image": [string];
+	"on-image-upload": [ImageModelValue];
 }>();
 
 const imgInput = ref<HTMLInputElement | null>(null);
@@ -40,7 +42,7 @@ function onImageUpload(e: any): void {
 	}
 
 	reader.addEventListener("load", () => {
-		emit("update:image", reader.result as string);
+		emit("on-image-upload", { src: reader.result as string, uploaded: true });
 	});
 
 	if (file) {
@@ -72,7 +74,7 @@ function onImageUpload(e: any): void {
 						: 'text-stone-400',
 					'rounded px-2 text-center text-sm transition-[filter]',
 				]"
-				@click="emit('update:image', '')"
+				@click="emit('on-image-upload', { src: '', uploaded: false })"
 			>
 				{{ image.trim() ? "remove" : "add an" }} image
 			</button>
@@ -82,7 +84,7 @@ function onImageUpload(e: any): void {
 		<img
 			v-if="image.trim()"
 			:src="image"
-			class="rounded self-center shadow shadow-black/30"
+			class="self-center rounded shadow shadow-black/30"
 		/>
 
 		<div v-else class="flex gap-3">
@@ -117,7 +119,9 @@ function onImageUpload(e: any): void {
 				size="1"
 				class="input grow placeholder:text-white/50 focus:!border-stone-100"
 				@keydown.enter="imgInput!.blur()"
-				@blur="emit('update:image', imgInput!.value)"
+				@blur="
+					emit('on-image-upload', { src: imgInput!.value, uploaded: false })
+				"
 			/>
 		</div>
 	</div>
