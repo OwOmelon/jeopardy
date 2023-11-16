@@ -102,7 +102,7 @@ onUnmounted(() => {
 			>
 				<InputArea
 					v-model:text="questionText"
-					v-model:image="questionImage"
+					:image="questionImage.src"
 					label="Question:"
 					text-box-placeholder="enter a question"
 				/>
@@ -121,7 +121,7 @@ onUnmounted(() => {
 
 				<InputArea
 					v-model:text="answerText"
-					v-model:image="answerImage"
+					:image="answerImage.src"
 					label="Answer:"
 					text-box-placeholder="enter an answer"
 				/>
