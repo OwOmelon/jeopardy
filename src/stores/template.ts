@@ -319,7 +319,7 @@ export const useTemplateStore = defineStore("template", () => {
 		(template) => {
 			logHistory(template);
 		},
-		{ deep: true },
+		{ deep: true, immediate: true },
 	);
 
 	// ------------------------------
