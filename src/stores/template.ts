@@ -2,6 +2,7 @@ import { ref, computed, watch, watchEffect, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 import { useGuestsStore } from "./guests";
 import { useGameProgressStore } from "./game_progress";
+import { useUploadedImagesStore } from "./uploaded_images";
 import { v4 as uuidv4 } from "uuid";
 
 import type { Guest } from "./guests";
@@ -65,6 +66,8 @@ export type HistoryTemplate = TemplateData & {
 export const useTemplateStore = defineStore("template", () => {
 	const guests = useGuestsStore();
 	const gameProgress = useGameProgressStore();
+	const uploadedImages = useUploadedImagesStore();
+
 	const editing = ref<boolean>(true);
 	const resetTemplateWarning = ref<boolean>(false);
 
@@ -181,13 +184,29 @@ export const useTemplateStore = defineStore("template", () => {
 			return {
 				...rows,
 				[row]: columns.value.reduce((columns, column) => {
+					const rawTableCell: RawTableCell = JSON.parse(
+						JSON.stringify(rawTable.value[row][column.id]),
+					);
+
 					const answeredBy =
 						gameProgress.progress?.[row]?.[column.id]?.successfullyAnswered;
+
+					rawTableCell.question.image = fetchCellImage(
+						"question",
+						row,
+						column.id,
+					).src;
+
+					rawTableCell.answer.image = fetchCellImage(
+						"answer",
+						row,
+						column.id,
+					).src;
 
 					return {
 						...columns,
 						[column.id]: {
-							...rawTable.value[row][column.id],
+							...rawTableCell,
 							row,
 							points: points.value[rowIndex],
 							column: column.id,
@@ -222,6 +241,31 @@ export const useTemplateStore = defineStore("template", () => {
 			};
 		}, {});
 	});
+
+	function fetchCellImage(
+		type: "question" | "answer",
+		row: RowID,
+		column: Column["id"],
+	): { src: string; uploaded: boolean } {
+		const rawTableCell = rawTable.value?.[row]?.[column];
+
+		let src = "";
+		let uploaded = false;
+
+		if (rawTableCell) {
+			const imageLink = rawTableCell[type].image;
+			const uploadedImage = uploadedImages.images?.[row]?.[column]?.[type];
+
+			if (imageLink) {
+				src = imageLink;
+			} else if (uploadedImage) {
+				src = uploadedImage;
+				uploaded = true;
+			}
+		}
+
+		return { src, uploaded };
+	}
 
 	// ---------- HISTORY ----------
 
@@ -299,6 +343,7 @@ export const useTemplateStore = defineStore("template", () => {
 		activeCell,
 		filteredColumns,
 		filteredCompleteTable,
+		fetchCellImage,
 
 		//  ----
 
