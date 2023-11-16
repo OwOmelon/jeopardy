@@ -60,13 +60,17 @@ function saveChanges(): void {
 		td.answer.image = answerImage.value.src;
 	}
 
-	template.activeCell = null;
+	closeTableDataEditor();
 }
 
 function onKeyDown(e: KeyboardEvent) {
 	if (e.key === "Escape") {
-		template.activeCell = null;
+		closeTableDataEditor();
 	}
+}
+
+function closeTableDataEditor(): void {
+	template.activeCell = null;
 }
 
 onMounted(() => {
@@ -88,7 +92,7 @@ onUnmounted(() => {
 		class="component modal"
 		v-on-click-outside="
 			() => {
-				template.activeCell = null;
+				closeTableDataEditor();
 			}
 		"
 	>
@@ -107,7 +111,7 @@ onUnmounted(() => {
 			<button
 				type="button"
 				class="btn hover:bg-rose-700"
-				@click="template.activeCell = null"
+				@click="closeTableDataEditor()"
 			>
 				CLOSE <span class="hidden lg:inline">[ESC]</span>
 			</button>
