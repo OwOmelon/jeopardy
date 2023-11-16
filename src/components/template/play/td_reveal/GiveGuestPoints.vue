@@ -130,14 +130,14 @@ onBeforeMount(() => {
 						<button
 							v-if="props.revealProgress === 4"
 							type="button"
-							class="group mt-3 flex items-center text-3xl"
+							class="group mx-1 mb-1 mt-3 flex items-center rounded-md bg-red-400 p-3 text-3xl text-white shadow shadow-black/30 transition-transform hover:-translate-y-1"
 							@click="confirm"
 						>
 							confirm
 
 							<Icon
 								icon="material-symbols:arrow-right-rounded"
-								class="ml-3 scale-[2] transition-transform group-hover:translate-x-2"
+								class="ml-3 scale-[3] transition-transform group-hover:translate-x-2"
 							/>
 						</button>
 					</div>
