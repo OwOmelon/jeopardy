@@ -37,7 +37,7 @@ watch(
     <MainMenu />
   </ModalWrapper>
 
-  <debug />
+<!-- <debug /> -->
 </template>
 
 <style lang="postcss">
