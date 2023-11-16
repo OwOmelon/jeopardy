@@ -10,6 +10,7 @@ export type ImageModelValue = ReturnType<typeof template.fetchCellImage>;
 import InputArea from "./InputArea.vue";
 
 const template = useTemplateStore();
+const uploadedImages = useUploadedImagesStore();
 const mainmenu = useMainMenuStore();
 
 const questionText = ref<string>(template.activeCell!.question.text);
@@ -35,10 +36,29 @@ function saveChanges(): void {
 		template.rawTable[template.activeCell!.row][template.activeCell!.column];
 
 	td.question.text = questionText.value;
-	td.question.image = questionImage.value;
-
 	td.answer.text = answerText.value;
-	td.answer.image = answerImage.value;
+
+	if (questionImage.value.uploaded) {
+		uploadedImages.addImage(
+			questionImage.value.src,
+			"question",
+			template.activeCell!.row,
+			template.activeCell!.column,
+		);
+	} else {
+		td.question.image = questionImage.value.src;
+	}
+
+	if (answerImage.value.uploaded) {
+		uploadedImages.addImage(
+			answerImage.value.src,
+			"answer",
+			template.activeCell!.row,
+			template.activeCell!.column,
+		);
+	} else {
+		td.answer.image = answerImage.value.src;
+	}
 
 	template.activeCell = null;
 }
