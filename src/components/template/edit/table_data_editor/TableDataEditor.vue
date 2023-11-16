@@ -129,6 +129,7 @@ onUnmounted(() => {
 					:image="questionImage.src"
 					label="Question:"
 					text-box-placeholder="enter a question"
+					@on-image-upload="questionImage = $event"
 				/>
 
 				<div
@@ -148,6 +149,7 @@ onUnmounted(() => {
 					:image="answerImage.src"
 					label="Answer:"
 					text-box-placeholder="enter an answer"
+					@on-image-upload="answerImage = $event"
 				/>
 			</div>
 
