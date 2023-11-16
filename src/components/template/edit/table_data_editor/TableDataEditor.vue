@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { useTemplateStore } from "@/stores/template";
+import { useUploadedImagesStore } from "@/stores/uploaded_images";
 import { useMainMenuStore } from "@/stores/mainmenu";
 import { vOnClickOutside } from "@vueuse/components";
+
+export type ImageModelValue = ReturnType<typeof template.fetchCellImage>;
 
 import InputArea from "./InputArea.vue";
 
@@ -10,10 +13,22 @@ const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
 
 const questionText = ref<string>(template.activeCell!.question.text);
-const questionImage = ref<string>(template.activeCell!.question.image);
+const questionImage = ref<ImageModelValue>(
+	template.fetchCellImage(
+		"question",
+		template.activeCell!.row,
+		template.activeCell!.column,
+	),
+);
 
 const answerText = ref<string>(template.activeCell!.answer.text);
-const answerImage = ref<string>(template.activeCell!.answer.image);
+const answerImage = ref<ImageModelValue>(
+	template.fetchCellImage(
+		"answer",
+		template.activeCell!.row,
+		template.activeCell!.column,
+	),
+);
 
 function saveChanges(): void {
 	const td =
