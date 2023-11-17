@@ -214,7 +214,7 @@ export const useTemplateStore = defineStore("template", () => {
 							answeredBy:
 								answeredBy === undefined
 									? ""
-									: guests.getGuest(answeredBy ?? "")?.name ?? "no one",
+									: guests.getGuest(answeredBy ?? "guest_")?.name ?? "no one",
 						},
 					};
 				}, {}),

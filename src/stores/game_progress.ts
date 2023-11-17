@@ -60,7 +60,7 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 				});
 
 				guests.editGuestPoints(
-					gameProgressValue?.successfullyAnswered ?? "",
+					gameProgressValue?.successfullyAnswered ?? "guest_",
 					pointsToAssign,
 					"legitimate",
 					true,
