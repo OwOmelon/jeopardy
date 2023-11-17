@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
 import { useGameProgressStore } from "@/stores/game_progress";
 
@@ -9,17 +8,8 @@ import TableDataReveal from "./td_reveal/TableDataReveal.vue";
 import WarningModal from "@/components/WarningModal.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
-const {
-	activeCell: activeTemplateCell,
-	filteredCompleteTable: filteredTemplateCompleteTable,
-} = storeToRefs(useTemplateStore());
-
-const { checkTableDataProperties: checkTemplateTableDataProperties } =
-	useTemplateStore();
-
-const { progress: gameProgress, resetGameProgressWarning } = storeToRefs(
-	useGameProgressStore(),
-);
+const template = useTemplateStore()
+const gameProgress = useGameProgressStore()
 </script>
 
 <template>
@@ -27,25 +17,25 @@ const { progress: gameProgress, resetGameProgressWarning } = storeToRefs(
 		<RowCategories />
 
 		<tr
-			v-for="(rowValue, rowKey, rowIndex) in filteredTemplateCompleteTable"
+			v-for="(rowValue, rowKey, rowIndex) in template.filteredCompleteTable"
 			:key="rowKey"
 		>
 			<TableData
 				v-for="(cellValue, cellKey, cellIndex) in rowValue"
 				v-bind="cellValue"
 				:is-empty="
-					checkTemplateTableDataProperties(rowKey, cellKey) === 'empty'
+					template.checkTableDataProperties(rowKey, cellKey) === 'empty'
 				"
 				:key="cellKey"
-				@reveal="activeTemplateCell = cellValue"
+				@reveal="template.activeCell = cellValue"
 			/>
 		</tr>
 
-		<ModalWrapper :show="activeTemplateCell ? true : false">
+		<ModalWrapper :show="template.activeCell ? true : false">
 			<TableDataReveal />
 		</ModalWrapper>
 
-		<ModalWrapper :show="resetGameProgressWarning">
+		<ModalWrapper :show="gameProgress.resetGameProgressWarning">
 			<WarningModal
 				header="!! PROGRESS RESET"
 				:paragraph="[
@@ -54,10 +44,10 @@ const { progress: gameProgress, resetGameProgressWarning } = storeToRefs(
 				]"
 				@confirm="
 					() => {
-						gameProgress = {};
+						gameProgress.progress = {};
 					}
 				"
-				@close="resetGameProgressWarning = false"
+				@close="gameProgress.resetGameProgressWarning = false"
 			/>
 		</ModalWrapper>
 	</table>

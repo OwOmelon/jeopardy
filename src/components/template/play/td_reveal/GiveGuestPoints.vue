@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from "vue";
-import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
 import { useGameProgressStore } from "@/stores/game_progress";
 import { useGuestsStore } from "@/stores/guests";
@@ -18,12 +17,9 @@ const emit = defineEmits<{
 	done: [];
 }>();
 
-const { activeCell: activeTemplateCell } = storeToRefs(useTemplateStore());
-
-const { list: guestList } = storeToRefs(useGuestsStore());
-
-const { progress: gameProgress } = storeToRefs(useGameProgressStore());
-const { updateGameProgress } = useGameProgressStore();
+const template = useTemplateStore();
+const gameProgress = useGameProgressStore();
+const guests = useGuestsStore();
 
 // !!! rename this variable
 const mappedGuestList = ref<MappedGuestList>([]);
@@ -64,9 +60,9 @@ function confirm(): void {
 		}
 	});
 
-	updateGameProgress(
-		activeTemplateCell.value!.row,
-		activeTemplateCell.value!.column,
+	gameProgress.updateGameProgress(
+		template.activeCell!.row,
+		template.activeCell!.column,
 		failedToAnswer,
 		successfulyAnswered,
 	);
@@ -76,11 +72,11 @@ function confirm(): void {
 
 onBeforeMount(() => {
 	const gameProgressValue =
-		gameProgress.value?.[activeTemplateCell.value!.row]?.[
-			activeTemplateCell.value!.column
+		gameProgress.progress?.[template.activeCell!.row]?.[
+			template.activeCell!.column
 		];
 
-	mappedGuestList.value = guestList.value.map((guest) => {
+	mappedGuestList.value = guests.list.map((guest) => {
 		return {
 			...guest,
 			answered: gameProgressValue?.failedToAnswer?.includes(guest.id)
