@@ -1,7 +1,7 @@
 import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
-import { useTemplateStore } from './template'
-import { useGuestsStore } from './guests'
+import { useTemplateStore } from "./template";
+import { useGuestsStore } from "./guests";
 
 import type { RowID, Column } from "./template";
 import type { Guest } from "./guests";
@@ -21,22 +21,22 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 	const template = useTemplateStore();
 	const guests = useGuestsStore();
 
-	const progress = ref<GameProgress>(
-		fetchGameProgressFromLocalStorage() || {},
-	);
+	const progress = ref<GameProgress>(fetchGameProgressFromLocalStorage() || {});
 	const resetGameProgressWarning = ref<boolean>(false);
 
 	function updateGameProgress(
+		row: RowID,
+		column: Column["id"],
 		failedToAnswer: GameProgressValue["failedToAnswer"],
 		successfullyAnswered: GameProgressValue["successfullyAnswered"],
 	) {
-		const row = progress.value?.[template.activeCell!.row] ?? {};
+		const progressRow = progress.value?.[row] ?? {};
 
-		row[template.activeCell!.column!] = {
+		progressRow[column] = {
 			failedToAnswer,
 			successfullyAnswered,
 		};
-		progress.value[template.activeCell!.row] = row;
+		progress.value[template.activeCell!.row] = progressRow;
 	}
 
 	function updateGuestsLegitimatePoints(): void {
@@ -87,6 +87,6 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 	return {
 		progress,
 		resetGameProgressWarning,
-		updateGameProgress
-	}
+		updateGameProgress,
+	};
 });
