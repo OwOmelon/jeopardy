@@ -191,17 +191,15 @@ export const useTemplateStore = defineStore("template", () => {
 					const answeredBy =
 						gameProgress.progress?.[row]?.[column.id]?.successfullyAnswered;
 
-					rawTableCell.question.image = fetchCellImage(
-						"question",
-						row,
-						column.id,
-					).src;
-
-					rawTableCell.answer.image = fetchCellImage(
-						"answer",
-						row,
-						column.id,
-					).src;
+					(["question", "answer"] as ("question" | "answer")[]).forEach(
+						(type) => {
+							rawTableCell[type].image = fetchCellImage(
+								type,
+								row,
+								column.id,
+							).src;
+						},
+					);
 
 					return {
 						...columns,
