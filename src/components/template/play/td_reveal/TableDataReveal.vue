@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { storeToRefs } from "pinia";
+import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
 import { useMainMenuStore } from "@/stores/mainmenu";
 import { vOnClickOutside } from "@vueuse/components";
@@ -9,6 +10,7 @@ import { Icon } from "@iconify/vue";
 import QuestionAnswer from "./QuestionAnswer.vue";
 import GiveGuestPoints from "./GiveGuestPoints.vue";
 
+const { list: guestList } = storeToRefs(useGuestsStore());
 const { activeCell: activeTemplateCell } = storeToRefs(useTemplateStore());
 const { disableToggle: disableMainMenuToggle } = storeToRefs(
 	useMainMenuStore(),
@@ -44,9 +46,9 @@ function revertProgress(): void {
 }
 
 const cancelAdvanceProgress = computed<boolean>(() => {
-	if (revealProgress.value === 4) return true;
-
-	return activeTemplateCell.value!.answeredBy
+	return revealProgress.value === 4 ||
+		(!guestList.value.length && revealProgress.value === 2) ||
+		activeTemplateCell.value!.answeredBy
 		? revealProgress.value !== 3
 		: false;
 });
