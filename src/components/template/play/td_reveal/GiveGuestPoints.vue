@@ -64,7 +64,12 @@ function confirm(): void {
 		}
 	});
 
-	updateGameProgress(failedToAnswer, successfulyAnswered);
+	updateGameProgress(
+		activeTemplateCell.value!.row,
+		activeTemplateCell.value!.column,
+		failedToAnswer,
+		successfulyAnswered,
+	);
 
 	emit("done");
 }
