@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from "vue";
+import { ref } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { useGameProgressStore } from "@/stores/game_progress";
 import { useGuestsStore } from "@/stores/guests";
@@ -22,7 +22,7 @@ const gameProgress = useGameProgressStore();
 const guests = useGuestsStore();
 
 // !!! rename this variable
-const mappedGuestList = ref<MappedGuestList>([]);
+const mappedGuestList = ref<MappedGuestList>(getMappedGuestList());
 
 function onGuestBtnClick(guest: (typeof mappedGuestList.value)[number]): void {
 	if (guest.answered !== "no") {
@@ -70,13 +70,13 @@ function confirm(): void {
 	emit("done");
 }
 
-onBeforeMount(() => {
+function getMappedGuestList(): MappedGuestList {
 	const gameProgressValue =
 		gameProgress.progress?.[template.activeCell!.row]?.[
 			template.activeCell!.column
 		];
 
-	mappedGuestList.value = guests.list.map((guest) => {
+	return guests.list.map((guest) => {
 		return {
 			...guest,
 			answered: gameProgressValue?.failedToAnswer?.includes(guest.id)
@@ -86,7 +86,7 @@ onBeforeMount(() => {
 				: "no",
 		};
 	});
-});
+}
 </script>
 
 <template>
