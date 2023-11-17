@@ -70,6 +70,10 @@ export const useGuestsStore = defineStore("guests", () => {
 		return list.value[guestIndex] ?? null;
 	}
 
+	function resetActiveGuestID(): void {
+		activeGuestID.value = "guest_";
+	}
+
 	function fetchGuestListFromLocalStorage(): Guest[] {
 		const list = localStorage.getItem("guestList");
 
@@ -96,5 +100,6 @@ export const useGuestsStore = defineStore("guests", () => {
 		editGuestPoints,
 		deleteGuest,
 		getGuest,
+		resetActiveGuestID,
 	};
 });
