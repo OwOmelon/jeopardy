@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useTemplateStore } from "@/stores/template";
+import { useGameProgressStore } from "@/stores/game_progress";
 
 import RowPoints from "./RowPoints.vue";
 import RowCategories from "./RowCategories.vue";
@@ -10,6 +11,7 @@ import WarningModal from "@/components/WarningModal.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
 const template = useTemplateStore();
+const gameProgress = useGameProgressStore();
 </script>
 
 <template>
@@ -54,7 +56,7 @@ const template = useTemplateStore();
 				]"
 				@confirm="
 					() => {
-						template.cellsAnswered = {}
+						gameProgress.progress = {}
 						template.history = [];
 						template.historyPushIteration = 0;
 						template.templateData = template.createTemplate();
