@@ -13,7 +13,7 @@ export type Guest = {
 
 export const useGuestsStore = defineStore("guests", () => {
 	const list = ref<Guest[]>(fetchGuestListFromLocalStorage());
-	const activeGuestID = ref<Guest["id"]>("guest_");
+	const activeGuestID = ref<Guest["id"] | null>(null);
 
 	const guestLimitReached = computed<boolean>(() => {
 		const guestLimit = 6;
@@ -71,7 +71,7 @@ export const useGuestsStore = defineStore("guests", () => {
 	}
 
 	function resetActiveGuestID(): void {
-		activeGuestID.value = "guest_";
+		activeGuestID.value = null;
 	}
 
 	function fetchGuestListFromLocalStorage(): Guest[] {
