@@ -31,9 +31,10 @@ function startGuestRename(guest: Guest) {
 }
 
 function cancelGuestRename() {
-	guests.activeGuestID = "";
 	textInput.value = "";
 	textBox.value!.blur();
+
+	guests.resetActiveGuestID();
 }
 
 function saveChanges(): void {
@@ -41,7 +42,7 @@ function saveChanges(): void {
 		guests.editGuestName(guests.activeGuestID, textInput.value);
 		textBox.value?.blur();
 
-		guests.activeGuestID = "";
+		guests.resetActiveGuestID();
 	} else {
 		if (textInput.value) {
 			guests.addGuest(textInput.value);
@@ -52,7 +53,7 @@ function saveChanges(): void {
 }
 
 onUnmounted(() => {
-	guests.activeGuestID = "";
+	guests.resetActiveGuestID();
 });
 </script>
 
