@@ -55,8 +55,10 @@ export type TemplateData = {
 
 //  ----
 
+export type HistoryTemplateID = `template_${string}`;
+
 export type HistoryTemplate = TemplateData & {
-	id: string;
+	id: HistoryTemplateID;
 	iteration: number;
 	dateModified: Date;
 };
@@ -267,7 +269,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	// ---------- HISTORY ----------
 
-	const currentID = ref<string>("");
+	const currentID = ref<HistoryTemplateID>("template_");
 
 	const history = ref<HistoryTemplate[]>([]);
 	const historyPushIteration = ref<number>(0);
@@ -302,7 +304,7 @@ export const useTemplateStore = defineStore("template", () => {
 		}
 
 		historyPushIteration.value++;
-		currentID.value = uuidv4();
+		currentID.value = `template_${uuidv4()}`;
 
 		history.value.push({
 			...JSON.parse(JSON.stringify(template)),
