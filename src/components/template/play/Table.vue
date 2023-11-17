@@ -2,7 +2,6 @@
 import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
 import { useGameProgressStore } from "@/stores/game_progress";
-import { useGuestsStore } from "@/stores/guests";
 
 import RowCategories from "./RowCategories.vue";
 import TableData from "./TableData.vue";
@@ -21,9 +20,6 @@ const { checkTableDataProperties: checkTemplateTableDataProperties } =
 const { progress: gameProgress, resetGameProgressWarning } = storeToRefs(
 	useGameProgressStore(),
 );
-
-const { list: guestList } = storeToRefs(useGuestsStore());
-const { editGuestPoints } = useGuestsStore();
 </script>
 
 <template>
@@ -59,11 +55,6 @@ const { editGuestPoints } = useGuestsStore();
 				@confirm="
 					() => {
 						gameProgress = {};
-
-						guestList.forEach((guest) => {
-							editGuestPoints(guest.id, 0, 'legitimate');
-							editGuestPoints(guest.id, 0, 'illegitimate');
-						});
 					}
 				"
 				@close="resetGameProgressWarning = false"
