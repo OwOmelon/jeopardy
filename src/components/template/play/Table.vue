@@ -8,8 +8,8 @@ import TableDataReveal from "./td_reveal/TableDataReveal.vue";
 import WarningModal from "@/components/WarningModal.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
-const template = useTemplateStore()
-const gameProgress = useGameProgressStore()
+const template = useTemplateStore();
+const gameProgress = useGameProgressStore();
 </script>
 
 <template>
@@ -42,11 +42,7 @@ const gameProgress = useGameProgressStore()
 					'Are you sure you want to reset your play progress?',
 					`Your progress as well as every guests' score will be reset. This action cannot be undone.`,
 				]"
-				@confirm="
-					() => {
-						gameProgress.progress = {};
-					}
-				"
+				@confirm="gameProgress.progress = {}"
 				@close="gameProgress.resetGameProgressWarning = false"
 			/>
 		</ModalWrapper>
