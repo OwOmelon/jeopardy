@@ -4,7 +4,7 @@ import { useTemplateStore } from "./stores/template";
 import { useMainMenuStore } from "./stores/mainmenu";
 
 import MainMenu from "./components/MainMenuModal/Modal.vue";
-import ShowMainMenuBtn from "./components/MainMenuModal/ShowMainMenuBtn.vue";
+import PauseBtn from "./components/MainMenuModal/PauseBtn.vue";
 import JeopardyTemplate from "./components/template/Template.vue";
 import ModalWrapper from "./components/ModalWrapper.vue";
 import TemplateHistory from "./components/template_history/History.vue";
@@ -27,7 +27,7 @@ watch(
 </script>
 
 <template>
-  <ShowMainMenuBtn />
+  <PauseBtn />
   <TemplateHistory v-if="template.editing" />
 
   <JeopardyTemplate />
