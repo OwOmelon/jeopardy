@@ -35,8 +35,8 @@ function saveChanges(): void {
 	const td =
 		template.rawTable[template.activeCell!.row][template.activeCell!.column];
 
-	td.question.text = questionText.value;
-	td.answer.text = answerText.value;
+	td.question.text = questionText.value.trim();
+	td.answer.text = answerText.value.trim();
 
 	if (questionImage.value.uploaded) {
 		uploadedImages.addImage(
