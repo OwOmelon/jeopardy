@@ -60,7 +60,7 @@ function onImageUpload(e: any): void {
 			v-model="computedModelValue"
 			:placeholder="textBoxPlaceholder"
 			focus-classes="!border-stone-100"
-			class="input min-h-[10.3ex] md:min-h-[18.2ex]"
+			class="input min-h-[10.3ex] cursor-text md:min-h-[18.2ex]"
 		/>
 
 		<div class="flex items-center gap-3">
