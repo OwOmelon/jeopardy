@@ -113,7 +113,9 @@ onUnmounted(() => {
 			<button
 				v-if="template.editing"
 				type="button"
-				:disabled="template.history.length <= 1"
+				:disabled="
+					!template.filteredColumns.length
+				"
 				class="mode-btn mode-btn-dark"
 				@click="
 					() => {
