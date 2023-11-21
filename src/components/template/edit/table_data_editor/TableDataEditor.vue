@@ -38,27 +38,20 @@ function saveChanges(): void {
 	td.question.text = questionText.value.trim();
 	td.answer.text = answerText.value.trim();
 
-	if (questionImage.value.uploaded) {
-		uploadedImages.addImage(
-			questionImage.value.src,
-			"question",
-			template.activeCell!.row,
-			template.activeCell!.column,
-		);
-	} else {
-		td.question.image = questionImage.value.src;
-	}
+	[questionImage.value, answerImage.value].forEach((image, index) => {
+		const type: "question" | "answer" = index === 0 ? "question" : "answer";
 
-	if (answerImage.value.uploaded) {
-		uploadedImages.addImage(
-			answerImage.value.src,
-			"answer",
-			template.activeCell!.row,
-			template.activeCell!.column,
-		);
-	} else {
-		td.answer.image = answerImage.value.src;
-	}
+		if (image.uploaded) {
+			uploadedImages.addImage(
+				image.src,
+				type,
+				template.activeCell!.row,
+				template.activeCell!.column,
+			);
+		} else {
+			td[type].image = questionImage.value.src;
+		}
+	});
 
 	closeTableDataEditor();
 }
