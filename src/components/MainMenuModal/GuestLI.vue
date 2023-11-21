@@ -5,7 +5,6 @@ import type { Guest } from "@/stores/guests";
 
 const props = defineProps<
 	{
-		editing: boolean;
 		currentlyEditing: boolean | "active";
 	} & Guest
 >();
@@ -20,7 +19,7 @@ const emit = defineEmits<{
 <template>
 	<li
 		:class="[
-			`${editing ? 'dark' : 'light'}${
+			`guest${
 				currentlyEditing === 'active'
 					? '-active'
 					: currentlyEditing
@@ -86,27 +85,27 @@ button {
 </style>
 
 <style scoped lang="postcss">
-.light {
+.light .guest {
 	@apply hover:bg-stone-200;
 }
 
-.light-active {
+.light .guest-active {
 	@apply bg-red-400 text-white;
 }
 
-.light-disabled {
+.light .guest-disabled {
 	@apply bg-stone-400;
 }
 
-.dark {
+.dark .guest {
 	@apply hover:bg-stone-500;
 }
 
-.dark-active {
+.dark .guest-active {
 	@apply bg-stone-300 text-stone-600;
 }
 
-.dark-disabled {
+.dark .guest-disabled {
 	@apply bg-stone-700 text-stone-500;
 }
 </style>

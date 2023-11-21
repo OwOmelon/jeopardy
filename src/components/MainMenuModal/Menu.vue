@@ -60,7 +60,9 @@ onUnmounted(() => {
 <template>
 	<div
 		:class="[
-			template.editing ? 'bg-stone-600 text-stone-300' : 'bg-stone-300',
+			template.editing
+				? 'dark bg-stone-600 text-stone-300'
+				: 'light bg-stone-300',
 			'component z-100 w-[260px] rounded bg-stone-300 p-5 shadow-[0_10px_40px] shadow-black/40',
 		]"
 		v-on-click-outside="
@@ -71,15 +73,9 @@ onUnmounted(() => {
 	>
 		<h1 class="text-3xl font-bold">JEOPARDY</h1>
 
-		<TextBox
-			ref="textBox"
-			v-model="textInput"
-			:editing="template.editing"
-			@save-changes="saveChanges"
-		/>
+		<TextBox ref="textBox" v-model="textInput" @save-changes="saveChanges" />
 
 		<SaveChangesBtn
-			:editing="template.editing"
 			:text-input-length="textInput.length"
 			@save-changes="saveChanges"
 		/>
@@ -94,7 +90,6 @@ onUnmounted(() => {
 			<GuestLI
 				v-for="guest in guests.list"
 				v-bind="guest"
-				:editing="template.editing"
 				:currently-editing="
 					guests.activeGuestID
 						? guests.activeGuestID === guest.id
@@ -113,9 +108,7 @@ onUnmounted(() => {
 			<button
 				v-if="template.editing"
 				type="button"
-				:disabled="
-					!template.filteredColumns.length
-				"
+				:disabled="!template.filteredColumns.length"
 				class="mode-btn mode-btn-dark"
 				@click="
 					() => {
@@ -168,19 +161,19 @@ onUnmounted(() => {
 	@apply rounded px-2 text-lg shadow shadow-black/30 transition-colors;
 }
 
-.mode-btn-light {
+.light .mode-btn {
 	@apply bg-red-400 text-white hover:bg-red-300;
 }
 
-.mode-btn-light:disabled {
+.light .mode-btn:disabled {
 	@apply cursor-not-allowed bg-stone-400 text-stone-500;
 }
 
-.mode-btn-dark {
+.dark .mode-btn {
 	@apply bg-stone-300 text-stone-600 hover:bg-stone-400;
 }
 
-.mode-btn-dark:disabled {
+.dark .mode-btn:disabled {
 	@apply cursor-not-allowed bg-stone-700 text-stone-500;
 }
 </style>

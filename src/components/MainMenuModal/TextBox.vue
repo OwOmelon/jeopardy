@@ -3,7 +3,6 @@ import { ref, computed } from "vue";
 import { useGuestsStore } from "../../stores/guests";
 
 const props = defineProps<{
-	editing: boolean;
 	modelValue: string;
 }>();
 
@@ -53,27 +52,24 @@ defineExpose({ focus, blur });
 			guests.guestLimitReached ? (guests.activeGuestID ? false : true) : false
 		"
 		@keydown.enter="emit('save-changes')"
-		:class="[
-			editing ? 'dark' : 'light',
-			'mt-3 w-full rounded border-y-2 border-transparent px-2 shadow shadow-black/30 outline-none transition-colors',
-		]"
+		class="input mt-3 w-full rounded border-y-2 border-transparent px-2 shadow shadow-black/30 outline-none transition-colors"
 	/>
 </template>
 
 <style scoped lang="postcss">
-.light {
+.light .input {
 	@apply bg-stone-100 focus:border-b-red-400;
 }
 
-.light:disabled {
+.light .input:disabled {
 	@apply cursor-not-allowed bg-stone-400 placeholder:text-stone-500;
 }
 
-.dark {
+.dark .input {
 	@apply bg-stone-500 text-stone-100 placeholder:text-stone-400 focus:border-b-stone-100;
 }
 
-.dark:disabled {
+.dark .input:disabled {
 	@apply cursor-not-allowed bg-stone-700 placeholder:text-stone-500;
 }
 </style>
