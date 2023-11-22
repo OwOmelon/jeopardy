@@ -103,6 +103,10 @@ const btnFocused = ref<boolean>(false);
 	@apply bg-stone-400;
 }
 
+.light button {
+	@apply outline-stone-500;
+}
+
 /* ----- */
 
 .dark .child-btn-focused {
@@ -121,10 +125,14 @@ const btnFocused = ref<boolean>(false);
 	@apply bg-stone-700 text-stone-500;
 }
 
+.dark button {
+	@apply outline-stone-300;
+}
+
 /* ----- */
 
 button {
-	@apply transition-transform hover:scale-150 focus:scale-150 focus:opacity-100 active:scale-100 group-hover:opacity-100 lg:opacity-0;
+	@apply outline-offset-2 transition-transform hover:scale-150 focus:scale-150 focus:opacity-100 active:scale-100 group-hover:opacity-100 lg:opacity-0;
 }
 
 .child-btn-focused button {
