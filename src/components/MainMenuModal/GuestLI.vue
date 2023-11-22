@@ -79,12 +79,6 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="postcss">
-button {
-	@apply transition-transform hover:scale-150 active:scale-100;
-}
-</style>
-
-<style scoped lang="postcss">
 .light .guest {
 	@apply hover:bg-stone-200;
 }
@@ -107,5 +101,9 @@ button {
 
 .dark .guest-disabled {
 	@apply bg-stone-700 text-stone-500;
+}
+
+button {
+	@apply transition-transform hover:scale-150 active:scale-100;
 }
 </style>
