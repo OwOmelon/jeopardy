@@ -37,8 +37,8 @@ const emit = defineEmits<{
 					? '!opacity-100'
 					: currentlyEditing
 					? '!opacity-0'
-					: 'group-hover:opacity-100',
-				'flex items-center gap-2 transition-opacity lg:opacity-0',
+					: '',
+				'flex items-center gap-2 transition-opacity',
 			]"
 		>
 			<button
@@ -104,6 +104,6 @@ const emit = defineEmits<{
 }
 
 button {
-	@apply transition-transform hover:scale-150 active:scale-100;
+	@apply transition-transform hover:scale-150 active:scale-100 group-hover:opacity-100 lg:opacity-0;
 }
 </style>
