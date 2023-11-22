@@ -132,7 +132,7 @@ const btnFocused = ref<boolean>(false);
 /* ----- */
 
 button {
-	@apply outline-offset-2 transition-transform hover:scale-150 focus:scale-150 focus:opacity-100 active:scale-100 group-hover:opacity-100 lg:opacity-0;
+	@apply outline-offset-2 transition-[opacity,_transform] hover:scale-150 focus:scale-150 focus:opacity-100 active:scale-100 group-hover:opacity-100 lg:opacity-0;
 }
 
 .child-btn-focused button {
