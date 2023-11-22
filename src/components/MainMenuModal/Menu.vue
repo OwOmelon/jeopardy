@@ -104,7 +104,7 @@ onUnmounted(() => {
 			/>
 		</TransitionGroup>
 
-		<div class="flex items-center justify-between">
+		<div class="flex items-center gap-3">
 			<button
 				v-if="template.editing"
 				type="button"
@@ -158,7 +158,7 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 .mode-btn {
-	@apply rounded px-2 text-lg shadow shadow-black/30 transition-colors;
+	@apply grow rounded px-2 text-lg shadow shadow-black/30 transition-colors;
 }
 
 .light .mode-btn {
