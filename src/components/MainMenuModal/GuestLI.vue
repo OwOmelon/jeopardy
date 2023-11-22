@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { Icon } from "@iconify/vue";
 
 import type { Guest } from "@/stores/guests";
@@ -14,11 +15,14 @@ const emit = defineEmits<{
 	"rename-cancel": [];
 	delete: [];
 }>();
+
+const btnFocused = ref<boolean>(false);
 </script>
 
 <template>
 	<li
 		:class="[
+			{ 'child-btn-focused': btnFocused },
 			`guest${
 				currentlyEditing === 'active'
 					? '-active'
@@ -44,6 +48,8 @@ const emit = defineEmits<{
 			<button
 				type="button"
 				:disabled="currentlyEditing === true"
+				@focus="btnFocused = true"
+				@blur="btnFocused = false"
 				@click="
 					() => {
 						if (props.currentlyEditing === 'active') {
@@ -65,6 +71,8 @@ const emit = defineEmits<{
 			<button
 				type="button"
 				:disabled="currentlyEditing === true"
+				@focus="btnFocused = true"
+				@blur="btnFocused = false"
 				@click="
 					() => {
 						emit('rename-cancel');
@@ -79,6 +87,10 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="postcss">
+.light .child-btn-focused {
+	@apply bg-stone-200;
+}
+
 .light .guest {
 	@apply hover:bg-stone-200;
 }
@@ -89,6 +101,12 @@ const emit = defineEmits<{
 
 .light .guest-disabled {
 	@apply bg-stone-400;
+}
+
+/* ----- */
+
+.dark .child-btn-focused {
+	@apply bg-stone-500;
 }
 
 .dark .guest {
@@ -103,7 +121,13 @@ const emit = defineEmits<{
 	@apply bg-stone-700 text-stone-500;
 }
 
+/* ----- */
+
 button {
 	@apply transition-transform hover:scale-150 focus:scale-150 focus:opacity-100 active:scale-100 group-hover:opacity-100 lg:opacity-0;
+}
+
+.child-btn-focused button {
+	@apply opacity-100;
 }
 </style>
