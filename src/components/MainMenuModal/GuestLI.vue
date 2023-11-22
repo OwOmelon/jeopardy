@@ -88,11 +88,11 @@ const btnFocused = ref<boolean>(false);
 
 <style scoped lang="postcss">
 .light .child-btn-focused {
-	@apply bg-stone-200;
+	@apply bg-stone-100;
 }
 
 .light .guest {
-	@apply hover:bg-stone-200;
+	@apply hover:bg-stone-100;
 }
 
 .light .guest-active {
