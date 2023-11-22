@@ -104,6 +104,6 @@ const emit = defineEmits<{
 }
 
 button {
-	@apply transition-transform hover:scale-150 active:scale-100 group-hover:opacity-100 lg:opacity-0;
+	@apply transition-transform hover:scale-150 focus:scale-150 focus:opacity-100 active:scale-100 group-hover:opacity-100 lg:opacity-0;
 }
 </style>
