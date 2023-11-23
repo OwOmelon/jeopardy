@@ -42,7 +42,7 @@ function onImageUpload(e: any): void {
 	}
 
 	reader.addEventListener("load", () => {
-		emit("on-image-upload", { src: reader.result as string, uploaded: true });
+		emit("on-image-upload", { src: reader.result as string, type: "upload" });
 	});
 
 	if (file) {
@@ -74,7 +74,7 @@ function onImageUpload(e: any): void {
 						: 'text-stone-400',
 					'rounded px-2 text-center text-sm transition-[filter]',
 				]"
-				@click="emit('on-image-upload', { src: '', uploaded: false })"
+				@click="emit('on-image-upload', null)"
 			>
 				{{ image.trim() ? "remove" : "add an" }} image
 			</button>
@@ -119,9 +119,7 @@ function onImageUpload(e: any): void {
 				size="1"
 				class="input grow placeholder:text-white/50 focus:!border-stone-100"
 				@keydown.enter="imgInput!.blur()"
-				@blur="
-					emit('on-image-upload', { src: imgInput!.value, uploaded: false })
-				"
+				@blur="emit('on-image-upload', { src: imgInput!.value, type: 'link' })"
 			/>
 		</div>
 	</div>

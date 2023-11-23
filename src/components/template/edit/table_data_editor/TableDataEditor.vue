@@ -1,55 +1,57 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { useTemplateStore } from "@/stores/template";
-import { useUploadedImagesStore } from "@/stores/uploaded_images";
 import { useMainMenuStore } from "@/stores/mainmenu";
 import { vOnClickOutside } from "@vueuse/components";
 
-export type ImageModelValue = ReturnType<typeof template.fetchCellImage>;
+export type ImageModelValue = ReturnType<typeof template.fetchImageTableImage>;
 
 import InputArea from "./InputArea.vue";
 
 const template = useTemplateStore();
-const uploadedImages = useUploadedImagesStore();
 const mainmenu = useMainMenuStore();
 
 const questionText = ref<string>(template.activeCell!.question.text);
 const questionImage = ref<ImageModelValue>(
-	template.fetchCellImage(
-		"question",
+	template.fetchImageTableImage(
 		template.activeCell!.row,
 		template.activeCell!.column,
+		"question",
 	),
 );
 
 const answerText = ref<string>(template.activeCell!.answer.text);
 const answerImage = ref<ImageModelValue>(
-	template.fetchCellImage(
-		"answer",
+	template.fetchImageTableImage(
 		template.activeCell!.row,
 		template.activeCell!.column,
+		"answer",
 	),
 );
 
 function saveChanges(): void {
-	const td =
-		template.rawTable[template.activeCell!.row][template.activeCell!.column];
+	[
+		{ text: questionText.value, image: questionImage.value },
+		{ text: answerText.value, image: answerImage.value },
+	].forEach((propertyValue, index) => {
+		const propertyKey: "question" | "answer" =
+			index === 0 ? "question" : "answer";
 
-	td.question.text = questionText.value.trim();
-	td.answer.text = answerText.value.trim();
+		template.updateTextTable(
+			template.activeCell!.row,
+			template.activeCell!.column,
+			propertyValue.text.trim(),
+			propertyKey,
+		);
 
-	[questionImage.value, answerImage.value].forEach((image, index) => {
-		const type: "question" | "answer" = index === 0 ? "question" : "answer";
-
-		if (image.uploaded) {
-			uploadedImages.addImage(
-				image.src,
-				type,
+		if (propertyValue.image) {
+			template.updateImageTable(
 				template.activeCell!.row,
 				template.activeCell!.column,
+				propertyValue.image.src,
+				propertyValue.image.type,
+				propertyKey,
 			);
-		} else {
-			td[type].image = questionImage.value.src;
 		}
 	});
 
@@ -119,7 +121,7 @@ onUnmounted(() => {
 			>
 				<InputArea
 					v-model:text="questionText"
-					:image="questionImage.src"
+					:image="questionImage?.src || ''"
 					label="Question:"
 					text-box-placeholder="enter a question"
 					@on-image-upload="questionImage = $event"
@@ -139,7 +141,7 @@ onUnmounted(() => {
 
 				<InputArea
 					v-model:text="answerText"
-					:image="answerImage.src"
+					:image="answerImage?.src || ''"
 					label="Answer:"
 					text-box-placeholder="enter an answer"
 					@on-image-upload="answerImage = $event"

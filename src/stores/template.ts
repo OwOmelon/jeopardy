@@ -1,8 +1,8 @@
 import { ref, computed, watch, watchEffect, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
+import { useLocalStorage } from "@vueuse/core";
 import { useGuestsStore } from "./guests";
 import { useGameProgressStore } from "./game_progress";
-import { useUploadedImagesStore } from "./uploaded_images";
 import { v4 as uuidv4 } from "uuid";
 
 import type { Guest } from "./guests";
@@ -16,7 +16,37 @@ export type Column = {
 	category: string;
 };
 
-export type RawTableCell = {
+//  ----
+
+export type TableCell = {
+	question: string;
+	answer: string;
+};
+
+export type TextTable = {
+	[key: RowID]: { [key: Column["id"]]: TableCell };
+};
+
+export type ImageTable = {
+	uploads: {
+		[key: RowID]: {
+			[key: Column["id"]]: TableCell;
+		};
+	};
+	links: {
+		[key: RowID]: {
+			[key: Column["id"]]: TableCell;
+		};
+	};
+};
+
+//  ----
+
+export type CompleteTableCell = {
+	row: RowID;
+	column: Column["id"];
+	points: number;
+	category: Column["category"];
 	question: {
 		text: string;
 		image: string;
@@ -25,19 +55,8 @@ export type RawTableCell = {
 		text: string;
 		image: string;
 	};
-};
-
-export type RawTable = {
-	[key: RowID]: { [key: Column["id"]]: RawTableCell };
-};
-
-export type CompleteTableCell = {
-	row: RowID;
-	points: number;
-	column: Column["id"];
-	category: Column["category"];
 	answeredBy: Guest["name"] | "no one";
-} & RawTableCell;
+};
 
 export type CompleteTable = {
 	[key: RowID]: { [key: Column["id"]]: CompleteTableCell };
@@ -50,7 +69,8 @@ export type TemplateData = {
 	points: number[];
 	rows: RowID[];
 	columns: Column[];
-	rawTable: RawTable;
+	textTable: TextTable;
+	imageTable: ImageTable;
 };
 
 //  ----
@@ -68,7 +88,8 @@ export type HistoryTemplate = TemplateData & {
 export const useTemplateStore = defineStore("template", () => {
 	const guests = useGuestsStore();
 	const gameProgress = useGameProgressStore();
-	const uploadedImages = useUploadedImagesStore();
+
+	// ---------- INITIALIZATION ----------
 
 	const editing = ref<boolean>(true);
 	const resetTemplateWarning = ref<boolean>(false);
@@ -77,7 +98,101 @@ export const useTemplateStore = defineStore("template", () => {
 	const points = ref<number[]>([]);
 	const rows = ref<RowID[]>([]);
 	const columns = ref<Column[]>([]);
-	const rawTable = ref<RawTable>({});
+
+	watch(
+		() => ({
+			name: name.value,
+			points: points.value,
+			rows: rows.value,
+			columns: columns.value,
+		}),
+		(templateStructure) => {
+			localStorage.setItem(
+				"template-structure",
+				JSON.stringify(templateStructure),
+			);
+		},
+		{ deep: true },
+	);
+
+	// ---------------
+
+	const textTable = ref<TextTable>(useLocalStorage("text-table", {}));
+
+	function updateTextTable(
+		row: RowID,
+		column: Column["id"],
+		text: string,
+		property: "question" | "answer",
+	): void {
+		const textRow = textTable.value[row] ?? {};
+		const textCell = textRow?.[column] ?? { question: "", answer: "" };
+
+		textCell[property] = text;
+		textRow[column] = textCell;
+		textTable.value[row] = textRow;
+	}
+
+	function fetchTextTableText(
+		row: RowID,
+		column: Column["id"],
+		property: "question" | "answer",
+	): string {
+		return textTable.value?.[row]?.[column]?.[property] ?? "";
+	}
+
+	// ---------------
+
+	const imageTable = ref<ImageTable>({
+		uploads: {},
+		links: {},
+	});
+
+	function updateImageTable(
+		row: RowID,
+		column: Column["id"],
+		src: string,
+		branch: "upload" | "link",
+		property: "question" | "answer",
+	) {
+		const imageRow = imageTable.value[`${branch}s`][row] ?? {};
+		const imageCell = imageRow?.[column] ?? { question: "", answer: "" };
+
+		imageCell[property] = src;
+		imageRow[column] = imageCell;
+		imageTable.value[`${branch}s`][row] = imageRow;
+	}
+
+	function fetchImageTableImage(
+		row: RowID,
+		column: Column["id"],
+		property: "question" | "answer",
+	): { src: string; type: "upload" | "link" } | null {
+		const uploadedImage = imageTable.value.uploads?.[row]?.[column]?.[property];
+		const imageLink = imageTable.value.links?.[row]?.[column]?.[property];
+
+		let obj: ReturnType<typeof fetchImageTableImage> = null;
+
+		if (uploadedImage) {
+			obj = { src: uploadedImage, type: "upload" };
+		}
+
+		if (imageLink) {
+			obj = { src: imageLink, type: "link" };
+		}
+
+		return obj;
+	}
+
+	watch(
+		() => imageTable.value.links,
+		(branch) => {
+			localStorage.setItem("image-table-links", JSON.stringify(branch));
+		},
+		{ deep: true },
+	);
+
+	// ---------------
 
 	const templateData = computed<TemplateData>({
 		get() {
@@ -86,7 +201,8 @@ export const useTemplateStore = defineStore("template", () => {
 				rows: rows.value,
 				points: points.value,
 				columns: columns.value,
-				rawTable: rawTable.value,
+				textTable: textTable.value,
+				imageTable: imageTable.value,
 			};
 		},
 
@@ -95,34 +211,10 @@ export const useTemplateStore = defineStore("template", () => {
 			rows.value = newValue.rows;
 			points.value = newValue.points;
 			columns.value = newValue.columns;
-			rawTable.value = newValue.rawTable;
+			textTable.value = newValue.textTable;
+			imageTable.value = newValue.imageTable;
 		},
 	});
-
-	function checkTableDataProperties(
-		row: RowID,
-		column: Column["id"],
-	): "complete" | "empty" | "partial" {
-		const td = rawTable.value[row][column];
-
-		return (td.question.text || td.question.image) &&
-			(td.answer.text || td.answer.image)
-			? "complete"
-			: !(td.question.text || td.question.image) &&
-			  !(td.answer.text || td.answer.image)
-			? "empty"
-			: "partial";
-	}
-
-	function columnIsEmpty(column: Column["id"]): boolean {
-		const arr: string[] = [];
-
-		for (let i = 0; i < rows.value.length; i++) {
-			arr.push(checkTableDataProperties(`row${i + 1}`, column));
-		}
-
-		return arr.every((a) => a === "empty");
-	}
 
 	function createTemplate(): TemplateData {
 		const points: number[] = [];
@@ -135,49 +227,33 @@ export const useTemplateStore = defineStore("template", () => {
 			columns.push({ id: `column${i + 1}`, category: `` });
 		}
 
-		const rawTable: RawTable = rows.reduce((rows, row) => {
-			return {
-				...rows,
-				[row]: columns.reduce((columns, column) => {
-					const cell: RawTableCell = {
-						question: {
-							text: "",
-							image: "",
-						},
-						answer: {
-							text: "",
-							image: "",
-						},
-					};
-
-					return {
-						...columns,
-						[column.id]: cell,
-					};
-				}, {}),
-			};
-		}, {});
-
-		return { name: "", points, rows, columns, rawTable };
+		return {
+			name: "",
+			points,
+			rows,
+			columns,
+			textTable: {},
+			imageTable: { uploads: {}, links: {} },
+		};
 	}
 
 	function fetchTemplateFromLocalStorage(): TemplateData | null {
-		const template = localStorage.getItem("template");
+		const templateStructure = localStorage.getItem("template-structure");
+		const textTable = localStorage.getItem("text-table");
+		const imageTableLinks = localStorage.getItem("image-table-links");
 
-		return template ? JSON.parse(template) : null;
+		if (!templateStructure || !textTable || !imageTableLinks) return null;
+		
+		return {
+			...JSON.parse(templateStructure),
+			textTable: JSON.parse(textTable),
+			imageTable: { uploads: {}, links: JSON.parse(imageTableLinks) },
+		};
 	}
-
-	watch(
-		templateData,
-		(template) => {
-			localStorage.setItem("template", JSON.stringify(template));
-		},
-		{ deep: true },
-	);
 
 	templateData.value = fetchTemplateFromLocalStorage() ?? createTemplate();
 
-	// ------------------------------
+	// ---------- DISPLAY ----------
 
 	const activeCell = ref<CompleteTableCell | null>(null);
 
@@ -186,36 +262,33 @@ export const useTemplateStore = defineStore("template", () => {
 			return {
 				...rows,
 				[row]: columns.value.reduce((columns, column) => {
-					const rawTableCell: RawTableCell = JSON.parse(
-						JSON.stringify(rawTable.value[row][column.id]),
-					);
-
-					const answeredBy =
+					const successfullyAnswered =
 						gameProgress.progress?.[row]?.[column.id]?.successfullyAnswered;
 
-					(["question", "answer"] as ("question" | "answer")[]).forEach(
-						(type) => {
-							rawTableCell[type].image = fetchCellImage(
-								type,
-								row,
-								column.id,
-							).src;
+					const completeCell: CompleteTableCell = {
+						row,
+						column: column.id,
+						points: points.value[rowIndex],
+						category: column.category,
+						question: {
+							text: fetchTextTableText(row, column.id, "question"),
+							image:
+								fetchImageTableImage(row, column.id, "question")?.src || "",
 						},
-					);
+						answer: {
+							text: fetchTextTableText(row, column.id, "answer"),
+							image: fetchImageTableImage(row, column.id, "answer")?.src || "",
+						},
+						answeredBy:
+							successfullyAnswered === undefined
+								? ""
+								: guests.getGuest(successfullyAnswered ?? "guest_")?.name ??
+								  "no one",
+					};
 
 					return {
 						...columns,
-						[column.id]: {
-							...rawTableCell,
-							row,
-							points: points.value[rowIndex],
-							column: column.id,
-							category: column.category,
-							answeredBy:
-								answeredBy === undefined
-									? ""
-									: guests.getGuest(answeredBy ?? "guest_")?.name ?? "no one",
-						},
+						[column.id]: completeCell,
 					};
 				}, {}),
 			};
@@ -242,29 +315,29 @@ export const useTemplateStore = defineStore("template", () => {
 		}, {});
 	});
 
-	function fetchCellImage(
-		type: "question" | "answer",
+	function checkTableDataProperties(
 		row: RowID,
 		column: Column["id"],
-	): { src: string; uploaded: boolean } {
-		const rawTableCell = rawTable.value?.[row]?.[column];
+	): "complete" | "empty" | "partial" {
+		const td = completeTable.value[row][column];
 
-		let src = "";
-		let uploaded = false;
+		return (td.question.text || td.question.image) &&
+			(td.answer.text || td.answer.image)
+			? "complete"
+			: !(td.question.text || td.question.image) &&
+			  !(td.answer.text || td.answer.image)
+			? "empty"
+			: "partial";
+	}
 
-		if (rawTableCell) {
-			const imageLink = rawTableCell[type].image;
-			const uploadedImage = uploadedImages.images?.[row]?.[column]?.[type];
+	function columnIsEmpty(column: Column["id"]): boolean {
+		const arr: string[] = [];
 
-			if (imageLink) {
-				src = imageLink;
-			} else if (uploadedImage) {
-				src = uploadedImage;
-				uploaded = true;
-			}
+		for (let i = 0; i < rows.value.length; i++) {
+			arr.push(checkTableDataProperties(`row${i + 1}`, column));
 		}
 
-		return { src, uploaded };
+		return arr.every((a) => a === "empty");
 	}
 
 	// ---------- HISTORY ----------
@@ -327,23 +400,31 @@ export const useTemplateStore = defineStore("template", () => {
 	return {
 		editing,
 		resetTemplateWarning,
+
 		name,
 		points,
 		rows,
 		columns,
-		rawTable,
+
+		textTable,
+		updateTextTable,
+		fetchTextTableText,
+
+		imageTable,
+		updateImageTable,
+		fetchImageTableImage,
+
 		templateData,
-		checkTableDataProperties,
-		columnIsEmpty,
 		createTemplate,
 
 		//  ----
 
-		completeTable,
 		activeCell,
+		completeTable,
 		filteredColumns,
 		filteredCompleteTable,
-		fetchCellImage,
+		checkTableDataProperties,
+		columnIsEmpty,
 
 		//  ----
 

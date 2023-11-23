@@ -116,13 +116,17 @@ const emit = defineEmits<{
 										<img
 											v-if="
 												showAnswers
-													? rawTable[row][column.id].answer.image
-													: rawTable[row][column.id].question.image
+													? imageTable.links?.[row]?.[column.id]?.answer ||
+													  imageTable.uploads?.[row]?.[column.id]?.answer
+													: imageTable.links?.[row]?.[column.id]?.question ||
+													  imageTable.uploads?.[row]?.[column.id]?.question
 											"
 											:src="
 												showAnswers
-													? rawTable[row][column.id].answer.image
-													: rawTable[row][column.id].question.image
+													? imageTable.links?.[row]?.[column.id]?.answer ||
+													  imageTable.uploads?.[row]?.[column.id]?.answer
+													: imageTable.links?.[row]?.[column.id]?.question ||
+													  imageTable.uploads?.[row]?.[column.id]?.question
 											"
 											class="h-full object-contain"
 										/>
@@ -137,8 +141,8 @@ const emit = defineEmits<{
 									<p v-else>
 										{{
 											showAnswers
-												? rawTable[row][column.id].answer.text || "x"
-												: rawTable[row][column.id].question.text || "x"
+												? textTable?.[row]?.[column.id]?.answer || "x"
+												: textTable?.[row]?.[column.id]?.question || "x"
 										}}
 									</p>
 								</td>
