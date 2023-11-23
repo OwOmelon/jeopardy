@@ -237,13 +237,34 @@ export const useTemplateStore = defineStore("template", () => {
 		};
 	}
 
+	function downloadTemplate(): void {
+		const file = new Blob([JSON.stringify(templateData.value, null, 3)], {
+			type: "application/json",
+		});
+
+		const a = document.createElement("a");
+		const url = URL.createObjectURL(file);
+
+		a.href = URL.createObjectURL(file);
+		a.download = templateData.value.name || "Jeopardy Template";
+
+		document.body.appendChild(a);
+
+		a.click();
+
+		setTimeout(() => {
+			document.body.removeChild(a);
+			window.URL.revokeObjectURL(url);
+		}, 0);
+	}
+
 	function fetchTemplateFromLocalStorage(): TemplateData | null {
 		const templateStructure = localStorage.getItem("template-structure");
 		const textTable = localStorage.getItem("text-table");
 		const imageTableLinks = localStorage.getItem("image-table-links");
 
 		if (!templateStructure || !textTable || !imageTableLinks) return null;
-		
+
 		return {
 			...JSON.parse(templateStructure),
 			textTable: JSON.parse(textTable),
@@ -416,6 +437,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 		templateData,
 		createTemplate,
+		downloadTemplate,
 
 		//  ----
 
