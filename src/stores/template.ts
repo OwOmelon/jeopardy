@@ -245,7 +245,7 @@ export const useTemplateStore = defineStore("template", () => {
 		const a = document.createElement("a");
 		const url = URL.createObjectURL(file);
 
-		a.href = URL.createObjectURL(file);
+		a.href = url;
 		a.download = templateData.value.name || "Jeopardy Template";
 
 		document.body.appendChild(a);
