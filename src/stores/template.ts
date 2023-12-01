@@ -23,21 +23,13 @@ export type TableCell = {
 	answer: string;
 };
 
-export type TextTable = {
+export type Table = {
 	[key: RowID]: { [key: Column["id"]]: TableCell };
 };
 
 export type ImageTable = {
-	uploads: {
-		[key: RowID]: {
-			[key: Column["id"]]: TableCell;
-		};
-	};
-	links: {
-		[key: RowID]: {
-			[key: Column["id"]]: TableCell;
-		};
-	};
+	uploads: Table;
+	links: Table;
 };
 
 //  ----
@@ -66,10 +58,10 @@ export type CompleteTable = {
 
 export type TemplateData = {
 	name: string;
-	points: number[];
 	rows: RowID[];
 	columns: Column[];
-	textTable: TextTable;
+	points: number[];
+	textTable: Table;
 	imageTable: ImageTable;
 };
 
@@ -95,16 +87,16 @@ export const useTemplateStore = defineStore("template", () => {
 	const resetTemplateWarning = ref<boolean>(false);
 
 	const name = ref<string>("");
-	const points = ref<number[]>([]);
 	const rows = ref<RowID[]>([]);
 	const columns = ref<Column[]>([]);
+	const points = ref<number[]>([]);
 
 	watch(
 		() => ({
 			name: name.value,
-			points: points.value,
 			rows: rows.value,
 			columns: columns.value,
+			points: points.value,
 		}),
 		(templateStructure) => {
 			localStorage.setItem(
@@ -117,7 +109,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	// ---------------
 
-	const textTable = ref<TextTable>(useLocalStorage("text-table", {}));
+	const textTable = ref<Table>(useLocalStorage("text-table", {}));
 
 	function updateTextTable(
 		row: RowID,
@@ -199,8 +191,8 @@ export const useTemplateStore = defineStore("template", () => {
 			return {
 				name: name.value,
 				rows: rows.value,
-				points: points.value,
 				columns: columns.value,
+				points: points.value,
 				textTable: textTable.value,
 				imageTable: imageTable.value,
 			};
@@ -209,17 +201,17 @@ export const useTemplateStore = defineStore("template", () => {
 		set(newValue) {
 			name.value = newValue.name;
 			rows.value = newValue.rows;
-			points.value = newValue.points;
 			columns.value = newValue.columns;
+			points.value = newValue.points;
 			textTable.value = newValue.textTable;
 			imageTable.value = newValue.imageTable;
 		},
 	});
 
 	function createTemplate(): TemplateData {
-		const points: number[] = [];
 		const rows: RowID[] = [];
 		const columns: Column[] = [];
+		const points: number[] = [];
 
 		for (let i = 0; i < 5; i++) {
 			points.push((i + 1) * 100);
@@ -229,33 +221,12 @@ export const useTemplateStore = defineStore("template", () => {
 
 		return {
 			name: "",
-			points,
 			rows,
 			columns,
+			points,
 			textTable: {},
 			imageTable: { uploads: {}, links: {} },
 		};
-	}
-
-	function downloadTemplate(): void {
-		const file = new Blob([JSON.stringify(templateData.value, null, 3)], {
-			type: "application/json",
-		});
-
-		const a = document.createElement("a");
-		const url = URL.createObjectURL(file);
-
-		a.href = url;
-		a.download = templateData.value.name || "Jeopardy Template";
-
-		document.body.appendChild(a);
-
-		a.click();
-
-		setTimeout(() => {
-			document.body.removeChild(a);
-			window.URL.revokeObjectURL(url);
-		}, 0);
 	}
 
 	function fetchTemplateFromLocalStorage(): TemplateData | null {
@@ -437,7 +408,6 @@ export const useTemplateStore = defineStore("template", () => {
 
 		templateData,
 		createTemplate,
-		downloadTemplate,
 
 		//  ----
 
