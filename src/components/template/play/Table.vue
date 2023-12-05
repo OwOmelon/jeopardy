@@ -13,38 +13,40 @@ const gameProgress = useGameProgressStore();
 </script>
 
 <template>
-	<table class="grid gap-3">
-		<RowCategories />
+	<div class="table-wrapper">
+		<table class="grid gap-3">
+			<RowCategories />
 
-		<tr
-			v-for="(rowValue, rowKey, rowIndex) in template.filteredCompleteTable"
-			:key="rowKey"
-		>
-			<TableData
-				v-for="(cellValue, cellKey, cellIndex) in rowValue"
-				v-bind="cellValue"
-				:is-empty="
-					template.checkTableDataProperties(rowKey, cellKey) === 'empty'
-				"
-				:key="cellKey"
-				@reveal="template.activeCell = cellValue"
-			/>
-		</tr>
+			<tr
+				v-for="(rowValue, rowKey, rowIndex) in template.filteredCompleteTable"
+				:key="rowKey"
+			>
+				<TableData
+					v-for="(cellValue, cellKey, cellIndex) in rowValue"
+					v-bind="cellValue"
+					:is-empty="
+						template.checkTableDataProperties(rowKey, cellKey) === 'empty'
+					"
+					:key="cellKey"
+					@reveal="template.activeCell = cellValue"
+				/>
+			</tr>
 
-		<ModalWrapper :show="template.activeCell ? true : false">
-			<TableDataReveal />
-		</ModalWrapper>
+			<ModalWrapper :show="template.activeCell ? true : false">
+				<TableDataReveal />
+			</ModalWrapper>
 
-		<ModalWrapper :show="gameProgress.resetGameProgressWarning">
-			<WarningModal
-				header="!! PROGRESS RESET"
-				:paragraph="[
-					'Are you sure you want to reset your play progress?',
-					`Your progress as well as every guests' score will be reset. This action cannot be undone.`,
-				]"
-				@confirm="gameProgress.progress = {}"
-				@close="gameProgress.resetGameProgressWarning = false"
-			/>
-		</ModalWrapper>
-	</table>
+			<ModalWrapper :show="gameProgress.resetGameProgressWarning">
+				<WarningModal
+					header="!! PROGRESS RESET"
+					:paragraph="[
+						'Are you sure you want to reset your play progress?',
+						`Your progress as well as every guests' score will be reset. This action cannot be undone.`,
+					]"
+					@confirm="gameProgress.progress = {}"
+					@close="gameProgress.resetGameProgressWarning = false"
+				/>
+			</ModalWrapper>
+		</table>
+	</div>
 </template>

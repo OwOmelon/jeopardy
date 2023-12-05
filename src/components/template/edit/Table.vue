@@ -84,58 +84,59 @@ function parseJSONFile(file: any): Promise<any> {
 </script>
 
 <template>
-	<table class="grid">
-		<th class="col-start-2 row-start-1">
-			<RowCategories />
-			<RowHRs />
-		</th>
-		<RowPoints />
+	<div clas="table-wrapper">
+		<table class="grid">
+			<th class="col-start-2 row-start-1">
+				<RowCategories />
+				<RowHRs />
+			</th>
+			<RowPoints />
 
-		<div class="col-start-2 row-start-2 flex flex-col gap-3">
-			<TransitionGroup
-				tag="tr"
-				name="list-slide-left"
-				v-for="(rowValue, rowKey, rowIndex) in template.completeTable"
-				:key="rowKey"
-				class="relative"
-			>
-				<template
-					v-for="(cellValue, cellKey, columnIndex) in rowValue"
-					:key="cellKey"
+			<div class="col-start-2 row-start-2 flex flex-col gap-3">
+				<TransitionGroup
+					tag="tr"
+					name="list-slide-left"
+					v-for="(rowValue, rowKey, rowIndex) in template.completeTable"
+					:key="rowKey"
+					class="relative"
 				>
-					<TableData
-						v-bind="cellValue"
-						:data-values="template.checkTableDataProperties(rowKey, cellKey)"
-						@edit="template.activeCell = cellValue"
-					/>
-				</template>
-			</TransitionGroup>
-		</div>
+					<template
+						v-for="(cellValue, cellKey, columnIndex) in rowValue"
+						:key="cellKey"
+					>
+						<TableData
+							v-bind="cellValue"
+							:data-values="template.checkTableDataProperties(rowKey, cellKey)"
+							@edit="template.activeCell = cellValue"
+						/>
+					</template>
+				</TransitionGroup>
+			</div>
 
-		<ModalWrapper :show="template.activeCell ? true : false">
-			<TableDataEditor />
-		</ModalWrapper>
+			<ModalWrapper :show="template.activeCell ? true : false">
+				<TableDataEditor />
+			</ModalWrapper>
 
-		<ModalWrapper :show="template.resetTemplateWarning">
-			<WarningModal
-				header="!! TEMPLATE RESET"
-				:paragraph="[
-					'Are you sure you want to reset your template?',
-					'Your template history and play progress will be wiped upon doing so.',
-				]"
-				@confirm="
-					() => {
-						gameProgress.progress = {};
-						template.history = [];
-						template.historyPushIteration = 0;
-						template.templateData = template.createTemplate();
-					}
-				"
-				@close="template.resetTemplateWarning = false"
-			/>
-		</ModalWrapper>
+			<ModalWrapper :show="template.resetTemplateWarning">
+				<WarningModal
+					header="!! TEMPLATE RESET"
+					:paragraph="[
+						'Are you sure you want to reset your template?',
+						'Your template history and play progress will be wiped upon doing so.',
+					]"
+					@confirm="
+						() => {
+							gameProgress.progress = {};
+							template.history = [];
+							template.historyPushIteration = 0;
+							template.templateData = template.createTemplate();
+						}
+					"
+					@close="template.resetTemplateWarning = false"
+				/>
+			</ModalWrapper>
 
-		<div class="col-start-2 row-start-3 grid grid-cols-3 gap-x-3">
+			<!-- <div class="col-start-2 row-start-3 grid grid-cols-3 gap-x-3">
 			<hr
 				class="col-start-1 col-end-4 my-3 rounded-full border-t-2 border-stone-600"
 			/>
@@ -161,8 +162,9 @@ function parseJSONFile(file: any): Promise<any> {
 			<button type="button" class="cell-padding" @click="downloadTemplate">
 				download
 			</button>
-		</div>
-	</table>
+		</div> -->
+		</table>
+	</div>
 </template>
 
 <style scoped lang="postcss">
