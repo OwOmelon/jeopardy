@@ -1,4 +1,4 @@
 # Specify filepatterns you want git to ignore.
 
 /node_modules
-# /src/components/debug.vue
+/src/components/debug.vue

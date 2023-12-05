@@ -8,7 +8,7 @@ export async function checkTemplateForAlterations(
 
 		// --- STAGE 1
 
-		await checkTemplatePropertiesForAlterations(template).catch((err) => {
+		await checkTemplatePropertiesForErrors(template).catch((err) => {
 			rejectionReasons.push(err);
 		});
 
@@ -47,20 +47,20 @@ export async function checkTemplateForAlterations(
 
 		const columnIDs = template.columns.map((column) => column.id);
 
-		const pointsAltered = checkPointsForAlterations(template.points);
-		const textTableAltered = checkTableForAlterations(
+		const pointsAltered = checkPointsForErrors(template.points);
+		const textTableAltered = checkTableForErrors(
 			"textTable",
 			template.textTable,
 			template.rows,
 			columnIDs,
 		);
-		const uploadImageTableAltered = checkTableForAlterations(
+		const uploadImageTableAltered = checkTableForErrors(
 			"imageTable.uploads",
 			template.imageTable.uploads,
 			template.rows,
 			columnIDs,
 		);
-		const linkImageTableAltered = checkTableForAlterations(
+		const linkImageTableAltered = checkTableForErrors(
 			"imageTable.links",
 			template.imageTable.links,
 			template.rows,
@@ -80,6 +80,10 @@ export async function checkTemplateForAlterations(
 			});
 		});
 
+		console.log(rejectionReasons);
+
+		res("okie :> :3 <3");
+
 		if (rejectionReasons.length) {
 			rej(rejectionReasons);
 		} else {
@@ -90,7 +94,7 @@ export async function checkTemplateForAlterations(
 
 // ------------------------------
 
-async function checkTemplatePropertiesForAlterations(
+async function checkTemplatePropertiesForErrors(
 	template: TemplateData,
 ): Promise<string> {
 	return new Promise((res, rej) => {
@@ -125,13 +129,21 @@ async function checkRowsForErrors(rows: RowID[]): Promise<string> {
 			return;
 		}
 
-		const errorsFound: string[] = [];
+		const evaluation: string[] = [];
 		const duplicates: RowID[] = [];
-
 		const alteredLength = rows.length - 5;
+		const shouldHave = ["row1", "row2", "row3", "row4", "row5"] as const;
+
+		shouldHave.forEach((shouldHaveRow) => {
+			if (!rows.includes(shouldHaveRow)) {
+				evaluation.push(
+					`template property 'rows' is missing id '${shouldHaveRow}'`,
+				);
+			}
+		});
 
 		if (alteredLength !== 0) {
-			errorsFound.push(
+			evaluation.push(
 				`template property 'rows' has ${Math.abs(alteredLength)} ${
 					alteredLength > 0 ? "more" : "less"
 				} items than it should have`,
@@ -139,38 +151,34 @@ async function checkRowsForErrors(rows: RowID[]): Promise<string> {
 		}
 
 		rows.forEach((row, index) => {
-			if (typeof row === "string") {
-				if (row.startsWith("row")) {
-					const isDuplicate = rows.indexOf(row) !== index;
-					const tag = parseInt(row.slice(3, row.length));
+			if (typeof row === "string" && row.startsWith("row")) {
+				const isDuplicate = rows.indexOf(row) !== index;
+				const tag = parseInt(row.slice(3, row.length));
 
-					if (isDuplicate) duplicates.push(row);
+				if (isDuplicate) duplicates.push(row);
 
-					if (!(tag > 0 && tag < 6)) {
-						errorsFound.push(
-							`number tag of id '${row}' is (${
-								tag < 1 ? "below 1" : "above 5"
-							}) invalid`,
-						);
-					}
-				} else {
-					errorsFound.push(`id at rows[${index}] is invalid (${row})`);
+				if (!(tag > 0 && tag < 6)) {
+					evaluation.push(
+						`number tag of id '${row}' is (${
+							tag < 1 ? "below 1" : "above 5"
+						}) invalid`,
+					);
 				}
 			} else {
-				errorsFound.push(`id at rows[${index}] is not of type 'string'`);
+				evaluation.push(`id at rows[${index}] is invalid`);
 			}
 		});
 
 		if (duplicates.length) {
-			errorsFound.unshift(
+			evaluation.unshift(
 				`template property 'rows' has ${
 					rows.filter((row) => duplicates.includes(row)).length
 				} identical ids`,
 			);
 		}
 
-		if (errorsFound.length) {
-			rej(errorsFound);
+		if (evaluation.length) {
+			rej(evaluation);
 		} else {
 			res(`rows pass`);
 		}
@@ -181,21 +189,36 @@ async function checkRowsForErrors(rows: RowID[]): Promise<string> {
 
 async function checkColumnsForErrors(columns: Column[]): Promise<string> {
 	return new Promise((res, rej) => {
-		const errorsFound: string[] = [];
+		const evaluation: string[] = [];
+		const shouldHave = [
+			"column1",
+			"column2",
+			"column3",
+			"column4",
+			"column5",
+		] as const;
+		const duplicates: Column["id"][] = [];
+		const alteredLength = columns.length - 5;
+
+		shouldHave.forEach((shouldHaveColumnID) => {
+			if (
+				columns.findIndex((column) => column.id === shouldHaveColumnID) === -1
+			) {
+				evaluation.push(
+					`template property 'columns' is missing an object with id '${shouldHaveColumnID}'`,
+				);
+			}
+		});
 
 		if (!Array.isArray(columns)) {
-			errorsFound.push("template property 'columns' is not of type 'array'");
+			evaluation.push("template property 'columns' is not of type 'array'");
 
-			rej(errorsFound);
+			rej(evaluation);
 			return;
 		}
 
-		const duplicates: Column["id"][] = [];
-
-		const alteredLength = columns.length - 5;
-
 		if (alteredLength !== 0) {
-			errorsFound.push(
+			evaluation.push(
 				`columns array has ${alteredLength > 0 ? "more" : "less"} ${Math.abs(
 					alteredLength,
 				)} objects than it should have`,
@@ -207,7 +230,7 @@ async function checkColumnsForErrors(columns: Column[]): Promise<string> {
 
 			if (columnCheck.errors.length) {
 				columnCheck.errors.forEach((error) => {
-					errorsFound.push(error);
+					evaluation.push(error);
 				});
 			}
 
@@ -217,15 +240,15 @@ async function checkColumnsForErrors(columns: Column[]): Promise<string> {
 		});
 
 		if (duplicates.length) {
-			errorsFound.unshift(
+			evaluation.unshift(
 				`template property 'columns' has ${
 					columns.filter((column) => duplicates.includes(column.id)).length
 				} objects with identical ids`,
 			);
 		}
 
-		if (errorsFound.length) {
-			rej(errorsFound);
+		if (evaluation.length) {
+			rej(evaluation);
 		} else {
 			res("columns pass");
 		}
@@ -250,31 +273,25 @@ function checkColumnForErrors(
 		return evaluation;
 	}
 
-	if (column.id) {
-		if (typeof column.id === "string") {
-			if (column.id.startsWith("column")) {
-				const tag = parseInt(column.id.slice(6, column.id.length));
-				const isDuplicate =
-					columns.findIndex((c) => c.id === column.id) !== index;
+	if (column.id !== undefined) {
+		if (typeof column.id === "string" && column.id.startsWith("column")) {
+			const tag = parseInt(column.id.slice(6, column.id.length));
+			const isDuplicate =
+				columns.findIndex((c) => c.id === column.id) !== index;
 
-				if (!(tag > 0 && tag < 6)) {
-					evaluation.errors.push(
-						`tag (${tag}) of id '${column.id}' is (${
-							tag < 0 ? "below 0" : "above 5"
-						}) invalid`,
-					);
-				}
+			if (!(tag > 0 && tag < 6)) {
+				evaluation.errors.push(
+					`number tag of id '${column.id}' is (${
+						tag < 0 ? "below 0" : "above 5"
+					}) invalid`,
+				);
+			}
 
-				if (isDuplicate) {
-					evaluation.duplicateIndex = true;
-				}
-			} else {
-				evaluation.errors.push(`property 'id' of columns[${index}] is invalid`);
+			if (isDuplicate) {
+				evaluation.duplicateIndex = true;
 			}
 		} else {
-			evaluation.errors.push(
-				`property 'id' of columns[${index}] is not of type string`,
-			);
+			evaluation.errors.push(`property 'id' of columns[${index}] is invalid`);
 		}
 	} else {
 		evaluation.errors.push(
@@ -282,7 +299,7 @@ function checkColumnForErrors(
 		);
 	}
 
-	if (column.category) {
+	if (column.category !== undefined) {
 		if (typeof column.category !== "string") {
 			evaluation.errors.push(
 				`property 'category' of columns[${index}] is not of type string`,
@@ -294,13 +311,9 @@ function checkColumnForErrors(
 		);
 	}
 
-	const unncecessaryProperties: any[] = [];
-
-	Object.keys(column).forEach((key) => {
-		if (!["id", "category"].includes(key)) {
-			unncecessaryProperties.push(key);
-		}
-	});
+	const unncecessaryProperties = Object.keys(column).filter(
+		(key) => !["id", "category"].includes(key),
+	);
 
 	if (unncecessaryProperties.length) {
 		evaluation.errors.push(
@@ -315,21 +328,21 @@ function checkColumnForErrors(
 
 // ------------------------------
 
-async function checkPointsForAlterations(points: number[]): Promise<string> {
+async function checkPointsForErrors(points: number[]): Promise<string> {
 	return new Promise((res, rej) => {
-		const errorsFound: string[] = [];
+		const evaluation: string[] = [];
 
 		if (!Array.isArray(points)) {
-			errorsFound.push(`template property 'points' is not an array`);
+			evaluation.push(`template property 'points' is not an array`);
 
-			rej(errorsFound);
+			rej(evaluation);
 			return;
 		}
 
 		const alteredLength = points.length - 5;
 
 		if (alteredLength !== 0) {
-			errorsFound.push(
+			evaluation.push(
 				`'points' array has ${alteredLength > 0 ? "more" : "less"} ${Math.abs(
 					alteredLength,
 				)} items than it should have`,
@@ -338,12 +351,12 @@ async function checkPointsForAlterations(points: number[]): Promise<string> {
 
 		points.forEach((num, index) => {
 			if (typeof num !== "number") {
-				errorsFound.push(`item at points[${index}] is not of type 'number'`);
+				evaluation.push(`item at points[${index}] is not of type 'number'`);
 			}
 		});
 
-		if (errorsFound.length) {
-			rej(errorsFound);
+		if (evaluation.length) {
+			rej(evaluation);
 
 			return;
 		}
@@ -354,21 +367,24 @@ async function checkPointsForAlterations(points: number[]): Promise<string> {
 
 // ------------------------------
 
-function checkTableForAlterations(
+function checkTableForErrors(
 	name: string,
 	table: Table,
 	rows: RowID[],
 	columns: Column["id"][],
 ): Promise<string> {
 	return new Promise((res, rej) => {
-		const errorsFound: string[] = [];
+		const notAnObject = !(
+			typeof table === "object" &&
+			table !== null &&
+			!Array.isArray(table)
+		);
+		const evaluation: string[] = [];
 
-		if (
-			!(typeof table === "object" && table !== null && !Array.isArray(table))
-		) {
-			errorsFound.push(`template property '${name}' is not of type 'object'`);
+		if (notAnObject) {
+			evaluation.push(`template property '${name}' is not of type 'object'`);
 
-			rej(errorsFound);
+			rej(evaluation);
 			return;
 		}
 
@@ -376,7 +392,7 @@ function checkTableForAlterations(
 
 		tableRows.forEach((tableRow) => {
 			if (!rows.includes(tableRow)) {
-				errorsFound.push(`${name} has invalid property key: ${tableRow}`);
+				evaluation.push(`${name} has invalid property key: ${tableRow}`);
 
 				return;
 			}
@@ -385,7 +401,7 @@ function checkTableForAlterations(
 
 			tableColumns.forEach((tableColumn) => {
 				if (!columns.includes(tableColumn)) {
-					errorsFound.push(
+					evaluation.push(
 						`${tableRow} of ${name} has invalid property key: ${tableColumn} of row: ${tableRow}`,
 					);
 
@@ -396,7 +412,7 @@ function checkTableForAlterations(
 				const cellEntries = Object.entries(cell);
 
 				if (cellEntries.length !== 2) {
-					errorsFound.push(
+					evaluation.push(
 						`cell of ${tableColumn} of ${tableRow} has ${
 							cellEntries.length > 2 ? "exceeding" : "deceeding"
 						} amount of entries`,
@@ -405,21 +421,21 @@ function checkTableForAlterations(
 
 				cellEntries.forEach(([key, value]) => {
 					if (!["question", "answer"].includes(key)) {
-						errorsFound.push(
+						evaluation.push(
 							`cell of ${tableColumn} of ${tableRow} has invalid key: ${key}`,
 						);
 					}
 
 					if (typeof value !== "string")
-						errorsFound.push(
-							`value of cell of  ${tableColumn} of ${tableRow} is not of type 'string'`,
+						evaluation.push(
+							`value of cell of ${tableColumn} of ${tableRow} is not of type 'string'`,
 						);
 				});
 			});
 		});
 
-		if (errorsFound.length) {
-			rej(errorsFound);
+		if (evaluation.length) {
+			rej(evaluation);
 		} else {
 			res("table pass");
 		}

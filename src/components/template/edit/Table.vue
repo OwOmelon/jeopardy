@@ -17,6 +17,7 @@ import ModalWrapper from "@/components/ModalWrapper.vue";
 const template = useTemplateStore();
 const gameProgress = useGameProgressStore();
 
+const importButton = ref<HTMLInputElement | null>(null);
 const importtedTemplateWarning = ref(false);
 
 function downloadTemplate(): void {
@@ -44,19 +45,23 @@ async function importTemplate(e: any): Promise<void> {
 	const file = e.target!.files[0];
 
 	try {
-		const parsedTemplate = await parseJSONFile(file);
+		const parsedImporttedTemplate = await parseJSONFile(file);
 
 		try {
-			const templateCheck = await checkTemplateForAlterations(parsedTemplate);
+			const templateCheck = await checkTemplateForAlterations(
+				parsedImporttedTemplate,
+			);
 
-			console.log(templateCheck)
+			template.templateData = parsedImporttedTemplate;
 		} catch (err) {
-			console.log(err)
+			console.log(err);
 		}
 	} catch (err) {
 		console.log("error reading json file");
 		console.log(err);
 	}
+
+	e.target.value = "";
 }
 
 function parseJSONFile(file: any): Promise<any> {
@@ -145,7 +150,12 @@ function parseJSONFile(file: any): Promise<any> {
 
 			<label class="cell-padding cursor-pointer">
 				<span class="block text-center">import</span>
-				<input type="file" class="hidden" @change="importTemplate" />
+				<input
+					ref="importButton"
+					type="file"
+					class="hidden"
+					@change="importTemplate"
+				/>
 			</label>
 
 			<button type="button" class="cell-padding" @click="downloadTemplate">
