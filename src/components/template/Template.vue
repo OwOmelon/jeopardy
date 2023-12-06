@@ -2,41 +2,30 @@
 import { useTemplateStore } from "@/stores/template";
 
 import TemplateName from "./TemplateName.vue";
-import Table_Edit from "./edit/Table.vue";
-import Table_Play from "./play/Table.vue";
-import EmptyTable_PlayFallback from "./play/EmptyTableFallback.vue";
-import GuestList from "../guests/GuestList.vue";
+import Content_Edit from "./edit/Content.vue";
+import Content_Play from "./play/Content.vue";
 
 const template = useTemplateStore();
 </script>
 
 <template>
-	<div class="mt-10 w-full">
+	<div class="w-full mt-10/">
 		<TemplateName />
-
-		<div class="grid place-items-center overflow-auto p-8">
-			<Transition
-				:name="template.editing ? 'fade-slide-right' : 'fade-slide-left'"
-				mode="out-in"
-			>
-				<Table_Edit v-if="template.editing" />
-
-				<template v-else>
-					<Table_Play v-if="template.filteredColumns.length" />
-					<EmptyTable_PlayFallback v-else />
-				</template>
-			</Transition>
-		</div>
-
-		<Transition name="height-auto">
-			<div v-if="!template.editing" class="grid">
-				<GuestList />
-			</div>
+		<Transition
+			:name="template.editing ? 'fade-slide-right' : 'fade-slide-left'"
+			mode="out-in"
+		>
+			<Content_Edit v-if="template.editing" />
+			<Content_Play v-else />
 		</Transition>
 	</div>
 </template>
 
 <style scoped lang="postcss">
+:deep(.table-wrapper) {
+	@apply grid w-full place-items-center overflow-auto px-8;
+}
+
 :deep(tr) {
 	@apply flex gap-3;
 }

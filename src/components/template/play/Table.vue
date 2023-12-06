@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { useTemplateStore } from "@/stores/template";
-import { useGameProgressStore } from "@/stores/game_progress";
 
 import RowCategories from "./RowCategories.vue";
 import TableData from "./TableData.vue";
-import TableDataReveal from "./td_reveal/TableDataReveal.vue";
-import WarningModal from "@/components/WarningModal.vue";
-import ModalWrapper from "@/components/ModalWrapper.vue";
 
 const template = useTemplateStore();
-const gameProgress = useGameProgressStore();
 </script>
 
 <template>
@@ -31,22 +26,6 @@ const gameProgress = useGameProgressStore();
 					@reveal="template.activeCell = cellValue"
 				/>
 			</tr>
-
-			<ModalWrapper :show="template.activeCell ? true : false">
-				<TableDataReveal />
-			</ModalWrapper>
-
-			<ModalWrapper :show="gameProgress.resetGameProgressWarning">
-				<WarningModal
-					header="!! PROGRESS RESET"
-					:paragraph="[
-						'Are you sure you want to reset your play progress?',
-						`Your progress as well as every guests' score will be reset. This action cannot be undone.`,
-					]"
-					@confirm="gameProgress.progress = {}"
-					@close="gameProgress.resetGameProgressWarning = false"
-				/>
-			</ModalWrapper>
 		</table>
 	</div>
 </template>
