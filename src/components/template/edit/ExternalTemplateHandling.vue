@@ -3,7 +3,13 @@ import { ref } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { checkTemplateForAlterations } from "@/composables/check_template_for_alterations";
 
+const emit = defineEmits<{
+	"reset-template": [];
+}>();
+
 const template = useTemplateStore();
+
+const importTemplateBtn = ref<HTMLInputElement | null>(null);
 
 function downloadTemplate(): void {
 	const file = new Blob([JSON.stringify(template.templateData, null, 3)], {
@@ -70,24 +76,20 @@ function parseJSONFile(file: any): Promise<any> {
 
 <template>
 	<div
-		class="col-start-2 row-start-3 grid max-w-[914px] grid-cols-3 gap-x-3 px-8 mx-auto"
+		class="col-start-2 row-start-3 mx-auto grid max-w-[914px] grid-cols-3 gap-x-3 px-8"
 	>
 		<hr
 			class="col-start-1 col-end-4 my-3 rounded-full border-t-2 border-stone-600"
 		/>
 
-		<button
-			type="button"
-			class="cell-padding"
-			@click="template.resetTemplateWarning = true"
-		>
+		<button type="button" class="cell-padding" @click="emit('reset-template')">
 			reset
 		</button>
 
 		<label class="cell-padding cursor-pointer">
 			<span class="block text-center">import</span>
 			<input
-				ref="importButton"
+				ref="importTemplateBtn"
 				type="file"
 				class="hidden"
 				@change="importTemplate"

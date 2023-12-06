@@ -84,7 +84,6 @@ export const useTemplateStore = defineStore("template", () => {
 	// ---------- INITIALIZATION ----------
 
 	const editing = ref<boolean>(true);
-	const resetTemplateWarning = ref<boolean>(false);
 
 	const name = ref<string>("");
 	const rows = ref<RowID[]>([]);
@@ -391,7 +390,6 @@ export const useTemplateStore = defineStore("template", () => {
 
 	return {
 		editing,
-		resetTemplateWarning,
 
 		name,
 		points,
