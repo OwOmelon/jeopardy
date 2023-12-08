@@ -40,29 +40,32 @@ onUnmounted(() => {
 			<p v-for="(text, key) in paragraph" :key="key">{{ text }}</p>
 		</div>
 
-		<slot></slot>
+		<div class="mb-3">
+			<slot></slot>
+		</div>
 
-		<button v-if="!hideCancelBtn" type="button" @click="emit('close')">
-			CANCEL
-		</button>
-		
-		<button
-			type="button"
-			class="ml-3"
-			@click="
-				() => {
-					emit('confirm');
-					emit('close');
-				}
-			"
-		>
-			CONFIRM
-		</button>
+		<div class="flex gap-3">
+			<button v-if="!hideCancelBtn" type="button" @click="emit('close')">
+				CANCEL
+			</button>
+
+			<button
+				type="button"
+				@click="
+					() => {
+						emit('confirm');
+						emit('close');
+					}
+				"
+			>
+				CONFIRM
+			</button>
+		</div>
 	</div>
 </template>
 
 <style scoped lang="postcss">
 button {
-	@apply rounded bg-white p-2 text-xl font-bold text-red-400 transition-transform hover:-translate-y-1;
+	@apply grow rounded bg-white p-2 text-xl font-bold text-red-400 shadow shadow-black/30 transition-transform hover:-translate-y-1;
 }
 </style>
