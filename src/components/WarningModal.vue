@@ -6,6 +6,7 @@ import { useMainMenuStore } from "@/stores/mainmenu";
 const props = defineProps<{
 	header: string;
 	paragraph: string[];
+	hideCancelBtn?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -39,7 +40,12 @@ onUnmounted(() => {
 			<p v-for="(text, key) in paragraph" :key="key">{{ text }}</p>
 		</div>
 
-		<button type="button" @click="emit('close')">CANCEL</button>
+		<slot></slot>
+
+		<button v-if="!hideCancelBtn" type="button" @click="emit('close')">
+			CANCEL
+		</button>
+		
 		<button
 			type="button"
 			class="ml-3"

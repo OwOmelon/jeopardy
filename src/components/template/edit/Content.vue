@@ -3,6 +3,8 @@ import { ref } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { useGameProgressStore } from "@/stores/game_progress";
 
+import type { TemplateErrors } from "@/composables/check_template_for_errors";
+
 import Table from "./Table.vue";
 import ExternalTemplateHandling from "./ExternalTemplateHandling.vue";
 import TableDataEditor from "./table_data_editor/TableDataEditor.vue";
@@ -13,12 +15,16 @@ const template = useTemplateStore();
 const gameProgress = useGameProgressStore();
 
 const resetTemplateWarning = ref<boolean>(false);
+const importTemplateErrors = ref<TemplateErrors | null>(null);
 </script>
 
 <template>
 	<div>
 		<Table />
-		<ExternalTemplateHandling @reset-template="resetTemplateWarning = true" />
+		<ExternalTemplateHandling
+			@reset-template="resetTemplateWarning = true"
+			@import-error="importTemplateErrors = $event"
+		/>
 
 		<ModalWrapper :show="template.activeCell ? true : false">
 			<TableDataEditor />
@@ -41,6 +47,25 @@ const resetTemplateWarning = ref<boolean>(false);
 				"
 				@close="resetTemplateWarning = false"
 			/>
+		</ModalWrapper>
+
+		<ModalWrapper :show="importTemplateErrors !== null">
+			<WarningModal
+				header="!! IMPORT TEMPLATE ERROR"
+				:paragraph="['Errors were found in the template you tried to import.']"
+				hide-cancel-btn
+				@confirm="importTemplateErrors = null"
+			>
+				<div
+					v-for="(errors, property, index) in importTemplateErrors"
+					class="mb-3"
+				>
+					<span>{{ property }}: </span>
+					<ol class="list-disc ml-8">
+						<li v-for="error in errors">{{ error }}</li>
+					</ol>
+				</div>
+			</WarningModal>
 		</ModalWrapper>
 	</div>
 </template>

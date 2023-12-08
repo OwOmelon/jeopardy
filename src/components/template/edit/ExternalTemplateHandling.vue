@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useTemplateStore } from "@/stores/template";
-import { checkTemplateForAlterations } from "@/composables/check_template_for_alterations";
+import { checkTemplateForErrors } from "@/composables/check_template_for_errors";
+
+import type { TemplateErrors } from '@/composables/check_template_for_errors'
 
 const emit = defineEmits<{
 	"reset-template": [];
+	"import-error": [TemplateErrors];
 }>();
 
 const template = useTemplateStore();
@@ -32,27 +35,26 @@ function downloadTemplate(): void {
 	}, 0);
 }
 
-async function importTemplate(e: any): Promise<void> {
-	const file = e.target!.files[0];
+async function importTemplate(): Promise<void> {
+	const file = importTemplateBtn.value!.files![0];
 
 	try {
 		const parsedImporttedTemplate = await parseJSONFile(file);
 
 		try {
-			const templateCheck = await checkTemplateForAlterations(
-				parsedImporttedTemplate,
-			);
+			await checkTemplateForErrors(parsedImporttedTemplate);
 
 			template.templateData = parsedImporttedTemplate;
 		} catch (err) {
-			console.log(err);
+			console.log('found error in template')
+			emit("import-error", err as TemplateErrors);
 		}
 	} catch (err) {
 		console.log("error reading json file");
 		console.log(err);
 	}
 
-	e.target.value = "";
+	importTemplateBtn.value!.value = "";
 }
 
 function parseJSONFile(file: any): Promise<any> {
