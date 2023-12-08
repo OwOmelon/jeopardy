@@ -3,11 +3,12 @@ import { ref } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { checkTemplateForErrors } from "@/composables/check_template_for_errors";
 
-import type { TemplateErrors } from '@/composables/check_template_for_errors'
+import type { TemplateErrors } from "@/composables/check_template_for_errors";
 
 const emit = defineEmits<{
 	"reset-template": [];
-	"import-error": [TemplateErrors];
+	"import-error-read": [Error];
+	"import-error-properties": [TemplateErrors];
 }>();
 
 const template = useTemplateStore();
@@ -46,12 +47,11 @@ async function importTemplate(): Promise<void> {
 
 			template.templateData = parsedImporttedTemplate;
 		} catch (err) {
-			console.log('found error in template')
-			emit("import-error", err as TemplateErrors);
+			emit("import-error-properties", err as TemplateErrors);
 		}
 	} catch (err) {
-		console.log("error reading json file");
 		console.log(err);
+		emit("import-error-read", err as Error);
 	}
 
 	importTemplateBtn.value!.value = "";
@@ -59,12 +59,14 @@ async function importTemplate(): Promise<void> {
 
 function parseJSONFile(file: any): Promise<any> {
 	return new Promise((res, rej) => {
-		if (file.type !== "application/json") rej("not json");
-
 		const reader = new FileReader();
 
 		reader.onload = (ev) => {
-			res(JSON.parse(ev.target!.result as string));
+			try {
+				res(JSON.parse(ev.target!.result as string));
+			} catch (err) {
+				rej(err);
+			}
 		};
 
 		reader.onerror = (err) => {
