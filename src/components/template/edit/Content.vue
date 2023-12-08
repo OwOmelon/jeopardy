@@ -15,7 +15,8 @@ const template = useTemplateStore();
 const gameProgress = useGameProgressStore();
 
 const resetTemplateWarning = ref<boolean>(false);
-const importTemplateErrors = ref<TemplateErrors | null>(null);
+const importTemplateError_Properties = ref<TemplateErrors | null>(null);
+const importTemplateError_Read = ref<Error | null>(null);
 </script>
 
 <template>
@@ -23,7 +24,8 @@ const importTemplateErrors = ref<TemplateErrors | null>(null);
 		<Table />
 		<ExternalTemplateHandling
 			@reset-template="resetTemplateWarning = true"
-			@import-error="importTemplateErrors = $event"
+			@import-error-properties="importTemplateError_Properties = $event"
+			@import-error-read="importTemplateError_Read = $event"
 		/>
 
 		<ModalWrapper :show="template.activeCell ? true : false">
@@ -49,22 +51,35 @@ const importTemplateErrors = ref<TemplateErrors | null>(null);
 			/>
 		</ModalWrapper>
 
-		<ModalWrapper :show="importTemplateErrors !== null">
+		<ModalWrapper :show="importTemplateError_Properties !== null">
 			<WarningModal
 				header="!! IMPORT TEMPLATE ERROR"
 				:paragraph="['Errors were found in the template you tried to import.']"
 				hide-cancel-btn
-				@confirm="importTemplateErrors = null"
+				@confirm="importTemplateError_Properties = null"
 			>
 				<div
-					v-for="(errors, property, index) in importTemplateErrors"
+					v-for="(errors, property, index) in importTemplateError_Properties"
 					class="mb-3"
 				>
 					<span>{{ property }}: </span>
-					<ol class="list-disc ml-8">
+					<ol class="ml-8 list-disc">
 						<li v-for="error in errors">{{ error }}</li>
 					</ol>
 				</div>
+			</WarningModal>
+		</ModalWrapper>
+
+		<ModalWrapper :show="importTemplateError_Read !== null">
+			<WarningModal
+				header="!! IMPORT TEMPLATE ERROR"
+				:paragraph="['Error reading file.']"
+				hide-cancel-btn
+				@confirm="importTemplateError_Read = null"
+			>
+				<span>
+					{{ importTemplateError_Read }}
+				</span>
 			</WarningModal>
 		</ModalWrapper>
 	</div>

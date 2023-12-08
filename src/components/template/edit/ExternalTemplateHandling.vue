@@ -50,7 +50,6 @@ async function importTemplate(): Promise<void> {
 			emit("import-error-properties", err as TemplateErrors);
 		}
 	} catch (err) {
-		console.log(err);
 		emit("import-error-read", err as Error);
 	}
 
