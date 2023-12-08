@@ -170,7 +170,7 @@ async function checkRowsForErrors(rows: RowID[]): Promise<string> {
 					);
 				}
 			} else {
-				evaluation.push(`id at rows[${index}] is invalid`);
+				evaluation.push(`id at index ${index} is invalid`);
 			}
 		});
 
@@ -271,7 +271,7 @@ function checkColumnForErrors(
 	if (
 		!(typeof column === "object" && column !== null && !Array.isArray(column))
 	) {
-		evaluation.errors.push(`columns[${index}] is not of type 'object'`);
+		evaluation.errors.push(`item at index ${index} is not of type 'object'`);
 
 		return evaluation;
 	}
@@ -294,23 +294,23 @@ function checkColumnForErrors(
 				evaluation.duplicateIndex = true;
 			}
 		} else {
-			evaluation.errors.push(`property 'id' of columns[${index}] is invalid`);
+			evaluation.errors.push(
+				`property 'id' of object at index ${index} is invalid`,
+			);
 		}
 	} else {
-		evaluation.errors.push(
-			`object at columns[${index}] has missing property 'id'`,
-		);
+		evaluation.errors.push(`object at index ${index} is missing property 'id'`);
 	}
 
 	if (column.category !== undefined) {
 		if (typeof column.category !== "string") {
 			evaluation.errors.push(
-				`property 'category' of columns[${index}] is not of type string`,
+				`property 'category' of object at index ${index} is not of type string`,
 			);
 		}
 	} else {
 		evaluation.errors.push(
-			`object at columns[${index}] has missing property 'category'`,
+			`object at index ${index} is missing property 'category'`,
 		);
 	}
 
@@ -405,7 +405,7 @@ function checkTableForErrors(
 			tableColumns.forEach((tableColumn) => {
 				if (!columns.includes(tableColumn)) {
 					evaluation.push(
-						`${tableRow} has unnecessary property (${tableColumn})`,
+						`${tableRow} has unnecessary property: (${tableColumn})`,
 					);
 
 					return;
@@ -418,7 +418,7 @@ function checkTableForErrors(
 					if (key === "question" || key === "answer") {
 						if (typeof value !== "string") {
 							evaluation.push(
-								`property value of object ${tableColumn} of ${tableRow} is not of type 'string' (${key})`,
+								`${key} property of object ${tableColumn} of ${tableRow} is not of type 'string'`,
 							);
 						}
 					}
