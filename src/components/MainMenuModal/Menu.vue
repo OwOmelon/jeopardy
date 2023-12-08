@@ -106,25 +106,10 @@ onUnmounted(() => {
 
 		<div class="flex items-center gap-3">
 			<button
-				v-if="template.editing"
-				type="button"
-				:disabled="!template.filteredColumns.length"
-				class="mode-btn mode-btn-dark"
-				@click="
-					() => {
-						template.resetTemplateWarning = true;
-						mainmenu.show = false;
-					}
-				"
-			>
-				reset template
-			</button>
-
-			<button
-				v-else
+				v-if="!template.editing"
 				type="button"
 				:disabled="!Object.keys(gameProgress.progress).length"
-				class="mode-btn mode-btn-light"
+				class="mode-btn"
 				@click="
 					() => {
 						gameProgress.resetGameProgressWarning = true;
@@ -139,10 +124,6 @@ onUnmounted(() => {
 
 			<button
 				type="button"
-				:class="[
-					template.editing ? 'mode-btn-dark' : 'mode-btn-light',
-					'mode-btn',
-				]"
 				@click="
 					() => {
 						template.editing = !template.editing;
@@ -157,23 +138,23 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="postcss">
-.mode-btn {
+button {
 	@apply grow rounded px-2 text-lg shadow shadow-black/30 transition-colors;
 }
 
-.light .mode-btn {
+.light button {
 	@apply bg-red-400 text-white hover:bg-red-300;
 }
 
-.light .mode-btn:disabled {
+.light button:disabled {
 	@apply cursor-not-allowed bg-stone-400 text-stone-500;
 }
 
-.dark .mode-btn {
+.dark button {
 	@apply bg-stone-300 text-stone-600 hover:bg-stone-400;
 }
 
-.dark .mode-btn:disabled {
+.dark button:disabled {
 	@apply cursor-not-allowed bg-stone-700 text-stone-500;
 }
 </style>
