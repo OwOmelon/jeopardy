@@ -18,11 +18,7 @@ watch(
   (is) => {
     const body = document.getElementsByTagName("body")[0];
 
-    if (is) {
-      body.style.backgroundColor = "#292524";
-    } else {
-      body.style.backgroundColor = "#f5f5f4";
-    }
+    body.className = is ? "bg-stone-800" : "bg-stone-100";
   },
 );
 </script>
@@ -54,7 +50,7 @@ body {
 }
 
 #app {
-  @apply flex min-h-screen flex-col items-center justify-center my-10;
+  @apply my-10 flex min-h-screen flex-col items-center justify-center;
 }
 
 input::-webkit-outer-spin-button,
