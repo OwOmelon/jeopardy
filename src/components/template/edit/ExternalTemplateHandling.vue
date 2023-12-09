@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useTemplateStore } from "@/stores/template";
+import { downloadTemplate } from "@/composables/download_template";
 import { checkTemplateForErrors } from "@/composables/check_template_for_errors";
 
 import type { TemplateErrors } from "@/composables/check_template_for_errors";
@@ -14,27 +15,6 @@ const emit = defineEmits<{
 const template = useTemplateStore();
 
 const importTemplateBtn = ref<HTMLInputElement | null>(null);
-
-function downloadTemplate(): void {
-	const file = new Blob([JSON.stringify(template.templateData, null, 3)], {
-		type: "application/json",
-	});
-
-	const a = document.createElement("a");
-	const url = URL.createObjectURL(file);
-
-	a.href = url;
-	a.download = template.templateData.name || "Jeopardy Template";
-
-	document.body.appendChild(a);
-
-	a.click();
-
-	setTimeout(() => {
-		document.body.removeChild(a);
-		window.URL.revokeObjectURL(url);
-	}, 0);
-}
 
 async function importTemplate(): Promise<void> {
 	const file = importTemplateBtn.value!.files![0];
@@ -99,7 +79,11 @@ function parseJSONFile(file: any): Promise<any> {
 			/>
 		</label>
 
-		<button type="button" class="cell-padding" @click="downloadTemplate">
+		<button
+			type="button"
+			class="cell-padding"
+			@click="downloadTemplate(template.templateData)"
+		>
 			download
 		</button>
 	</div>
