@@ -4,8 +4,10 @@ import { useLocalStorage } from "@vueuse/core";
 import { useGuestsStore } from "./guests";
 import { useGameProgressStore } from "./game_progress";
 import { v4 as uuidv4 } from "uuid";
+import { checkTemplateForErrors } from "@/composables/check_template_for_errors";
 
 import type { Guest } from "./guests";
+import type { TemplateErrors } from "@/composables/check_template_for_errors";
 
 //  ----
 
@@ -228,12 +230,38 @@ export const useTemplateStore = defineStore("template", () => {
 		};
 	}
 
+	// ---------------
+
+	const localStorageTemplateErrors = ref<TemplateErrors | null>(null);
+
+	loadJeopardyTemplate();
+
+	async function loadJeopardyTemplate(): Promise<void> {
+		const localStorageTemplate = fetchTemplateFromLocalStorage();
+
+		if (!localStorageTemplate) {
+			templateData.value = createTemplate();
+
+			return;
+		}
+
+		try {
+			await checkTemplateForErrors(localStorageTemplate);
+
+			templateData.value = localStorageTemplate;
+		} catch (err) {
+			console.log(err)
+			
+			localStorageTemplateErrors.value = err as TemplateErrors;
+		}
+	}
+
 	function fetchTemplateFromLocalStorage(): TemplateData | null {
 		const templateStructure = localStorage.getItem("template-structure");
 		const textTable = localStorage.getItem("text-table");
 		const imageTableLinks = localStorage.getItem("image-table-links");
 
-		if (!templateStructure || !textTable || !imageTableLinks) return null;
+		if (!(templateStructure && textTable && imageTableLinks)) return null;
 
 		return {
 			...JSON.parse(templateStructure),
@@ -241,8 +269,6 @@ export const useTemplateStore = defineStore("template", () => {
 			imageTable: { uploads: {}, links: JSON.parse(imageTableLinks) },
 		};
 	}
-
-	templateData.value = fetchTemplateFromLocalStorage() ?? createTemplate();
 
 	// ---------- DISPLAY ----------
 
@@ -406,6 +432,10 @@ export const useTemplateStore = defineStore("template", () => {
 
 		templateData,
 		createTemplate,
+
+		localStorageTemplateErrors,
+
+		fetchTemplateFromLocalStorage,
 
 		//  ----
 
