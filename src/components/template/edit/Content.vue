@@ -62,7 +62,7 @@ const importTemplateError_Read = ref<Error | null>(null);
 					v-for="(errors, property, index) in importTemplateError_Properties"
 					class="mb-3"
 				>
-					<span>{{ property }}: </span>
+					<span class="font-bold tracking-wide">{{ property }}: </span>
 					<ol class="ml-8 list-disc">
 						<li v-for="error in errors">{{ error }}</li>
 					</ol>
