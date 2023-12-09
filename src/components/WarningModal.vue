@@ -27,7 +27,7 @@ onUnmounted(() => {
 
 <template>
 	<div
-		class="component modal !max-w-[500px] bg-red-400 p-5 text-white"
+		class="component modal flex !max-w-[500px] flex-col gap-3 bg-red-400 p-5 text-white"
 		v-on-click-outside="
 			() => {
 				emit('close');
@@ -36,13 +36,11 @@ onUnmounted(() => {
 	>
 		<h1 class="text-3xl font-bold">{{ header }}</h1>
 
-		<div class="my-3">
+		<div>
 			<p v-for="(text, key) in paragraph" :key="key">{{ text }}</p>
 		</div>
 
-		<div class="mb-3">
-			<slot></slot>
-		</div>
+		<slot></slot>
 
 		<div class="flex gap-3">
 			<button type="button" @click="emit('close')">
