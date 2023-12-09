@@ -29,19 +29,22 @@ export async function checkTemplateForErrors(
 
 		const checkRows = checkRowsForErrors(template.rows);
 		const checkColumns = checkColumnsForErrors(template.columns);
+		const pointsAltered = checkPointsForErrors(template.points);
 
-		await Promise.allSettled([checkRows, checkColumns]).then((values) => {
-			values.forEach((value) => {
-				if (value.status === "rejected") {
-					const [property, errors] = Object.entries(value.reason)[0] as [
-						string,
-						string[],
-					];
+		await Promise.allSettled([checkRows, checkColumns, pointsAltered]).then(
+			(values) => {
+				values.forEach((value) => {
+					if (value.status === "rejected") {
+						const [property, errors] = Object.entries(value.reason)[0] as [
+							string,
+							string[],
+						];
 
-					errorsFound[property] = errors;
-				}
-			});
-		});
+						errorsFound[property] = errors;
+					}
+				});
+			},
+		);
 
 		if (errorWasFound()) {
 			rej(errorsFound);
@@ -53,7 +56,6 @@ export async function checkTemplateForErrors(
 
 		const columnIDs = template.columns.map((column) => column.id);
 
-		const pointsAltered = checkPointsForErrors(template.points);
 		const textTableAltered = checkTableForErrors(
 			"textTable",
 			template.textTable,
@@ -74,7 +76,6 @@ export async function checkTemplateForErrors(
 		);
 
 		await Promise.allSettled([
-			pointsAltered,
 			textTableAltered,
 			uploadImageTableAltered,
 			linkImageTableAltered,
