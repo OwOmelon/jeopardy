@@ -55,8 +55,8 @@ const importTemplateError_Read = ref<Error | null>(null);
 			<WarningModal
 				header="!! IMPORT TEMPLATE ERROR"
 				:paragraph="['Errors were found in the template you tried to import.']"
-				hide-cancel-btn
-				@confirm="importTemplateError_Properties = null"
+				hide-confirm-btn
+				@close="importTemplateError_Properties = null"
 			>
 				<div
 					v-for="(errors, property, index) in importTemplateError_Properties"
@@ -74,8 +74,8 @@ const importTemplateError_Read = ref<Error | null>(null);
 			<WarningModal
 				header="!! IMPORT TEMPLATE ERROR"
 				:paragraph="['Error reading file.']"
-				hide-cancel-btn
-				@confirm="importTemplateError_Read = null"
+				hide-confirm-btn
+				@close="importTemplateError_Read = null"
 			>
 				<span>
 					{{ importTemplateError_Read }}

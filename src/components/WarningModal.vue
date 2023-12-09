@@ -6,7 +6,7 @@ import { useMainMenuStore } from "@/stores/mainmenu";
 const props = defineProps<{
 	header: string;
 	paragraph: string[];
-	hideCancelBtn?: boolean;
+	hideConfirmBtn?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -45,11 +45,12 @@ onUnmounted(() => {
 		</div>
 
 		<div class="flex gap-3">
-			<button v-if="!hideCancelBtn" type="button" @click="emit('close')">
-				CANCEL
+			<button type="button" @click="emit('close')">
+				{{ hideConfirmBtn ? "CLOSE" : "CANCEL" }}
 			</button>
 
 			<button
+				v-if="!hideConfirmBtn"
 				type="button"
 				@click="
 					() => {
