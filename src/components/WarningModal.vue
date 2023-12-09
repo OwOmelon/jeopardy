@@ -17,6 +17,7 @@ const emit = defineEmits<{
 const mainemenu = useMainMenuStore();
 
 onMounted(() => {
+	mainemenu.show = false;
 	mainemenu.disableToggle = true;
 });
 
