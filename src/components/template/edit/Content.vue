@@ -8,6 +8,7 @@ import type { TemplateErrors } from "@/composables/check_template_for_errors";
 import Table from "./Table.vue";
 import ExternalTemplateHandling from "./ExternalTemplateHandling.vue";
 import TableDataEditor from "./table_data_editor/TableDataEditor.vue";
+import TemplatePropertyErrorAlert from "../TemplatePropertyErrorAlert.vue";
 import WarningModal from "@/components/WarningModal.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
@@ -52,22 +53,12 @@ const importTemplateError_Read = ref<Error | null>(null);
 		</ModalWrapper>
 
 		<ModalWrapper :show="importTemplateError_Properties !== null">
-			<WarningModal
+			<TemplatePropertyErrorAlert
 				header="!! IMPORT TEMPLATE ERROR"
 				:paragraph="['Errors were found in the template you tried to import.']"
-				hide-confirm-btn
+				:errors="importTemplateError_Properties!"
 				@close="importTemplateError_Properties = null"
-			>
-				<div
-					v-for="(errors, property, index) in importTemplateError_Properties"
-					class="mb-3"
-				>
-					<span class="font-bold tracking-wide">{{ property }}: </span>
-					<ol class="ml-8 list-disc">
-						<li v-for="error in errors">{{ error }}</li>
-					</ol>
-				</div>
-			</WarningModal>
+			/>
 		</ModalWrapper>
 
 		<ModalWrapper :show="importTemplateError_Read !== null">
