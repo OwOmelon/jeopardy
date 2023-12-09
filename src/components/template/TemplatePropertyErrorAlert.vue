@@ -27,5 +27,7 @@ const emit = defineEmits<{
 				<li v-for="error in errorList">{{ error }}</li>
 			</ol>
 		</div>
+
+		<slot />
 	</WarningModal>
 </template>
