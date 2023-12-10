@@ -50,7 +50,7 @@ body {
 }
 
 #app {
-  @apply my-10 flex min-h-screen flex-col items-center justify-center;
+  @apply py-10 flex min-h-screen flex-col items-center justify-center;
 }
 
 input::-webkit-outer-spin-button,
