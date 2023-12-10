@@ -33,25 +33,34 @@ function saveChanges(): void {
 	[
 		{ text: questionText.value, image: questionImage.value },
 		{ text: answerText.value, image: answerImage.value },
-	].forEach((propertyValue, index) => {
-		const propertyKey: "question" | "answer" =
-			index === 0 ? "question" : "answer";
+	].forEach((property, index) => {
+		const key: "question" | "answer" = index === 0 ? "question" : "answer";
 
 		template.updateTextTable(
 			template.activeCell!.row,
 			template.activeCell!.column,
-			propertyValue.text.trim(),
-			propertyKey,
+			property.text.trim(),
+			key,
 		);
 
-		if (propertyValue.image) {
+		if (property.image) {
 			template.updateImageTable(
 				template.activeCell!.row,
 				template.activeCell!.column,
-				propertyValue.image.src,
-				propertyValue.image.type,
-				propertyKey,
+				property.image.src,
+				property.image.type,
+				key,
 			);
+		} else {
+			["link", "upload"].forEach((type) => {
+				template.updateImageTable(
+					template.activeCell!.row,
+					template.activeCell!.column,
+					"",
+					type as "link" | "upload",
+					key,
+				);
+			});
 		}
 	});
 
