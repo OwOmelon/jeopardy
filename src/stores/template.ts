@@ -250,8 +250,6 @@ export const useTemplateStore = defineStore("template", () => {
 
 			templateData.value = localStorageTemplate;
 		} catch (err) {
-			console.log(err)
-			
 			localStorageTemplateErrors.value = err as TemplateErrors;
 		}
 	}
