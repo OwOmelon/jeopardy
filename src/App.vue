@@ -8,7 +8,6 @@ import PauseBtn from "./components/MainMenuModal/PauseBtn.vue";
 import JeopardyTemplate from "./components/template/Template.vue";
 import ModalWrapper from "./components/ModalWrapper.vue";
 import TemplateHistory from "./components/template_history/History.vue";
-import debug from "./components/debug.vue";
 
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
