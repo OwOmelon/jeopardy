@@ -32,8 +32,6 @@ watch(
   <ModalWrapper :show="mainmenu.show">
     <MainMenu />
   </ModalWrapper>
-
-  <debug />
 </template>
 
 <style lang="postcss">
