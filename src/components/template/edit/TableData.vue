@@ -26,14 +26,31 @@ const emit = defineEmits<{
 		]"
 		@click="emit('edit')"
 	>
-		<div :class="[{ 'opacity-50': !question.text }, 'group-hover:hidden']">
-			<p>
+		<div :class="[{ 'text-stone-500': !question.text }, 'group-hover:hidden']">
+			<img
+				v-if="!question.text && question.image"
+				:src="question.image"
+				:alt="`image for question ${column} of ${row}`"
+			/>
+
+			<p v-else>
 				{{ question.text || "Add Question" }}
 			</p>
 		</div>
 
-		<div :class="[{ 'opacity-50': !answer.text }, '!hidden group-hover:!block']">
-			<p>
+		<div
+			:class="[
+				{ 'text-stone-500': !answer.text },
+				'!hidden group-hover:!block',
+			]"
+		>
+			<img
+				v-if="!answer.text && answer.image"
+				:src="answer.image"
+				:alt="`image for answer ${column} of ${row}`"
+			/>
+
+			<p v-else>
 				{{ answer.text || "Add Answer" }}
 			</p>
 		</div>
@@ -41,7 +58,15 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="postcss">
+div {
+	@apply h-full w-full;
+}
+
 p {
 	@apply line-clamp-3 break-words;
+}
+
+img {
+	@apply mx-auto h-full;
 }
 </style>
