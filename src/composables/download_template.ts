@@ -11,12 +11,9 @@ export function downloadTemplate(template: TemplateData): void {
 	a.href = url;
 	a.download = template.name || "Jeopardy Template";
 
-	document.body.appendChild(a);
-
 	a.click();
 
 	setTimeout(() => {
-		document.body.removeChild(a);
 		window.URL.revokeObjectURL(url);
 	}, 0);
 }
