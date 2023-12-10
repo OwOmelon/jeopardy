@@ -80,7 +80,9 @@ onUnmounted(() => {
 			@save-changes="saveChanges"
 		/>
 
-		<h2 class="mt-3 text-xl font-semibold">guests:</h2>
+		<h2 class="mt-3 text-xl font-semibold">
+			guests: {{ guests.list.length }}/6
+		</h2>
 
 		<Transition name="fade" leave-active-class="absolute duration-150">
 			<p v-if="!guests.list.length" class="text-sm">nobody to play with :(</p>
