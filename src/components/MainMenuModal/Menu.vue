@@ -53,6 +53,7 @@ function saveChanges(): void {
 }
 
 onUnmounted(() => {
+	saveChanges()
 	guests.resetActiveGuestID();
 });
 </script>
