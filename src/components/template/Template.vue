@@ -83,7 +83,7 @@ function onTemplatePropertyErrorAlertClose(): void {
 
 <style scoped lang="postcss">
 :deep(.table-wrapper) {
-	@apply grid w-full place-items-center overflow-auto px-8;
+	@apply grid w-full place-items-center overflow-auto p-8;
 }
 
 :deep(tr) {
