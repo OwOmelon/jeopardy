@@ -108,7 +108,7 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="relative grid min-h-[350px] grid-cols-[2rem,_auto,_2rem] items-center gap-3 rounded-b bg-stone-100 p-3 text-center text-red-400"
+			class="relative grid min-h-[350px] grid-cols-[2rem,_auto,_2rem] items-center gap-8 rounded-b bg-stone-100 p-3 px-8 text-center text-red-400 text-2xl"
 		>
 			<button
 				type="button"
@@ -121,7 +121,7 @@ onUnmounted(() => {
 				<Icon icon="material-symbols:arrow-left-rounded" />
 			</button>
 
-			<div class="grow">
+			<div class="grow my-5">
 				<Transition
 					name="height-auto"
 					enter-active-class="duration-500"
