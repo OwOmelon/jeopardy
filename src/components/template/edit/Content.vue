@@ -45,7 +45,7 @@ const importTemplateError_Read = ref<Error | null>(null);
 						gameProgress.progress = {};
 						template.history = [];
 						template.historyPushIteration = 0;
-						template.templateData = template.createTemplate();
+						template.templateData = template.generateTemplateStructure();
 					}
 				"
 				@close="resetTemplateWarning = false"

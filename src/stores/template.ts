@@ -209,7 +209,7 @@ export const useTemplateStore = defineStore("template", () => {
 		},
 	});
 
-	function createTemplate(): TemplateData {
+	function generateTemplateStructure(): TemplateData {
 		const rows: RowID[] = [];
 		const columns: Column[] = [];
 		const points: number[] = [];
@@ -240,7 +240,7 @@ export const useTemplateStore = defineStore("template", () => {
 		const localStorageTemplate = fetchTemplateFromLocalStorage();
 
 		if (!localStorageTemplate) {
-			templateData.value = createTemplate();
+			templateData.value = generateTemplateStructure();
 
 			return;
 		}
@@ -429,7 +429,7 @@ export const useTemplateStore = defineStore("template", () => {
 		fetchImageTableImage,
 
 		templateData,
-		createTemplate,
+		generateTemplateStructure,
 
 		localStorageTemplateErrors,
 

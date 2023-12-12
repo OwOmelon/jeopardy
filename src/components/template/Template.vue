@@ -18,7 +18,7 @@ function onTemplatePropertyErrorAlertClose(): void {
 	const localStorageTemplate = template.fetchTemplateFromLocalStorage();
 
 	template.localStorageTemplateErrors = null;
-	template.templateData = template.createTemplate();
+	template.templateData = template.generateTemplateStructure();
 
 	if (downloadLocalStorageTemplate.value && localStorageTemplate) {
 		downloadTemplate(localStorageTemplate);
