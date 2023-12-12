@@ -79,10 +79,10 @@ p {
 }
 
 .image-wrapper {
-	@apply mx-auto py-5 w-fit p-2;
+	@apply mx-auto py-5 w-2/3 p-2;
 }
 
 img {
-	@apply mx-auto w-2/3 rounded shadow shadow-black/30;
+	@apply rounded shadow shadow-black/30;
 }
 </style>
