@@ -23,14 +23,14 @@ const ImgAltTxt = (type: string) => {
 <template>
 	<div class="grid">
 		<div class="overflow-hidden">
+			<p>{{ ActiveTemplateCell!.question.text }}</p>
+
 			<div v-if="ActiveTemplateCell!.question.image" class="image-wrapper">
 				<img
 					:src="ActiveTemplateCell!.question.image"
 					:alt="ImgAltTxt('question')"
 				/>
 			</div>
-
-			<p class="text-xl">{{ ActiveTemplateCell!.question.text }}</p>
 
 			<Transition
 				name="height-auto"
@@ -39,7 +39,11 @@ const ImgAltTxt = (type: string) => {
 			>
 				<div v-if="props.showAnswer" class="grid">
 					<div class="overflow-hidden">
-						<hr class="my-5 border-t-2 border-red-400" />
+						<hr class="mx-12 my-5 border-t-2 border-red-400" />
+
+						<p class="font-bold">
+							{{ ActiveTemplateCell!.answer.text }}
+						</p>
 
 						<div v-if="ActiveTemplateCell!.answer.image" class="image-wrapper">
 							<img
@@ -47,17 +51,13 @@ const ImgAltTxt = (type: string) => {
 								:alt="ImgAltTxt('answer')"
 							/>
 						</div>
-
-						<p class="text-3xl font-bold">
-							{{ ActiveTemplateCell!.answer.text }}
-						</p>
 					</div>
 				</div>
 			</Transition>
 
 			<div
 				v-if="ActiveTemplateCell!.answeredBy"
-				class="mx-auto mb-1 mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white shadow shadow-black/30"
+				class="mx-auto mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white shadow shadow-black/30"
 			>
 				answered by: {{ ActiveTemplateCell!.answeredBy ?? "no one" }}
 
@@ -79,10 +79,10 @@ p {
 }
 
 .image-wrapper {
-	@apply mx-auto mb-6 w-fit p-2;
+	@apply mx-auto py-5 w-fit p-2;
 }
 
 img {
-	@apply rounded shadow shadow-black/30;
+	@apply mx-auto w-2/3 rounded shadow shadow-black/30;
 }
 </style>
