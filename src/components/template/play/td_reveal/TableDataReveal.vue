@@ -108,20 +108,9 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="relative grid min-h-[350px] grid-cols-[2rem,_auto,_2rem] items-center gap-8 rounded-b bg-stone-100 p-3 px-8 text-center text-red-400 text-2xl"
+			class="content grid-cols-[2rem,_auto,_2rem]/ relative grid max-h-[80vh] min-h-[350px] grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-x-hidden overflow-y-auto bg-stone-100 p-3 text-center text-2xl text-red-400"
 		>
-			<button
-				type="button"
-				:disabled="cancelRevertProgress"
-				:class="{
-					'opacity-0': cancelRevertProgress,
-				}"
-				@click="revertProgress"
-			>
-				<Icon icon="material-symbols:arrow-left-rounded" />
-			</button>
-
-			<div class="grow my-5">
+			<div class="my-5 grow">
 				<Transition
 					name="height-auto"
 					enter-active-class="duration-500"
@@ -142,12 +131,39 @@ onUnmounted(() => {
 				</Transition>
 			</div>
 
+			<div class="anchor" />
+		</div>
+
+		<!-- -------- -->
+
+		<div
+			class="grid grid-cols-[auto,max-content,_auto] rounded-b border-t-4 border-stone-400 bg-stone-300 p-2 text-sm"
+		>
+			<button
+				type="button"
+				:disabled="cancelRevertProgress"
+				:class="[
+					{
+						'opacity-0': cancelRevertProgress,
+					},
+					'group',
+				]"
+				@click="revertProgress"
+			>
+				<Icon icon="material-symbols:arrow-left-rounded" />
+			</button>
+
+			<span class="text-center">{{ revealProgress }} / 4</span>
+
 			<button
 				type="button"
 				:disabled="cancelAdvanceProgress"
-				:class="{
-					'opacity-0': cancelAdvanceProgress,
-				}"
+				:class="[
+					{
+						'opacity-0': cancelAdvanceProgress,
+					},
+					'group',
+				]"
 				@click="advanceProgress"
 			>
 				<Icon icon="material-symbols:arrow-right-rounded" />
@@ -157,11 +173,26 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="postcss">
+.content * {
+	overflow-anchor: none;
+}
+
 button {
-	@apply grid aspect-square place-items-center text-red-400 transition-[opacity,_transform] hover:scale-150;
+	@apply grid place-items-center transition-opacity;
 }
 
 button svg {
-	@apply pointer-events-none scale-[5];
+	@apply pointer-events-none scale-[3] transition-transform;
+}
+
+button:hover {
+	svg {
+		@apply scale-[5];
+	}
+}
+
+.anchor {
+	height: 1px;
+	overflow-anchor: auto;
 }
 </style>
