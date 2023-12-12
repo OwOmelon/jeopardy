@@ -6,7 +6,7 @@ const template = useTemplateStore();
 </script>
 
 <template>
-	<div class="my-10 rounded bg-stone-50 p-3 shadow-md">
+	<div class="my-10 rounded bg-stone-50 p-3 shadow-md w-fit mx-auto">
 		<p class="text-xl font-bold">your table is empty D:</p>
 		<button
 			type="button"
