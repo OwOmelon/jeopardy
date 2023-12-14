@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onUnmounted } from "vue";
+import { ref, nextTick, onUnmounted } from "vue";
 import { useMainMenuStore } from "@/stores/mainmenu";
 import { useTemplateStore } from "@/stores/template";
 import { useGameProgressStore } from "@/stores/game_progress";
@@ -20,14 +20,13 @@ const guests = useGuestsStore();
 const textBox = ref<InstanceType<typeof TextBox> | null>(null);
 const textInput = ref<string>("");
 
-function startGuestRename(guest: Guest) {
+async function startGuestRename(guest: Guest): Promise<void> {
 	guests.activeGuestID = guest.id;
 	textInput.value = guest.name;
 
-	// WAIT FOR TEXTBOX'S disabled ATTRIBUTE TO TURN TO false, THEN FOCUS,
-	setTimeout(() => {
-		textBox.value!.focus();
-	});
+	await nextTick();
+
+	textBox.value!.focus();
 }
 
 function cancelGuestRename() {
@@ -53,7 +52,7 @@ function saveChanges(): void {
 }
 
 onUnmounted(() => {
-	saveChanges()
+	saveChanges();
 	guests.resetActiveGuestID();
 });
 </script>
