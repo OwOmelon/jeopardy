@@ -15,14 +15,11 @@ const emit = defineEmits<{
 	"rename-cancel": [];
 	delete: [];
 }>();
-
-const btnFocused = ref<boolean>(false);
 </script>
 
 <template>
 	<li
 		:class="[
-			{ 'child-btn-focused': btnFocused },
 			`guest${
 				currentlyEditing === 'active'
 					? '-active'
@@ -35,21 +32,10 @@ const btnFocused = ref<boolean>(false);
 	>
 		<span>{{ name }}</span>
 
-		<div
-			:class="[
-				currentlyEditing === 'active'
-					? '!opacity-100'
-					: currentlyEditing
-					? '!opacity-0'
-					: '',
-				'flex items-center gap-2 transition-opacity',
-			]"
-		>
+		<div class="flex items-center gap-2 transition-opacity">
 			<button
 				type="button"
 				:disabled="currentlyEditing === true"
-				@focus="btnFocused = true"
-				@blur="btnFocused = false"
 				@click="
 					() => {
 						if (props.currentlyEditing === 'active') {
@@ -71,8 +57,6 @@ const btnFocused = ref<boolean>(false);
 			<button
 				type="button"
 				:disabled="currentlyEditing === true"
-				@focus="btnFocused = true"
-				@blur="btnFocused = false"
 				@click="
 					() => {
 						emit('rename-cancel');
@@ -132,10 +116,10 @@ const btnFocused = ref<boolean>(false);
 /* ----- */
 
 button {
-	@apply outline-offset-2 transition-[opacity,_transform] hover:scale-150 focus:scale-150 focus:opacity-100 active:scale-100 group-hover:opacity-100 lg:opacity-0;
+	@apply outline-offset-2 transition-[opacity,_transform] hover:scale-150  active:scale-100;
 }
 
-.child-btn-focused button {
-	@apply opacity-100;
+.guest-disabled button {
+	@apply opacity-0
 }
 </style>
