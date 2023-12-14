@@ -108,7 +108,7 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="content grid-cols-[2rem,_auto,_2rem]/ relative grid max-h-[80vh] min-h-[350px] grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-x-hidden overflow-y-auto bg-stone-100 p-3 text-center text-2xl text-red-400"
+			class="content relative grid max-h-[80vh] min-h-[350px] grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-x-hidden overflow-y-auto bg-stone-100 p-3 text-center text-2xl text-red-400"
 		>
 			<div class="my-5 grow">
 				<Transition
@@ -137,7 +137,7 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="grid grid-cols-[auto,max-content,_auto] rounded-b border-t-4 border-stone-400 bg-stone-300 p-2 text-sm"
+			class="grid grid-cols-[1fr,max-content,_1fr] rounded-b border-t-4 border-stone-400 bg-stone-300 p-2 text-sm"
 		>
 			<button
 				type="button"
