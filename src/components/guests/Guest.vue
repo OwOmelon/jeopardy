@@ -2,10 +2,12 @@
 import { ref, computed, watch } from "vue";
 import type { Guest } from "@/stores/guests";
 
+import { Icon } from "@iconify/vue";
+
 const props = defineProps<Guest>();
 
 const emit = defineEmits<{
-	"edit-points": [number];
+	"edit-points": [Guest["points"]["illegitimate"]];
 }>();
 
 const totalPoints = computed<number>(() => {
@@ -15,7 +17,7 @@ const totalPoints = computed<number>(() => {
 const textBox = ref<HTMLInputElement | null>(null);
 const textInput = ref<number>(totalPoints.value);
 
-function onBlur(): void {
+function textBoxEditPoints(): void {
 	if (!textInput.value.toString().length) {
 		textInput.value = totalPoints.value;
 		return;
@@ -24,22 +26,49 @@ function onBlur(): void {
 	emit("edit-points", textInput.value - props.points.legitimate);
 }
 
+function btnEditPoints(operation: "add" | "subtract"): void {
+	const operand =
+		operation === "add" ? 100 : operation === "subtract" ? -100 : 0;
+
+	emit("edit-points", props.points.illegitimate + operand);
+}
+
 watch(totalPoints, (val) => {
 	textInput.value = val;
 });
 </script>
 
 <template>
-	<li class="group relative flex flex-col items-center">
+	<li class="flex flex-col items-center gap-1">
 		<span class="font-bold text-red-400">{{ name }}</span>
 
-		<input
-			ref="textBox"
-			v-model="textInput"
-			type="number"
-			class="w-20 rounded border-2 border-transparent bg-red-400 bg-transparent px-2 text-center outline-none transition-colors hover:border-red-400 focus:bg-red-400 focus:text-white"
-			@keydown.enter="textBox?.blur()"
-			@blur="onBlur"
-		/>
+		<div
+			class="w-24 rounded bg-stone-50 p-1 shadow shadow-black/30 transition-colors"
+		>
+			<input
+				ref="textBox"
+				v-model="textInput"
+				type="number"
+				class="w-full bg-transparent px-2 text-center outline-none"
+				@keydown.enter="textBox?.blur()"
+				@blur="textBoxEditPoints"
+			/>
+
+			<div class="mt-1 flex gap-1">
+				<button type="button" @click="btnEditPoints('subtract')">
+					<Icon icon="ion:minus-round" />
+				</button>
+
+				<button type="button" @click="btnEditPoints('add')">
+					<Icon icon="ion:plus-round" />
+				</button>
+			</div>
+		</div>
 	</li>
 </template>
+
+<style scoped lang="postcss">
+button {
+	@apply flex grow justify-center rounded-sm bg-red-400 text-white shadow-sm shadow-black/30 transition-transform hover:-translate-y-1;
+}
+</style>
