@@ -18,7 +18,8 @@ const emit = defineEmits<{
 	"on-image-upload": [ImageModelValue];
 }>();
 
-const imgInput = ref<HTMLInputElement | null>(null);
+const uploadImgBtn = ref<HTMLInputElement | null>(null);
+const imgTextBox = ref<HTMLInputElement | null>(null);
 const notAnImageWarning = ref<number>(0);
 
 const computedModelValue = computed<string>({
@@ -31,9 +32,11 @@ const computedModelValue = computed<string>({
 	},
 });
 
-function onImageUpload(e: any): void {
-	const file = e.target!.files[0];
+function onImageUpload(): void {
+	const file = uploadImgBtn.value!.files![0];
 	const reader = new FileReader();
+
+	uploadImgBtn.value!.value = "";
 
 	if (!file.type.startsWith("image/")) {
 		notAnImageWarning.value++;
@@ -98,6 +101,7 @@ function onImageUpload(e: any): void {
 				<span class="ml-2">upload</span>
 
 				<input
+					ref="uploadImgBtn"
 					type="file"
 					class="fixed -top-full opacity-0"
 					@change="onImageUpload"
@@ -113,13 +117,15 @@ function onImageUpload(e: any): void {
 			</label>
 
 			<input
-				ref="imgInput"
+				ref="imgTextBox"
 				type="text"
 				placeholder="paste image link"
 				size="1"
 				class="input grow placeholder:text-white/50 focus:!border-stone-100"
-				@keydown.enter="imgInput!.blur()"
-				@blur="emit('on-image-upload', { src: imgInput!.value, type: 'link' })"
+				@keydown.enter="imgTextBox!.blur()"
+				@blur="
+					emit('on-image-upload', { src: imgTextBox!.value, type: 'link' })
+				"
 			/>
 		</div>
 	</div>
