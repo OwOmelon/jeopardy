@@ -79,7 +79,7 @@ p {
 }
 
 .image-wrapper {
-	@apply mx-auto py-5 w-2/3 p-2;
+	@apply mx-auto w-2/3 p-2 py-5;
 }
 
 img {
