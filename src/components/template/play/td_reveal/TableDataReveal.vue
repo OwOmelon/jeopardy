@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
 import { useMainMenuStore } from "@/stores/mainmenu";
+import { useElementSize } from "@vueuse/core";
 import { vOnClickOutside } from "@vueuse/components";
 
 import { Icon } from "@iconify/vue";
@@ -15,6 +16,38 @@ const { activeCell: activeTemplateCell } = storeToRefs(useTemplateStore());
 const { disableToggle: disableMainMenuToggle } = storeToRefs(
 	useMainMenuStore(),
 );
+
+// ------------------------------
+
+const revealContentWrapper = ref<HTMLDivElement | null>(null);
+const revealContent = ref<HTMLDivElement | null>(null);
+
+const { height: revealContentHeight } = useElementSize(revealContent);
+
+const revealContentOverflow = computed(() => {
+	if (!revealContentWrapper.value?.offsetHeight || !revealContentHeight.value)
+		return false;
+
+	return (
+		Math.ceil(revealContentHeight.value) >
+		Math.ceil(revealContentWrapper.value?.offsetHeight)
+	);
+});
+
+function scrollDown(): void {
+	revealContentWrapper.value!.scrollTo(
+		0,
+		revealContentWrapper.value!.scrollHeight,
+	);
+}
+
+watch(revealContentOverflow, (overflow) => {
+	if (overflow && revealProgress.value === 2) {
+		scrollDown();
+	}
+});
+
+// ------------------------------
 
 // 	1 = "show_question"
 // 	2 = "reveal_answer"
@@ -61,6 +94,8 @@ function advanceProgress(): void {
 	}
 
 	revealProgress.value++;
+
+	if (revealProgress.value === 2) scrollDown();
 }
 
 function onKeyDown(e: KeyboardEvent) {
@@ -70,6 +105,8 @@ function onKeyDown(e: KeyboardEvent) {
 			break;
 	}
 }
+
+// ------------------------------
 
 onMounted(() => {
 	disableMainMenuToggle.value = true;
@@ -108,27 +145,30 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="content relative grid max-h-[80vh] min-h-[350px] grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-x-hidden overflow-y-auto bg-stone-100 p-3 text-center text-2xl text-red-400"
+			ref="revealContentWrapper"
+			class="content relative grid max-h-[75vh] min-h-[350px] grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-100 px-3 text-center text-2xl text-red-400"
 		>
-			<div class="my-5 grow">
-				<Transition
-					name="height-auto"
-					enter-active-class="duration-500"
-					leave-active-class="duration-500"
-					mode="out-in"
-				>
-					<QuestionAnswer
-						v-if="revealProgress < 3"
-						:show-answer="revealProgress > 1"
-						@change-answeree="revealProgress = 3"
-					/>
+			<div ref="revealContent">
+				<div class="py-5">
+					<Transition
+						name="height-auto"
+						enter-active-class="duration-500"
+						leave-active-class="duration-500"
+						mode="out-in"
+					>
+						<QuestionAnswer
+							v-if="revealProgress < 3"
+							:show-answer="revealProgress > 1"
+							@change-answeree="revealProgress = 3"
+						/>
 
-					<GiveGuestPoints
-						v-else
-						:reveal-progress="revealProgress"
-						@done="activeTemplateCell = null"
-					/>
-				</Transition>
+						<GiveGuestPoints
+							v-else
+							:reveal-progress="revealProgress"
+							@done="activeTemplateCell = null"
+						/>
+					</Transition>
+				</div>
 			</div>
 
 			<div class="anchor" />
