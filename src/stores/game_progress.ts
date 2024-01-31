@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { useTemplateStore } from "./template";
 import { useGuestsStore } from "./guests";
 
-import type { RowID, Column } from "./template";
+import type { RowID, ColumnID } from "./template";
 import type { Guest } from "./guests";
 
 export type GameProgressValue = {
@@ -13,7 +13,7 @@ export type GameProgressValue = {
 
 export type GameProgress = {
 	[key: RowID]: {
-		[key: Column["id"]]: GameProgressValue;
+		[key: ColumnID]: GameProgressValue;
 	};
 };
 
@@ -26,7 +26,7 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 
 	function updateGameProgress(
 		row: RowID,
-		column: Column["id"],
+		column: ColumnID,
 		failedToAnswer: GameProgressValue["failedToAnswer"],
 		successfullyAnswered: GameProgressValue["successfullyAnswered"],
 	) {
@@ -47,10 +47,10 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 		const gameProgressRows = Object.keys(progress.value) as RowID[];
 
 		gameProgressRows.forEach((row) => {
-			const pointsToAssign = template.points[template.rows.indexOf(row)];
+			const pointsToAssign = template.rows[row];
 			const gamePRogressColumns = Object.keys(
 				progress.value[row],
-			) as Column["id"][];
+			) as ColumnID[];
 
 			gamePRogressColumns.forEach((column) => {
 				const gameProgressValue = progress.value[row][column];

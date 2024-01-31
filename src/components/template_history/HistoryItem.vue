@@ -71,8 +71,8 @@ const emit = defineEmits<{
 					<div>
 						<label>points:</label>
 						<ul class="flex gap-2">
-							<li v-for="(point, index) in points" :key="index" class="item">
-								{{ point }}
+							<li v-for="(points, row, index) in rows" :key="row" class="item">
+								{{ points }}
 							</li>
 						</ul>
 					</div>
@@ -80,8 +80,8 @@ const emit = defineEmits<{
 					<div>
 						<label>columns:</label>
 						<ul class="grid grid-cols-5 gap-2">
-							<li v-for="(column, index) in columns" :key="index" class="item">
-								<p>{{ column.category || column.id }}</p>
+							<li v-for="(category, column, index) in columns" :key="column" class="item">
+								<p>{{ category || column }}</p>
 							</li>
 						</ul>
 					</div>
@@ -106,27 +106,27 @@ const emit = defineEmits<{
 							</button>
 						</div>
 						<table class="flex w-full flex-col gap-2 text-[0.65rem]">
-							<tr v-for="row in rows" :key="row" class="grid grid-cols-5 gap-2">
+							<tr v-for="points, row, rowIndex in rows" :key="row" class="grid grid-cols-5 gap-2">
 								<td
-									v-for="column in columns"
-									:key="column.id"
+									v-for="category, column, columnIndex in columns"
+									:key="column"
 									class="item h-[9ex]"
 								>
 									<template v-if="showImages">
 										<img
 											v-if="
 												showAnswers
-													? imageTable.links?.[row]?.[column.id]?.answer ||
-													  imageTable.uploads?.[row]?.[column.id]?.answer
-													: imageTable.links?.[row]?.[column.id]?.question ||
-													  imageTable.uploads?.[row]?.[column.id]?.question
+													? imageTable.links?.[row]?.[column]?.answer ||
+													  imageTable.uploads?.[row]?.[column]?.answer
+													: imageTable.links?.[row]?.[column]?.question ||
+													  imageTable.uploads?.[row]?.[column]?.question
 											"
 											:src="
 												showAnswers
-													? imageTable.links?.[row]?.[column.id]?.answer ||
-													  imageTable.uploads?.[row]?.[column.id]?.answer
-													: imageTable.links?.[row]?.[column.id]?.question ||
-													  imageTable.uploads?.[row]?.[column.id]?.question
+													? imageTable.links?.[row]?.[column]?.answer ||
+													  imageTable.uploads?.[row]?.[column]?.answer
+													: imageTable.links?.[row]?.[column]?.question ||
+													  imageTable.uploads?.[row]?.[column]?.question
 											"
 											class="h-full object-contain"
 										/>
@@ -141,8 +141,8 @@ const emit = defineEmits<{
 									<p v-else>
 										{{
 											showAnswers
-												? textTable?.[row]?.[column.id]?.answer || "x"
-												: textTable?.[row]?.[column.id]?.question || "x"
+												? textTable?.[row]?.[column]?.answer || "x"
+												: textTable?.[row]?.[column]?.question || "x"
 										}}
 									</p>
 								</td>
