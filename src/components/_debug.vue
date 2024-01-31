@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { UseDraggable as Draggable } from "@vueuse/components";
+import { useTemplateStore } from "@/stores/template";
 
 const handle = ref<HTMLElement | null>(null);
 const show = ref(true);
@@ -12,6 +13,22 @@ function toggleShow(e: KeyboardEvent) {
 }
 
 window.addEventListener("keydown", toggleShow);
+
+// --------------------
+
+const template = useTemplateStore();
+
+const templateColumnsToArr = computed(() => {
+	return Object.entries(template.columns);
+});
+
+const templateRowsToArr = computed(() => {
+	return Object.entries(template.rows);
+});
+
+function func() {
+	console.log(template.columns);
+}
 </script>
 
 <template>
@@ -32,9 +49,34 @@ window.addEventListener("keydown", toggleShow);
 			id="DEBUG-MAIN"
 			class="rounded-b bg-black/50 p-3 text-xs text-white backdrop-blur-sm"
 		>
-			<p>man what in the goddamn</p>
-			<p>i shouldn't have ignored the debug component</p>
-			<p>i'm so fucking stupid</p>
+			<div class="flex gap-3">
+				<div v-for="n in 5" class="text-center">
+					<p>
+						{{
+							templateColumnsToArr[n - 1][1] || templateColumnsToArr[n - 1][0]
+						}}
+					</p>
+					<hr />
+					<div class="group">
+						<p class="group-hover:hidden">
+							{{ templateRowsToArr[n - 1][0] }}
+						</p>
+						<p class="hidden group-hover:block">
+							{{ templateRowsToArr[n - 1][1] }}
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<br />
+
+			<button @click="func">func</button>
 		</div>
 	</Draggable>
 </template>
+
+<style scoped lang="postcss">
+button {
+	@apply rounded border-2 border-white bg-white px-3 py-1 text-black transition-colors hover:bg-black hover:text-white;
+}
+</style>
