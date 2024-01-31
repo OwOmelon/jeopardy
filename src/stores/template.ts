@@ -12,11 +12,10 @@ import type { TemplateErrors } from "@/composables/check_template_for_errors";
 //  ----
 
 export type RowID = `row${number}`; /* row1 - row-5 */
+export type Rows = { [key: RowID]: number };
 
-export type Column = {
-	id: `column${number}` /* column1 - column-5 */;
-	category: string;
-};
+export type ColumnID = `column${number}`; /* column1 - column-5 */
+export type Columns = { [key: ColumnID]: string };
 
 //  ----
 
@@ -26,7 +25,7 @@ export type TableCell = {
 };
 
 export type Table = {
-	[key: RowID]: { [key: Column["id"]]: TableCell };
+	[key: RowID]: { [key: ColumnID]: TableCell };
 };
 
 export type ImageTable = {
@@ -38,9 +37,9 @@ export type ImageTable = {
 
 export type CompleteTableCell = {
 	row: RowID;
-	column: Column["id"];
+	column: ColumnID;
 	points: number;
-	category: Column["category"];
+	category: string;
 	question: {
 		text: string;
 		image: string;
@@ -53,16 +52,15 @@ export type CompleteTableCell = {
 };
 
 export type CompleteTable = {
-	[key: RowID]: { [key: Column["id"]]: CompleteTableCell };
+	[key: RowID]: { [key: ColumnID]: CompleteTableCell };
 };
 
 //  ----
 
 export type TemplateData = {
 	name: string;
-	rows: RowID[];
-	columns: Column[];
-	points: number[];
+	rows: Rows;
+	columns: Columns;
 	textTable: Table;
 	imageTable: ImageTable;
 };
@@ -88,16 +86,14 @@ export const useTemplateStore = defineStore("template", () => {
 	const editing = ref<boolean>(true);
 
 	const name = ref<string>("");
-	const rows = ref<RowID[]>([]);
-	const columns = ref<Column[]>([]);
-	const points = ref<number[]>([]);
+	const rows = ref<Rows>({});
+	const columns = ref<Columns>({});
 
 	watch(
 		() => ({
 			name: name.value,
 			rows: rows.value,
 			columns: columns.value,
-			points: points.value,
 		}),
 		(templateStructure) => {
 			localStorage.setItem(
@@ -114,7 +110,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	function updateTextTable(
 		row: RowID,
-		column: Column["id"],
+		column: ColumnID,
 		text: string,
 		property: "question" | "answer",
 	): void {
@@ -128,7 +124,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	function fetchTextTableText(
 		row: RowID,
-		column: Column["id"],
+		column: ColumnID,
 		property: "question" | "answer",
 	): string {
 		return textTable.value?.[row]?.[column]?.[property] ?? "";
@@ -143,7 +139,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	function updateImageTable(
 		row: RowID,
-		column: Column["id"],
+		column: ColumnID,
 		src: string,
 		branch: "upload" | "link",
 		property: "question" | "answer",
@@ -158,7 +154,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	function fetchImageTableImage(
 		row: RowID,
-		column: Column["id"],
+		column: ColumnID,
 		property: "question" | "answer",
 	): { src: string; type: "upload" | "link" } | null {
 		const uploadedImage = imageTable.value.uploads?.[row]?.[column]?.[property];
@@ -193,7 +189,6 @@ export const useTemplateStore = defineStore("template", () => {
 				name: name.value,
 				rows: rows.value,
 				columns: columns.value,
-				points: points.value,
 				textTable: textTable.value,
 				imageTable: imageTable.value,
 			};
@@ -203,28 +198,24 @@ export const useTemplateStore = defineStore("template", () => {
 			name.value = newValue.name;
 			rows.value = newValue.rows;
 			columns.value = newValue.columns;
-			points.value = newValue.points;
 			textTable.value = newValue.textTable;
 			imageTable.value = newValue.imageTable;
 		},
 	});
 
 	function generateTemplateStructure(): TemplateData {
-		const rows: RowID[] = [];
-		const columns: Column[] = [];
-		const points: number[] = [];
+		const rows: Rows = {};
+		const columns: Columns = {};
 
 		for (let i = 0; i < 5; i++) {
-			points.push((i + 1) * 100);
-			rows.push(`row${i + 1}`);
-			columns.push({ id: `column${i + 1}`, category: `` });
+			rows[`row${i + 1}`] = (i + 1) * 100;
+			columns[`column${i + 1}`] = "";
 		}
 
 		return {
 			name: "",
 			rows,
 			columns,
-			points,
 			textTable: {},
 			imageTable: { uploads: {}, links: {} },
 		};
@@ -273,57 +264,70 @@ export const useTemplateStore = defineStore("template", () => {
 	const activeCell = ref<CompleteTableCell | null>(null);
 
 	const completeTable = computed<CompleteTable>(() => {
-		return rows.value.reduce((rows, row, rowIndex) => {
-			return {
-				...rows,
-				[row]: columns.value.reduce((columns, column) => {
-					const successfullyAnswered =
-						gameProgress.progress?.[row]?.[column.id]?.successfullyAnswered;
+		const rowsToArr = Object.entries(rows.value) as [RowID, number][];
+		const columnsToArr = Object.entries(columns.value) as [ColumnID, string][];
 
-					const completeCell: CompleteTableCell = {
+		return rowsToArr.reduce((allRows, [row, points]) => {
+			return {
+				...allRows,
+				[row]: columnsToArr.reduce((allColumns, [column, category]) => {
+					const successfullyAnswered =
+						gameProgress.progress?.[row]?.[column]?.successfullyAnswered;
+
+					const completeTableCell: CompleteTableCell = {
 						row,
-						column: column.id,
-						points: points.value[rowIndex],
-						category: column.category,
+						column,
+						points,
+						category,
 						question: {
-							text: fetchTextTableText(row, column.id, "question"),
-							image:
-								fetchImageTableImage(row, column.id, "question")?.src || "",
+							text: fetchTextTableText(row, column, "question"),
+							image: fetchImageTableImage(row, column, "question")?.src || "",
 						},
 						answer: {
-							text: fetchTextTableText(row, column.id, "answer"),
-							image: fetchImageTableImage(row, column.id, "answer")?.src || "",
+							text: fetchTextTableText(row, column, "answer"),
+							image: fetchImageTableImage(row, column, "answer")?.src || "",
 						},
 						answeredBy:
 							successfullyAnswered === undefined
 								? ""
 								: guests.getGuest(successfullyAnswered ?? "guest_")?.name ??
-								  "no one",
+									"no one",
 					};
 
 					return {
-						...columns,
-						[column.id]: completeCell,
+						...allColumns,
+						[column]: completeTableCell,
 					};
 				}, {}),
 			};
 		}, {});
 	});
 
-	const filteredColumns = computed<Column[]>(() => {
-		return columns.value.filter(
-			(column) => column.category || !columnIsEmpty(column.id),
-		);
+	const filteredColumns = computed<Columns>(() => {
+		const columnsToArr = Object.entries(columns.value) as [ColumnID, string][];
+		const filteredColumnsToArr = columnsToArr.filter(([column, category]) => {
+			return category || columnIsEmpty(column);
+		});
+
+		return filteredColumnsToArr.reduce((all, [column, category]) => {
+			return {
+				...all,
+				[column]: category,
+			};
+		}, {});
 	});
 
 	const filteredCompleteTable = computed<CompleteTable>(() => {
-		return rows.value.reduce((rows, row) => {
+		const rowIDs = Object.keys(rows.value) as RowID[];
+		const filteredColumnIDs = Object.keys(filteredColumns.value) as ColumnID[];
+
+		return rowIDs.reduce((allRows, row) => {
 			return {
-				...rows,
-				[row]: filteredColumns.value.reduce((columns, column) => {
+				...allRows,
+				[row]: filteredColumnIDs.reduce((allColumns, column) => {
 					return {
-						...columns,
-						[column.id]: completeTable.value[row][column.id],
+						...allColumns,
+						[column]: completeTable.value[row][column],
 					};
 				}, {}),
 			};
@@ -332,7 +336,7 @@ export const useTemplateStore = defineStore("template", () => {
 
 	function checkTableDataProperties(
 		row: RowID,
-		column: Column["id"],
+		column: ColumnID,
 	): "complete" | "empty" | "partial" {
 		const td = completeTable.value[row][column];
 
@@ -340,19 +344,17 @@ export const useTemplateStore = defineStore("template", () => {
 			(td.answer.text || td.answer.image)
 			? "complete"
 			: !(td.question.text || td.question.image) &&
-			  !(td.answer.text || td.answer.image)
-			? "empty"
-			: "partial";
+				  !(td.answer.text || td.answer.image)
+				? "empty"
+				: "partial";
 	}
 
-	function columnIsEmpty(column: Column["id"]): boolean {
-		const arr: string[] = [];
+	function columnIsEmpty(column: ColumnID): boolean {
+		const columnProps = (Object.keys(rows.value) as RowID[]).map((row) => {
+			return checkTableDataProperties(row, column);
+		});
 
-		for (let i = 0; i < rows.value.length; i++) {
-			arr.push(checkTableDataProperties(`row${i + 1}`, column));
-		}
-
-		return arr.every((a) => a === "empty");
+		return columnProps.every((prop) => prop === "empty");
 	}
 
 	// ---------- HISTORY ----------
@@ -416,7 +418,6 @@ export const useTemplateStore = defineStore("template", () => {
 		editing,
 
 		name,
-		points,
 		rows,
 		columns,
 
