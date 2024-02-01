@@ -8,6 +8,7 @@ import PauseBtn from "./components/MainMenuModal/PauseBtn.vue";
 import JeopardyTemplate from "./components/template/Template.vue";
 import ModalWrapper from "./components/ModalWrapper.vue";
 import TemplateHistory from "./components/template_history/History.vue";
+import d from "./components/_debug.vue";
 
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
@@ -23,14 +24,16 @@ watch(
 </script>
 
 <template>
-  <PauseBtn />
+  <!-- <PauseBtn />
   <TemplateHistory v-if="template.editing" />
 
   <JeopardyTemplate />
 
   <ModalWrapper :show="mainmenu.show">
     <MainMenu />
-  </ModalWrapper>
+  </ModalWrapper> -->
+
+  <d />
 </template>
 
 <style lang="postcss">

@@ -52,17 +52,8 @@ type ArrKey = `uh${number}`;
 const transitGroupEl = ref<any>(null);
 
 const obj = ref(createObj());
+const dummyObj = ref(obj.value);
 const uniqueKey = "uh9";
-
-watch(obj, (val) => {
-	const entries: any[] = JSON.parse(JSON.stringify(Object.entries(val)))
-
-	entries.forEach((entry) => {
-		console.log(entry)
-	})
-
-	console.log('---------------------')
-})
 
 const dragFrom = ref<number | null>(null);
 const dropTo = ref<number | null>(null);
@@ -82,8 +73,7 @@ function onDragEnter(attr: string) {
 function onDrop() {
 	if (dragFrom.value === null || dropTo.value === null) return;
 
-	let objToArr = Object.entries(obj.value) as [ArrKey, string][];
-
+	const objToArr = Object.entries(obj.value) as [ArrKey, string][];
 	const movedObj = arrSwitch(objToArr, dragFrom.value, dropTo.value).reduce(
 		(entries, [key, value]) => {
 			return {
@@ -93,8 +83,8 @@ function onDrop() {
 		},
 		{},
 	);
-
 	obj.value = movedObj;
+	dummyObj.value = movedObj;
 }
 
 function onDragEnd() {
@@ -117,9 +107,6 @@ onMounted(() => {
 	el.addEventListener("dragend", () => onDragEnd());
 
 	el.addEventListener("dragover", (e) => {
-		e.preventDefault();
-	});
-	el.addEventListener("dragenter", (e) => {
 		e.preventDefault();
 	});
 
@@ -206,6 +193,7 @@ function arrSwitch(arr: any[], from: number, to: number): any[] {
 					</div>
 				</div>
 			</div>
+			a
 
 			<br />
 
@@ -213,14 +201,14 @@ function arrSwitch(arr: any[], from: number, to: number): any[] {
 			<TransitionGroup
 				ref="transitGroupEl"
 				tag="div"
-				name="list-slide-left"
+				name="transitgroup"
 				class="relative flex gap-3"
 			>
 				<div
 					v-for="(value, key, index) in obj"
 					:key="key"
 					:class="[
-						{ '!-translate-y-1': index === dragFrom },
+						{ '-translate-y-1': index === dragFrom },
 						{ 'translate-y-1': index === dropTo },
 						'text-center transition-transform',
 					]"
@@ -246,5 +234,19 @@ function arrSwitch(arr: any[], from: number, to: number): any[] {
 <style scoped lang="postcss">
 button {
 	@apply rounded border-2 border-white bg-white px-3 py-1 text-black transition-colors hover:bg-black hover:text-white;
+}
+</style>
+
+<style scoped lang="scss">
+.transitgroup {
+	&-move {
+		transition: all 150ms cubic-bezier(0.55, 0, 0.1, 1);
+	}
+}
+
+.transitgroup-slow {
+	&-move {
+		transition: all 1s cubic-bezier(0.55, 0, 0.1, 1);
+	}
 }
 </style>
