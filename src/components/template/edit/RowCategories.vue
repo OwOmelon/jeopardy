@@ -1,39 +1,37 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
 
 import HeaderCategory from "./HeaderCategory.vue";
-import draggable from "vuedraggable";
+import Draggable from "./DraggableHeaderWrapper.vue";
 
-import type { Column } from "@/stores/template";
+import type { ColumnID } from "@/stores/template";
 
-const template = useTemplateStore();
+const { columns } = storeToRefs(useTemplateStore());
 
-function changeColumnCategory(newName: string, id: Column["id"]): void {
-	const columnIndex = template.columns.findIndex((column) => column.id === id);
-	const column = template.columns[columnIndex];
+function changeColumnCategory(id: ColumnID, newCategory: string): void {
+	// const columnIndex = template.columns.findIndex((column) => column.id === id);
+	// const column = template.columns[columnIndex];
 
-	if (column.category === newName) return;
+	// if (columns.value[id] === newName) return;
 
-	column.category = newName;
+	columns.value[id] = newCategory;
 }
 </script>
 
 <template>
-	<draggable
-		v-model="template.columns"
-		item-key="element"
+	<Draggable
+		v-model="columns"
 		tag="tr"
-		handle=".handle"
-		:animation="200"
-		:disabled="!template.editing"
+		group="categories"
+		transition-name="list-slide-left"
 		class="items-end"
+		v-slot="{ value, property, dragging, dropTo }"
 	>
-		<template #item="{ element }">
 			<HeaderCategory
-				:column="element"
+				:column="property as ColumnID"
+				:category="value as string"
 				@change-column-category="changeColumnCategory"
 			/>
-		</template>
-	</draggable>
+	</Draggable>
 </template>

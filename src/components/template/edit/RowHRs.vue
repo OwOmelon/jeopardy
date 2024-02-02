@@ -2,15 +2,18 @@
 import { computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
-import type { Column } from "@/stores/template";
+import type { RowID, ColumnID } from "@/stores/template";
 
 const template = useTemplateStore();
 
-const hrColors = computed<{ id: Column["id"]; color: string; text: string }[]>(
+const hrColors = computed<{ id: ColumnID; color: string; text: string }[]>(
 	() => {
-		return template.columns.map((column) => {
-			const columnDataValues = template.rows.map((row) =>
-				template.checkTableDataProperties(row, column.id),
+		const rowIDs = Object.keys(template.rows) as RowID[];
+		const columnIDs = Object.keys(template.columns) as ColumnID[];
+
+		return columnIDs.map((column) => {
+			const columnDataValues = rowIDs.map((row) =>
+				template.checkTableDataProperties(row, column),
 			);
 
 			let color = "border-red-400";
@@ -26,7 +29,7 @@ const hrColors = computed<{ id: Column["id"]; color: string; text: string }[]>(
 				}
 			}
 
-			return { id: column.id, color, text };
+			return { id: column, color, text };
 		});
 	},
 );

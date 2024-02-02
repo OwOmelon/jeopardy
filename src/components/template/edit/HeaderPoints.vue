@@ -3,13 +3,15 @@ import { ref, watch } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import DragHandle from "@/components/DragHandle.vue";
 
+import type { RowID } from "@/stores/template";
+
 const props = defineProps<{
-	rowIndex: number;
+	row: RowID;
 	points: number;
 }>();
 
 const emit = defineEmits<{
-	"update-points": [number, number];
+	"update-points": [RowID, typeof props.points];
 }>();
 
 const template = useTemplateStore();
@@ -23,7 +25,7 @@ function onBlur(): void {
 		return;
 	}
 
-	emit("update-points", textInput.value, props.rowIndex);
+	emit("update-points", props.row, textInput.value);
 }
 
 watch(

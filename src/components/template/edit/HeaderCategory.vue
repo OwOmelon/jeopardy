@@ -13,7 +13,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	"change-column-category": [string, ColumnID];
+	"change-column-category": [columnID, typeof props.category];
 }>();
 
 const template = useTemplateStore();

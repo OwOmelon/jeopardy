@@ -1,37 +1,43 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
 
 import HeaderPoints from "./HeaderPoints.vue";
-import draggable from "vuedraggable";
+import Draggable from "./DraggableHeaderWrapper.vue";
 
-const template = useTemplateStore();
+import type { RowID } from "@/stores/template";
 
-const dragging = ref<boolean>(false);
+const { rows } = storeToRefs(useTemplateStore());
 
-function updatePoints(newPoints: number, rowIndex: number) {
-	template.points[rowIndex] = newPoints;
+function updatePoints(id: RowID, newPoints: number) {
+	rows.value[id] = newPoints;
 
-	template.points.sort((a, b) => (a > b ? 1 : -1));
+	const ids = Object.keys(rows.value) as RowID[];
+	const points = Object.values(rows.value).sort((a, b) => (a > b ? 1 : -1));
+
+	const sortedRows: typeof rows.value = {};
+
+	for (let i = 0; i < 5; i++) {
+		sortedRows[ids[i]] = points[i];
+	}
+
+	rows.value = sortedRows;
 }
 </script>
 
 <template>
-	<draggable
-		v-model="template.rows"
-		item-key="element"
+	<Draggable
+		v-model="rows"
 		tag="tr"
-		handle=".handle"
-		:animation="200"
-		:disabled="!template.editing"
+		group="points"
+		transition-name="list-slide-left"
+		v-slot="{ value, property, dragging, dropTo }"
 		class="col-start-1 row-start-2 mr-5 w-20 flex-col justify-around gap-3 justify-self-end"
 	>
-		<template #item="{ element, index }">
-			<HeaderPoints
-				:row-index="index"
-				:points="template.points[index]"
-				@update-points="updatePoints"
-			/>
-		</template>
-	</draggable>
+		<HeaderPoints
+			:row="property as RowID"
+			:points="value as number"
+			@update-points="updatePoints"
+		/>
+	</Draggable>
 </template>
