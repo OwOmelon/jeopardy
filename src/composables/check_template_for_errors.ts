@@ -1,4 +1,11 @@
-import type { RowID, Column, Table, TemplateData } from "@/stores/template";
+import type {
+	RowID,
+	Rows,
+	ColumnID,
+	Columns,
+	Table,
+	TemplateData,
+} from "@/stores/template";
 export type TemplateErrors = { [key: string]: string[] };
 
 export async function checkTemplateForErrors(
@@ -27,24 +34,21 @@ export async function checkTemplateForErrors(
 			errorsFound.name = [`template property "name" is not of type "string"`];
 		}
 
-		const checkRows = checkRowsForErrors(template.rows);
-		const checkColumns = checkColumnsForErrors(template.columns);
-		const pointsAltered = checkPointsForErrors(template.points);
+		const checkRows = checkHeaders(template.rows, "row");
+		const checkColumns = checkHeaders(template.columns, "column");
 
-		await Promise.allSettled([checkRows, checkColumns, pointsAltered]).then(
-			(values) => {
-				values.forEach((value) => {
-					if (value.status === "rejected") {
-						const [property, errors] = Object.entries(value.reason)[0] as [
-							string,
-							string[],
-						];
+		await Promise.allSettled([checkRows, checkColumns]).then((values) => {
+			values.forEach((value) => {
+				if (value.status === "rejected") {
+					const [property, errors] = Object.entries(value.reason)[0] as [
+						string,
+						string[],
+					];
 
-						errorsFound[property] = errors;
-					}
-				});
-			},
-		);
+					errorsFound[property] = errors;
+				}
+			});
+		});
 
 		if (errorWasFound()) {
 			rej(errorsFound);
@@ -54,24 +58,25 @@ export async function checkTemplateForErrors(
 
 		// --- STAGE 3
 
-		const columnIDs = template.columns.map((column) => column.id);
+		const rowIDs = Object.keys(template.rows) as RowID[];
+		const columnIDs = Object.keys(template.columns) as ColumnID[];
 
 		const textTableAltered = checkTableForErrors(
 			"textTable",
 			template.textTable,
-			template.rows,
+			rowIDs,
 			columnIDs,
 		);
 		const uploadImageTableAltered = checkTableForErrors(
 			"imageTable.uploads",
 			template.imageTable.uploads,
-			template.rows,
+			rowIDs,
 			columnIDs,
 		);
 		const linkImageTableAltered = checkTableForErrors(
 			"imageTable.links",
 			template.imageTable.links,
-			template.rows,
+			rowIDs,
 			columnIDs,
 		);
 
@@ -110,7 +115,6 @@ async function checkTemplatePropertiesForErrors(
 		const missingProperties = [
 			"name",
 			"rows",
-			"points",
 			"columns",
 			"textTable",
 			"imageTable",
@@ -128,77 +132,135 @@ async function checkTemplatePropertiesForErrors(
 
 // ------------------------------
 
-async function checkRowsForErrors(rows: RowID[]): Promise<string> {
+/*async function checkRowsForErrors(rows: Rows): Promise<string> {
 	return new Promise((res, rej) => {
-		if (!Array.isArray(rows)) {
-			rej({ rows: [`not of type "array"`] });
+		if (!(typeof rows === "object" && rows !== null && !Array.isArray(rows))) {
+			rej({ columns: `template property "rows" is not of type "object"` });
 
 			return;
 		}
 
-		const evaluation: string[] = [];
-		const duplicates: RowID[] = [];
-		const alteredLength = rows.length - 5;
-		const missingIDs = ["row1", "row2", "row3", "row4", "row5"].filter(
-			(id) => !rows.includes(id as RowID),
+		const errorsFound: string[] = [];
+		const rowEntries = Object.entries(rows) as [RowID, number][];
+		const shouldHaveProperties = Array.from(
+			{ length: 5 },
+			(_, i) => `row${i + 1}`,
+		);
+		const missingProperties = shouldHaveProperties.filter(
+			(id) => rowEntries.findIndex((entry) => entry[0] === id) === -1,
 		);
 
-		if (missingIDs.length) {
-			evaluation.push(
-				`missing id${missingIDs.length > 1 ? "s" : ""}: ${stringifyArray(
-					missingIDs,
+		if (missingProperties.length) {
+			errorsFound.push(
+				`missing propert${missingProperties.length > 1 ? "ies" : "y"}: ${stringifyArray(
+					missingProperties,
 				)}`,
 			);
 		}
 
-		if (alteredLength !== 0) {
-			evaluation.push(
-				`has ${Math.abs(alteredLength)} ${
-					alteredLength > 0 ? "more" : "less"
-				} item${alteredLength > 1 ? "s" : ""} than it should have`,
-			);
-		}
-
-		rows.forEach((row, index) => {
-			if (typeof row === "string" && row.startsWith("row")) {
-				const isDuplicate = rows.indexOf(row) !== index;
-				const tag = parseInt(row.slice(3, row.length));
-
-				if (isDuplicate) duplicates.push(row);
+		rowEntries.forEach(([id, points]) => {
+			if (typeof id === "string" && id.startsWith("row")) {
+				const tag = parseInt(id.slice(3, id.length));
 
 				if (!(tag > 0 && tag < 6)) {
-					evaluation.push(
-						`number tag of id "${row}" is (${
+					errorsFound.push(
+						`number tag of id "${id}" is (${
 							tag < 1 ? "below 1" : "above 5"
 						}) invalid`,
 					);
 				}
 			} else {
-				evaluation.push(`id at index ${index} is invalid`);
+				errorsFound.push(`contains invalid property: "${id}"`);
+			}
+
+			if (typeof points !== "number") {
+				errorsFound.push(
+					`value of property "${id} is not of type "number": ${points}, type ${typeof points}`,
+				);
 			}
 		});
 
-		if (duplicates.length) {
-			evaluation.splice(
-				1,
-				0,
-				`has ${
-					rows.filter((row) => duplicates.includes(row)).length
-				} identical ids`,
+		if (errorsFound.length) {
+			rej({ columns: errorsFound });
+		} else {
+			res("rows pass");
+		}
+	});
+}*/
+
+async function checkHeaders(
+	headers: Rows | Columns,
+	type: "row" | "column",
+): Promise<string> {
+	return new Promise((res, rej) => {
+		if (
+			!(
+				typeof headers === "object" &&
+				headers !== null &&
+				!Array.isArray(headers)
+			)
+		) {
+			rej({ [`${type}s`]: `not of type "object"` });
+
+			return;
+		}
+
+		const errorsFound: string[] = [];
+		const headerEntries = Object.entries(headers) as [
+			string,
+			string | number,
+		][];
+		const shouldHaveProperties = Array.from(
+			{ length: 5 },
+			(_, i) => `${type}${i + 1}`,
+		);
+		const missingProperties = shouldHaveProperties.filter(
+			(id) => headerEntries.findIndex((entry) => entry[0] === id) === -1,
+		);
+
+		if (missingProperties.length) {
+			errorsFound.push(
+				`missing propert${missingProperties.length > 1 ? "ies" : "y"}: ${stringifyArray(
+					missingProperties,
+				)}`,
 			);
 		}
 
-		if (evaluation.length) {
-			rej({ rows: evaluation });
+		headerEntries.forEach(([id, value]) => {
+			const valueType = type === "row" ? "number" : "string";
+
+			if (typeof id === "string" && id.startsWith(type)) {
+				const tag = parseInt(id.slice(type.length, id.length));
+
+				if (!(tag > 0 && tag < 6)) {
+					errorsFound.push(
+						`number tag of id "${id}" is (${
+							tag < 1 ? "below 1" : "above 5"
+						}) invalid`,
+					);
+				}
+			} else {
+				errorsFound.push(`contains invalid property: "${id}"`);
+			}
+
+			if (typeof value !== valueType) {
+				errorsFound.push(
+					`value of property "${id}" is not of type "${valueType}": ${value}, type ${typeof value}`,
+				);
+			}
+		});
+
+		if (errorsFound.length) {
+			rej({ [`${type}s`]: errorsFound });
 		} else {
-			res(`rows pass`);
+			res("rows pass");
 		}
 	});
 }
 
 // ------------------------------
 
-async function checkColumnsForErrors(columns: Column[]): Promise<string> {
+/*async function checkColumnsForErrors(columns: Columns): Promise<string> {
 	return new Promise((res, rej) => {
 		if (!Array.isArray(columns)) {
 			rej({ columns: `not of type "array"` });
@@ -206,172 +268,25 @@ async function checkColumnsForErrors(columns: Column[]): Promise<string> {
 			return;
 		}
 
-		const evaluation: string[] = [];
-		const duplicates: Column["id"][] = [];
-		const alteredLength = columns.length - 5;
-		const missingIDs = [
-			"column1",
-			"column2",
-			"column3",
-			"column4",
-			"column5",
-		].filter((id) => columns.findIndex((column) => column.id === id) === -1);
+		const errorsFound: string[] = [];
+		const columnEntries = Object.entries(columns) as [RowID, number][];
+		const shouldHaveProperties = Array.from(
+			{ length: 5 },
+			(_, i) => `column${i + 1}`,
+		);
+		const missingProperties = shouldHaveProperties.filter(
+			(id) => columnEntries.findIndex((entry) => entry[0] === id) === -1,
+		);
 
-		if (missingIDs.length) {
-			const plural = missingIDs.length > 1 ? "s" : "";
-
-			evaluation.unshift(
-				`missing object${plural} with id${plural}: ${stringifyArray(
-					missingIDs,
+		if (missingProperties.length) {
+			errorsFound.push(
+				`missing propert${missingProperties.length > 1 ? "ies" : "y"}: ${stringifyArray(
+					missingProperties,
 				)}`,
 			);
 		}
-
-		if (alteredLength !== 0) {
-			evaluation.push(
-				`has ${alteredLength > 0 ? "more" : "less"} ${Math.abs(
-					alteredLength,
-				)} item${alteredLength > 1 ? "s" : ""} than it should have`,
-			);
-		}
-
-		columns.forEach((column, index) => {
-			const columnCheck = checkColumnForErrors(column, index, columns);
-
-			if (columnCheck.errors.length) {
-				columnCheck.errors.forEach((error) => {
-					evaluation.push(error);
-				});
-			}
-
-			if (columnCheck.duplicateIndex) {
-				duplicates.push(column.id);
-			}
-		});
-
-		if (duplicates.length) {
-			evaluation.unshift(
-				`contains ${
-					columns.filter((column) => duplicates.includes(column.id)).length
-				} objects with identical ids`,
-			);
-		}
-
-		if (evaluation.length) {
-			rej({ columns: evaluation });
-		} else {
-			res("columns pass");
-		}
 	});
-}
-
-function checkColumnForErrors(
-	column: Column,
-	index: number,
-	columns: Column[],
-): { errors: string[]; duplicateIndex: boolean } {
-	const evaluation: ReturnType<typeof checkColumnForErrors> = {
-		errors: [],
-		duplicateIndex: false,
-	};
-
-	if (
-		!(typeof column === "object" && column !== null && !Array.isArray(column))
-	) {
-		evaluation.errors.push(`item at index ${index} is not of type "object"`);
-
-		return evaluation;
-	}
-
-	if (column.id !== undefined) {
-		if (typeof column.id === "string" && column.id.startsWith("column")) {
-			const tag = parseInt(column.id.slice(6, column.id.length));
-			const isDuplicate =
-				columns.findIndex((c) => c.id === column.id) !== index;
-
-			if (!(tag > 0 && tag < 6)) {
-				evaluation.errors.push(
-					`number tag of id "${column.id}" is (${
-						tag < 0 ? "below 0" : "above 5"
-					}) invalid`,
-				);
-			}
-
-			if (isDuplicate) {
-				evaluation.duplicateIndex = true;
-			}
-		} else {
-			evaluation.errors.push(
-				`property "id" of object at index ${index} is invalid`,
-			);
-		}
-	} else {
-		evaluation.errors.push(`object at index ${index} is missing property "id"`);
-	}
-
-	if (column.category !== undefined) {
-		if (typeof column.category !== "string") {
-			evaluation.errors.push(
-				`property "category" of object at index ${index} is not of type "string"`,
-			);
-		}
-	} else {
-		evaluation.errors.push(
-			`object at index ${index} is missing property "category"`,
-		);
-	}
-
-	const unncecessaryProperties = Object.keys(column).filter(
-		(key) => !["id", "category"].includes(key),
-	);
-
-	if (unncecessaryProperties.length) {
-		evaluation.errors.push(
-			`object at index ${index} contains unncecessary propert${
-				unncecessaryProperties.length > 1 ? "ies" : "y"
-			} ${stringifyArray(unncecessaryProperties)}`,
-		);
-	}
-
-	return evaluation;
-}
-
-// ------------------------------
-
-async function checkPointsForErrors(points: number[]): Promise<string> {
-	return new Promise((res, rej) => {
-		const evaluation: string[] = [];
-
-		if (!Array.isArray(points)) {
-			evaluation.push(`not an array`);
-
-			rej(evaluation);
-			return;
-		}
-
-		const alteredLength = points.length - 5;
-
-		if (alteredLength !== 0) {
-			evaluation.push(
-				`has ${Math.abs(alteredLength)} ${
-					alteredLength > 0 ? "more" : "less"
-				} item${alteredLength > 1 ? "s" : ""} than it should have`,
-			);
-		}
-
-		points.forEach((num, index) => {
-			if (typeof num !== "number") {
-				evaluation.push(`item at index ${index} is not of type "number"`);
-			}
-		});
-
-		if (evaluation.length) {
-			rej({ points: evaluation });
-		} else {
-			res("points pass");
-		}
-	});
-}
+}*/
 
 // ------------------------------
 
@@ -379,7 +294,7 @@ function checkTableForErrors(
 	name: string,
 	table: Table,
 	rows: RowID[],
-	columns: Column["id"][],
+	columns: ColumnID[],
 ): Promise<string> {
 	return new Promise((res, rej) => {
 		const notAnObject = !(
@@ -405,7 +320,7 @@ function checkTableForErrors(
 				return;
 			}
 
-			const tableColumns = Object.keys(table[tableRow]) as Column["id"][];
+			const tableColumns = Object.keys(table[tableRow]) as ColumnID[];
 
 			tableColumns.forEach((tableColumn) => {
 				if (!columns.includes(tableColumn)) {
