@@ -86,11 +86,11 @@ function onTemplatePropertyErrorAlertClose(): void {
 	@apply grid w-full place-items-center overflow-auto p-8;
 }
 
-:deep(tr) {
+:deep(.tr-flex) {
 	@apply flex gap-3;
 }
 
-:deep(td) {
+:deep(.td-stylized) {
 	@apply h-[9.5ex] cursor-pointer text-xs;
 }
 
