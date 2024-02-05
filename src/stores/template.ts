@@ -230,7 +230,7 @@ export const useTemplateStore = defineStore("template", () => {
 	async function loadJeopardyTemplate(): Promise<void> {
 		const localStorageTemplate = fetchTemplateFromLocalStorage();
 
-		templateData.value = localStorageTemplate || generateTemplateStructure()
+		templateData.value = localStorageTemplate || generateTemplateStructure();
 
 		/*if (!localStorageTemplate) {
 			templateData.value = generateTemplateStructure();
@@ -266,13 +266,13 @@ export const useTemplateStore = defineStore("template", () => {
 	const activeCell = ref<CompleteTableCell | null>(null);
 
 	const completeTable = computed<CompleteTable>(() => {
-		const rowsToArr = Object.entries(rows.value) as [RowID, number][];
-		const columnsToArr = Object.entries(columns.value) as [ColumnID, string][];
+		const rowEntries = Object.entries(rows.value) as [RowID, number][];
+		const columnEntries = Object.entries(columns.value) as [ColumnID, string][];
 
-		return rowsToArr.reduce((allRows, [row, points]) => {
+		return rowEntries.reduce((allRows, [row, points]) => {
 			return {
 				...allRows,
-				[row]: columnsToArr.reduce((allColumns, [column, category]) => {
+				[row]: columnEntries.reduce((allColumns, [column, category]) => {
 					const successfullyAnswered =
 						gameProgress.progress?.[row]?.[column]?.successfullyAnswered;
 
@@ -299,37 +299,6 @@ export const useTemplateStore = defineStore("template", () => {
 					return {
 						...allColumns,
 						[column]: completeTableCell,
-					};
-				}, {}),
-			};
-		}, {});
-	});
-
-	const filteredColumns = computed<Columns>(() => {
-		const columnsToArr = Object.entries(columns.value) as [ColumnID, string][];
-		const filteredColumnsToArr = columnsToArr.filter(([column, category]) => {
-			return category || columnIsEmpty(column);
-		});
-
-		return filteredColumnsToArr.reduce((all, [column, category]) => {
-			return {
-				...all,
-				[column]: category,
-			};
-		}, {});
-	});
-
-	const filteredCompleteTable = computed<CompleteTable>(() => {
-		const rowIDs = Object.keys(rows.value) as RowID[];
-		const filteredColumnIDs = Object.keys(filteredColumns.value) as ColumnID[];
-
-		return rowIDs.reduce((allRows, row) => {
-			return {
-				...allRows,
-				[row]: filteredColumnIDs.reduce((allColumns, column) => {
-					return {
-						...allColumns,
-						[column]: completeTable.value[row][column],
 					};
 				}, {}),
 			};
@@ -442,8 +411,6 @@ export const useTemplateStore = defineStore("template", () => {
 
 		activeCell,
 		completeTable,
-		filteredColumns,
-		filteredCompleteTable,
 		checkTableDataProperties,
 		columnIsEmpty,
 
