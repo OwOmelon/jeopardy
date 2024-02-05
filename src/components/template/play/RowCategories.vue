@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { useTemplateStore } from "@/stores/template";
+import type { Columns } from "@/stores/template";
 
-const template = useTemplateStore();
+const props = defineProps<{
+	columns: Columns
+}>()
 </script>
 
 <template>
 	<tr class="items-end">
 		<th
-			v-for="column in template.filteredColumns"
+			v-for="(category, column, index) in columns"
 			class="cell cell-width cell-padding bg-red-400 text-white"
 		>
-			{{ column.category || column.id }}
+			{{ category || column }}
 		</th>
 	</tr>
 </template>
