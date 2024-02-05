@@ -22,7 +22,7 @@ const template = useTemplateStore();
 				<TransitionGroup
 					tag="tr"
 					name="list-slide-left"
-					v-for="(rowValue, rowKey, rowIndex) in template.getCompleteTable()"
+					v-for="(rowValue, rowKey, rowIndex) in template.completeTable"
 					:key="rowKey"
 					class="tr-flex relative"
 				>
