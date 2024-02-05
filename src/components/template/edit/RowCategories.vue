@@ -10,11 +10,6 @@ import type { ColumnID } from "@/stores/template";
 const { columns } = storeToRefs(useTemplateStore());
 
 function changeColumnCategory(id: ColumnID, newCategory: string): void {
-	// const columnIndex = template.columns.findIndex((column) => column.id === id);
-	// const column = template.columns[columnIndex];
-
-	// if (columns.value[id] === newName) return;
-
 	columns.value[id] = newCategory;
 }
 </script>
