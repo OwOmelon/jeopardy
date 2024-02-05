@@ -132,62 +132,6 @@ async function checkTemplatePropertiesForErrors(
 
 // ------------------------------
 
-/*async function checkRowsForErrors(rows: Rows): Promise<string> {
-	return new Promise((res, rej) => {
-		if (!(typeof rows === "object" && rows !== null && !Array.isArray(rows))) {
-			rej({ columns: `template property "rows" is not of type "object"` });
-
-			return;
-		}
-
-		const errorsFound: string[] = [];
-		const rowEntries = Object.entries(rows) as [RowID, number][];
-		const shouldHaveProperties = Array.from(
-			{ length: 5 },
-			(_, i) => `row${i + 1}`,
-		);
-		const missingProperties = shouldHaveProperties.filter(
-			(id) => rowEntries.findIndex((entry) => entry[0] === id) === -1,
-		);
-
-		if (missingProperties.length) {
-			errorsFound.push(
-				`missing propert${missingProperties.length > 1 ? "ies" : "y"}: ${stringifyArray(
-					missingProperties,
-				)}`,
-			);
-		}
-
-		rowEntries.forEach(([id, points]) => {
-			if (typeof id === "string" && id.startsWith("row")) {
-				const tag = parseInt(id.slice(3, id.length));
-
-				if (!(tag > 0 && tag < 6)) {
-					errorsFound.push(
-						`number tag of id "${id}" is (${
-							tag < 1 ? "below 1" : "above 5"
-						}) invalid`,
-					);
-				}
-			} else {
-				errorsFound.push(`contains invalid property: "${id}"`);
-			}
-
-			if (typeof points !== "number") {
-				errorsFound.push(
-					`value of property "${id} is not of type "number": ${points}, type ${typeof points}`,
-				);
-			}
-		});
-
-		if (errorsFound.length) {
-			rej({ columns: errorsFound });
-		} else {
-			res("rows pass");
-		}
-	});
-}*/
-
 async function checkHeaders(
 	headers: Rows | Columns,
 	type: "row" | "column",
@@ -218,6 +162,12 @@ async function checkHeaders(
 			(id) => headerEntries.findIndex((entry) => entry[0] === id) === -1,
 		);
 
+		if (headerEntries.length !== 5) {
+			errorsFound.push(
+				`${headerEntries.length} properties found. (should only have 5 properties)`,
+			);
+		}
+
 		if (missingProperties.length) {
 			errorsFound.push(
 				`missing propert${missingProperties.length > 1 ? "ies" : "y"}: ${stringifyArray(
@@ -227,7 +177,8 @@ async function checkHeaders(
 		}
 
 		headerEntries.forEach(([id, value]) => {
-			const valueType = type === "row" ? "number" : "string";
+			const valueType = typeof value;
+			const valueType_ShouldBe = type === "row" ? "number" : "string";
 
 			if (typeof id === "string" && id.startsWith(type)) {
 				const tag = parseInt(id.slice(type.length, id.length));
@@ -243,9 +194,9 @@ async function checkHeaders(
 				errorsFound.push(`contains invalid property: "${id}"`);
 			}
 
-			if (typeof value !== valueType) {
+			if (valueType !== valueType_ShouldBe) {
 				errorsFound.push(
-					`value of property "${id}" is not of type "${valueType}": ${value}, type ${typeof value}`,
+					`value of property "${id}" is not of type "${valueType_ShouldBe}": ${value}, type ${valueType}`,
 				);
 			}
 		});
@@ -258,37 +209,7 @@ async function checkHeaders(
 	});
 }
 
-// ------------------------------
-
-/*async function checkColumnsForErrors(columns: Columns): Promise<string> {
-	return new Promise((res, rej) => {
-		if (!Array.isArray(columns)) {
-			rej({ columns: `not of type "array"` });
-
-			return;
-		}
-
-		const errorsFound: string[] = [];
-		const columnEntries = Object.entries(columns) as [RowID, number][];
-		const shouldHaveProperties = Array.from(
-			{ length: 5 },
-			(_, i) => `column${i + 1}`,
-		);
-		const missingProperties = shouldHaveProperties.filter(
-			(id) => columnEntries.findIndex((entry) => entry[0] === id) === -1,
-		);
-
-		if (missingProperties.length) {
-			errorsFound.push(
-				`missing propert${missingProperties.length > 1 ? "ies" : "y"}: ${stringifyArray(
-					missingProperties,
-				)}`,
-			);
-		}
-	});
-}*/
-
-// ------------------------------
+// ------------------------------\
 
 function checkTableForErrors(
 	name: string,
