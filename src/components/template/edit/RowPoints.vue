@@ -33,7 +33,7 @@ function updatePoints(id: RowID, newPoints: number) {
 		handle="handle"
 		transition-name="list-slide-left"
 		v-slot="{ value, property, dragging, dropTo }"
-		class="col-start-1 row-start-2 mr-5 w-20 flex-col justify-around gap-3 justify-self-end"
+		class="tr-flex col-start-1 row-start-2 mr-5 w-20 flex-col justify-around justify-self-end"
 	>
 		<HeaderPoints
 			:row="property as RowID"

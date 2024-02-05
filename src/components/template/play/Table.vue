@@ -13,8 +13,9 @@ const template = useTemplateStore();
 			<RowCategories />
 
 			<tr
-				v-for="(rowValue, rowKey, rowIndex) in template.filteredCompleteTable"
+				v-for="(rowValue, rowKey, rowIndex) in template.getCompleteTable(true)"
 				:key="rowKey"
+				class="tr-flex"
 			>
 				<TableData
 					v-for="(cellValue, cellKey, cellIndex) in rowValue"

@@ -36,7 +36,7 @@ const hrColors = computed<{ id: ColumnID; color: string; text: string }[]>(
 </script>
 
 <template>
-	<TransitionGroup tag="tr" name="list-slide-left" class="my-2">
+	<TransitionGroup tag="tr" name="list-slide-left" class="tr-flex my-2">
 		<div
 			v-for="hr in hrColors"
 			:key="hr.id"

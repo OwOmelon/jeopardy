@@ -26,7 +26,7 @@ function changeColumnCategory(id: ColumnID, newCategory: string): void {
 		group="categories"
 		handle="handle"
 		transition-name="list-slide-left"
-		class="items-end"
+		class="tr-flex items-end"
 		v-slot="{ value, property, dragging, dropTo }"
 	>
 			<HeaderCategory
