@@ -9,11 +9,11 @@ import type { ColumnID } from "@/stores/template";
 
 const props = defineProps<{
 	column: ColumnID;
-	category: string
+	category: string;
 }>();
 
 const emit = defineEmits<{
-	"change-column-category": [columnID, typeof props.category];
+	"change-column-category": [ColumnID, typeof props.category];
 }>();
 
 const template = useTemplateStore();
@@ -40,7 +40,7 @@ watch(
 				{ '!bg-red-400 !text-white': !template.editing },
 				'cell cell-padding th-bg',
 			]"
-			@blur="emit('change-column-category', textInput, props.column)"
+			@blur="emit('change-column-category', props.column, textInput)"
 		/>
 
 		<DragHandle v-if="template.editing" />
