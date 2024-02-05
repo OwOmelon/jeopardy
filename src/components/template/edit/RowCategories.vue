@@ -24,6 +24,7 @@ function changeColumnCategory(id: ColumnID, newCategory: string): void {
 		v-model="columns"
 		tag="tr"
 		group="categories"
+		handle="handle"
 		transition-name="list-slide-left"
 		class="items-end"
 		v-slot="{ value, property, dragging, dropTo }"
