@@ -15,7 +15,7 @@ const gameProgress = useGameProgressStore();
 
 <template>
 	<div>
-		<Table v-if="template.filteredColumns.length" />
+		<Table v-if="Object.keys(template.completeTable).length" />
 		<EmptyTable_PlayFallback v-else />
 
 		<GuestList />
