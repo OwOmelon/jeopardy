@@ -5,6 +5,7 @@ import { arrSwap } from "@/composables/array_swap";
 const props = defineProps<{
 	tag: string;
 	group: string;
+	handle: string;
 	transitionName: string;
 }>();
 
@@ -48,10 +49,20 @@ function onDrop() {
 	obj.value = swappedModelValue;
 }
 
-function onDragEnd() {
+function onDragEnd(el: Element) {
+	el.removeAttribute("draggable");
+
 	dragFrom.value = null;
 	dropTo.value = null;
 }
+
+// --------------------
+
+function onHandleMouseDown(parent: Element) {
+	parent.setAttribute("draggable", "true");
+}
+
+// --------------------
 
 function findIndex(attr: string): number | null {
 	const children = getChildren();
@@ -75,7 +86,6 @@ onMounted(() => {
 	const el = getWrapperEl()!;
 
 	el.addEventListener("drop", () => onDrop());
-	el.addEventListener("dragend", () => onDragEnd());
 
 	el.addEventListener("dragover", (e) => {
 		e.preventDefault();
@@ -83,12 +93,15 @@ onMounted(() => {
 
 	Array.from(el.children).forEach((child, index) => {
 		const attr = `drag-${props.group}-${index}`;
+		const handle = child.getElementsByClassName(props.handle)[0];
 
-		child.setAttribute("draggable", "true");
+		handle.addEventListener("mousedown", () => onHandleMouseDown(child));
+
 		child.setAttribute(attr, "");
 
 		child.addEventListener("dragstart", () => onDragStart(attr));
 		child.addEventListener("dragenter", () => onDragEnter(attr));
+		child.addEventListener("dragend", () => onDragEnd(child));
 	});
 });
 </script>
