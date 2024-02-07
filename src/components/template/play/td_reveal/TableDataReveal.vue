@@ -13,9 +13,8 @@ import GiveGuestPoints from "./GiveGuestPoints.vue";
 
 const { list: guestList } = storeToRefs(useGuestsStore());
 const { activeCell: activeTemplateCell } = storeToRefs(useTemplateStore());
-const { disableToggle: disableMainMenuToggle } = storeToRefs(
-	useMainMenuStore(),
-);
+const { disableToggle: disableMainMenuToggle } =
+	storeToRefs(useMainMenuStore());
 
 // ------------------------------
 
@@ -225,10 +224,8 @@ button svg {
 	@apply pointer-events-none scale-[3] transition-transform;
 }
 
-button:hover {
-	svg {
-		@apply scale-[5];
-	}
+button:hover svg {
+	@apply scale-[5];
 }
 
 .anchor {
