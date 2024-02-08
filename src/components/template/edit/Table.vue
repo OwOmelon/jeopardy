@@ -12,13 +12,12 @@ const template = useTemplateStore();
 <template>
 	<div class="table-wrapper !pb-0">
 		<table class="grid">
-			<th class="col-start-2 row-start-1">
-				<RowCategories />
-				<RowHRs />
-			</th>
-			<RowPoints />
+			<RowCategories class="col-start-2 row-start-1" />
+			<RowHRs class="col-start-2 row-start-2" />
 
-			<div class="col-start-2 row-start-2 flex flex-col gap-3">
+			<RowPoints class="row-start-2 row-end-4" />
+
+			<div class="col-start-2 row-start-3 flex flex-col gap-3">
 				<TransitionGroup
 					tag="tr"
 					name="list-slide-left"
