@@ -20,22 +20,22 @@ const wrapper = ref<any>(null);
 const dragFrom = ref<number | null>(null);
 const dropTo = ref<number | null>(null);
 
-function onDragStart(attr: string) {
+function onDragStart(attr: string): void {
 	const index = findIndex(attr);
 
 	dragFrom.value = index;
 	emit('dragstart');
 }
 
-function onDragEnter(attr: string) {
+function onDragEnter(attr: string): void {
 	if (dragFrom.value === null) return
-		
+
 	const index = findIndex(attr);
 
 	dropTo.value = index;
 }
 
-function onDrop() {
+function onDrop(): void {
 	if (dragFrom.value === null || dropTo.value === null) return;
 
 	const swappedModelValueEntries = arrSwap(
@@ -44,20 +44,12 @@ function onDrop() {
 		dropTo.value,
 	);
 
-	const swappedModelValue = swappedModelValueEntries.reduce(
-		(entries, [key, value]) => {
-			return {
-				...entries,
-				[key]: value,
-			};
-		},
-		{},
-	) as typeof obj.value;
+	const swappedModelValue = Object.fromEntries(swappedModelValueEntries) as typeof obj.value
 
 	obj.value = swappedModelValue;
 }
 
-function onDragEnd(el: Element) {
+function onDragEnd(el: Element): void {
 	el.removeAttribute("draggable");
 
 	dragFrom.value = null;
