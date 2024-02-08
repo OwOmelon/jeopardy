@@ -48,9 +48,7 @@ function onTemplatePropertyErrorAlertClose(): void {
 				:errors="template.localStorageTemplateErrors!"
 				@close="onTemplatePropertyErrorAlertClose"
 			>
-				<label
-					class="flex cursor-pointer items-center gap-3"
-				>
+				<label class="flex cursor-pointer items-center gap-3">
 					<input
 						v-model="downloadLocalStorageTemplate"
 						type="checkbox"
@@ -99,7 +97,7 @@ function onTemplatePropertyErrorAlertClose(): void {
 }
 
 :deep(.cell) {
-	@apply rounded border-2 border-transparent shadow !shadow-black/30 transition-[background-color,_border_color,_color,_box-shadow,_opacity,_transform];
+	@apply rounded border-2 border-transparent shadow !shadow-black/30 transition-[background-color,_border_color,_color,_box-shadow,_opacity,_transform] focus-within:border-stone-100;
 }
 
 :deep(.cell-width) {
