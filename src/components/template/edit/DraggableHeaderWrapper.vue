@@ -2,6 +2,11 @@
 import { ref, onMounted } from "vue";
 import { arrSwap } from "@/composables/array_swap";
 
+const emit = defineEmits<{
+	'dragstart': []; 
+	'dragend': []; 
+}>()
+
 const props = defineProps<{
 	tag: string;
 	group: string;
@@ -19,6 +24,7 @@ function onDragStart(attr: string) {
 	const index = findIndex(attr);
 
 	dragFrom.value = index;
+	emit('dragstart');
 }
 
 function onDragEnter(attr: string) {
@@ -54,6 +60,8 @@ function onDragEnd(el: Element) {
 
 	dragFrom.value = null;
 	dropTo.value = null;
+	
+	emit('dragend');
 }
 
 // --------------------
@@ -86,7 +94,6 @@ onMounted(() => {
 	const el = getWrapperEl()!;
 
 	el.addEventListener("drop", () => onDrop());
-
 	el.addEventListener("dragover", (e) => {
 		e.preventDefault();
 	});
