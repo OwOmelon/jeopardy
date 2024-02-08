@@ -37,16 +37,20 @@ watch(
 </script>
 
 <template>
-	<th :class="['th-bg group relative grid w-full place-items-center rounded']">
+	<th
+		:class="[
+			'cell th-bg group relative grid w-full place-items-center rounded',
+		]"
+	>
 		<input
 			ref="textBox"
 			v-model="textInput"
 			type="number"
-			class="cell cell-padding w-full bg-transparent text-center outline-none focus:!border-stone-100"
+			class="cell-padding w-full bg-transparent text-center outline-none"
 			@blur="onBlur"
 			@keydown.enter="textBox?.blur()"
 		/>
 
-		<DragHandle v-if="template.editing" rotate />
+		<DragHandle rotate />
 	</th>
 </template>

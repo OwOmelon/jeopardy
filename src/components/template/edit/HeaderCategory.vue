@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { useTemplateStore } from "@/stores/template";
-
 import DragHandle from "@/components/DragHandle.vue";
 import TextBox from "@/components/TextBox.vue";
 
@@ -16,8 +14,6 @@ const emit = defineEmits<{
 	"change-column-category": [ColumnID, typeof props.category];
 }>();
 
-const template = useTemplateStore();
-
 const textInput = ref(props.category);
 
 watch(
@@ -29,20 +25,14 @@ watch(
 </script>
 
 <template>
-	<th class="cell-width group relative">
+	<th class="cell cell-width cell-padding th-bg group relative">
 		<TextBox
 			v-model="textInput"
 			:placeholder="props.column"
-			:disabled="!template.editing"
-			focus-classes="!border-stone-100"
 			blur-on-keydown-enter
-			:class="[
-				{ '!bg-red-400 !text-white': !template.editing },
-				'cell cell-padding th-bg',
-			]"
 			@blur="emit('change-column-category', props.column, textInput)"
 		/>
 
-		<DragHandle v-if="template.editing" />
+		<DragHandle />
 	</th>
 </template>
