@@ -3,9 +3,9 @@ import { ref, onMounted } from "vue";
 import { arrSwap } from "@/composables/array_swap";
 
 const emit = defineEmits<{
-	'dragstart': []; 
-	'dragend': []; 
-}>()
+	dragstart: [];
+	dragend: [];
+}>();
 
 const props = defineProps<{
 	tag: string;
@@ -24,11 +24,11 @@ function onDragStart(attr: string): void {
 	const index = findIndex(attr);
 
 	dragFrom.value = index;
-	emit('dragstart');
+	emit("dragstart");
 }
 
 function onDragEnter(attr: string): void {
-	if (dragFrom.value === null) return
+	if (dragFrom.value === null) return;
 
 	const index = findIndex(attr);
 
@@ -44,7 +44,9 @@ function onDrop(): void {
 		dropTo.value,
 	);
 
-	const swappedModelValue = Object.fromEntries(swappedModelValueEntries) as typeof obj.value
+	const swappedModelValue = Object.fromEntries(
+		swappedModelValueEntries,
+	) as typeof obj.value;
 
 	obj.value = swappedModelValue;
 }
@@ -54,8 +56,8 @@ function onDragEnd(el: Element): void {
 
 	dragFrom.value = null;
 	dropTo.value = null;
-	
-	emit('dragend');
+
+	emit("dragend");
 }
 
 // --------------------
@@ -114,7 +116,7 @@ onMounted(() => {
 				:value="value"
 				:property="key"
 				:dragging="index === dragFrom"
-				:dropTo="index === dropTo"
+				:dropTo="index === dropTo && index !== dragFrom"
 			/>
 		</template>
 	</TransitionGroup>
