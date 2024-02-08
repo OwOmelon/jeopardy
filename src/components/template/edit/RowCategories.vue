@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
 
@@ -8,6 +9,7 @@ import Draggable from "./DraggableHeaderWrapper.vue";
 import type { ColumnID } from "@/stores/template";
 
 const { columns } = storeToRefs(useTemplateStore());
+const draggingContents = ref<boolean>(false);
 
 function changeColumnCategory(id: ColumnID, newCategory: string): void {
 	columns.value[id] = newCategory;
@@ -21,13 +23,19 @@ function changeColumnCategory(id: ColumnID, newCategory: string): void {
 		group="categories"
 		handle="handle"
 		transition-name="list-slide-left"
-		class="tr-flex items-end"
 		v-slot="{ value, property, dragging, dropTo }"
+		class="tr-flex items-end"
+		@dragstart="draggingContents = true"
+		@dragend="draggingContents = false"
 	>
 		<HeaderCategory
 			:column="property as ColumnID"
 			:category="value as string"
-			:class="[{ 'opacity-50': dragging }, { '-translate-y-1': dropTo }]"
+			:class="[
+				{ 'bounce-y': draggingContents },
+				{ dragging: dragging },
+				{ 'drop-to': dropTo },
+			]"
 			@change-column-category="changeColumnCategory"
 		/>
 	</Draggable>

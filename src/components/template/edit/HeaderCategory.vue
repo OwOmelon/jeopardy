@@ -25,14 +25,43 @@ watch(
 </script>
 
 <template>
-	<th class="cell cell-width cell-padding th-bg group relative">
-		<TextBox
-			v-model="textInput"
-			:placeholder="props.column"
-			blur-on-keydown-enter
-			@blur="emit('change-column-category', props.column, textInput)"
-		/>
+	<th>
+		<div class="bounce-y-wrapper">
+			<div class="cell cell-width cell-padding th-bg group relative">
+				<TextBox
+					v-model="textInput"
+					:placeholder="props.column"
+					blur-on-keydown-enter
+					@blur="emit('change-column-category', props.column, textInput)"
+				/>
 
-		<DragHandle />
+				<DragHandle />
+			</div>
+		</div>
 	</th>
 </template>
+
+<style scoped lang="postcss">
+.bounce-y .bounce-y-wrapper {
+	animation: bounce-y 1s ease-in-out infinite;
+}
+
+.dragging .cell {
+	@apply opacity-50;
+}
+
+.drop-to .cell {
+	@apply -translate-y-1;
+}
+
+@keyframes bounce-y {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+
+	50% {
+		transform: translateY(-0.5rem);
+	}
+}
+</style>
