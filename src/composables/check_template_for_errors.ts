@@ -204,7 +204,7 @@ async function checkHeaders(
 		if (errorsFound.length) {
 			rej({ [`${type}s`]: errorsFound });
 		} else {
-			res("rows pass");
+			res(`${type}s pass`);
 		}
 	});
 }
