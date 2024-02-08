@@ -28,6 +28,8 @@ function onDragStart(attr: string) {
 }
 
 function onDragEnter(attr: string) {
+	if (dragFrom.value === null) return
+		
 	const index = findIndex(attr);
 
 	dropTo.value = index;
