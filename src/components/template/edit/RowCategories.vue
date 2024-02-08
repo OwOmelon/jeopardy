@@ -24,10 +24,11 @@ function changeColumnCategory(id: ColumnID, newCategory: string): void {
 		class="tr-flex items-end"
 		v-slot="{ value, property, dragging, dropTo }"
 	>
-			<HeaderCategory
-				:column="property as ColumnID"
-				:category="value as string"
-				@change-column-category="changeColumnCategory"
-			/>
+		<HeaderCategory
+			:column="property as ColumnID"
+			:category="value as string"
+			:class="[{ 'opacity-50': dragging }, { '-translate-y-1': dropTo }]"
+			@change-column-category="changeColumnCategory"
+		/>
 	</Draggable>
 </template>

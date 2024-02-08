@@ -38,6 +38,7 @@ function updatePoints(id: RowID, newPoints: number) {
 		<HeaderPoints
 			:row="property as RowID"
 			:points="value as number"
+			:class="[{ 'opacity-50': dragging }, { '-translate-x-1': dropTo }]"
 			@update-points="updatePoints"
 		/>
 	</Draggable>
