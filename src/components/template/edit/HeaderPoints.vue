@@ -56,7 +56,7 @@ watch(
 
 <style scoped lang="postcss">
 .bounce-x .bounce-x-wrapper {
-	animation: bounce-x 1s ease-in-out infinite;
+	animation: bounce-x 2s ease-in-out infinite;
 }
 
 .dragging .cell {

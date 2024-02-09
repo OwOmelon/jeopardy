@@ -43,7 +43,7 @@ watch(
 
 <style scoped lang="postcss">
 .bounce-y .bounce-y-wrapper {
-	animation: bounce-y 1s ease-in-out infinite;
+	animation: bounce-y 2s ease-in-out infinite;
 }
 
 .dragging .cell {
