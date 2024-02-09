@@ -230,9 +230,7 @@ export const useTemplateStore = defineStore("template", () => {
 	async function loadJeopardyTemplate(): Promise<void> {
 		const localStorageTemplate = fetchTemplateFromLocalStorage();
 
-		templateData.value = localStorageTemplate || generateTemplateStructure();
-
-		/*if (!localStorageTemplate) {
+		if (!localStorageTemplate) {
 			templateData.value = generateTemplateStructure();
 
 			return;
@@ -244,7 +242,7 @@ export const useTemplateStore = defineStore("template", () => {
 			templateData.value = localStorageTemplate;
 		} catch (err) {
 			localStorageTemplateErrors.value = err as TemplateErrors;
-		}*/
+		}
 	}
 
 	function fetchTemplateFromLocalStorage(): TemplateData | null {

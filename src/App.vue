@@ -24,14 +24,14 @@ watch(
 </script>
 
 <template>
-  <!-- <PauseBtn />
+  <PauseBtn />
   <TemplateHistory v-if="template.editing" />
 
   <JeopardyTemplate />
 
   <ModalWrapper :show="mainmenu.show">
     <MainMenu />
-  </ModalWrapper> -->
+  </ModalWrapper>
 
   <d />
 </template>
