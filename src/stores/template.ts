@@ -183,27 +183,25 @@ export const useTemplateStore = defineStore("template", () => {
 
 	// ---------------
 
-	const templateData = computed<TemplateData>({
-		get() {
-			return {
-				name: name.value,
-				rows: rows.value,
-				columns: columns.value,
-				textTable: textTable.value,
-				imageTable: imageTable.value,
-			};
-		},
+	function setTemplateData(newTemplate: TemplateData): void {
+		name.value = newTemplate.name;
+		rows.value = newTemplate.rows;
+		columns.value = newTemplate.columns;
+		textTable.value = newTemplate.textTable;
+		imageTable.value = newTemplate.imageTable;
+	}
 
-		set(newValue) {
-			name.value = newValue.name;
-			rows.value = newValue.rows;
-			columns.value = newValue.columns;
-			textTable.value = newValue.textTable;
-			imageTable.value = newValue.imageTable;
-		},
-	});
+	function getTemplateData(): TemplateData {
+		return {
+			name: name.value,
+			rows: rows.value,
+			columns: columns.value,
+			textTable: textTable.value,
+			imageTable: imageTable.value,
+		};
+	}
 
-	function generateTemplateStructure(): TemplateData {
+	function createTemplateData(): TemplateData {
 		const rows: Rows = {};
 		const columns: Columns = {};
 
@@ -231,7 +229,7 @@ export const useTemplateStore = defineStore("template", () => {
 		const localStorageTemplate = fetchTemplateFromLocalStorage();
 
 		if (!localStorageTemplate) {
-			templateData.value = generateTemplateStructure();
+			setTemplateData(createTemplateData());
 
 			return;
 		}
@@ -239,7 +237,7 @@ export const useTemplateStore = defineStore("template", () => {
 		try {
 			await checkTemplateForErrors(localStorageTemplate);
 
-			templateData.value = localStorageTemplate;
+			setTemplateData(localStorageTemplate);
 		} catch (err) {
 			localStorageTemplateErrors.value = err as TemplateErrors;
 		}
@@ -342,7 +340,7 @@ export const useTemplateStore = defineStore("template", () => {
 		forceDisableHistoryLog.value = true;
 
 		currentID.value = save.id;
-		templateData.value = save;
+		setTemplateData(save);
 	}
 
 	function logHistory(template: TemplateData): void {
@@ -374,7 +372,7 @@ export const useTemplateStore = defineStore("template", () => {
 	}
 
 	watch(
-		templateData,
+		() => getTemplateData(),
 		(template) => {
 			logHistory(template);
 		},
@@ -398,8 +396,9 @@ export const useTemplateStore = defineStore("template", () => {
 		updateImageTable,
 		fetchImageTableImage,
 
-		templateData,
-		generateTemplateStructure,
+		setTemplateData,
+		getTemplateData,
+		createTemplateData,
 
 		localStorageTemplateErrors,
 

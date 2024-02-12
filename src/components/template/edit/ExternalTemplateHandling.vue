@@ -25,7 +25,7 @@ async function importTemplate(): Promise<void> {
 		try {
 			await checkTemplateForErrors(parsedImporttedTemplate);
 
-			template.templateData = parsedImporttedTemplate;
+			template.setTemplateData(parsedImporttedTemplate);
 		} catch (err) {
 			emit("import-error-properties", err as TemplateErrors);
 		}
@@ -82,7 +82,7 @@ function parseJSONFile(file: any): Promise<any> {
 		<button
 			type="button"
 			class="cell-padding"
-			@click="downloadTemplate(template.templateData)"
+			@click="downloadTemplate(template.getTemplateData())"
 		>
 			download
 		</button>
