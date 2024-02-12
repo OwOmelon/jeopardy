@@ -62,8 +62,8 @@ function onDragEnd(el: Element): void {
 
 // --------------------
 
-function onHandleMouseDown(parent: Element) {
-	parent.setAttribute("draggable", "true");
+function onHandleMouseDown(el: Element) {
+	el.setAttribute("draggable", "true");
 }
 
 // --------------------
@@ -87,25 +87,28 @@ function getWrapperEl(): Element | null {
 }
 
 onMounted(() => {
-	const el = getWrapperEl()!;
+	setTimeout(() => {
+		const el = getWrapperEl()!;
+		const children = Array.from(el.children);
 
-	el.addEventListener("drop", () => onDrop());
-	el.addEventListener("dragover", (e) => {
-		e.preventDefault();
-	});
+		el.addEventListener("drop", () => onDrop());
+		el.addEventListener("dragover", (e) => {
+			e.preventDefault();
+		});
 
-	Array.from(el.children).forEach((child, index) => {
-		const attr = `drag-${props.group}-${index}`;
-		const handle = child.getElementsByClassName(props.handle)[0];
+		children.forEach((child, index) => {
+			const attr = `drag-${props.group}-${index}`;
+			const handle = child.getElementsByClassName(props.handle)[0];
 
-		handle.addEventListener("mousedown", () => onHandleMouseDown(child));
+			handle.addEventListener("mousedown", () => onHandleMouseDown(child));
 
-		child.setAttribute(attr, "");
+			child.setAttribute(attr, "");
 
-		child.addEventListener("dragstart", () => onDragStart(attr));
-		child.addEventListener("dragenter", () => onDragEnter(attr));
-		child.addEventListener("dragend", () => onDragEnd(child));
-	});
+			child.addEventListener("dragstart", () => onDragStart(attr));
+			child.addEventListener("dragenter", () => onDragEnter(attr));
+			child.addEventListener("dragend", () => onDragEnd(child));
+		});
+	}, 100);
 });
 </script>
 
