@@ -9,11 +9,9 @@ import Draggable from "./DraggableHeaderWrapper.vue";
 import type { ColumnID } from "@/stores/template";
 
 const { columns } = storeToRefs(useTemplateStore());
-const draggingContents = ref<boolean>(false);
+const { updateColumnCategory } = useTemplateStore()
 
-function changeColumnCategory(id: ColumnID, newCategory: string): void {
-	columns.value[id] = newCategory;
-}
+const draggingContents = ref<boolean>(false);
 </script>
 
 <template>
@@ -36,7 +34,7 @@ function changeColumnCategory(id: ColumnID, newCategory: string): void {
 				{ dragging: dragging },
 				{ 'drop-to': dropTo },
 			]"
-			@change-column-category="changeColumnCategory"
+			@change-column-category="updateColumnCategory"
 		/>
 	</Draggable>
 </template>

@@ -9,21 +9,9 @@ import Draggable from "./DraggableHeaderWrapper.vue";
 import type { RowID } from "@/stores/template";
 
 const { rows } = storeToRefs(useTemplateStore());
+const { updateRowPoints, sortRows } = useTemplateStore();
+
 const draggingContents = ref<boolean>(false);
-
-function updatePoints(id: RowID, newPoints: number) {
-	rows.value[id] = newPoints;
-
-	const ids = Object.keys(rows.value) as RowID[];
-	const sortedPoints = Object.values(rows.value).sort((a, b) => (a > b ? 1 : -1));
-	const sortedRows: typeof rows.value = {};
-
-	for (let i = 0; i < 5; i++) {
-		sortedRows[ids[i]] = sortedPoints[i];
-	}
-
-	rows.value = sortedRows;
-}
 </script>
 
 <template>
@@ -36,7 +24,12 @@ function updatePoints(id: RowID, newPoints: number) {
 		v-slot="{ value, property, dragging, dropTo }"
 		class="tr-flex col-start-1 row-start-2 mr-5 w-20 flex-col justify-around justify-self-end"
 		@dragstart="draggingContents = true"
-		@dragend="draggingContents = false"
+		@dragend="
+			() => {
+				draggingContents = false;
+				sortRows();
+			}
+		"
 	>
 		<HeaderPoints
 			:row="property as RowID"
@@ -46,7 +39,12 @@ function updatePoints(id: RowID, newPoints: number) {
 				{ dragging: dragging },
 				{ 'drop-to': dropTo },
 			]"
-			@update-points="updatePoints"
+			@update-points="
+				(row, points) => {
+					updateRowPoints(row, points);
+					sortRows();
+				}
+			"
 		/>
 	</Draggable>
 </template>

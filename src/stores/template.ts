@@ -89,6 +89,31 @@ export const useTemplateStore = defineStore("template", () => {
 	const rows = ref<Rows>({});
 	const columns = ref<Columns>({});
 
+	function updateRowPoints(row: RowID, points: number): void {
+		rows.value[row] = points;
+		console.log('update row points');
+	}
+
+	function updateColumnCategory(column: ColumnID, category: string): void {
+		columns.value[column] = category;
+		console.log('update column category');
+	}
+
+	function sortRows(): void {
+		const rowIDs = Object.keys(rows.value) as RowID[];
+		const sortedPoints = Object.values(rows.value).sort((a, b) =>
+			a > b ? 1 : -1,
+		);
+		const sortedRows: typeof rows.value = {};
+
+		for (let i = 0; i < 5; i++) {
+			sortedRows[rowIDs[i]] = sortedPoints[i];
+		}
+
+		rows.value = sortedRows;
+		console.log('sort rows')
+	}
+
 	watch(
 		() => ({
 			name: name.value,
@@ -387,6 +412,10 @@ export const useTemplateStore = defineStore("template", () => {
 		name,
 		rows,
 		columns,
+
+		updateRowPoints,
+		updateColumnCategory,
+		sortRows,
 
 		textTable,
 		updateTextTable,
