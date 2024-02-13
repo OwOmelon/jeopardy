@@ -91,27 +91,30 @@ export const useTemplateStore = defineStore("template", () => {
 
 	function updateRowPoints(row: RowID, points: number): void {
 		rows.value[row] = points;
-		console.log('update row points');
 	}
 
 	function updateColumnCategory(column: ColumnID, category: string): void {
 		columns.value[column] = category;
-		console.log('update column category');
 	}
 
-	function sortRows(): void {
-		const rowIDs = Object.keys(rows.value) as RowID[];
-		const sortedPoints = Object.values(rows.value).sort((a, b) =>
-			a > b ? 1 : -1,
-		);
+	function sortRows(deep: boolean = false): void {
+		const points = Object.values(rows.value);
+		const sortedPoints = points.toSorted((a, b) => (a > b ? 1 : -1));
+
+		const rowKeys = Object.keys(rows.value) as RowID[];
+		const orderedRowKeys = deep
+			? sortedPoints.map((num) => rowKeys[points.indexOf(num)])
+			: [];
+
 		const sortedRows: typeof rows.value = {};
 
 		for (let i = 0; i < 5; i++) {
-			sortedRows[rowIDs[i]] = sortedPoints[i];
+			const property = deep ? orderedRowKeys[i] : rowKeys[i];
+
+			sortedRows[property] = sortedPoints[i];
 		}
 
 		rows.value = sortedRows;
-		console.log('sort rows')
 	}
 
 	watch(

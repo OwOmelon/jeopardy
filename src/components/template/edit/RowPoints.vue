@@ -42,7 +42,7 @@ const draggingContents = ref<boolean>(false);
 			@update-points="
 				(row, points) => {
 					updateRowPoints(row, points);
-					sortRows();
+					sortRows(true);
 				}
 			"
 		/>
