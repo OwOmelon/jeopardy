@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { arrSwap } from "@/composables/array_swap";
 
-type Attr = `drag-${typeof props.group}-${number}`;
+type DragAttr = `drag-${typeof props.group}-${number}`;
 
 const emit = defineEmits<{
 	dragstart: [];
@@ -22,35 +22,7 @@ const wrapper = ref<any>(null);
 const dragFrom = ref<number | null>(null);
 const dropTo = ref<number | null>(null);
 
-function onDragStart(attr: Attr): void {
-	const index = findIndex(attr);
-
-	dragFrom.value = index;
-
-	emit("dragstart");
-}
-
-function onDragEnter(e: MouseEvent): void {
-	if (dragFrom.value === null) return;
-
-	const attr = getDragAttribute(e.target as HTMLElement);
-
-	if (attr === null) return;
-
-	const index = findIndex(attr);
-
-	if (index === dragFrom.value) return;
-
-	dropTo.value = index;
-	document.body.style.cursor = "cell";
-}
-
-function onDragLeave(): void {
-	if (dragFrom.value === null || dropTo.value === null) return;
-
-	dropTo.value = null;
-	document.body.style.cursor = "no-drop";
-}
+function moveTo(e: MouseEvent): void {}
 
 function onDragEnd(): void {
 	if (dragFrom.value !== null && dropTo.value !== null) {
@@ -75,69 +47,160 @@ function onDragEnd(): void {
 
 // --------------------
 
-function startDragOperations(e: MouseEvent, attr: Attr): void {
-	e.preventDefault();
+async function startDragOperations(
+	e: MouseEvent,
+	attr: DragAttr,
+): Promise<void> {
+	const moveFromIndex = await findDragindex(attr);
 
-	onDragStart(attr);
+	if (moveFromIndex === null) return;
 
-	getChildren()!.forEach((child) => {
-		child.addEventListener("mouseenter", onDragEnter);
-		child.addEventListener("mouseleave", onDragLeave);
-	});
+	dragFrom.value = moveFromIndex;
 
-	document.body.style.cursor = "no-drop";
-	window.addEventListener("mouseup", stopDragOperations);
+	try {
+		const children = await getChildren();
+
+		children.forEach((child, index) => {
+			if (moveFromIndex !== index) {
+				child.addEventListener("click", moveTo);
+			}
+		});
+
+		emit("dragstart");
+		e.preventDefault();
+		document.body.style.cursor = "no-drop";
+		window.addEventListener("mouseup", endDragOperations);
+	} catch (e) {
+		console.error(e);
+	}
 }
 
-function stopDragOperations(): void {
+async function endDragOperations(): Promise<void> {
 	onDragEnd();
 
-	getChildren()!.forEach((child) => {
-		child.removeEventListener("mouseenter", onDragEnter);
-		child.removeEventListener("mouseleave", onDragLeave);
-	});
+	try {
+		const children = await getChildren();
 
-	document.body.style.cursor = "";
-	window.removeEventListener("mouseup", stopDragOperations);
+		children.forEach((child) => {
+			child.removeEventListener("click", moveTo);
+		});
+
+		document.body.style.cursor = "";
+		window.removeEventListener("mouseup", endDragOperations);
+	} catch (e) {
+		console.error(e);
+	}
 }
 
 // --------------------
 
-function findIndex(attr: Attr): number | null {
-	const children = getChildren();
+function getDragAttribute(el: HTMLElement): Promise<DragAttr> {
+	return new Promise((res, rej) => {
+		const attr = el.getAttribute("drag-item") as DragAttr;
 
-	return children !== null
-		? children.findIndex((child) => child.getAttribute("drag-item") === attr)
-		: null;
+		if (attr === null) {
+			rej("drag attribute not found");
+		} else {
+			res(attr);
+		}
+	});
 }
 
-function getDragAttribute(el: HTMLElement): Attr | null {
-	return (el.getAttribute("drag-item") as Attr) ?? null;
+async function getDragElHandle(el: HTMLElement): Promise<HTMLElement> {
+	return new Promise((res, rej) => {
+		const handle = el.getElementsByClassName("handle")[0] as HTMLElement;
+
+		if (handle === undefined) {
+			rej("handle element not found");
+		} else {
+			res(handle);
+		}
+	});
 }
 
-function getChildren(): HTMLElement[] | null {
-	const wrapperEl = getWrapperEl();
+function findDragindex(attr: DragAttr): Promise<number> {
+	return new Promise(async (res, rej) => {
+		try {
+			const children = await getChildren();
 
-	return wrapperEl !== null
-		? (Array.from(wrapperEl.children) as HTMLElement[])
-		: null;
+			let dragIndex = -1;
+
+			for (const [index, child] of Object.entries(children)) {
+				try {
+					const dragAttr = await getDragAttribute(child);
+
+					if (dragAttr === attr) {
+						dragIndex = +index;
+
+						break;
+					}
+				} catch (e) {
+					console.error(e);
+				}
+			}
+
+			if (dragIndex === -1) {
+				rej("drag index not found");
+			} else {
+				res(dragIndex);
+			}
+		} catch (e) {
+			console.error(e);
+		}
+	});
 }
 
-function getWrapperEl(): HTMLElement | null {
-	return wrapper.value?.$el ?? null;
+function getChildren(): Promise<HTMLElement[]> {
+	return new Promise(async (res, rej) => {
+		try {
+			const wrapperEl = await getWrapperEl();
+			const children = Array.from(wrapperEl.children) as HTMLElement[];
+
+			if (children.length) {
+				res(children);
+			} else {
+				rej("children not found");
+			}
+		} catch (e) {
+			console.error(e);
+		}
+	});
+}
+
+function getWrapperEl(): Promise<HTMLElement> {
+	return new Promise((res, rej) => {
+		const el = wrapper.value?.$el as HTMLElement;
+
+		if (el === undefined) {
+			rej("wrapper el not found");
+		} else {
+			res(el);
+		}
+	});
 }
 
 onMounted(() => {
-	setTimeout(() => {
-		getChildren()!.forEach((child, index) => {
-			const attr: Attr = `drag-${props.group}-${index}`;
-			const handle = child.getElementsByClassName(
-				props.handle,
-			)[0] as HTMLElement;
+	setTimeout(async () => {
+		try {
+			const children = await getChildren();
 
-			handle.addEventListener("mousedown", (e) => startDragOperations(e, attr));
-			child.setAttribute("drag-item", attr);
-		});
+			children.forEach(async (child, index) => {
+				const attr: DragAttr = `drag-${props.group}-${index}`;
+
+				try {
+					const handle = await getDragElHandle(child);
+
+					handle.addEventListener("mousedown", (e) =>
+						startDragOperations(e, attr),
+					);
+					child.setAttribute("drag-item", attr);
+				} catch (e) {
+					console.error(e);
+				}
+			});
+		} catch (e) {
+			console.error(e);
+		}
 	}, 100);
 });
 </script>
