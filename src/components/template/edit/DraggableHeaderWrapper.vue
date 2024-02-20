@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { arrSwap } from "@/composables/array_swap";
 
 type DragAttr = `drag-${typeof props.group}-${number}`;
@@ -22,28 +22,87 @@ const wrapper = ref<any>(null);
 const dragFrom = ref<number | null>(null);
 const dropTo = ref<number | null>(null);
 
-function moveTo(e: MouseEvent): void {}
+async function dragMove(e: MouseEvent): Promise<void> {
+	try {
+		const children = await getChildren();
+		const childrenCoords = children.map((child) =>
+			child.getBoundingClientRect(),
+		);
 
-function onDragEnd(): void {
-	if (dragFrom.value !== null && dropTo.value !== null) {
-		const swappedModelValueEntries = arrSwap(
+		const mouseX = e.clientX;
+		const mouseY = e.clientY;
+
+		const childHoveredIndex = childrenCoords.findIndex((rect) => {
+			return (
+				mouseX >= rect.left &&
+				mouseX <= rect.right &&
+				mouseY >= rect.top &&
+				mouseY <= rect.bottom
+			);
+		});
+
+		if (childHoveredIndex !== dragFrom.value) {
+			dropTo.value = childHoveredIndex;
+		}
+	} catch (e) {
+		console.error(e);
+	}
+}
+
+function swapModelValue(): void {
+	if (dragFrom.value !== null && dropTo.value !== null && dropTo.value !== -1) {
+		const swappedEntries = arrSwap(
 			Object.entries(obj.value),
 			dragFrom.value,
 			dropTo.value,
 		);
 
-		const swappedModelValue = Object.fromEntries(
-			swappedModelValueEntries,
-		) as typeof obj.value;
+		const swapped = Object.fromEntries(swappedEntries) as typeof obj.value;
 
-		obj.value = swappedModelValue;
+		obj.value = swapped;
 	}
 
 	dragFrom.value = null;
 	dropTo.value = null;
-
-	emit("dragend");
 }
+
+watch(dropTo, (newTo, oldTo) => {
+	if (newTo !== null && oldTo === null) {
+		const rule = "* { cursor: no-drop !important }";
+
+		const styleSheet = document.createElement("style");
+
+		styleSheet.innerText = rule;
+		styleSheet.title = "drag-override-window-cursor";
+		styleSheet.setAttribute("id", "drag-override-window-cursor");
+		document.head.appendChild(styleSheet);
+
+		return;
+	}
+
+	if (newTo === null && oldTo !== null) {
+		const customStyleSheet = document.getElementById(
+			"drag-override-window-cursor",
+		);
+
+		customStyleSheet?.remove();
+
+		return;
+	}
+
+	if (newTo !== null) {
+		const sheets = document.styleSheets;
+		const index = Array.from(sheets).findIndex(
+			(sheet) => sheet.title === "drag-override-window-cursor",
+		);
+		const wcss = sheets.item(index);
+
+		wcss?.deleteRule(0);
+		wcss?.insertRule(
+			`* { cursor: ${newTo === -1 ? "no-drop" : "cell"} !important }`,
+		);
+	}
+});
 
 // --------------------
 
@@ -51,45 +110,30 @@ async function startDragOperations(
 	e: MouseEvent,
 	attr: DragAttr,
 ): Promise<void> {
-	const moveFromIndex = await findDragindex(attr);
-
-	if (moveFromIndex === null) return;
-
-	dragFrom.value = moveFromIndex;
-
 	try {
-		const children = await getChildren();
+		const moveFromIndex = await findDragIndex(attr);
 
-		children.forEach((child, index) => {
-			if (moveFromIndex !== index) {
-				child.addEventListener("click", moveTo);
-			}
-		});
+		if (moveFromIndex === null) return;
+
+		dragFrom.value = moveFromIndex;
+
+		e.preventDefault();
+		window.addEventListener("mousemove", dragMove);
+		window.addEventListener("mouseup", endDragOperations);
 
 		emit("dragstart");
-		e.preventDefault();
-		document.body.style.cursor = "no-drop";
-		window.addEventListener("mouseup", endDragOperations);
 	} catch (e) {
 		console.error(e);
 	}
 }
 
 async function endDragOperations(): Promise<void> {
-	onDragEnd();
+	swapModelValue();
 
-	try {
-		const children = await getChildren();
+	window.removeEventListener("mousemove", dragMove);
+	window.removeEventListener("mouseup", endDragOperations);
 
-		children.forEach((child) => {
-			child.removeEventListener("click", moveTo);
-		});
-
-		document.body.style.cursor = "";
-		window.removeEventListener("mouseup", endDragOperations);
-	} catch (e) {
-		console.error(e);
-	}
+	emit("dragend");
 }
 
 // --------------------
@@ -99,7 +143,7 @@ function getDragAttribute(el: HTMLElement): Promise<DragAttr> {
 		const attr = el.getAttribute("drag-item") as DragAttr;
 
 		if (attr === null) {
-			rej("drag attribute not found");
+			rej({ reason: "drag attribute not found", el });
 		} else {
 			res(attr);
 		}
@@ -111,14 +155,14 @@ async function getDragElHandle(el: HTMLElement): Promise<HTMLElement> {
 		const handle = el.getElementsByClassName("handle")[0] as HTMLElement;
 
 		if (handle === undefined) {
-			rej("handle element not found");
+			rej({ reason: "handle element not found", el });
 		} else {
 			res(handle);
 		}
 	});
 }
 
-function findDragindex(attr: DragAttr): Promise<number> {
+function findDragIndex(attr: DragAttr): Promise<number> {
 	return new Promise(async (res, rej) => {
 		try {
 			const children = await getChildren();
@@ -140,7 +184,11 @@ function findDragindex(attr: DragAttr): Promise<number> {
 			}
 
 			if (dragIndex === -1) {
-				rej("drag index not found");
+				rej({
+					reason: "drag index not found",
+					AttrToFind: attr,
+					children,
+				});
 			} else {
 				res(dragIndex);
 			}
