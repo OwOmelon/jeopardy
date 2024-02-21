@@ -53,28 +53,3 @@ watch(
 		</div>
 	</th>
 </template>
-
-<style scoped lang="postcss">
-.bounce-x .bounce-x-wrapper {
-	animation: bounce-x 2s ease-in-out infinite;
-}
-
-.dragging .cell {
-	@apply opacity-50;
-}
-
-.drop-to .cell {
-	@apply -translate-x-1;
-}
-
-@keyframes bounce-x {
-	0%,
-	100% {
-		transform: translateX(0);
-	}
-
-	50% {
-		transform: translateX(-0.5rem);
-	}
-}
-</style>

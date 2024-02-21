@@ -31,8 +31,8 @@ const draggingContents = ref<boolean>(false);
 			:category="value as string"
 			:class="[
 				{ 'bounce-y': draggingContents },
-				{ dragging: dragging },
-				{ 'drop-to': dropTo },
+				{ 'dragging-header': dragging },
+				{ 'drop-to drop-to-y': dropTo },
 			]"
 			@change-column-category="updateColumnCategory"
 		/>

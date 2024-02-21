@@ -45,4 +45,54 @@ const template = useTemplateStore();
 :deep(.th-bg) {
 	@apply bg-stone-500 text-stone-100;
 }
+
+:deep(.drop-to .cell) {
+	@apply !bg-stone-100 !text-stone-500;
+}
+
+:deep(.dragging-header .cell) {
+	@apply opacity-25;
+}
+
+/* --- */
+
+:deep(.drop-to-y .cell) {
+	@apply -translate-y-1;
+}
+
+:deep(.bounce-y .bounce-y-wrapper) {
+	animation: bounce-y 2s ease-in-out infinite;
+}
+
+@keyframes bounce-y {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+
+	50% {
+		transform: translateY(-0.5rem);
+	}
+}
+
+/* --- */
+
+:deep(.drop-to-x .cell) {
+	@apply -translate-x-1;
+}
+
+:deep(.bounce-x .bounce-x-wrapper) {
+	animation: bounce-x 2s ease-in-out infinite;
+}
+
+@keyframes bounce-x {
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+
+	50% {
+		transform: translateX(-0.5rem);
+	}
+}
 </style>

@@ -36,8 +36,8 @@ const draggingContents = ref<boolean>(false);
 			:points="value as number"
 			:class="[
 				{ 'bounce-x': draggingContents },
-				{ dragging: dragging },
-				{ 'drop-to': dropTo },
+				{ 'dragging-header': dragging },
+				{ 'drop-to drop-to-x': dropTo },
 			]"
 			@update-points="
 				(row, points) => {

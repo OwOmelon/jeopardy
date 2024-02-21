@@ -40,28 +40,3 @@ watch(
 		</div>
 	</th>
 </template>
-
-<style scoped lang="postcss">
-.bounce-y .bounce-y-wrapper {
-	animation: bounce-y 2s ease-in-out infinite;
-}
-
-.dragging .cell {
-	@apply opacity-50;
-}
-
-.drop-to .cell {
-	@apply -translate-y-1;
-}
-
-@keyframes bounce-y {
-	0%,
-	100% {
-		transform: translateY(0);
-	}
-
-	50% {
-		transform: translateY(-0.5rem);
-	}
-}
-</style>
