@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import DragHandle from "@/components/DragHandle.vue";
+import DragHandle from "./draggable/DragHandle.vue";
 
 import type { RowID } from "@/stores/template";
 

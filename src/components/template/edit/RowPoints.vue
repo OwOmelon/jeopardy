@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
 
 import HeaderPoints from "./HeaderPoints.vue";
-import Draggable from "./DraggableHeaderWrapper.vue";
+import Draggable from "./draggable//DraggableHeaderWrapper.vue";
 
 import type { RowID } from "@/stores/template";
 
