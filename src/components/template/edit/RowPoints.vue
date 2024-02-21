@@ -22,7 +22,7 @@ const draggingContents = ref<boolean>(false);
 		handle="handle"
 		transition-name="list-slide-left"
 		v-slot="{ value, property, dragging, dropTo }"
-		class="tr-flex col-start-1 row-start-2 mr-5 w-20 flex-col justify-around justify-self-end"
+		class="tr-flex col-start-1 row-start-3 mr-5 w-20 flex-col justify-around justify-self-end"
 		@dragstart="draggingContents = true"
 		@dragend="
 			() => {
