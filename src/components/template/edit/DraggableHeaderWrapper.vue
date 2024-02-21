@@ -22,22 +22,22 @@ const wrapper = ref<any>(null);
 const dragFrom = ref<number | null>(null);
 const dropTo = ref<number | null>(null);
 
-async function dragMove(e: MouseEvent): Promise<void> {
+async function dragMove(e: PointerEvent): Promise<void> {
 	try {
 		const children = await getChildren();
 		const childrenCoords = children.map((child) =>
 			child.getBoundingClientRect(),
 		);
 
-		const mouseX = e.clientX;
-		const mouseY = e.clientY;
+		const pointerX = e.clientX;
+		const pointerY = e.clientY;
 
 		const childHoveredIndex = childrenCoords.findIndex((rect) => {
 			return (
-				mouseX >= rect.left &&
-				mouseX <= rect.right &&
-				mouseY >= rect.top &&
-				mouseY <= rect.bottom
+				pointerX >= rect.left &&
+				pointerX <= rect.right &&
+				pointerY >= rect.top &&
+				pointerY <= rect.bottom
 			);
 		});
 
@@ -66,50 +66,62 @@ function swapModelValue(): void {
 	dropTo.value = null;
 }
 
+function overrideAllCursors(): void {
+	const rule = "* { cursor: grabbing !important }";
+
+	const styleSheet = document.createElement("style");
+
+	styleSheet.innerText = rule;
+	styleSheet.title = "drag-override-window-cursor";
+	styleSheet.setAttribute("id", "drag-override-window-cursor");
+	document.head.appendChild(styleSheet);
+}
+
+function overrideChangeCursorType(cursor: "grabbing" | "cell"): void {
+	const sheets = document.styleSheets;
+	const index = Array.from(sheets).findIndex(
+		(sheet) => sheet.title === "drag-override-window-cursor",
+	);
+	const wcss = sheets.item(index);
+
+	wcss?.deleteRule(0);
+	wcss?.insertRule(`* { cursor: ${cursor} !important }`);
+}
+
+function removeCursorOverride(): void {
+	const customStyleSheet = document.getElementById(
+		"drag-override-window-cursor",
+	);
+
+	customStyleSheet?.remove();
+}
+
 watch(dropTo, (newTo, oldTo) => {
 	if (newTo !== null && oldTo === null) {
-		const rule = "* { cursor: no-drop !important }";
-
-		const styleSheet = document.createElement("style");
-
-		styleSheet.innerText = rule;
-		styleSheet.title = "drag-override-window-cursor";
-		styleSheet.setAttribute("id", "drag-override-window-cursor");
-		document.head.appendChild(styleSheet);
+		overrideAllCursors();
 
 		return;
 	}
 
 	if (newTo === null && oldTo !== null) {
-		const customStyleSheet = document.getElementById(
-			"drag-override-window-cursor",
-		);
-
-		customStyleSheet?.remove();
+		removeCursorOverride();
 
 		return;
 	}
 
 	if (newTo !== null) {
-		const sheets = document.styleSheets;
-		const index = Array.from(sheets).findIndex(
-			(sheet) => sheet.title === "drag-override-window-cursor",
-		);
-		const wcss = sheets.item(index);
-
-		wcss?.deleteRule(0);
-		wcss?.insertRule(
-			`* { cursor: ${newTo === -1 ? "no-drop" : "cell"} !important }`,
-		);
+		overrideChangeCursorType(newTo === -1 ? "grabbing" : "cell");
 	}
 });
 
 // --------------------
 
 async function startDragOperations(
-	e: MouseEvent,
+	e: PointerEvent,
 	attr: DragAttr,
 ): Promise<void> {
+	const handle = e.target as HTMLElement;
+
 	try {
 		const moveFromIndex = await findDragIndex(attr);
 
@@ -117,9 +129,9 @@ async function startDragOperations(
 
 		dragFrom.value = moveFromIndex;
 
-		e.preventDefault();
-		window.addEventListener("mousemove", dragMove);
-		window.addEventListener("mouseup", endDragOperations);
+		handle.setPointerCapture(e.pointerId);
+		handle.addEventListener("pointermove", dragMove);
+		handle.addEventListener("pointerup", endDragOperations);
 
 		emit("dragstart");
 	} catch (e) {
@@ -127,11 +139,20 @@ async function startDragOperations(
 	}
 }
 
-async function endDragOperations(): Promise<void> {
+async function endDragOperations(e: PointerEvent): Promise<void> {
+	const handle = e.target as HTMLElement;
+
+	if (!handle.hasPointerCapture(e.pointerId)) {
+		console.error("pointer capture not found on handle", handle);
+
+		return;
+	}
+
 	swapModelValue();
 
-	window.removeEventListener("mousemove", dragMove);
-	window.removeEventListener("mouseup", endDragOperations);
+	handle.releasePointerCapture(e.pointerId);
+	handle.removeEventListener("pointermove", dragMove);
+	handle.removeEventListener("pointerup", endDragOperations);
 
 	emit("dragend");
 }
@@ -238,7 +259,8 @@ onMounted(() => {
 				try {
 					const handle = await getDragElHandle(child);
 
-					handle.addEventListener("mousedown", (e) =>
+					handle.addEventListener("touchstart", (e) => e.preventDefault());
+					handle.addEventListener("pointerdown", (e) =>
 						startDragOperations(e, attr),
 					);
 					child.setAttribute("drag-item", attr);
