@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 import { arrSwap } from "@/composables/array_swap";
+import { appCursorOverwrite } from "@/composables/app_cursor_overwrite";
 
 type DragAttr = `drag-${typeof props.group}-${number}`;
 
@@ -61,56 +62,11 @@ function swapModelValue(): void {
 
 		obj.value = swapped;
 	}
-
-	dragFrom.value = null;
-	dropTo.value = null;
 }
 
-function overrideAllCursors(): void {
-	const rule = "* { cursor: grabbing !important }";
-
-	const styleSheet = document.createElement("style");
-
-	styleSheet.innerText = rule;
-	styleSheet.title = "drag-override-window-cursor";
-	styleSheet.setAttribute("id", "drag-override-window-cursor");
-	document.head.appendChild(styleSheet);
-}
-
-function overrideChangeCursorType(cursor: "grabbing" | "cell"): void {
-	const sheets = document.styleSheets;
-	const index = Array.from(sheets).findIndex(
-		(sheet) => sheet.title === "drag-override-window-cursor",
-	);
-	const wcss = sheets.item(index);
-
-	wcss?.deleteRule(0);
-	wcss?.insertRule(`* { cursor: ${cursor} !important }`);
-}
-
-function removeCursorOverride(): void {
-	const customStyleSheet = document.getElementById(
-		"drag-override-window-cursor",
-	);
-
-	customStyleSheet?.remove();
-}
-
-watch(dropTo, (newTo, oldTo) => {
-	if (newTo !== null && oldTo === null) {
-		overrideAllCursors();
-
-		return;
-	}
-
-	if (newTo === null && oldTo !== null) {
-		removeCursorOverride();
-
-		return;
-	}
-
-	if (newTo !== null) {
-		overrideChangeCursorType(newTo === -1 ? "grabbing" : "cell");
+watch(dropTo, (to) => {
+	if (to !== null) {
+		appCursorOverwrite.enable(to === -1 ? "grabbing" : "cell");
 	}
 });
 
@@ -128,6 +84,8 @@ async function startDragOperations(
 		if (moveFromIndex === null) return;
 
 		dragFrom.value = moveFromIndex;
+
+		appCursorOverwrite.enable("grabbing");
 
 		handle.setPointerCapture(e.pointerId);
 		handle.addEventListener("pointermove", dragMove);
@@ -149,6 +107,10 @@ async function endDragOperations(e: PointerEvent): Promise<void> {
 	}
 
 	swapModelValue();
+	appCursorOverwrite.disable();
+
+	dragFrom.value = null;
+	dropTo.value = null;
 
 	handle.releasePointerCapture(e.pointerId);
 	handle.removeEventListener("pointermove", dragMove);
