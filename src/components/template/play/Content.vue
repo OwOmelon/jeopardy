@@ -1,6 +1,14 @@
 <script setup lang="ts">
+import { computed, provide } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { useGameProgressStore } from "@/stores/game_progress";
+
+import type {
+	RowID,
+	ColumnID,
+	Columns,
+	CompleteTable,
+} from "@/stores/template";
 
 import Table from "./Table.vue";
 import EmptyTable_PlayFallback from "./EmptyTableFallback.vue";
@@ -11,11 +19,49 @@ import ModalWrapper from "@/components/ModalWrapper.vue";
 
 const template = useTemplateStore();
 const gameProgress = useGameProgressStore();
+
+const filteredColumns = computed<Columns>(() => {
+	const columnEntries = Object.entries(template.columns) as [
+		ColumnID,
+		string,
+	][];
+	const filteredColumnEntries = columnEntries.filter(([column, category]) => {
+		return category || !template.columnIsEmpty(column);
+	});
+
+	return Object.fromEntries(filteredColumnEntries);
+});
+
+const filteredCompleteTable = computed<CompleteTable>(() => {
+	const rowEntries = Object.entries(template.rows) as [RowID, number][];
+	const filteredColumnEntries = Object.entries(filteredColumns.value) as [
+		ColumnID,
+		string,
+	][];
+
+	return rowEntries.reduce((allRowEntries, [row, points]) => {
+		return {
+			...allRowEntries,
+			[row]: filteredColumnEntries.reduce(
+				(allColumnEntries, [column, category]) => {
+					return {
+						...allColumnEntries,
+						[column]: template.completeTable[row][column],
+					};
+				},
+				{},
+			),
+		};
+	}, {});
+});
+
+provide('filtered-columns', filteredColumns)
+provide('filtered-complete-table', filteredCompleteTable)
 </script>
 
 <template>
 	<div>
-		<Table v-if="Object.keys(template.completeTable).length" />
+		<Table v-if="Object.keys(filteredColumns).length" />
 		<EmptyTable_PlayFallback v-else />
 
 		<GuestList />

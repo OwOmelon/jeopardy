@@ -1,9 +1,8 @@
 <script setup lang="ts">
+import { inject } from "vue";
 import type { Columns } from "@/stores/template";
 
-const props = defineProps<{
-	columns: Columns
-}>()
+const columns = inject('filtered-columns') as Columns
 </script>
 
 <template>
