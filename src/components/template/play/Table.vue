@@ -20,18 +20,16 @@ const filteredTableDataRows = inject(
 			<RowCategories />
 
 			<tr
-				v-for="(rowValue, rowKey, rowIndex) in filteredTableDataRows"
-				:key="rowKey"
+				v-for="(columns, row, rowIndex) in filteredTableDataRows"
+				:key="row"
 				class="tr-flex"
 			>
 				<TableData
-					v-for="(cellValue, cellKey, cellIndex) in rowValue"
-					v-bind="cellValue"
-					:is-empty="
-						template.checkTableDataProperties(rowKey, cellKey) === 'empty'
-					"
-					:key="cellKey"
-					@reveal="template.activeTableDataCell = cellValue"
+					v-for="(cell, column, cellIndex) in columns"
+					v-bind="cell"
+					:is-empty="template.checkTableDataProperties(row, column) === 'empty'"
+					:key="column"
+					@reveal="template.setActiveDataCell({ row, column })"
 				/>
 			</tr>
 		</table>

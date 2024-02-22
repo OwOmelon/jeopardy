@@ -287,8 +287,6 @@ export const useTemplateStore = defineStore("template", () => {
 
 	// ---------- DISPLAY ----------
 
-	const activeTableDataCell = ref<TableDataCell | null>(null);
-
 	const tableDataRows = computed<TableDataRows>(() => {
 		const rowEntries = Object.entries(rows.value) as [RowID, number][];
 		const columnEntries = Object.entries(columns.value) as [ColumnID, string][];
@@ -328,6 +326,25 @@ export const useTemplateStore = defineStore("template", () => {
 			};
 		}, {});
 	});
+
+	const activeTableDataCellIndeces = ref<{
+		row: RowID;
+		column: ColumnID;
+	} | null>(null);
+
+	const activeTableDataCell = computed<TableDataCell | null>(() => {
+		return activeTableDataCellIndeces.value === null
+			? null
+			: tableDataRows.value[activeTableDataCellIndeces.value.row][
+					activeTableDataCellIndeces.value.column
+				];
+	});
+
+	function setActiveDataCell(
+		keys: typeof activeTableDataCellIndeces.value | null,
+	) {
+		activeTableDataCellIndeces.value = keys;
+	}
 
 	function checkTableDataProperties(
 		row: RowID,
@@ -438,8 +455,9 @@ export const useTemplateStore = defineStore("template", () => {
 
 		//  ----
 
-		activeTableDataCell,
 		tableDataRows,
+		activeTableDataCell,
+		setActiveDataCell,
 		checkTableDataProperties,
 		columnIsEmpty,
 

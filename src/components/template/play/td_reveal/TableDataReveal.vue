@@ -13,6 +13,7 @@ import GiveGuestPoints from "./GiveGuestPoints.vue";
 
 const { list: guestList } = storeToRefs(useGuestsStore());
 const { activeTableDataCell } = storeToRefs(useTemplateStore());
+const { setActiveDataCell } = useTemplateStore();
 const { disableToggle: disableMainMenuToggle } =
 	storeToRefs(useMainMenuStore());
 
@@ -69,7 +70,7 @@ function revertProgress(): void {
 		revealProgress.value === 1 ||
 		(activeTableDataCell.value!.answeredBy && revealProgress.value === 2)
 	) {
-		activeTableDataCell.value = null;
+		setActiveDataCell(null);
 
 		return;
 	}
@@ -87,7 +88,7 @@ const cancelAdvanceProgress = computed<boolean>(() => {
 
 function advanceProgress(): void {
 	if (cancelAdvanceProgress.value) {
-		activeTableDataCell.value = null;
+		setActiveDataCell(null);
 
 		return;
 	}
@@ -100,7 +101,7 @@ function advanceProgress(): void {
 function onKeyDown(e: KeyboardEvent) {
 	switch (e.code) {
 		case "Escape":
-			activeTableDataCell.value = null;
+			setActiveDataCell(null);
 			break;
 	}
 }
@@ -125,7 +126,7 @@ onUnmounted(() => {
 		class="component modal"
 		v-on-click-outside="
 			() => {
-				activeTableDataCell = null;
+				setActiveDataCell(null);
 			}
 		"
 	>
@@ -165,7 +166,7 @@ onUnmounted(() => {
 						<GiveGuestPoints
 							v-else
 							:reveal-progress="revealProgress"
-							@done="activeTableDataCell = null"
+							@done="setActiveDataCell(null)"
 						/>
 					</Transition>
 				</div>

@@ -21,18 +21,18 @@ const template = useTemplateStore();
 				<TransitionGroup
 					tag="tr"
 					name="list-slide-left"
-					v-for="(rowValue, rowKey, rowIndex) in template.tableDataRows"
-					:key="rowKey"
+					v-for="(columns, row, rowIndex) in template.tableDataRows"
+					:key="row"
 					class="tr-flex relative"
 				>
 					<template
-						v-for="(cellValue, cellKey, columnIndex) in rowValue"
-						:key="cellKey"
+						v-for="(cell, column, columnIndex) in columns"
+						:key="column"
 					>
 						<TableData
-							v-bind="cellValue"
-							:data-values="template.checkTableDataProperties(rowKey, cellKey)"
-							@edit="template.activeTableDataCell = cellValue"
+							v-bind="cell"
+							:data-values="template.checkTableDataProperties(row, column)"
+							@edit="template.setActiveDataCell({ row, column })"
 						/>
 					</template>
 				</TransitionGroup>

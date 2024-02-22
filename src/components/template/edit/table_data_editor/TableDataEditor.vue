@@ -74,7 +74,7 @@ function onKeyDown(e: KeyboardEvent) {
 }
 
 function closeTableDataEditor(): void {
-	template.activeTableDataCell = null;
+	template.setActiveDataCell(null);
 }
 
 onMounted(() => {
@@ -106,10 +106,13 @@ onUnmounted(() => {
 			<p>
 				Editing
 				<span class="font-bold">{{
-					template.activeTableDataCell!.category || template.activeTableDataCell!.column
+					template.activeTableDataCell!.category ||
+					template.activeTableDataCell!.column
 				}}</span>
 				for
-				<span class="font-bold">{{ template.activeTableDataCell!.points }}</span>
+				<span class="font-bold">{{
+					template.activeTableDataCell!.points
+				}}</span>
 			</p>
 
 			<button
