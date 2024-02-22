@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useTemplateStore } from "@/stores/template";
 import { Icon } from "@iconify/vue";
 
+import type { TableDataCell } from "@/stores/template";
+
 const props = defineProps<{
+	activeTableDataCell: TableDataCell;
 	showAnswer: boolean;
 }>();
 
@@ -11,13 +12,11 @@ const emit = defineEmits<{
 	"change-answeree": [];
 }>();
 
-const { activeTableDataCell } = storeToRefs(useTemplateStore());
-
 const ImgAltTxt = (type: string) => {
 	return `image for ${type} of ${
-		activeTableDataCell.value!.category ||
-		activeTableDataCell.value!.column
-	} for ${activeTableDataCell.value!.points} points`;
+		props.activeTableDataCell.category ||
+		props.activeTableDataCell.column
+	} for ${props.activeTableDataCell.points} points`;
 };
 </script>
 
