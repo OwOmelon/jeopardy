@@ -157,6 +157,7 @@ onUnmounted(() => {
 					>
 						<QuestionAnswer
 							v-if="revealProgress < 3"
+							:active-table-data-cell="activeTableDataCell!"
 							:show-answer="revealProgress > 1"
 							@change-answeree="revealProgress = 3"
 						/>
