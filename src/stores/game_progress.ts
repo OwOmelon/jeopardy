@@ -36,7 +36,7 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 			failedToAnswer,
 			successfullyAnswered,
 		};
-		progress.value[template.activeCell!.row] = progressRow;
+		progress.value[template.activeTableDataCell!.row] = progressRow;
 	}
 
 	function updateGuestsLegitimatePoints(): void {

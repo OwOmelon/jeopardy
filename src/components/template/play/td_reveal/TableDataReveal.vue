@@ -12,7 +12,7 @@ import QuestionAnswer from "./QuestionAnswer.vue";
 import GiveGuestPoints from "./GiveGuestPoints.vue";
 
 const { list: guestList } = storeToRefs(useGuestsStore());
-const { activeCell: activeTemplateCell } = storeToRefs(useTemplateStore());
+const { activeTableDataCell } = storeToRefs(useTemplateStore());
 const { disableToggle: disableMainMenuToggle } =
 	storeToRefs(useMainMenuStore());
 
@@ -53,11 +53,11 @@ watch(revealContentOverflow, (overflow) => {
 // 	3 = "deduct_points"
 // 	4 = "add_points"
 const revealProgress = ref<number>(
-	activeTemplateCell.value!.answeredBy ? 2 : 1,
+	activeTableDataCell.value!.answeredBy ? 2 : 1,
 );
 
 const cancelRevertProgress = computed<boolean>(() => {
-	return activeTemplateCell.value!.answeredBy &&
+	return activeTableDataCell.value!.answeredBy &&
 		revealProgress.value !== 2 &&
 		revealProgress.value !== 4
 		? true
@@ -67,9 +67,9 @@ const cancelRevertProgress = computed<boolean>(() => {
 function revertProgress(): void {
 	if (
 		revealProgress.value === 1 ||
-		(activeTemplateCell.value!.answeredBy && revealProgress.value === 2)
+		(activeTableDataCell.value!.answeredBy && revealProgress.value === 2)
 	) {
-		activeTemplateCell.value = null;
+		activeTableDataCell.value = null;
 
 		return;
 	}
@@ -80,14 +80,14 @@ function revertProgress(): void {
 const cancelAdvanceProgress = computed<boolean>(() => {
 	return revealProgress.value === 4 ||
 		(!guestList.value.length && revealProgress.value === 2) ||
-		activeTemplateCell.value!.answeredBy
+		activeTableDataCell.value!.answeredBy
 		? revealProgress.value !== 3
 		: false;
 });
 
 function advanceProgress(): void {
 	if (cancelAdvanceProgress.value) {
-		activeTemplateCell.value = null;
+		activeTableDataCell.value = null;
 
 		return;
 	}
@@ -100,7 +100,7 @@ function advanceProgress(): void {
 function onKeyDown(e: KeyboardEvent) {
 	switch (e.code) {
 		case "Escape":
-			activeTemplateCell.value = null;
+			activeTableDataCell.value = null;
 			break;
 	}
 }
@@ -125,7 +125,7 @@ onUnmounted(() => {
 		class="component modal"
 		v-on-click-outside="
 			() => {
-				activeTemplateCell = null;
+				activeTableDataCell = null;
 			}
 		"
 	>
@@ -134,10 +134,10 @@ onUnmounted(() => {
 		>
 			<p class="text-center">
 				<span class="font-bold">{{
-					activeTemplateCell!.category || activeTemplateCell?.column
+					activeTableDataCell!.category || activeTableDataCell?.column
 				}}</span>
 				for
-				<span class="font-bold">{{ activeTemplateCell!.points }}</span>
+				<span class="font-bold">{{ activeTableDataCell!.points }}</span>
 			</p>
 		</div>
 
@@ -164,7 +164,7 @@ onUnmounted(() => {
 						<GiveGuestPoints
 							v-else
 							:reveal-progress="revealProgress"
-							@done="activeTemplateCell = null"
+							@done="activeTableDataCell = null"
 						/>
 					</Transition>
 				</div>

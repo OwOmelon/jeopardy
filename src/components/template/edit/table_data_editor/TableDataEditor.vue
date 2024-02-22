@@ -11,20 +11,20 @@ import InputArea from "./InputArea.vue";
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
 
-const questionText = ref<string>(template.activeCell!.question.text);
+const questionText = ref<string>(template.activeTableDataCell!.question.text);
 const questionImage = ref<ImageModelValue>(
 	template.fetchImageTableImage(
-		template.activeCell!.row,
-		template.activeCell!.column,
+		template.activeTableDataCell!.row,
+		template.activeTableDataCell!.column,
 		"question",
 	),
 );
 
-const answerText = ref<string>(template.activeCell!.answer.text);
+const answerText = ref<string>(template.activeTableDataCell!.answer.text);
 const answerImage = ref<ImageModelValue>(
 	template.fetchImageTableImage(
-		template.activeCell!.row,
-		template.activeCell!.column,
+		template.activeTableDataCell!.row,
+		template.activeTableDataCell!.column,
 		"answer",
 	),
 );
@@ -37,16 +37,16 @@ function saveChanges(): void {
 		const key: "question" | "answer" = index === 0 ? "question" : "answer";
 
 		template.updateTextTable(
-			template.activeCell!.row,
-			template.activeCell!.column,
+			template.activeTableDataCell!.row,
+			template.activeTableDataCell!.column,
 			property.text.trim(),
 			key,
 		);
 
 		if (property.image) {
 			template.updateImageTable(
-				template.activeCell!.row,
-				template.activeCell!.column,
+				template.activeTableDataCell!.row,
+				template.activeTableDataCell!.column,
 				property.image.src,
 				property.image.type,
 				key,
@@ -54,8 +54,8 @@ function saveChanges(): void {
 		} else {
 			["link", "upload"].forEach((type) => {
 				template.updateImageTable(
-					template.activeCell!.row,
-					template.activeCell!.column,
+					template.activeTableDataCell!.row,
+					template.activeTableDataCell!.column,
 					"",
 					type as "link" | "upload",
 					key,
@@ -74,7 +74,7 @@ function onKeyDown(e: KeyboardEvent) {
 }
 
 function closeTableDataEditor(): void {
-	template.activeCell = null;
+	template.activeTableDataCell = null;
 }
 
 onMounted(() => {
@@ -106,10 +106,10 @@ onUnmounted(() => {
 			<p>
 				Editing
 				<span class="font-bold">{{
-					template.activeCell!.category || template.activeCell!.column
+					template.activeTableDataCell!.category || template.activeTableDataCell!.column
 				}}</span>
 				for
-				<span class="font-bold">{{ template.activeCell!.points }}</span>
+				<span class="font-bold">{{ template.activeTableDataCell!.points }}</span>
 			</p>
 
 			<button

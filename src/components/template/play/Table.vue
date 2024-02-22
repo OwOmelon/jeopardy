@@ -2,16 +2,16 @@
 import { inject } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
-import type { CompleteTable } from "@/stores/template";
+import type { TableDataRows } from "@/stores/template";
 
 import RowCategories from "./RowCategories.vue";
 import TableData from "./TableData.vue";
 
 const template = useTemplateStore();
 
-const filteredCompleteTable = inject(
-	"filtered-complete-table",
-) as CompleteTable;
+const filteredTableDataRows = inject(
+	"filtered-table-data-rows",
+) as TableDataRows;
 </script>
 
 <template>
@@ -20,7 +20,7 @@ const filteredCompleteTable = inject(
 			<RowCategories />
 
 			<tr
-				v-for="(rowValue, rowKey, rowIndex) in filteredCompleteTable"
+				v-for="(rowValue, rowKey, rowIndex) in filteredTableDataRows"
 				:key="rowKey"
 				class="tr-flex"
 			>
@@ -31,7 +31,7 @@ const filteredCompleteTable = inject(
 						template.checkTableDataProperties(rowKey, cellKey) === 'empty'
 					"
 					:key="cellKey"
-					@reveal="template.activeCell = cellValue"
+					@reveal="template.activeTableDataCell = cellValue"
 				/>
 			</tr>
 		</table>

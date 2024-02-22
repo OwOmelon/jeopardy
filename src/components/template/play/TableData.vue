@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { CompleteTableCell } from "@/stores/template";
+import type { TableDataCell } from "@/stores/template";
 
-defineProps<{ isEmpty: boolean } & CompleteTableCell>();
+defineProps<{ isEmpty: boolean } & TableDataCell>();
 
 const emit = defineEmits<{
 	reveal: [];

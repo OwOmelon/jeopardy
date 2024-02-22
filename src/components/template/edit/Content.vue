@@ -29,7 +29,7 @@ const importTemplateError_Read = ref<Error | null>(null);
 			@import-error-read="importTemplateError_Read = $event"
 		/>
 
-		<ModalWrapper :show="template.activeCell ? true : false">
+		<ModalWrapper :show="template.activeTableDataCell ? true : false">
 			<TableDataEditor />
 		</ModalWrapper>
 

@@ -11,23 +11,24 @@ const emit = defineEmits<{
 	"change-answeree": [];
 }>();
 
-const { activeCell: ActiveTemplateCell } = storeToRefs(useTemplateStore());
+const { activeTableDataCell } = storeToRefs(useTemplateStore());
 
 const ImgAltTxt = (type: string) => {
 	return `image for ${type} of ${
-		ActiveTemplateCell.value!.category || ActiveTemplateCell.value!.column
-	} for ${ActiveTemplateCell.value!.points} points`;
+		activeTableDataCell.value!.category ||
+		activeTableDataCell.value!.column
+	} for ${activeTableDataCell.value!.points} points`;
 };
 </script>
 
 <template>
 	<div class="grid">
 		<div class="overflow-hidden">
-			<p>{{ ActiveTemplateCell!.question.text }}</p>
+			<p>{{ activeTableDataCell!.question.text }}</p>
 
-			<div v-if="ActiveTemplateCell!.question.image" class="image-wrapper">
+			<div v-if="activeTableDataCell!.question.image" class="image-wrapper">
 				<img
-					:src="ActiveTemplateCell!.question.image"
+					:src="activeTableDataCell!.question.image"
 					:alt="ImgAltTxt('question')"
 				/>
 			</div>
@@ -42,12 +43,15 @@ const ImgAltTxt = (type: string) => {
 						<hr class="mx-12 my-5 border-t-2 border-red-400" />
 
 						<p class="font-bold">
-							{{ ActiveTemplateCell!.answer.text }}
+							{{ activeTableDataCell!.answer.text }}
 						</p>
 
-						<div v-if="ActiveTemplateCell!.answer.image" class="image-wrapper">
+						<div
+							v-if="activeTableDataCell!.answer.image"
+							class="image-wrapper"
+						>
 							<img
-								:src="ActiveTemplateCell!.answer.image"
+								:src="activeTableDataCell!.answer.image"
 								:alt="ImgAltTxt('answer')"
 							/>
 						</div>
@@ -56,10 +60,10 @@ const ImgAltTxt = (type: string) => {
 			</Transition>
 
 			<div
-				v-if="ActiveTemplateCell!.answeredBy"
+				v-if="activeTableDataCell!.answeredBy"
 				class="mx-auto mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white shadow shadow-black/30"
 			>
-				answered by: {{ ActiveTemplateCell!.answeredBy ?? "no one" }}
+				answered by: {{ activeTableDataCell!.answeredBy ?? "no one" }}
 
 				<button
 					type="button"

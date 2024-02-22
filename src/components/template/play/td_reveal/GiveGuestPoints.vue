@@ -61,8 +61,8 @@ function confirm(): void {
 	});
 
 	gameProgress.updateGameProgress(
-		template.activeCell!.row,
-		template.activeCell!.column,
+		template.activeTableDataCell!.row,
+		template.activeTableDataCell!.column,
 		failedToAnswer,
 		successfulyAnswered,
 	);
@@ -72,8 +72,8 @@ function confirm(): void {
 
 function getMappedGuestList(): MappedGuestList {
 	const gameProgressValue =
-		gameProgress.progress?.[template.activeCell!.row]?.[
-			template.activeCell!.column
+		gameProgress.progress?.[template.activeTableDataCell!.row]?.[
+			template.activeTableDataCell!.column
 		];
 
 	return guests.list.map((guest) => {

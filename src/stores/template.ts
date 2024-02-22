@@ -35,7 +35,7 @@ export type ImageTable = {
 
 //  ----
 
-export type CompleteTableCell = {
+export type TableDataCell = {
 	row: RowID;
 	column: ColumnID;
 	points: number;
@@ -51,8 +51,8 @@ export type CompleteTableCell = {
 	answeredBy: Guest["name"] | "no one";
 };
 
-export type CompleteTable = {
-	[key: RowID]: { [key: ColumnID]: CompleteTableCell };
+export type TableDataRows = {
+	[key: RowID]: { [key: ColumnID]: TableDataCell };
 };
 
 //  ----
@@ -287,9 +287,9 @@ export const useTemplateStore = defineStore("template", () => {
 
 	// ---------- DISPLAY ----------
 
-	const activeCell = ref<CompleteTableCell | null>(null);
+	const activeTableDataCell = ref<TableDataCell | null>(null);
 
-	const completeTable = computed<CompleteTable>(() => {
+	const tableDataRows = computed<TableDataRows>(() => {
 		const rowEntries = Object.entries(rows.value) as [RowID, number][];
 		const columnEntries = Object.entries(columns.value) as [ColumnID, string][];
 
@@ -300,7 +300,7 @@ export const useTemplateStore = defineStore("template", () => {
 					const successfullyAnswered =
 						gameProgress.progress?.[row]?.[column]?.successfullyAnswered;
 
-					const completeTableCell: CompleteTableCell = {
+					const completeTableCell: TableDataCell = {
 						row,
 						column,
 						points,
@@ -333,7 +333,7 @@ export const useTemplateStore = defineStore("template", () => {
 		row: RowID,
 		column: ColumnID,
 	): "complete" | "empty" | "partial" {
-		const td = completeTable.value[row][column];
+		const td = tableDataRows.value[row][column];
 
 		return (td.question.text || td.question.image) &&
 			(td.answer.text || td.answer.image)
@@ -438,8 +438,8 @@ export const useTemplateStore = defineStore("template", () => {
 
 		//  ----
 
-		activeCell,
-		completeTable,
+		activeTableDataCell,
+		tableDataRows,
 		checkTableDataProperties,
 		columnIsEmpty,
 

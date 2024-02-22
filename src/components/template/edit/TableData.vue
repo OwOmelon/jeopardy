@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { CompleteTableCell } from "@/stores/template";
+import type { TableDataCell } from "@/stores/template";
 
 const props = defineProps<
 	{
 		dataValues: string;
-	} & CompleteTableCell
+	} & TableDataCell
 >();
 
 const emit = defineEmits<{

@@ -7,7 +7,7 @@ import type {
 	RowID,
 	ColumnID,
 	Columns,
-	CompleteTable,
+	TableDataRows,
 } from "@/stores/template";
 
 import Table from "./Table.vue";
@@ -32,7 +32,7 @@ const filteredColumns = computed<Columns>(() => {
 	return Object.fromEntries(filteredColumnEntries);
 });
 
-const filteredCompleteTable = computed<CompleteTable>(() => {
+const filteredTableDataRows = computed<TableDataRows>(() => {
 	const rowEntries = Object.entries(template.rows) as [RowID, number][];
 	const filteredColumnEntries = Object.entries(filteredColumns.value) as [
 		ColumnID,
@@ -46,7 +46,7 @@ const filteredCompleteTable = computed<CompleteTable>(() => {
 				(allColumnEntries, [column, category]) => {
 					return {
 						...allColumnEntries,
-						[column]: template.completeTable[row][column],
+						[column]: template.tableDataRows[row][column],
 					};
 				},
 				{},
@@ -56,7 +56,7 @@ const filteredCompleteTable = computed<CompleteTable>(() => {
 });
 
 provide('filtered-columns', filteredColumns)
-provide('filtered-complete-table', filteredCompleteTable)
+provide('filtered-table-data-rows', filteredTableDataRows)
 </script>
 
 <template>
@@ -66,7 +66,7 @@ provide('filtered-complete-table', filteredCompleteTable)
 
 		<GuestList />
 
-		<ModalWrapper :show="template.activeCell ? true : false">
+		<ModalWrapper :show="template.activeTableDataCell ? true : false">
 			<TableDataReveal />
 		</ModalWrapper>
 

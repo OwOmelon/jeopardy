@@ -21,7 +21,7 @@ const template = useTemplateStore();
 				<TransitionGroup
 					tag="tr"
 					name="list-slide-left"
-					v-for="(rowValue, rowKey, rowIndex) in template.completeTable"
+					v-for="(rowValue, rowKey, rowIndex) in template.tableDataRows"
 					:key="rowKey"
 					class="tr-flex relative"
 				>
@@ -32,7 +32,7 @@ const template = useTemplateStore();
 						<TableData
 							v-bind="cellValue"
 							:data-values="template.checkTableDataProperties(rowKey, cellKey)"
-							@edit="template.activeCell = cellValue"
+							@edit="template.activeTableDataCell = cellValue"
 						/>
 					</template>
 				</TransitionGroup>
