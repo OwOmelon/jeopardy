@@ -2,6 +2,7 @@
 import { ref, watch, onMounted } from "vue";
 import { arrSwap } from "@/composables/array_swap";
 import { appCursorOverwrite } from "@/composables/app_cursor_overwrite";
+import { useDragCursor } from "./drag_cursor";
 
 type DragAttr = `drag-${typeof props.group}-${number}`;
 
@@ -18,6 +19,7 @@ const props = defineProps<{
 }>();
 
 const obj = defineModel<Record<string, string | number>>({ required: true });
+const dragCursor = useDragCursor();
 const wrapper = ref<any>(null);
 
 const dragFrom = ref<number | null>(null);
@@ -42,6 +44,8 @@ async function dragMove(e: PointerEvent): Promise<void> {
 			);
 		});
 
+		dragCursor.move(pointerX, pointerY, true);
+
 		if (childHoveredIndex !== dragFrom.value) {
 			dropTo.value = childHoveredIndex;
 		}
@@ -64,10 +68,11 @@ function swapModelValue(): void {
 	}
 }
 
-watch(dropTo, (to) => {
-	if (to !== null) {
-		appCursorOverwrite.enable(to === -1 ? "grabbing" : "cell");
-	}
+watch(dropTo, (num) => {
+	const className =
+		num === null || num === -1 ? "" : "drag-cursor-dropzone-enter";
+
+	dragCursor.addClass(className);
 });
 
 // --------------------
@@ -83,9 +88,14 @@ async function startDragOperations(
 
 		if (moveFromIndex === null) return;
 
+		const pointerX = e.clientX;
+		const pointerY = e.clientY;
+
 		dragFrom.value = moveFromIndex;
 
 		appCursorOverwrite.enable("grabbing");
+		dragCursor.show();
+		dragCursor.move(pointerX, pointerY, false);
 
 		handle.setPointerCapture(e.pointerId);
 		handle.addEventListener("pointermove", dragMove);
@@ -107,6 +117,7 @@ async function endDragOperations(e: PointerEvent): Promise<void> {
 	}
 
 	swapModelValue();
+	dragCursor.hide();
 	appCursorOverwrite.disable();
 
 	dragFrom.value = null;
