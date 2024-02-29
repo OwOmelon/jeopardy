@@ -45,7 +45,7 @@ defineExpose({ focus, blur });
 				? 'edit guest name'
 				: guests.guestLimitReached
 				? 'guest limit reached'
-				: 'insert guest name'
+				: 'enter guest name'
 		"
 		maxlength="15"
 		:disabled="
