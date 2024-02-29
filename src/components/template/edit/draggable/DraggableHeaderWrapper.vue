@@ -69,10 +69,7 @@ function swapModelValue(): void {
 }
 
 watch(dropTo, (num) => {
-	const className =
-		num === null || num === -1 ? "" : "drag-cursor-dropzone-enter";
-
-	dragCursor.addClass(className);
+	dragCursor.enteredDropZone.value = num !== null && num !== -1;
 });
 
 // --------------------
