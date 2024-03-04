@@ -23,8 +23,8 @@ const emit = defineEmits<{
 				currentlyEditing === 'active'
 					? '-active'
 					: currentlyEditing
-					? '-disabled'
-					: ''
+						? '-disabled'
+						: ''
 			}`,
 			'group flex items-center justify-between rounded px-2 transition-colors',
 		]"
@@ -70,10 +70,6 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="postcss">
-.light .child-btn-focused {
-	@apply bg-stone-100;
-}
-
 .light .guest {
 	@apply hover:bg-stone-100;
 }
@@ -91,10 +87,6 @@ const emit = defineEmits<{
 }
 
 /* ----- */
-
-.dark .child-btn-focused {
-	@apply bg-stone-500;
-}
 
 .dark .guest {
 	@apply hover:bg-stone-500;
@@ -119,6 +111,6 @@ button {
 }
 
 .guest-disabled button {
-	@apply opacity-0
+	@apply opacity-0;
 }
 </style>
