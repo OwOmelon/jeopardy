@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 import { arrSwap } from "@/composables/array_swap";
-import { appCursorOverwrite } from "@/composables/app_cursor_overwrite";
 import { useDragCursor } from "./drag_cursor";
 
 type DragAttr = `drag-${typeof props.group}-${number}`;
@@ -90,7 +89,6 @@ async function startDragOperations(
 
 		dragFrom.value = moveFromIndex;
 
-		appCursorOverwrite.enable("grabbing");
 		dragCursor.show();
 		dragCursor.move(pointerX, pointerY, false);
 
@@ -115,7 +113,6 @@ async function endDragOperations(e: PointerEvent): Promise<void> {
 
 	swapModelValue();
 	dragCursor.hide();
-	appCursorOverwrite.disable();
 
 	dragFrom.value = null;
 	dropTo.value = null;
