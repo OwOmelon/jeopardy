@@ -15,14 +15,9 @@ const emit = defineEmits<{
 <template>
 	<td
 		:class="[
-			dataValues === 'complete'
-				? 'hover:!border-b-green-400'
-				: dataValues === 'partial'
-				? 'hover:!border-b-yellow-400'
-				: dataValues === 'empty'
-				? 'hover:!border-b-red-400'
-				: '',
-			'td-stylized td-rise group cell cell-width cell-padding !border-x-0 bg-stone-700 text-stone-300',
+			row,
+			column,
+			'td-stylized td-rise cell cell-width cell-padding group relative !border-x-0 bg-stone-700 text-stone-300',
 		]"
 		@click="emit('edit')"
 	>
@@ -54,6 +49,19 @@ const emit = defineEmits<{
 				{{ answer.text || "Add Answer" }}
 			</p>
 		</div>
+
+		<hr
+			:class="[
+				dataValues === 'complete'
+					? '!border-b-green-400'
+					: dataValues === 'partial'
+						? '!border-b-yellow-400'
+						: dataValues === 'empty'
+							? '!border-b-red-400'
+							: '',
+				'data-values-status-bar pointer-events-none absolute -bottom-[2px] left-0 h-3 w-full rounded-[inherit] border-0 border-b-2 border-transparent opacity-0 transition-opacity group-hover:opacity-100',
+			]"
+		/>
 	</td>
 </template>
 
