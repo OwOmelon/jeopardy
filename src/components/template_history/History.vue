@@ -36,7 +36,7 @@ watch(hide, () => {
 	>
 		<ul
 			:class="[
-				'max-h-screen overflow-y-scroll rounded bg-black/50 p-2 text-xs text-white backdrop-blur ',
+				'max-h-screen overflow-y-scroll rounded bg-stone-900/75 p-2 text-xs text-stone-50 backdrop-blur ',
 			]"
 		>
 			<HistoryItem
