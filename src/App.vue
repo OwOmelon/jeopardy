@@ -9,7 +9,6 @@ import JeopardyTemplate from "./components/template/Template.vue";
 import ModalWrapper from "./components/ModalWrapper.vue";
 import TemplateHistory from "./components/template_history/History.vue";
 import DragCursor from "./components/template/edit/draggable/DragCrusor.vue";
-import d from "./components/_debug.vue";
 
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
@@ -35,8 +34,6 @@ watch(
 	</ModalWrapper>
 
 	<DragCursor />
-
-	<d />
 </template>
 
 <style lang="postcss">
