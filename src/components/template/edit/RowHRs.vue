@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTemplateStore } from "@/stores/template";
+import { useCustomStylesheet } from "@/composables/custom_stylesheet";
 
 import type { RowID, ColumnID } from "@/stores/template";
 
 const template = useTemplateStore();
+const stylesheet = useCustomStylesheet("table-data-status-bar-indicator");
 
 const hrColors = computed<{ id: ColumnID; color: string; text: string }[]>(
 	() => {
@@ -33,6 +35,14 @@ const hrColors = computed<{ id: ColumnID; color: string; text: string }[]>(
 		});
 	},
 );
+
+function writeCustomeStylesheet(column: ColumnID | null): void {
+	stylesheet.write(
+		column === null
+			? ""
+			: `.${column} .data-values-status-bar { opacity: 1 !important };`,
+	);
+}
 </script>
 
 <template>
@@ -41,6 +51,8 @@ const hrColors = computed<{ id: ColumnID; color: string; text: string }[]>(
 			v-for="hr in hrColors"
 			:key="hr.id"
 			class="cell-width group relative flex justify-center"
+			@mouseenter="writeCustomeStylesheet(hr.id)"
+			@mouseleave="writeCustomeStylesheet(null)"
 		>
 			<hr :class="[hr.color, 'my-1 grow rounded-full border-t-2']" />
 
