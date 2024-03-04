@@ -28,33 +28,39 @@ watch(hide, () => {
 </script>
 
 <template>
-	<ul
+	<div
 		:class="[
 			{ '-translate-x-full': hide },
-			'fixed left-0 top-0 z-10 w-[calc(100%_-_(50.48px_+_8px))] max-w-[450px] rounded bg-black/50 p-2 text-xs text-white backdrop-blur transition-transform duration-300',
+			'fixed left-0 top-0 z-10 w-[calc(100%_-_(50.48px_+_8px))] max-w-[450px] transition-transform duration-300',
 		]"
 	>
-		<HistoryItem
-			v-for="(historyTemplate, index) in template.history"
-			v-bind="historyTemplate"
-			:index="index"
-			:is-current-template="index === template.historyIndexOfCurrentTemplate"
-			:is-active="index === activeHistoryItem"
-			:show-answers="showAnswers"
-			:show-images="showImages"
-			:key="historyTemplate.id"
-			@set-active-item="setActiveItem(index)"
-			@load-save="template.loadTemplate(historyTemplate)"
-			@toggle-show-answers="showAnswers = !showAnswers"
-			@toggle-show-images="showImages = !showImages"
-		/>
+		<ul
+			:class="[
+				'max-h-screen overflow-y-scroll rounded bg-black/50 p-2 text-xs text-white backdrop-blur ',
+			]"
+		>
+			<HistoryItem
+				v-for="(historyTemplate, index) in template.history"
+				v-bind="historyTemplate"
+				:index="index"
+				:is-current-template="index === template.historyIndexOfCurrentTemplate"
+				:is-active="index === activeHistoryItem"
+				:show-answers="showAnswers"
+				:show-images="showImages"
+				:key="historyTemplate.id"
+				@set-active-item="setActiveItem(index)"
+				@load-save="template.loadTemplate(historyTemplate)"
+				@toggle-show-answers="showAnswers = !showAnswers"
+				@toggle-show-images="showImages = !showImages"
+			/>
+		</ul>
 
 		<button
 			type="button"
-			class="absolute left-full top-0 ml-2 grid aspect-square place-items-center rounded-[inherit] bg-[inherit] p-5 backdrop-blur"
+			class="absolute left-full top-0 ml-2 grid aspect-square place-items-center rounded bg-black/50 p-5 text-white backdrop-blur"
 			@click="hide = !hide"
 		>
 			|||
 		</button>
-	</ul>
+	</div>
 </template>
