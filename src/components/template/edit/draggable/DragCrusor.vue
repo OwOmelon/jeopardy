@@ -22,7 +22,7 @@ const { enteredDropZone } = useDragCursor();
 
 			<div
 				:class="[
-					enteredDropZone ? 'drag-icon-drop-enter' : 'drag-icon-dragging',
+					{ 'drag-icon-drop-enter': enteredDropZone },
 					'drag-icon shadow-subtle absolute grid place-items-center',
 				]"
 			>
@@ -66,53 +66,28 @@ const { enteredDropZone } = useDragCursor();
 <style scoped lang="scss">
 .drag-icon {
 	& > i:nth-child(1) {
-		width: 4px;
-	}
-
-	& > i:nth-child(2) {
-		height: 4px;
-		width: 12px;
-	}
-
-	& > i:nth-child(3) {
-		height: 4px;
-		width: 12px;
-	}
-
-	.box {
-		i:nth-child(-n + 4) {
-			top: 0;
-		}
-
-		i:nth-child(n + 5):nth-child(-n + 8) {
-			bottom: 0;
-		}
-
-		i:nth-child(n + 3):nth-child(-n + 6) {
-			right: 0;
-		}
-	}
-}
-
-.drag-icon-dragging {
-	& > i:nth-child(1) {
 		bottom: -6px;
 		height: 12px;
+		width: 4px;
 	}
 
 	& > i:nth-child(2) {
 		left: -6px;
 		bottom: -2px;
+		height: 4px;
+		width: 12px;
 		transform: rotate(0);
 	}
 
 	& > i:nth-child(3) {
 		right: -6px;
 		bottom: -2px;
+		height: 4px;
+		width: 12px;
 		transform: rotate(0);
 	}
 
-	& .box {
+	.box {
 		top: -13px;
 		width: 26px;
 		height: 26px;
@@ -127,6 +102,18 @@ const { enteredDropZone } = useDragCursor();
 			height: 10px;
 			width: 4px;
 		}
+
+		i:nth-child(-n + 4) {
+			top: 0;
+		}
+
+		i:nth-child(n + 5):nth-child(-n + 8) {
+			bottom: 0;
+		}
+
+		i:nth-child(n + 3):nth-child(-n + 6) {
+			right: 0;
+		}
 	}
 }
 
@@ -134,7 +121,6 @@ const { enteredDropZone } = useDragCursor();
 	& > i:nth-child(1) {
 		bottom: 8px;
 		height: 30px;
-		width: 4px;
 	}
 
 	& > i:nth-child(2) {
