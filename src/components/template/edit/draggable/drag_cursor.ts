@@ -1,4 +1,4 @@
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
 const cursor = ref<HTMLElement | null>(null);
 const enteredDropZone = ref<boolean>(false);
@@ -20,10 +20,6 @@ function hide() {
 	cursor.value!.style.transform = "";
 	cursor.value!.style.opacity = "0";
 }
-
-watch(enteredDropZone, (x) => {
-	console.log(x, "store");
-});
 
 setTimeout(() => {
 	cursor.value = document.getElementById("drag-cursor");
