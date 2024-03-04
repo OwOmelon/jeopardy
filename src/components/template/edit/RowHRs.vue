@@ -14,15 +14,21 @@ const hrColors = computed<{ id: ColumnID; color: string; text: string }[]>(
 		const columnIDs = Object.keys(template.columns) as ColumnID[];
 
 		return columnIDs.map((column) => {
-			const columnDataValues = rowIDs.map((row) =>
-				template.checkTableDataProperties(row, column),
-			);
-
 			let color = "border-red-400";
 			let text = "this column is empty";
 
-			if (columnDataValues.some((check1) => check1 !== "empty")) {
-				if (columnDataValues.every((check2) => check2 === "complete")) {
+			const cdv = {
+				empty: 0,
+				partial: 0,
+				complete: 0,
+			};
+
+			rowIDs.forEach((row) => {
+				cdv[template.checkTableDataProperties(row, column)]++;
+			});
+
+			if (cdv.empty !== 5) {
+				if (cdv.complete === columnIDs.length) {
 					color = "border-green-400";
 					text = "this column is complete";
 				} else {
