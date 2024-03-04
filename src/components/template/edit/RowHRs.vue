@@ -17,7 +17,7 @@ const hrColors = computed<{ id: ColumnID; color: string; text: string }[]>(
 			);
 
 			let color = "border-red-400";
-			let text = "this column empty";
+			let text = "this column is empty";
 
 			if (columnDataValues.some((check1) => check1 !== "empty")) {
 				if (columnDataValues.every((check2) => check2 === "complete")) {
