@@ -36,7 +36,7 @@ watch(hide, () => {
 	>
 		<ul
 			:class="[
-				'max-h-screen overflow-y-scroll rounded bg-stone-900/75 p-2 text-xs text-stone-50 backdrop-blur ',
+				'max-h-screen overflow-y-auto rounded bg-stone-900/75 p-2 text-xs text-stone-50 backdrop-blur ',
 			]"
 		>
 			<HistoryItem
@@ -64,3 +64,10 @@ watch(hide, () => {
 		</button>
 	</div>
 </template>
+
+<style scoped lang="postcss">
+* {
+	scrollbar-color: rgb(255, 255, 255, 0.35) #0000;
+	scrollbar-width: thin;
+}
+</style>
