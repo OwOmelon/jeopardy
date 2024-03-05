@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
+import IconEdit from "~icons/material-symbols/edit-rounded";
 
 import type { TableDataCell } from "@/stores/template";
 
@@ -14,8 +14,7 @@ const emit = defineEmits<{
 
 const ImgAltTxt = (type: string) => {
 	return `image for ${type} of ${
-		props.activeTableDataCell.category ||
-		props.activeTableDataCell.column
+		props.activeTableDataCell.category || props.activeTableDataCell.column
 	} for ${props.activeTableDataCell.points} points`;
 };
 </script>
@@ -45,10 +44,7 @@ const ImgAltTxt = (type: string) => {
 							{{ activeTableDataCell!.answer.text }}
 						</p>
 
-						<div
-							v-if="activeTableDataCell!.answer.image"
-							class="image-wrapper"
-						>
+						<div v-if="activeTableDataCell!.answer.image" class="image-wrapper">
 							<img
 								:src="activeTableDataCell!.answer.image"
 								:alt="ImgAltTxt('answer')"
@@ -69,7 +65,7 @@ const ImgAltTxt = (type: string) => {
 					class="rounded bg-white p-2 text-red-400 shadow shadow-black/30 transition-[box-shadow,_transform] hover:-translate-y-1 hover:shadow-md"
 					@click="emit('change-answeree')"
 				>
-					<Icon icon="material-symbols:edit-rounded" />
+					<IconEdit />
 				</button>
 			</div>
 		</div>

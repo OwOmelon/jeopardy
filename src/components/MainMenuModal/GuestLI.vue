@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
+import IconEditRounded from "~icons/material-symbols/edit-rounded";
+import IconDeleteRounded from "~icons/material-symbols/delete-rounded";
+import IconCancelRounded from "~icons/material-symbols/cancel-rounded";
 
 import type { Guest } from "@/stores/guests";
 
@@ -45,13 +47,8 @@ const emit = defineEmits<{
 					}
 				"
 			>
-				<Icon
-					:icon="
-						currentlyEditing === 'active'
-							? 'material-symbols:cancel-rounded'
-							: 'material-symbols:edit-rounded'
-					"
-				/>
+				<IconCancelRounded v-if="currentlyEditing === 'active'" />
+				<IconEditRounded v-else />
 			</button>
 			<button
 				type="button"
@@ -63,7 +60,7 @@ const emit = defineEmits<{
 					}
 				"
 			>
-				<Icon icon="material-symbols:delete-rounded" />
+				<IconDeleteRounded />
 			</button>
 		</div>
 	</li>

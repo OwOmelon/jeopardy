@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useTemplateStore } from "@/stores/template";
-import { Icon } from "@iconify/vue";
+import IconEdit from "~icons/material-symbols/edit-rounded";
 
 const template = useTemplateStore();
 </script>
 
 <template>
-	<div class="my-10 rounded bg-stone-50 p-3 shadow-md w-fit mx-auto">
+	<div class="mx-auto my-10 w-fit rounded bg-stone-50 p-3 shadow-md">
 		<p class="text-xl font-bold">your table is empty D:</p>
 		<button
 			type="button"
@@ -14,7 +14,8 @@ const template = useTemplateStore();
 			@click="template.editing = true"
 		>
 			go work on it
-			<Icon icon="material-symbols:edit-rounded" class="h-6 w-6" />
+
+			<IconEdit class="h-6 w-6" />
 		</button>
 	</div>
 </template>

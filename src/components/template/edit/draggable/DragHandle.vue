@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
+import IconDragHorizontal from "~icons/carbon/drag-horizontal";
+import IconDragVertical from "~icons/carbon/drag-vertical";
+
 const props = defineProps<{
 	rotate?: boolean;
 }>();
@@ -14,9 +16,13 @@ const props = defineProps<{
 		]"
 		@click.stop
 	>
-		<Icon
-			:icon="`carbon:drag-${rotate ? 'vertical' : 'horizontal'}`"
-			class="h-5 w-5 text-stone-600"
-		/>
+		<IconDragVertical v-if="rotate" />
+		<IconDragHorizontal v-else />
 	</div>
 </template>
+
+<style scoped lang="postcss">
+svg {
+	@apply h-5 w-5 text-stone-600;
+}
+</style>

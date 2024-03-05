@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
+import IconTabArrowLeft from "~icons/fluent/tab-arrow-left-24-regular";
+import IconNoPhotography from "~icons/material-symbols/no-photography";
 
 import type { RowID, ColumnID, HistoryTemplate } from "@/stores/template";
 
@@ -58,8 +59,7 @@ function getImg(row: RowID, column: ColumnID) {
 					'order-2 ml-10 flex items-center gap-2 transition-opacity duration-300',
 				]"
 			>
-				<Icon
-					icon="fluent:tab-arrow-left-24-regular"
+				<IconTabArrowLeft
 					@click.stop="emit('load-save')"
 					class="peer order-1 h-5 w-5 transition-transform hover:scale-125"
 				/>
@@ -67,7 +67,7 @@ function getImg(row: RowID, column: ColumnID) {
 				<p
 					:class="[
 						{ '!opacity-100': isActive },
-						'whitespace-nowrap text-[0.7rem] transition-opacity peer-hover:opacity-100 opacity-0',
+						'whitespace-nowrap text-[0.7rem] opacity-0 transition-opacity peer-hover:opacity-100',
 					]"
 				>
 					load template
@@ -139,11 +139,7 @@ function getImg(row: RowID, column: ColumnID) {
 											class="h-full object-contain"
 										/>
 
-										<Icon
-											v-else
-											icon="material-symbols:no-photography"
-											class="scale-125"
-										/>
+										<IconNoPhotography v-else class="scale-125" />
 									</template>
 
 									<p v-else>

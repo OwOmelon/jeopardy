@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 
 import type { ImageModelValue } from "./TableDataEditor.vue";
 
-import { Icon } from "@iconify/vue";
+import IconAddPhoto from "~icons/material-symbols/add-a-photo-outline-rounded";
 import TextBox from "@/components/TextBox.vue";
 
 const props = defineProps<{
@@ -94,10 +94,7 @@ function onImageUpload(): void {
 			<label
 				class="btn relative flex cursor-pointer items-center justify-center hover:!border-stone-100"
 			>
-				<Icon
-					icon="material-symbols:add-a-photo-outline-rounded"
-					class="scale-125"
-				/>
+				<IconAddPhoto class="scale-125" />
 				<span class="ml-2">upload</span>
 
 				<input

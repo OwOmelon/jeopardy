@@ -2,7 +2,8 @@
 import { ref, computed, watch } from "vue";
 import type { Guest } from "@/stores/guests";
 
-import { Icon } from "@iconify/vue";
+import IconPlus from "~icons/ion/plus-round";
+import IconMinus from "~icons/ion/minus-round";
 
 const props = defineProps<Guest>();
 
@@ -56,11 +57,11 @@ watch(totalPoints, (val) => {
 
 			<div class="mt-1 flex gap-1">
 				<button type="button" @click="btnEditPoints('subtract')">
-					<Icon icon="ion:minus-round" />
+					<IconMinus />
 				</button>
 
 				<button type="button" @click="btnEditPoints('add')">
-					<Icon icon="ion:plus-round" />
+					<IconPlus />
 				</button>
 			</div>
 		</div>

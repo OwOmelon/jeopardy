@@ -3,8 +3,7 @@ import { ref } from "vue";
 import { useTemplateStore } from "@/stores/template";
 import { downloadTemplate } from "@/composables/download_template";
 
-import { Icon } from "@iconify/vue";
-
+import IconCheck from "~icons/material-symbols/check-small";
 import TemplateName from "./TemplateName.vue";
 import Content_Edit from "./edit/Content.vue";
 import Content_Play from "./play/Content.vue";
@@ -61,8 +60,7 @@ function onTemplatePropertyErrorAlertClose(): void {
 							'aspect-square w-8 rounded border-2 border-white shadow shadow-black/30',
 						]"
 					>
-						<Icon
-							icon="material-symbols:check-small"
+						<IconCheck
 							:class="[
 								{ hidden: !downloadLocalStorageTemplate },
 								'h-full w-full scale-125 text-red-400',

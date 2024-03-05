@@ -7,7 +7,7 @@ import { useGuestsStore } from "@/stores/guests";
 import type { Guest } from "@/stores/guests";
 type MappedGuestList = (Guest & { answered: "no" | "failed" | "succeeded" })[];
 
-import { Icon } from "@iconify/vue";
+import IconArrowRight from "~icons/material-symbols/arrow-right-rounded";
 
 const props = defineProps<{
 	revealProgress: number;
@@ -82,8 +82,8 @@ function getMappedGuestList(): MappedGuestList {
 			answered: gameProgressValue?.failedToAnswer?.includes(guest.id)
 				? "failed"
 				: guest.id === gameProgressValue?.successfullyAnswered
-				? "succeeded"
-				: "no",
+					? "succeeded"
+					: "no",
 		};
 	});
 }
@@ -113,10 +113,10 @@ function getMappedGuestList(): MappedGuestList {
 									props.revealProgress === 4
 										? 'pointer-events-none opacity-50'
 										: ''
-							  }`
+								}`
 							: guest.answered === 'succeeded'
-							? 'gain-points'
-							: 'bg-stone-300 text-stone-500',
+								? 'gain-points'
+								: 'bg-stone-300 text-stone-500',
 						'rounded p-2 shadow shadow-black/30 transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1',
 					]"
 					@click="onGuestBtnClick(guest)"
@@ -136,8 +136,7 @@ function getMappedGuestList(): MappedGuestList {
 						>
 							confirm
 
-							<Icon
-								icon="material-symbols:arrow-right-rounded"
+							<IconArrowRight
 								class="ml-3 scale-[3] transition-transform group-hover:translate-x-2"
 							/>
 						</button>

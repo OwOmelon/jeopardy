@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useTemplateStore } from "@/stores/template";
 import { useMainMenuStore } from "@/stores/mainmenu";
-import { Icon } from "@iconify/vue";
+
+import IconPause from "~icons/solar/pause-bold";
 
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
@@ -18,6 +19,6 @@ const mainmenu = useMainMenuStore();
 		]"
 		@click="mainmenu.show = !mainmenu.show"
 	>
-		<Icon icon="solar:pause-bold" />
+		<IconPause />
 	</button>
 </template>

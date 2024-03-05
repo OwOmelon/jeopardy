@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
 import { useGuestsStore } from "../../stores/guests";
+
+import IconCheckmarkRound from "~icons/ion/checkmark-round";
+import IconPlusRound from "~icons/ion/plus-round";
 
 const props = defineProps<{
 	textInputLength: number;
@@ -23,9 +25,9 @@ const guests = useGuestsStore();
 		@click="emit('save-changes')"
 	>
 		<span>{{ guests.activeGuestID ? "edit" : "add" }}</span>
-		<Icon
-			:icon="guests.activeGuestID ? 'ion:checkmark-round' : 'ion:plus-round'"
-		/>
+
+		<IconCheckmarkRound v-if="guests.activeGuestID" />
+		<IconPlusRound v-else />
 	</button>
 </template>
 

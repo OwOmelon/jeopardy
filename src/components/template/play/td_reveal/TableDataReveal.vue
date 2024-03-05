@@ -7,7 +7,8 @@ import { useMainMenuStore } from "@/stores/mainmenu";
 import { useElementSize } from "@vueuse/core";
 import { vOnClickOutside } from "@vueuse/components";
 
-import { Icon } from "@iconify/vue";
+import IconArrowLeft from "~icons/material-symbols/arrow-left-rounded";
+import IconArrowRight from "~icons/material-symbols/arrow-right-rounded";
 import QuestionAnswer from "./QuestionAnswer.vue";
 import GiveGuestPoints from "./GiveGuestPoints.vue";
 
@@ -191,7 +192,7 @@ onUnmounted(() => {
 				]"
 				@click="revertProgress"
 			>
-				<Icon icon="material-symbols:arrow-left-rounded" />
+				<IconArrowLeft />
 			</button>
 
 			<span class="text-center">{{ revealProgress }} / 4</span>
@@ -207,7 +208,7 @@ onUnmounted(() => {
 				]"
 				@click="advanceProgress"
 			>
-				<Icon icon="material-symbols:arrow-right-rounded" />
+				<IconArrowRight />
 			</button>
 		</div>
 	</div>
