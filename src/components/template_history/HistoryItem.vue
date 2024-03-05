@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 
-import type { HistoryTemplate } from "@/stores/template";
+import type { RowID, ColumnID, HistoryTemplate } from "@/stores/template";
 
 const props = defineProps<
 	{
@@ -18,6 +18,15 @@ const emit = defineEmits<{
 	"toggle-show-answers": [];
 	"toggle-show-images": [];
 }>();
+
+function getImg(row: RowID, column: ColumnID) {
+	const imgLink = props.imageTable.links?.[row]?.[column];
+	const imgUpload = props.imageTable.uploads?.[row]?.[column];
+
+	return props.showAnswers
+		? imgLink?.answer || imgUpload?.answer
+		: imgLink?.question || imgUpload?.question;
+}
 </script>
 
 <template>
@@ -31,7 +40,7 @@ const emit = defineEmits<{
 		<div class="group relative flex items-center justify-between">
 			<p
 				:class="[
-					isCurrentTemplate ? 'text-red-400' : 'text-white',
+					{ 'text-red-400': isCurrentTemplate },
 					'font-bold transition-colors',
 				]"
 			>
@@ -44,8 +53,8 @@ const emit = defineEmits<{
 					isCurrentTemplate
 						? 'pointer-events-none opacity-0'
 						: isActive
-						? 'oapcity-100'
-						: 'group-hover:opacity-100 lg:opacity-0',
+							? 'oapcity-100'
+							: 'group-hover:opacity-100 lg:opacity-0',
 					'order-2 ml-10 flex items-center gap-2 transition-opacity duration-300',
 				]"
 			>
@@ -56,7 +65,10 @@ const emit = defineEmits<{
 				/>
 
 				<p
-					class="whitespace-nowrap text-[0.7rem] transition-opacity peer-hover:opacity-100 lg:opacity-0"
+					:class="[
+						{ '!opacity-100': isActive },
+						'whitespace-nowrap text-[0.7rem] transition-opacity peer-hover:opacity-100 lg:opacity-0',
+					]"
 				>
 					load template
 				</p>
@@ -65,13 +77,21 @@ const emit = defineEmits<{
 
 		<Transition name="height-auto">
 			<div v-if="isActive" class="grid">
-				<div class="flex flex-col gap-3 overflow-hidden">
-					<p>template name: {{ name || "x" }}</p>
+				<div class="flex flex-col gap-2 overflow-hidden">
+					<hr class="mt-2 border-white" />
+					<p>
+						name:
+						<span class="item ml-2 !inline font-bold">{{ name || "x" }}</span>
+					</p>
 
 					<div>
 						<label>points:</label>
-						<ul class="flex gap-2">
-							<li v-for="(points, row, index) in rows" :key="row" class="item">
+						<ul class="ml-2 inline-flex gap-2">
+							<li
+								v-for="(points, row, index) in rows"
+								:key="row"
+								class="item font-bold"
+							>
 								{{ points }}
 							</li>
 						</ul>
@@ -80,8 +100,12 @@ const emit = defineEmits<{
 					<div>
 						<label>columns:</label>
 						<ul class="grid grid-cols-5 gap-2">
-							<li v-for="(category, column, index) in columns" :key="column" class="item">
-								<p>{{ category || column }}</p>
+							<li
+								v-for="(category, column, index) in columns"
+								:key="column"
+								class="item"
+							>
+								<p class="font-bold">{{ category || column }}</p>
 							</li>
 						</ul>
 					</div>
@@ -89,45 +113,29 @@ const emit = defineEmits<{
 					<div>
 						<div class="mb-2 flex gap-2">
 							<label>table:</label>
-							<button
-								type="button"
-								@click.stop="emit('toggle-show-answers')"
-								class="font-bold transition-colors hover:bg-white/20"
-							>
-								{{ `show table ${showAnswers ? "questions" : "answers"}` }}
+							<button type="button" @click.stop="emit('toggle-show-answers')">
+								show {{ showAnswers ? "questions" : "answers" }}
 							</button>
 
-							<button
-								type="button"
-								@click.stop="emit('toggle-show-images')"
-								class="font-bold transition-colors hover:bg-white/20"
-							>
-								{{ `${showImages ? "hide" : "show"} images` }}
+							<button type="button" @click.stop="emit('toggle-show-images')">
+								show {{ showImages ? "text" : "images" }}
 							</button>
 						</div>
 						<table class="flex w-full flex-col gap-2 text-[0.65rem]">
-							<tr v-for="points, row, rowIndex in rows" :key="row" class="grid grid-cols-5 gap-2">
+							<tr
+								v-for="(points, row, rowIndex) in rows"
+								:key="row"
+								class="grid grid-cols-5 gap-2"
+							>
 								<td
-									v-for="category, column, columnIndex in columns"
+									v-for="(category, column, columnIndex) in columns"
 									:key="column"
 									class="item h-[9ex]"
 								>
 									<template v-if="showImages">
 										<img
-											v-if="
-												showAnswers
-													? imageTable.links?.[row]?.[column]?.answer ||
-													  imageTable.uploads?.[row]?.[column]?.answer
-													: imageTable.links?.[row]?.[column]?.question ||
-													  imageTable.uploads?.[row]?.[column]?.question
-											"
-											:src="
-												showAnswers
-													? imageTable.links?.[row]?.[column]?.answer ||
-													  imageTable.uploads?.[row]?.[column]?.answer
-													: imageTable.links?.[row]?.[column]?.question ||
-													  imageTable.uploads?.[row]?.[column]?.question
-											"
+											v-if="getImg(row, column)"
+											:src="getImg(row, column)"
 											class="h-full object-contain"
 										/>
 
@@ -157,10 +165,14 @@ const emit = defineEmits<{
 
 <style scoped lang="postcss">
 .item {
-	@apply flex items-center justify-center overflow-hidden bg-white/20 text-center;
+	@apply flex items-center justify-center overflow-hidden bg-white/20 px-2 text-center;
 }
 
 .item p {
 	@apply line-clamp-3 w-full break-words;
+}
+
+button {
+	@apply border-[1px] border-stone-200 bg-stone-200 px-2 font-bold text-stone-600 transition-colors hover:bg-transparent hover:text-stone-200;
 }
 </style>
