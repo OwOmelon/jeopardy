@@ -2,6 +2,7 @@
 import { ref, computed, watch } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
+import IconHamburger from "~icons/ci/hamburger-lg";
 import HistoryItem from "./HistoryItem.vue";
 
 const template = useTemplateStore();
@@ -73,10 +74,10 @@ watch(hide, () => {
 		<div class="absolute left-full top-0 ml-2 flex items-start gap-3 text-sm">
 			<button
 				type="button"
-				class="grid aspect-square place-items-center rounded bg-black/50 !p-5 backdrop-blur"
+				class="grid aspect-square place-items-center rounded bg-black/50 !p-3 backdrop-blur !text-xl"
 				@click="hide = !hide"
 			>
-				|||
+				<IconHamburger />
 			</button>
 
 			<button
