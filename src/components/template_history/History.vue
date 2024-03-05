@@ -52,7 +52,7 @@ watch(hide, () => {
 	>
 		<ul
 			:class="[
-				'max-h-screen overflow-y-auto rounded border-2 border-stone-500 bg-stone-900/75 p-2 text-xs text-stone-50 backdrop-blur ',
+				'max-h-screen overflow-y-auto rounded-br border-b-2 border-r-2 border-stone-500 bg-stone-900/75 p-2 text-xs text-stone-50 backdrop-blur ',
 			]"
 		>
 			<HistoryItem
