@@ -1,4 +1,4 @@
-import { ref, computed, watch, watchEffect, onBeforeMount } from "vue";
+import { ref, computed, watch, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 import { useLocalStorage } from "@vueuse/core";
 import { useGuestsStore } from "./guests";
@@ -251,8 +251,6 @@ export const useTemplateStore = defineStore("template", () => {
 
 	const localStorageTemplateErrors = ref<TemplateErrors | null>(null);
 
-	loadJeopardyTemplate();
-
 	async function loadJeopardyTemplate(): Promise<void> {
 		const localStorageTemplate = fetchTemplateFromLocalStorage();
 
@@ -284,6 +282,8 @@ export const useTemplateStore = defineStore("template", () => {
 			imageTable: { uploads: {}, links: JSON.parse(imageTableLinks) },
 		};
 	}
+
+	onBeforeMount(loadJeopardyTemplate);
 
 	// ---------- DISPLAY ----------
 
@@ -421,7 +421,7 @@ export const useTemplateStore = defineStore("template", () => {
 		(template) => {
 			logHistory(template);
 		},
-		{ deep: true, immediate: true },
+		{ deep: true },
 	);
 
 	// ------------------------------
