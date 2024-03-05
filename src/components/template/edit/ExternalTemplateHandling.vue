@@ -6,6 +6,10 @@ import { checkTemplateForErrors } from "@/composables/check_template_for_errors"
 
 import type { TemplateErrors } from "@/composables/check_template_for_errors";
 
+import IconReset from "~icons/ph/arrow-counter-clockwise-bold";
+import IconUpload from "~icons/material-symbols/upload-rounded";
+import IconDownload from "~icons/material-symbols/download-rounded";
+
 const emit = defineEmits<{
 	"reset-template": [];
 	"import-error-read": [Error];
@@ -67,6 +71,8 @@ function parseJSONFile(file: any): Promise<any> {
 
 		<button type="button" class="cell-padding" @click="emit('reset-template')">
 			reset
+
+			<IconReset />
 		</button>
 
 		<label class="cell-padding cursor-pointer">
@@ -77,6 +83,8 @@ function parseJSONFile(file: any): Promise<any> {
 				class="hidden"
 				@change="importTemplate"
 			/>
+
+			<IconUpload />
 		</label>
 
 		<button
@@ -85,6 +93,8 @@ function parseJSONFile(file: any): Promise<any> {
 			@click="downloadTemplate(template.getTemplateData())"
 		>
 			download
+
+			<IconDownload />
 		</button>
 	</div>
 </template>
@@ -92,6 +102,6 @@ function parseJSONFile(file: any): Promise<any> {
 <style scoped lang="postcss">
 button,
 label {
-	@apply row-start-2 rounded border-2 border-transparent bg-stone-100 font-semibold text-stone-600 shadow shadow-black/30 outline-none transition-[border-color,_transform] hover:-translate-y-1 focus:border-red-400 active:scale-95;
+	@apply row-start-2 flex items-center justify-center gap-2 rounded border-2 border-transparent bg-stone-100 font-semibold text-stone-600 shadow shadow-black/30 outline-none transition-[border-color,_transform] hover:-translate-y-1 focus:border-red-400 active:scale-95;
 }
 </style>
