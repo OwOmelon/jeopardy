@@ -22,7 +22,7 @@ watch(
 	>
 		<TextBox
 			v-model="textInput"
-			placeholder="insert template name"
+			placeholder="enter template name"
 			focus-classes="!border-b-stone-300"
 			:disabled="!template.editing"
 			blur-on-keydown-enter
