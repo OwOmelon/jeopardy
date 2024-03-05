@@ -104,7 +104,7 @@ const emit = defineEmits<{
 /* ----- */
 
 button {
-	@apply outline-offset-2 transition-[opacity,_transform] hover:scale-150  active:scale-100;
+	@apply outline-offset-2 transition-[opacity,_transform] hover:scale-125  active:scale-100;
 }
 
 .guest-disabled button {
