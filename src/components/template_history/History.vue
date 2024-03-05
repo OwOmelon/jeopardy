@@ -105,6 +105,6 @@ ul {
 }
 
 button {
-	@apply rounded bg-stone-600 px-2 py-1 text-stone-200 transition-[background-color,_color,_transform] hover:bg-stone-200 hover:text-stone-600 active:scale-90 disabled:cursor-not-allowed disabled:bg-stone-700 disabled:text-stone-600;
+	@apply rounded bg-stone-600 px-2 py-1 text-stone-200 shadow shadow-black/30 transition-[background-color,_color,_transform] hover:bg-stone-200 hover:text-stone-600 active:scale-90 disabled:cursor-not-allowed disabled:bg-stone-700 disabled:text-stone-600;
 }
 </style>
