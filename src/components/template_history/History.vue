@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, computed, watch } from "vue";
 import { useTemplateStore } from "@/stores/template";
 
 import HistoryItem from "./HistoryItem.vue";
@@ -12,12 +12,27 @@ const activeHistoryItem = ref<number>(-1);
 const showAnswers = ref<boolean>(false);
 const showImages = ref<boolean>(false);
 
+const disableUndoRedo = computed(() => {
+	return template.historyIndexOfCurrentTemplate - 1 < 0
+		? "undo"
+		: template.historyIndexOfCurrentTemplate >= template.history.length - 1
+			? "redo"
+			: null;
+});
+
 function setActiveItem(index: number) {
 	if (index === activeHistoryItem.value) {
 		activeHistoryItem.value = -1;
 	} else {
 		activeHistoryItem.value = index;
 	}
+}
+
+function undoRedo(dir: -1 | 1): void {
+	const templateToLoad =
+		template.history[template.historyIndexOfCurrentTemplate + dir];
+
+	template.loadTemplate(templateToLoad);
 }
 
 watch(hide, () => {
@@ -36,7 +51,7 @@ watch(hide, () => {
 	>
 		<ul
 			:class="[
-				'max-h-screen overflow-y-auto rounded bg-stone-900/75 p-2 text-xs text-stone-50 backdrop-blur ',
+				'max-h-screen overflow-y-auto rounded border-2 border-stone-500 bg-stone-900/75 p-2 text-xs text-stone-50 backdrop-blur ',
 			]"
 		>
 			<HistoryItem
@@ -55,19 +70,40 @@ watch(hide, () => {
 			/>
 		</ul>
 
-		<button
-			type="button"
-			class="absolute left-full top-0 ml-2 grid aspect-square place-items-center rounded bg-black/50 p-5 text-white backdrop-blur"
-			@click="hide = !hide"
-		>
-			|||
-		</button>
+		<div class="absolute left-full top-0 ml-2 flex items-start gap-3 text-sm">
+			<button
+				type="button"
+				class="grid aspect-square place-items-center rounded bg-black/50 !p-5 backdrop-blur"
+				@click="hide = !hide"
+			>
+				|||
+			</button>
+
+			<button
+				type="button"
+				:disabled="disableUndoRedo === 'undo'"
+				@click="undoRedo(-1)"
+			>
+				undo
+			</button>
+			<button
+				type="button"
+				:disabled="disableUndoRedo === 'redo'"
+				@click="undoRedo(1)"
+			>
+				redo
+			</button>
+		</div>
 	</div>
 </template>
 
 <style scoped lang="postcss">
-* {
+ul {
 	scrollbar-color: rgb(255, 255, 255, 0.35) #0000;
 	scrollbar-width: thin;
+}
+
+button {
+	@apply rounded bg-stone-600 px-2 py-1 text-stone-200 disabled:cursor-not-allowed disabled:bg-stone-700 disabled:text-stone-600;
 }
 </style>
