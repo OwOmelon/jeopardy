@@ -67,7 +67,7 @@ function getImg(row: RowID, column: ColumnID) {
 				<p
 					:class="[
 						{ '!opacity-100': isActive },
-						'whitespace-nowrap text-[0.7rem] transition-opacity peer-hover:opacity-100 lg:opacity-0',
+						'whitespace-nowrap text-[0.7rem] transition-opacity peer-hover:opacity-100 opacity-0',
 					]"
 				>
 					load template
