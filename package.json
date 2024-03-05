@@ -10,7 +10,9 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
   },
   "dependencies": {
+    "@iconify/json": "^2.2.189",
     "@iconify/vue": "^4.1.1",
+    "@vue/compiler-sfc": "^3.4.21",
     "@vueuse/components": "^10.7.2",
     "@vueuse/core": "^10.4.1",
     "autoprefixer": "^10.4.17",
@@ -18,6 +20,7 @@
     "postcss": "^8.4.35",
     "sass": "^1.70.0",
     "tailwindcss": "^3.4.1",
+    "unplugin-icons": "^0.18.5",
     "uuid": "^9.0.1",
     "vue": "^3.3.4",
     "vuedraggable": "^2.24.3"
