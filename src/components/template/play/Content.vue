@@ -66,9 +66,10 @@ provide('filtered-table-data-rows', filteredTableDataRows)
 
 		<GuestList />
 
-		<ModalWrapper :show="template.activeTableDataCell ? true : false">
-			<TableDataReveal />
-		</ModalWrapper>
+		<Transition name="fade-slide-down">
+			<TableDataReveal v-if="template.activeTableDataCell ? true : false" />
+		</Transition>
+
 
 		<ModalWrapper :show="gameProgress.resetGameProgressWarning">
 			<WarningModal

@@ -124,7 +124,7 @@ onUnmounted(() => {
 
 <template>
 	<div
-		class="component modal"
+		class="fixed right-0 top-0 flex h-screen w-screen flex-col"
 		v-on-click-outside="
 			() => {
 				setActiveDataCell(null);
@@ -132,7 +132,7 @@ onUnmounted(() => {
 		"
 	>
 		<div
-			class="relative flex justify-center rounded-t border-b-4 border-red-300 bg-red-400 p-2 text-sm text-white"
+			class="relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-sm text-white"
 		>
 			<p class="text-center">
 				<span class="font-bold">{{
@@ -147,7 +147,7 @@ onUnmounted(() => {
 
 		<div
 			ref="revealContentWrapper"
-			class="content relative grid max-h-[75vh] min-h-[350px] grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-100 px-3 text-center text-2xl text-red-400"
+			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-100 px-3 text-center text-2xl text-red-400"
 		>
 			<div ref="revealContent">
 				<div class="py-5">
@@ -179,7 +179,7 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="grid grid-cols-[1fr,max-content,_1fr] rounded-b border-t-4 border-stone-400 bg-stone-300 p-2 text-sm"
+			class="grid grid-cols-[1fr,max-content,_1fr] border-t-4 border-stone-400 bg-stone-300 p-2 text-sm"
 		>
 			<button
 				type="button"
