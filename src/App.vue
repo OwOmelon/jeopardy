@@ -119,6 +119,28 @@ input[type="number"] {
 	}
 }
 
+.fade-slide-down {
+	&-enter-active,
+	&-leave-active {
+		transition:
+			opacity 150ms,
+			transform 150ms;
+	}
+
+	&-enter-from,
+	&-leave-to {
+		opacity: 0;
+	}
+
+	&-enter-from {
+		transform: translateY(-15px);
+	}
+
+	&-leave-to {
+		transform: translateY(15px);
+	}
+}
+
 .list-slide-left {
 	&-move,
 	&-enter-active,
