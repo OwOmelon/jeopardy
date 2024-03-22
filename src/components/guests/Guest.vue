@@ -70,6 +70,6 @@ watch(totalPoints, (val) => {
 
 <style scoped lang="postcss">
 button {
-	@apply flex grow justify-center rounded-sm bg-red-400 text-white shadow-sm shadow-black/30 transition-transform hover:-translate-y-1;
+	@apply flex grow justify-center rounded-sm border-2 border-red-400 bg-red-400 text-white shadow-sm shadow-black/30 transition-colors hover:bg-transparent hover:text-red-400;
 }
 </style>
