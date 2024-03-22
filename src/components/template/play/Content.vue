@@ -55,8 +55,8 @@ const filteredTableDataRows = computed<TableDataRows>(() => {
 	}, {});
 });
 
-provide('filtered-columns', filteredColumns)
-provide('filtered-table-data-rows', filteredTableDataRows)
+provide("filtered-columns", filteredColumns);
+provide("filtered-table-data-rows", filteredTableDataRows);
 </script>
 
 <template>
@@ -66,10 +66,11 @@ provide('filtered-table-data-rows', filteredTableDataRows)
 
 		<GuestList />
 
-		<Transition name="fade-slide-down">
-			<TableDataReveal v-if="template.activeTableDataCell ? true : false" />
-		</Transition>
-
+		<Teleport to="#new-window">
+			<Transition name="fade-slide-down">
+				<TableDataReveal v-if="template.activeTableDataCell ? true : false" />
+			</Transition>
+		</Teleport>
 
 		<ModalWrapper :show="gameProgress.resetGameProgressWarning">
 			<WarningModal
