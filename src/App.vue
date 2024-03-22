@@ -12,13 +12,19 @@ import DragCursor from "./components/template/edit/draggable/DragCrusor.vue";
 
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
+const body = document.getElementsByTagName("body")[0];
 
 watch(
 	() => template.editing,
 	(is) => {
-		const body = document.getElementsByTagName("body")[0];
-
 		body.className = is ? "bg-stone-800" : "bg-stone-100";
+	},
+);
+
+watch(
+	() => template.activeTableDataCell,
+	(data) => {
+		body.style.overflow = data === null ? "" : "hidden";
 	},
 );
 </script>
