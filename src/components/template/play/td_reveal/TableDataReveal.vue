@@ -7,8 +7,10 @@ import { useMainMenuStore } from "@/stores/mainmenu";
 import { useElementSize } from "@vueuse/core";
 import { vOnClickOutside } from "@vueuse/components";
 
+import IconClose from "~icons/material-symbols/close-rounded";
 import IconArrowLeft from "~icons/material-symbols/arrow-left-rounded";
 import IconArrowRight from "~icons/material-symbols/arrow-right-rounded";
+
 import QuestionAnswer from "./QuestionAnswer.vue";
 import GiveGuestPoints from "./GiveGuestPoints.vue";
 
@@ -141,6 +143,14 @@ onUnmounted(() => {
 				for
 				<span class="font-bold">{{ activeTableDataCell!.points }}</span>
 			</p>
+
+			<button
+				type="button"
+				class="absolute right-5 top-1/2 -translate-y-1/2 rounded border-2 border-stone-100 bg-stone-100 p-0.5 text-red-400 transition-colors hover:bg-red-400 hover:text-stone-100"
+				@click="setActiveDataCell(null)"
+			>
+				<IconClose class="h-5 w-5" />
+			</button>
 		</div>
 
 		<!-- -------- -->
@@ -187,7 +197,7 @@ onUnmounted(() => {
 					{
 						'opacity-0': cancelRevertProgress,
 					},
-					'group',
+					'prog-btn',
 				]"
 				@click="revertProgress"
 			>
@@ -203,7 +213,7 @@ onUnmounted(() => {
 					{
 						'opacity-0': cancelAdvanceProgress,
 					},
-					'group',
+					'prog-btn',
 				]"
 				@click="advanceProgress"
 			>
@@ -218,15 +228,15 @@ onUnmounted(() => {
 	overflow-anchor: none;
 }
 
-button {
+.prog-btn {
 	@apply grid place-items-center transition-opacity;
 }
 
-button svg {
+.prog-btn svg {
 	@apply pointer-events-none scale-[3] transition-transform;
 }
 
-button:hover svg {
+.prog-btn:hover svg {
 	@apply scale-[5];
 }
 
