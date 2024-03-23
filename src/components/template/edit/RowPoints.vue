@@ -24,12 +24,8 @@ const draggingContents = ref<boolean>(false);
 		v-slot="{ value, property, dragging, dropTo }"
 		class="tr-flex col-start-1 row-start-3 mr-5 w-20 flex-col justify-around justify-self-end"
 		@dragstart="draggingContents = true"
-		@dragend="
-			() => {
-				draggingContents = false;
-				sortRows();
-			}
-		"
+		@dragend="draggingContents = false"
+		@dragswap="sortRows"
 	>
 		<HeaderPoints
 			:row="property as RowID"
