@@ -13,6 +13,14 @@ import DragCursor from "./components/template/edit/draggable/DragCrusor.vue";
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
 const body = document.getElementsByTagName("body")[0];
+const initialDocumentTitle = document.title;
+
+watch(
+	() => template.name,
+	(name) => {
+		document.title = name || initialDocumentTitle;
+	},
+);
 
 watch(
 	() => template.editing,
