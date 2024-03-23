@@ -69,7 +69,7 @@ function writeCustomeStylesheet(column: ColumnID | null): void {
 				:style="{ backgroundColor: hr.color }"
 				class="pointer-events-none absolute -top-10 isolate rounded bg-stone-300 p-1 opacity-0 transition-opacity group-hover:opacity-100"
 			>
-				<span class="text-[0.6rem] font-semibold !text-[black] text-stone-600">
+				<span class="text-[0.6rem] font-semibold text-[black]">
 					{{ hr.text }}
 				</span>
 
