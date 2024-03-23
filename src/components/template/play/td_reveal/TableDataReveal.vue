@@ -134,7 +134,7 @@ onUnmounted(() => {
 		"
 	>
 		<div
-			class="relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-sm text-white"
+			class="relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-xl text-white"
 		>
 			<p class="text-center">
 				<span class="font-bold">{{
@@ -146,10 +146,10 @@ onUnmounted(() => {
 
 			<button
 				type="button"
-				class="absolute right-5 top-1/2 -translate-y-1/2 rounded border-2 border-stone-100 bg-stone-100 p-0.5 text-red-400 transition-colors hover:bg-red-400 hover:text-stone-100"
+				class="absolute right-2 top-1/2 -translate-y-1/2 rounded border-2 border-stone-100 bg-stone-100 p-0.5 text-red-400 transition-colors hover:bg-red-400 hover:text-stone-100"
 				@click="setActiveDataCell(null)"
 			>
-				<IconClose class="h-5 w-5" />
+				<IconClose class="h-6 w-6" />
 			</button>
 		</div>
 
@@ -157,7 +157,7 @@ onUnmounted(() => {
 
 		<div
 			ref="revealContentWrapper"
-			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-100 px-3 text-center text-2xl text-red-400"
+			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-100 p-10 text-center text-5xl text-red-400"
 		>
 			<div ref="revealContent">
 				<div class="py-5">
@@ -188,7 +188,7 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="grid grid-cols-[1fr,max-content,_1fr] border-t-4 border-stone-400 bg-stone-300 p-2 text-sm"
+			class="p-2/ grid grid-cols-[1fr,max-content,_1fr] place-items-center border-t-4 border-stone-400 bg-stone-300 text-sm"
 		>
 			<button
 				type="button"
@@ -229,7 +229,7 @@ onUnmounted(() => {
 }
 
 .prog-btn {
-	@apply grid place-items-center transition-opacity;
+	@apply grid place-items-center p-2 transition-opacity;
 }
 
 .prog-btn svg {
