@@ -15,7 +15,7 @@ const showImages = ref<boolean>(false);
 
 const disableUndoRedo = computed(() => {
 	return template.history.length === 1
-		? null
+		? "both"
 		: template.historyIndexOfCurrentTemplate - 1 < 0
 			? "undo"
 			: template.historyIndexOfCurrentTemplate >= template.history.length - 1
@@ -84,14 +84,14 @@ watch(hide, () => {
 
 			<button
 				type="button"
-				:disabled="disableUndoRedo === 'undo' || disableUndoRedo === null"
+				:disabled="disableUndoRedo === 'undo' || disableUndoRedo === 'both'"
 				@click="undoRedo(-1)"
 			>
 				undo
 			</button>
 			<button
 				type="button"
-				:disabled="disableUndoRedo === 'redo' || disableUndoRedo === null"
+				:disabled="disableUndoRedo === 'redo' || disableUndoRedo === 'both'"
 				@click="undoRedo(1)"
 			>
 				redo
