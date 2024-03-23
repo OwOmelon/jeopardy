@@ -8,6 +8,7 @@ type DragAttr = `drag-${typeof props.group}-${number}`;
 const emit = defineEmits<{
 	dragstart: [];
 	dragend: [];
+	dragswap: [];
 }>();
 
 const props = defineProps<{
@@ -64,6 +65,8 @@ function swapModelValue(): void {
 		const swapped = Object.fromEntries(swappedEntries) as typeof obj.value;
 
 		obj.value = swapped;
+
+		emit("dragswap");
 	}
 }
 
