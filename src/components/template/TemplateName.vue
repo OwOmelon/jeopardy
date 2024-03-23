@@ -18,7 +18,7 @@ watch(
 
 <template>
 	<caption
-		class="mx-auto block w-fit min-w-[12em] text-center text-3xl font-bold"
+		class="mx-auto block w-fit min-w-[12em] text-center text-5xl font-bold"
 	>
 		<TextBox
 			v-model="textInput"
