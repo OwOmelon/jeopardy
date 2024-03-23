@@ -14,7 +14,7 @@ const hrColors = computed<{ id: ColumnID; color: string; text: string }[]>(
 		const columnIDs = Object.keys(template.columns) as ColumnID[];
 
 		return columnIDs.map((column) => {
-			let color = "border-red-400";
+			let color = "#f87171";
 			let text = "this column is empty";
 
 			const cdv = {
@@ -29,10 +29,10 @@ const hrColors = computed<{ id: ColumnID; color: string; text: string }[]>(
 
 			if (cdv.empty !== 5) {
 				if (cdv.complete === columnIDs.length) {
-					color = "border-green-400";
+					color = "#4ade80";
 					text = "this column is complete";
 				} else {
-					color = "border-yellow-400";
+					color = "#facc15";
 					text = "this column is incomplete";
 				}
 			}
@@ -60,17 +60,21 @@ function writeCustomeStylesheet(column: ColumnID | null): void {
 			@mouseenter="writeCustomeStylesheet(hr.id)"
 			@mouseleave="writeCustomeStylesheet(null)"
 		>
-			<hr :class="[hr.color, 'my-1 grow rounded-full border-t-2']" />
+			<hr
+				:style="{ borderColor: hr.color }"
+				class="my-1 grow rounded-full border-t-2"
+			/>
 
 			<div
-				class="pointer-events-none absolute -top-9 rounded bg-stone-300 p-1 opacity-0 transition-opacity group-hover:opacity-100"
+				:style="{ backgroundColor: hr.color }"
+				class="pointer-events-none absolute -top-10 isolate rounded bg-stone-300 p-1 opacity-0 transition-opacity group-hover:opacity-100"
 			>
-				<span class="text-[0.6rem] font-semibold text-stone-600">
+				<span class="text-[0.6rem] font-semibold !text-[black] text-stone-600">
 					{{ hr.text }}
 				</span>
 
 				<div
-					class="absolute left-1/2 top-6 z-[-5] aspect-square w-3 -translate-x-1/2 rotate-45 rounded-sm bg-[inherit]"
+					class="absolute -bottom-1 left-1/2 z-[-5] aspect-square w-3 -translate-x-1/2 rotate-45 rounded-sm bg-[inherit]"
 				/>
 			</div>
 		</div>
