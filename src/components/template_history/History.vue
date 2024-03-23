@@ -14,11 +14,13 @@ const showAnswers = ref<boolean>(false);
 const showImages = ref<boolean>(false);
 
 const disableUndoRedo = computed(() => {
-	return template.historyIndexOfCurrentTemplate - 1 < 0
-		? "undo"
-		: template.historyIndexOfCurrentTemplate >= template.history.length - 1
-			? "redo"
-			: null;
+	return template.history.length === 1
+		? null
+		: template.historyIndexOfCurrentTemplate - 1 < 0
+			? "undo"
+			: template.historyIndexOfCurrentTemplate >= template.history.length - 1
+				? "redo"
+				: null;
 });
 
 function setActiveItem(index: number) {
@@ -82,14 +84,14 @@ watch(hide, () => {
 
 			<button
 				type="button"
-				:disabled="disableUndoRedo === 'undo'"
+				:disabled="disableUndoRedo === 'undo' || disableUndoRedo === null"
 				@click="undoRedo(-1)"
 			>
 				undo
 			</button>
 			<button
 				type="button"
-				:disabled="disableUndoRedo === 'redo'"
+				:disabled="disableUndoRedo === 'redo' || disableUndoRedo === null"
 				@click="undoRedo(1)"
 			>
 				redo
