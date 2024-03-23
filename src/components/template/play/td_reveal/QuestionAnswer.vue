@@ -38,7 +38,7 @@ const ImgAltTxt = (type: string) => {
 			>
 				<div v-if="props.showAnswer" class="grid">
 					<div class="overflow-hidden">
-						<hr class="mx-12 my-5 border-t-2 border-red-400" />
+						<hr class="mx-12 my-5 rounded-full border-t-4 border-red-400" />
 
 						<p class="font-bold">
 							{{ activeTableDataCell!.answer.text }}
@@ -74,7 +74,7 @@ const ImgAltTxt = (type: string) => {
 
 <style scoped lang="postcss">
 p {
-	@apply break-words;
+	@apply break-words py-1;
 }
 
 .image-wrapper {
