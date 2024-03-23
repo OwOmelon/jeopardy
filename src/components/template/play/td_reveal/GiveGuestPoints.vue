@@ -92,7 +92,7 @@ function getMappedGuestList(): MappedGuestList {
 <template>
 	<div class="grid">
 		<div
-			class="flex flex-col items-center justify-center overflow-hidden text-xl font-bold"
+			class="flex flex-col items-center justify-center overflow-hidden text-4xl font-bold"
 		>
 			<span
 				>who got it {{ props.revealProgress < 4 ? "wrong" : "right" }} ?</span
@@ -117,7 +117,6 @@ function getMappedGuestList(): MappedGuestList {
 							: guest.answered === 'succeeded'
 								? 'gain-points'
 								: 'bg-stone-300 text-stone-500',
-						'rounded p-2 shadow shadow-black/30 transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1',
 					]"
 					@click="onGuestBtnClick(guest)"
 				>
@@ -131,7 +130,7 @@ function getMappedGuestList(): MappedGuestList {
 						<button
 							v-if="props.revealProgress === 4"
 							type="button"
-							class="group mx-1 mb-1 mt-3 flex items-center rounded-md bg-red-400 p-3 text-3xl text-white shadow shadow-black/30 transition-transform hover:-translate-y-1"
+							class="group mx-1 mb-1 mt-3 flex items-center bg-red-400 text-white"
 							@click="confirm"
 						>
 							confirm
@@ -148,6 +147,10 @@ function getMappedGuestList(): MappedGuestList {
 </template>
 
 <style scoped lang="postcss">
+button {
+	@apply rounded-[0.1em] p-[0.4em] shadow shadow-black/30 transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1;
+}
+
 .lose-points {
 	animation: lose-points 0.5s;
 	@apply bg-stone-500 text-stone-300;
