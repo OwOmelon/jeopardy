@@ -67,7 +67,8 @@ function onImageUpload(): void {
 		/>
 
 		<div class="flex items-center gap-3">
-			<div class="h-px grow bg-stone-500" />
+			<i class="h-px grow bg-stone-500" />
+			
 			<button
 				type="button"
 				:disabled="!image.trim()"
@@ -81,7 +82,8 @@ function onImageUpload(): void {
 			>
 				{{ image.trim() ? "remove" : "add an" }} image
 			</button>
-			<div class="h-px grow bg-stone-500" />
+			
+			<i class="h-px grow bg-stone-500" />
 		</div>
 
 		<img

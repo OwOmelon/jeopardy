@@ -142,11 +142,11 @@ onUnmounted(() => {
 				<div
 					class="flex flex-row items-center justify-center gap-2 md:h-full md:flex-col"
 				>
-					<div
+					<i
 						class="h-1 w-[30%] rounded-full bg-stone-500 md:h-[30%] md:w-1"
 					/>
-					<div class="aspect-square h-2 rounded-full bg-stone-500" />
-					<div
+					<i class="aspect-square h-2 rounded-full bg-stone-500" />
+					<i
 						class="h-1 w-[30%] rounded-full bg-stone-500 md:h-[30%] md:w-1"
 					/>
 				</div>
