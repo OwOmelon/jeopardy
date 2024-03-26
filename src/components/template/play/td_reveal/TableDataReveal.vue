@@ -188,7 +188,7 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="p-2/ grid grid-cols-[1fr,max-content,_1fr] place-items-center border-t-4 border-stone-400 bg-stone-300 text-sm"
+			class="grid grid-cols-[1fr,max-content,_1fr] place-items-center border-t-4 border-stone-400 bg-stone-300 text-sm"
 		>
 			<button
 				type="button"
