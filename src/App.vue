@@ -96,11 +96,16 @@ input[type="number"] {
 }
 
 .fade-slide-left {
-	&-enter-active,
+	&-enter-active {
+		transition:
+			opacity 150ms ease-out,
+			transform 150ms ease-out;
+	}
+
 	&-leave-active {
 		transition:
-			opacity 150ms,
-			transform 150ms;
+			opacity 150ms ease-in,
+			transform 150ms ease-in;
 	}
 
 	&-enter-from {
@@ -115,11 +120,16 @@ input[type="number"] {
 }
 
 .fade-slide-right {
-	&-enter-active,
+	&-enter-active {
+		transition:
+			opacity 150ms ease-out,
+			transform 150ms ease-out;
+	}
+
 	&-leave-active {
 		transition:
-			opacity 150ms,
-			transform 150ms;
+			opacity 150ms ease-in,
+			transform 150ms ease-in;
 	}
 
 	&-enter-from {
