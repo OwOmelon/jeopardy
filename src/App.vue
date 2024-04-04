@@ -186,27 +186,4 @@ input[type="number"] {
 		transform: translateX(-25px);
 	}
 }
-
-.nested-fade-slide-down {
-	&-enter-active,
-	&-leave-active {
-		transition: all 300ms ease-in-out;
-	}
-
-	&-enter-from,
-	&-leave-to {
-		opacity: 0;
-	}
-
-	&-enter-active .component,
-	&-leave-active .component {
-		transition: all 300ms ease-in-out;
-	}
-
-	&-enter-from .component,
-	&-leave-to .component {
-		transform: translateY(-15px);
-		opacity: 0.001;
-	}
-}
 </style>

@@ -9,7 +9,7 @@ const props = defineProps<{
 		<Transition name="nested-fade-slide-down">
 			<div
 				v-if="props.show"
-				class="component fixed left-0 top-0 z-50 grid h-screen w-screen place-items-center overflow-auto bg-black/50 p-5 backdrop-blur-sm"
+				class="fixed left-0 top-0 z-50 grid h-screen w-screen place-items-center overflow-auto bg-black/50 p-5 backdrop-blur-sm"
 			>
 				<slot></slot>
 			</div>
@@ -19,6 +19,31 @@ const props = defineProps<{
 
 <style scoped lang="postcss">
 :slotted(.modal) {
-	@apply max-w-[1170px] w-[90vw] rounded shadow-[0_10px_40px] shadow-black/40;
+	@apply w-[90vw] max-w-[1170px] rounded shadow-[0_10px_40px] shadow-black/40;
+}
+</style>
+
+<style scoped lang="scss">
+.nested-fade-slide-down {
+	&-enter-active,
+	&-leave-active {
+		transition: all 300ms ease-in-out;
+	}
+
+	&-enter-from,
+	&-leave-to {
+		opacity: 0;
+	}
+
+	&-enter-active > :slotted(div),
+	&-leave-active > :slotted(div) {
+		transition: all 300ms ease-in-out;
+	}
+
+	&-enter-from > :slotted(div),
+	&-leave-to > :slotted(div) {
+		transform: translateY(-15px);
+		opacity: 0.001;
+	}
 }
 </style>
