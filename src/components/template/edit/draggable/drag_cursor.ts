@@ -24,12 +24,6 @@ function hide() {
 setTimeout(() => {
 	cursor.value = document.getElementById("drag-cursor");
 	hide();
-
-	window.addEventListener("keydown", (e) => {
-		if (e.ctrlKey && e.shiftKey && e.altKey && e.code === "KeyD") {
-			enteredDropZone.value = !enteredDropZone.value;
-		}
-	});
 }, 100);
 
 export function useDragCursor() {
