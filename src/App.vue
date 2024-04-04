@@ -210,26 +210,6 @@ input[type="number"] {
 	}
 }
 
-.height-auto {
-	&-enter-active,
-	&-leave-active {
-		transition:
-			grid-template-rows 300ms,
-			opacity 300ms;
-	}
-
-	&-enter-from,
-	&-leave-to {
-		grid-template-rows: 0fr;
-		opacity: 0;
-	}
-
-	&-enter-to,
-	&-leave-from {
-		grid-template-rows: 1fr;
-	}
-}
-
 .breathe {
 	animation: breathe 1s ease-in-out infinite;
 }
