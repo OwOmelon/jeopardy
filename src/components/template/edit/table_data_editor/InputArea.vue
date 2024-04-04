@@ -20,9 +20,9 @@ const emit = defineEmits<{
 	"show-help_image": [];
 }>();
 
+const helpImgBtn = ref<HTMLElement | null>(null);
 const uploadImgBtn = ref<HTMLInputElement | null>(null);
 const imgTextBox = ref<HTMLInputElement | null>(null);
-
 const notAnImageWarning = ref<number>(0);
 
 const computedModelValue = computed<string>({
@@ -47,13 +47,20 @@ function onImageUpload(): void {
 		return;
 	}
 
-	reader.addEventListener("load", () => {
+	reader.onload = () => {
 		emit("on-image-upload", { src: reader.result as string, type: "upload" });
-	});
+	};
 
 	if (file) {
 		reader.readAsDataURL(file);
 	}
+}
+
+function helpHint(): void {
+	helpImgBtn.value!.classList.remove("help-hint");
+	setTimeout(() => {
+		helpImgBtn.value!.classList.add("help-hint");
+	}, 20);
 }
 </script>
 
@@ -82,8 +89,9 @@ function onImageUpload(): void {
 			</button>
 
 			<button
+				ref="helpImgBtn"
 				type="button"
-				class="rounded-full bg-stone-500 p-1 text-stone-100 transition-[filter] hover:brightness-125"
+				class="rounded-full border-2 border-transparent bg-stone-500 p-px text-stone-100 transition-[filter] hover:brightness-125"
 				@click="emit('show-help_image')"
 			>
 				<IconQuestionMark class="h-4 w-4" />
@@ -102,6 +110,7 @@ function onImageUpload(): void {
 		<div v-else class="flex gap-3">
 			<label
 				class="btn relative flex cursor-pointer items-center justify-center hover:!border-stone-100"
+				@mouseenter="helpHint"
 			>
 				<IconAddPhoto class="scale-125" />
 				<span class="ml-2">upload</span>
@@ -140,6 +149,27 @@ function onImageUpload(): void {
 <style scoped lang="postcss">
 .input {
 	@apply rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors focus:border-stone-100;
+}
+
+.help-hint {
+	animation: help-hint 2s forwards linear;
+}
+
+@keyframes help-hint {
+	0%,
+	34%,
+	67%,
+	100% {
+		border-color: #0000;
+		transform: translateY(0);
+	}
+
+	17%,
+	50%,
+	84% {
+		border-color: #fff;
+		transform: translateY(-0.25rem);
+	}
 }
 
 .popup {
