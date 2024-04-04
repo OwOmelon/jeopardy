@@ -28,7 +28,7 @@ onUnmounted(() => {
 
 <template>
 	<div
-		class="component modal flex !max-w-[500px] flex-col gap-3 bg-red-400 p-5 text-white"
+		class="modal flex !max-w-[500px] flex-col gap-3 bg-red-400 p-5 text-white"
 		v-on-click-outside="
 			() => {
 				emit('close');

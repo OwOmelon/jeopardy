@@ -97,7 +97,7 @@ onUnmounted(() => {
 <template>
 	<div
 		ref="el"
-		class="component modal"
+		class="modal"
 		v-on-click-outside="
 			() => {
 				if (!showHelp_Image) {
