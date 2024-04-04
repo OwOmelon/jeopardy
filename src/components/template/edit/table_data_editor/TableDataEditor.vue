@@ -7,9 +7,13 @@ import { vOnClickOutside } from "@vueuse/components";
 export type ImageModelValue = ReturnType<typeof template.fetchImageTableImage>;
 
 import InputArea from "./InputArea.vue";
+import ModalWrapper from "@/components/ModalWrapper.vue";
+import Edit_Images from "@/components/help/Edit_Images.vue";
 
 const template = useTemplateStore();
 const mainmenu = useMainMenuStore();
+
+const showHelp_Image = ref(false);
 
 const questionText = ref<string>(template.activeTableDataCell!.question.text);
 const questionImage = ref<ImageModelValue>(
@@ -47,7 +51,7 @@ function saveChanges(): void {
 			template.updateImageTable(
 				template.activeTableDataCell!.row,
 				template.activeTableDataCell!.column,
-				property.image.src,
+				property.image.src.trim(),
 				property.image.type,
 				key,
 			);
@@ -96,7 +100,9 @@ onUnmounted(() => {
 		class="component modal"
 		v-on-click-outside="
 			() => {
-				closeTableDataEditor();
+				if (!showHelp_Image) {
+					closeTableDataEditor();
+				}
 			}
 		"
 	>
@@ -137,18 +143,15 @@ onUnmounted(() => {
 					label="Question:"
 					text-box-placeholder="enter a question"
 					@on-image-upload="questionImage = $event"
+					@show-help_image="showHelp_Image = true"
 				/>
 
 				<div
 					class="flex flex-row items-center justify-center gap-2 md:h-full md:flex-col"
 				>
-					<i
-						class="h-1 w-[30%] rounded-full bg-stone-500 md:h-[30%] md:w-1"
-					/>
+					<i class="h-1 w-[30%] rounded-full bg-stone-500 md:h-[30%] md:w-1" />
 					<i class="aspect-square h-2 rounded-full bg-stone-500" />
-					<i
-						class="h-1 w-[30%] rounded-full bg-stone-500 md:h-[30%] md:w-1"
-					/>
+					<i class="h-1 w-[30%] rounded-full bg-stone-500 md:h-[30%] md:w-1" />
 				</div>
 
 				<InputArea
@@ -157,6 +160,7 @@ onUnmounted(() => {
 					label="Answer:"
 					text-box-placeholder="enter an answer"
 					@on-image-upload="answerImage = $event"
+					@show-help_image="showHelp_Image = true"
 				/>
 			</div>
 
@@ -164,12 +168,16 @@ onUnmounted(() => {
 				SAVE
 			</button>
 		</form>
+
+		<ModalWrapper :show="showHelp_Image">
+			<Edit_Images @close="showHelp_Image = false" />
+		</ModalWrapper>
 	</div>
 </template>
 
 <style scoped lang="postcss">
 :deep(.btn) {
-	@apply rounded bg-stone-300 px-2 py-1 font-semibold text-stone-100 text-stone-600 shadow shadow-black/30 transition-colors hover:bg-stone-400;
+	@apply rounded bg-stone-300 px-2 py-1 font-semibold text-stone-100 text-stone-600 shadow shadow-black/30 transition-[filter] hover:brightness-125;
 }
 
 .text-box {

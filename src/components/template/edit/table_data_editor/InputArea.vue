@@ -3,23 +3,26 @@ import { ref, computed } from "vue";
 
 import type { ImageModelValue } from "./TableDataEditor.vue";
 
+import IconQuestionMark from "~icons/material-symbols/question-mark-rounded";
 import IconAddPhoto from "~icons/material-symbols/add-a-photo-outline-rounded";
 import TextBox from "@/components/TextBox.vue";
 
 const props = defineProps<{
+	label: string;
 	text: string;
 	image: string;
-	label: string;
 	textBoxPlaceholder: string;
 }>();
 
 const emit = defineEmits<{
 	"update:text": [string];
 	"on-image-upload": [ImageModelValue];
+	"show-help_image": [];
 }>();
 
 const uploadImgBtn = ref<HTMLInputElement | null>(null);
 const imgTextBox = ref<HTMLInputElement | null>(null);
+
 const notAnImageWarning = ref<number>(0);
 
 const computedModelValue = computed<string>({
@@ -68,29 +71,33 @@ function onImageUpload(): void {
 
 		<div class="flex items-center gap-3">
 			<i class="h-px grow bg-stone-500" />
-			
+
 			<button
 				type="button"
-				:disabled="!image.trim()"
-				:class="[
-					image.trim()
-						? 'bg-stone-500 text-stone-300 hover:brightness-125'
-						: 'text-stone-400',
-					'rounded px-2 text-center text-sm transition-[filter]',
-				]"
+				:disabled="!image"
+				class="rounded bg-stone-500 px-2 text-center text-sm text-stone-300 transition-[filter] hover:brightness-125 disabled:pointer-events-none disabled:bg-transparent disabled:text-stone-400"
 				@click="emit('on-image-upload', null)"
 			>
-				{{ image.trim() ? "remove" : "add an" }} image
+				{{ image ? "remove" : "add an" }} image
 			</button>
-			
+
+			<button
+				type="button"
+				class="rounded-full bg-stone-500 p-1 text-stone-100 transition-[filter] hover:brightness-125"
+				@click="emit('show-help_image')"
+			>
+				<IconQuestionMark class="h-4 w-4" />
+			</button>
+
 			<i class="h-px grow bg-stone-500" />
 		</div>
 
-		<img
-			v-if="image.trim()"
-			:src="image"
-			class="self-center rounded shadow shadow-black/30"
-		/>
+		<div v-if="image">
+			<img
+				:src="image"
+				class="mx-auto max-h-[300px] rounded shadow shadow-black/30"
+			/>
+		</div>
 
 		<div v-else class="flex gap-3">
 			<label
@@ -109,7 +116,7 @@ function onImageUpload(): void {
 				<span
 					v-if="notAnImageWarning"
 					:key="notAnImageWarning"
-					class="not-an-image-warning-anim pointer-events-none absolute whitespace-nowrap rounded bg-yellow-400 p-2 text-sm text-black"
+					class="popup pointer-events-none absolute whitespace-nowrap rounded bg-yellow-400 p-2 text-sm text-black"
 				>
 					that's not an image, silly !
 				</span>
@@ -135,19 +142,21 @@ function onImageUpload(): void {
 	@apply rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors focus:border-stone-100;
 }
 
-.not-an-image-warning-anim {
+.popup {
 	animation: fade-slide-up 5s forwards;
 }
 
 @keyframes fade-slide-up {
 	0%,
 	100% {
-		@apply -top-5 opacity-0;
+		opacity: 0;
+		transform: translateY(0px);
 	}
 
 	20%,
 	80% {
-		@apply -top-12 opacity-100;
+		opacity: 1;
+		transform: translateY(-3rem);
 	}
 }
 </style>
