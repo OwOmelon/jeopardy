@@ -1,11 +1,37 @@
 <script setup lang="ts">
-const props = defineProps<{
-	show: boolean;
-}>();
+import { computed } from "vue";
+
+const props = withDefaults(
+	defineProps<{ show: boolean; speed?: "slow" | "medium" | "fast" }>(),
+	{
+		speed: "fast",
+	},
+);
+
+const transitionDuration = computed(() => {
+	const options = {
+		enterActiveClass: "duration-300",
+		leaveActiveClass: "duration-300",
+	};
+
+	switch (props.speed) {
+		case "slow":
+			options.enterActiveClass = "duration-1000";
+			options.leaveActiveClass = "duration-1000";
+			break;
+
+		case "medium":
+			options.enterActiveClass = "duration-500";
+			options.leaveActiveClass = "duration-500";
+			break;
+	}
+
+	return options;
+});
 </script>
 
 <template>
-	<Transition name="height-auto">
+	<Transition name="height-auto" v-bind="transitionDuration">
 		<div v-if="show" class="grid">
 			<div class="overflow-hidden">
 				<slot />
