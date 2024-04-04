@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import IconTabArrowLeft from "~icons/fluent/tab-arrow-left-24-regular";
 import IconNoPhotography from "~icons/material-symbols/no-photography";
+import HeightAuto from "../HeightAutoTransitionWrapper.vue";
 
 import type { RowID, ColumnID, HistoryTemplate } from "@/stores/template";
 
@@ -75,87 +76,85 @@ function getImg(row: RowID, column: ColumnID) {
 			</div>
 		</div>
 
-		<Transition name="height-auto">
-			<div v-if="isActive" class="grid">
-				<div class="flex flex-col gap-2 overflow-hidden">
-					<hr class="mt-2 border-white" />
-					<p>
-						name:
-						<span class="item ml-2 !inline font-bold">{{ name || "x" }}</span>
-					</p>
+		<HeightAuto :show="isActive">
+			<div class="flex flex-col gap-2">
+				<hr class="mt-2 border-white" />
+				<p>
+					man what in the goddamn:
+					<span class="item ml-2 !inline font-bold">{{ name || "x" }}</span>
+				</p>
 
-					<div>
-						<label>points:</label>
-						<ul class="ml-2 inline-flex gap-2">
-							<li
-								v-for="(points, row, index) in rows"
-								:key="row"
-								class="item font-bold"
-							>
-								{{ points }}
-							</li>
-						</ul>
+				<div>
+					<label>points:</label>
+					<ul class="ml-2 inline-flex gap-2">
+						<li
+							v-for="(points, row, index) in rows"
+							:key="row"
+							class="item font-bold"
+						>
+							{{ points }}
+						</li>
+					</ul>
+				</div>
+
+				<div>
+					<label>columns:</label>
+					<ul class="grid grid-cols-5 gap-2">
+						<li
+							v-for="(category, column, index) in columns"
+							:key="column"
+							class="item"
+						>
+							<p class="font-bold">{{ category || column }}</p>
+						</li>
+					</ul>
+				</div>
+
+				<div>
+					<div class="mb-2 flex gap-2">
+						<label>table:</label>
+						<button type="button" @click.stop="emit('toggle-show-answers')">
+							show {{ showAnswers ? "questions" : "answers" }}
+						</button>
+
+						<button type="button" @click.stop="emit('toggle-show-images')">
+							show {{ showImages ? "text" : "images" }}
+						</button>
 					</div>
-
-					<div>
-						<label>columns:</label>
-						<ul class="grid grid-cols-5 gap-2">
-							<li
-								v-for="(category, column, index) in columns"
+					<table class="flex w-full flex-col gap-2 text-[0.65rem]">
+						<tr
+							v-for="(points, row, rowIndex) in rows"
+							:key="row"
+							class="grid grid-cols-5 gap-2"
+						>
+							<td
+								v-for="(category, column, columnIndex) in columns"
 								:key="column"
-								class="item"
+								class="item h-[9ex]"
 							>
-								<p class="font-bold">{{ category || column }}</p>
-							</li>
-						</ul>
-					</div>
+								<template v-if="showImages">
+									<img
+										v-if="getImg(row, column)"
+										:src="getImg(row, column)"
+										class="h-full object-contain"
+									/>
 
-					<div>
-						<div class="mb-2 flex gap-2">
-							<label>table:</label>
-							<button type="button" @click.stop="emit('toggle-show-answers')">
-								show {{ showAnswers ? "questions" : "answers" }}
-							</button>
+									<IconNoPhotography v-else class="scale-125" />
+								</template>
 
-							<button type="button" @click.stop="emit('toggle-show-images')">
-								show {{ showImages ? "text" : "images" }}
-							</button>
-						</div>
-						<table class="flex w-full flex-col gap-2 text-[0.65rem]">
-							<tr
-								v-for="(points, row, rowIndex) in rows"
-								:key="row"
-								class="grid grid-cols-5 gap-2"
-							>
-								<td
-									v-for="(category, column, columnIndex) in columns"
-									:key="column"
-									class="item h-[9ex]"
-								>
-									<template v-if="showImages">
-										<img
-											v-if="getImg(row, column)"
-											:src="getImg(row, column)"
-											class="h-full object-contain"
-										/>
-
-										<IconNoPhotography v-else class="scale-125" />
-									</template>
-
-									<p v-else>
-										{{
-											showAnswers
-												? textTable?.[row]?.[column]?.answer || "x"
-												: textTable?.[row]?.[column]?.question || "x"
-										}}
-									</p>
-								</td>
-							</tr>
-						</table>
-					</div>
+								<p v-else>
+									{{
+										showAnswers
+											? textTable?.[row]?.[column]?.answer || "x"
+											: textTable?.[row]?.[column]?.question || "x"
+									}}
+								</p>
+							</td>
+						</tr>
+					</table>
 				</div>
 			</div>
-		</Transition>
+		</HeightAuto>
 	</li>
 </template>
 

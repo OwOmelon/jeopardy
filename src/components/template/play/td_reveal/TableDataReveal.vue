@@ -13,6 +13,7 @@ import IconArrowRight from "~icons/material-symbols/arrow-right-rounded";
 
 import QuestionAnswer from "./QuestionAnswer.vue";
 import GiveGuestPoints from "./GiveGuestPoints.vue";
+import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
 
 const { list: guestList } = storeToRefs(useGuestsStore());
 const { activeTableDataCell } = storeToRefs(useTemplateStore());
@@ -161,24 +162,20 @@ onUnmounted(() => {
 		>
 			<div ref="revealContent">
 				<div class="py-5">
-					<Transition
-						name="height-auto"
-						enter-active-class="duration-500"
-						leave-active-class="duration-500"
-					>
+					<HeightAuto :show="revealProgress < 3">
 						<QuestionAnswer
-							v-if="revealProgress < 3"
 							:active-table-data-cell="activeTableDataCell!"
 							:show-answer="revealProgress > 1"
 							@change-answeree="revealProgress = 3"
 						/>
+					</HeightAuto>
 
+					<HeightAuto :show="revealProgress >= 3">
 						<GiveGuestPoints
-							v-else
 							:reveal-progress="revealProgress"
 							@done="setActiveDataCell(null)"
 						/>
-					</Transition>
+					</HeightAuto>
 				</div>
 			</div>
 

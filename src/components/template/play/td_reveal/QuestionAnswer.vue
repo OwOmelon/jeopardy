@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import IconEdit from "~icons/material-symbols/edit-rounded";
+import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
 
 import type { TableDataCell } from "@/stores/template";
 
@@ -20,54 +21,44 @@ const ImgAltTxt = (type: string) => {
 </script>
 
 <template>
-	<div class="grid">
-		<div class="overflow-hidden">
-			<p>{{ activeTableDataCell!.question.text }}</p>
+	<div>
+		<p>{{ activeTableDataCell!.question.text }}</p>
 
-			<div v-if="activeTableDataCell!.question.image" class="image-wrapper">
+		<div v-if="activeTableDataCell!.question.image" class="image-wrapper">
+			<img
+				:src="activeTableDataCell!.question.image"
+				:alt="ImgAltTxt('question')"
+			/>
+		</div>
+
+		<HeightAuto :show="showAnswer">
+			<hr class="mx-12 my-5 rounded-full border-t-4 border-red-400" />
+
+			<p class="font-bold">
+				{{ activeTableDataCell!.answer.text }}
+			</p>
+
+			<div v-if="activeTableDataCell!.answer.image" class="image-wrapper">
 				<img
-					:src="activeTableDataCell!.question.image"
-					:alt="ImgAltTxt('question')"
+					:src="activeTableDataCell!.answer.image"
+					:alt="ImgAltTxt('answer')"
 				/>
 			</div>
+		</HeightAuto>
 
-			<Transition
-				name="height-auto"
-				enter-active-class="duration-1000"
-				leave-active-class="duration-1000"
+		<div
+			v-if="activeTableDataCell!.answeredBy"
+			class="mx-auto mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white shadow shadow-black/30"
+		>
+			answered by: {{ activeTableDataCell!.answeredBy ?? "no one" }}
+
+			<button
+				type="button"
+				class="rounded bg-white p-2 text-red-400 shadow shadow-black/30 transition-[box-shadow,_transform] hover:-translate-y-1 hover:shadow-md"
+				@click="emit('change-answeree')"
 			>
-				<div v-if="props.showAnswer" class="grid">
-					<div class="overflow-hidden">
-						<hr class="mx-12 my-5 rounded-full border-t-4 border-red-400" />
-
-						<p class="font-bold">
-							{{ activeTableDataCell!.answer.text }}
-						</p>
-
-						<div v-if="activeTableDataCell!.answer.image" class="image-wrapper">
-							<img
-								:src="activeTableDataCell!.answer.image"
-								:alt="ImgAltTxt('answer')"
-							/>
-						</div>
-					</div>
-				</div>
-			</Transition>
-
-			<div
-				v-if="activeTableDataCell!.answeredBy"
-				class="mx-auto mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white shadow shadow-black/30"
-			>
-				answered by: {{ activeTableDataCell!.answeredBy ?? "no one" }}
-
-				<button
-					type="button"
-					class="rounded bg-white p-2 text-red-400 shadow shadow-black/30 transition-[box-shadow,_transform] hover:-translate-y-1 hover:shadow-md"
-					@click="emit('change-answeree')"
-				>
-					<IconEdit />
-				</button>
-			</div>
+				<IconEdit />
+			</button>
 		</div>
 	</div>
 </template>

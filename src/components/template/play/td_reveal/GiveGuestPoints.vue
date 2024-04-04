@@ -8,6 +8,7 @@ import type { Guest } from "@/stores/guests";
 type MappedGuestList = (Guest & { answered: "no" | "failed" | "succeeded" })[];
 
 import IconArrowRight from "~icons/material-symbols/arrow-right-rounded";
+import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
 
 const props = defineProps<{
 	revealProgress: number;
@@ -90,59 +91,48 @@ function getMappedGuestList(): MappedGuestList {
 </script>
 
 <template>
-	<div class="grid">
+	<div class="flex flex-col items-center justify-center text-4xl font-bold">
+		<span>who got it {{ props.revealProgress < 4 ? "wrong" : "right" }} ?</span>
+
 		<div
-			class="flex flex-col items-center justify-center overflow-hidden text-4xl font-bold"
+			v-if="mappedGuestList.length > 1"
+			class="my-5 flex flex-wrap justify-center gap-3"
 		>
-			<span
-				>who got it {{ props.revealProgress < 4 ? "wrong" : "right" }} ?</span
+			<button
+				v-for="guest in mappedGuestList"
+				:key="guest.id"
+				type="button"
+				:disabled="guest.answered === 'failed' && props.revealProgress === 4"
+				:class="[
+					guest.answered === 'failed'
+						? `lose-points ${
+								props.revealProgress === 4
+									? 'pointer-events-none opacity-50'
+									: ''
+							}`
+						: guest.answered === 'succeeded'
+							? 'gain-points'
+							: 'bg-stone-300 text-stone-500',
+				]"
+				@click="onGuestBtnClick(guest)"
 			>
-
-			<div
-				v-if="mappedGuestList.length > 1"
-				class="my-5 flex flex-wrap justify-center gap-3"
-			>
-				<button
-					v-for="guest in mappedGuestList"
-					:key="guest.id"
-					type="button"
-					:disabled="guest.answered === 'failed' && props.revealProgress === 4"
-					:class="[
-						guest.answered === 'failed'
-							? `lose-points ${
-									props.revealProgress === 4
-										? 'pointer-events-none opacity-50'
-										: ''
-								}`
-							: guest.answered === 'succeeded'
-								? 'gain-points'
-								: 'bg-stone-300 text-stone-500',
-					]"
-					@click="onGuestBtnClick(guest)"
-				>
-					{{ guest.name }}
-				</button>
-			</div>
-
-			<Transition name="height-auto">
-				<div v-if="props.revealProgress === 4" class="grid">
-					<div class="overflow-hidden">
-						<button
-							v-if="props.revealProgress === 4"
-							type="button"
-							class="group mx-1 mb-1 mt-3 flex items-center bg-red-400 text-white"
-							@click="confirm"
-						>
-							confirm
-
-							<IconArrowRight
-								class="ml-3 scale-[3] transition-transform group-hover:translate-x-2"
-							/>
-						</button>
-					</div>
-				</div>
-			</Transition>
+				{{ guest.name }}
+			</button>
 		</div>
+
+		<HeightAuto :show="revealProgress === 4">
+			<button
+				type="button"
+				class="group mx-1 mb-1 mt-3 flex items-center bg-red-400 text-white"
+				@click="confirm"
+			>
+				confirm
+
+				<IconArrowRight
+					class="ml-3 scale-[3] transition-transform group-hover:translate-x-2"
+				/>
+			</button>
+		</HeightAuto>
 	</div>
 </template>
 
