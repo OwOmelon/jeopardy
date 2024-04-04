@@ -209,19 +209,4 @@ input[type="number"] {
 		opacity: 0.001;
 	}
 }
-
-.breathe {
-	animation: breathe 1s ease-in-out infinite;
-}
-
-@keyframes breathe {
-	0%,
-	100% {
-		transform: scale(1);
-	}
-
-	50% {
-		transform: scale(1.05);
-	}
-}
 </style>
