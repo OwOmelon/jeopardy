@@ -225,6 +225,14 @@ onUnmounted(() => {
 	overflow-anchor: none;
 }
 
+.content {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+.content::-webkit-scrollbar {
+	display: none;
+}
+
 .prog-btn {
 	@apply grid place-items-center p-2 transition-opacity;
 }
