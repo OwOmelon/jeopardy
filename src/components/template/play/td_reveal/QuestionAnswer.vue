@@ -73,6 +73,6 @@ p {
 }
 
 img {
-	@apply rounded shadow shadow-black/30;
+	@apply mx-auto max-h-[300px] rounded shadow shadow-black/30;
 }
 </style>
