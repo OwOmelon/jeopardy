@@ -162,7 +162,7 @@ onUnmounted(() => {
 		>
 			<div ref="revealContent">
 				<div class="py-5">
-					<HeightAuto :show="revealProgress < 3">
+					<HeightAuto :show="revealProgress < 3" speed="medium">
 						<QuestionAnswer
 							:active-table-data-cell="activeTableDataCell!"
 							:show-answer="revealProgress > 1"
@@ -170,7 +170,7 @@ onUnmounted(() => {
 						/>
 					</HeightAuto>
 
-					<HeightAuto :show="revealProgress >= 3">
+					<HeightAuto :show="revealProgress >= 3" speed="medium">
 						<GiveGuestPoints
 							:reveal-progress="revealProgress"
 							@done="setActiveDataCell(null)"
