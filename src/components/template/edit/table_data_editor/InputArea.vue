@@ -108,9 +108,10 @@ function helpHint(): void {
 		</div>
 
 		<div v-else class="flex gap-3">
-			<label
+			<div
 				class="btn relative flex cursor-pointer items-center justify-center hover:!border-stone-100"
 				@mouseenter="helpHint"
+				@click="uploadImgBtn?.click()"
 			>
 				<IconAddPhoto class="scale-125" />
 				<span class="ml-2">upload</span>
@@ -118,7 +119,7 @@ function helpHint(): void {
 				<input
 					ref="uploadImgBtn"
 					type="file"
-					class="fixed -top-full opacity-0"
+					class="pointer-events-none fixed -top-full opacity-0"
 					@change="onImageUpload"
 				/>
 
@@ -129,7 +130,7 @@ function helpHint(): void {
 				>
 					that's not an image, silly !
 				</span>
-			</label>
+			</div>
 
 			<input
 				ref="imgTextBox"
