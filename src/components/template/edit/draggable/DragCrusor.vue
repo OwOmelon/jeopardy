@@ -16,14 +16,14 @@ const { enteredDropZone } = useDragCursor();
 			<i
 				:class="[
 					enteredDropZone ? 'w-24 border-green-400' : 'w-14 border-red-400',
-					'cursor-ring shadow-subtle absolute aspect-square rounded-full border-4 bg-stone-500/25 transition-[width_border] duration-300',
+					'cursor-ring soft-drop-shadow absolute aspect-square rounded-full border-4 bg-stone-500/25 transition-[width_border] duration-300',
 				]"
 			/>
 
 			<div
 				:class="[
 					{ 'drag-icon-drop-enter': enteredDropZone },
-					'drag-icon shadow-subtle absolute grid place-items-center',
+					'drag-icon soft-drop-shadow absolute grid place-items-center',
 				]"
 			>
 				<i />
@@ -50,7 +50,7 @@ const { enteredDropZone } = useDragCursor();
 </template>
 
 <style lang="postcss">
-.shadow-subtle {
+.soft-drop-shadow {
 	@apply drop-shadow-[0_1px_2px_rgb(0_0_0)];
 }
 
