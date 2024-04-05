@@ -65,9 +65,7 @@ function helpHint(): void {
 </script>
 
 <template>
-	<div
-		class="flex flex-col gap-3 rounded bg-stone-600 p-3 shadow shadow-black/30"
-	>
+	<div class="shadow-subtle flex flex-col gap-3 rounded bg-stone-600 p-3">
 		<label>{{ label }}</label>
 		<TextBox
 			v-model="computedModelValue"
@@ -101,10 +99,7 @@ function helpHint(): void {
 		</div>
 
 		<div v-if="image">
-			<img
-				:src="image"
-				class="mx-auto max-h-[300px] rounded shadow shadow-black/30"
-			/>
+			<img :src="image" class="shadow-subtle mx-auto max-h-[300px] rounded" />
 		</div>
 
 		<div v-else class="flex gap-3">
@@ -149,7 +144,7 @@ function helpHint(): void {
 
 <style scoped lang="postcss">
 .input {
-	@apply rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors focus:border-stone-100;
+	@apply shadow-subtle rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 outline-none transition-colors focus:border-stone-100;
 }
 
 .help-hint {

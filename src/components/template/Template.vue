@@ -57,7 +57,7 @@ function onTemplatePropertyErrorAlertClose(): void {
 					<div
 						:class="[
 							downloadLocalStorageTemplate ? 'bg-white' : 'bg-red-400',
-							'aspect-square w-8 rounded border-2 border-white shadow shadow-black/30',
+							'shadow-subtle aspect-square w-8 rounded border-2 border-white',
 						]"
 					>
 						<IconCheck

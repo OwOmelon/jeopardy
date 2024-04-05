@@ -44,15 +44,15 @@ defineExpose({ focus, blur });
 			guests.activeGuestID
 				? 'edit guest name'
 				: guests.guestLimitReached
-				? 'guest limit reached'
-				: 'enter guest name'
+					? 'guest limit reached'
+					: 'enter guest name'
 		"
 		maxlength="15"
 		:disabled="
 			guests.guestLimitReached ? (guests.activeGuestID ? false : true) : false
 		"
 		@keydown.enter="emit('save-changes')"
-		class="input mt-3 w-full rounded border-y-2 border-transparent px-2 shadow shadow-black/30 outline-none transition-colors"
+		class="input shadow-subtle mt-3 w-full rounded border-y-2 border-transparent px-2 outline-none transition-colors"
 	/>
 </template>
 

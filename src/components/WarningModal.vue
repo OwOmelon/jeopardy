@@ -66,6 +66,6 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 button {
-	@apply grow rounded bg-white p-2 text-xl font-bold text-red-400 shadow shadow-black/30 transition-transform hover:-translate-y-1;
+	@apply shadow-subtle grow rounded bg-white p-2 text-xl font-bold text-red-400 transition-transform hover:-translate-y-1;
 }
 </style>

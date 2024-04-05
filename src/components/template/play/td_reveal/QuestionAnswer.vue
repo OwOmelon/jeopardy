@@ -48,13 +48,13 @@ const ImgAltTxt = (type: string) => {
 
 		<div
 			v-if="activeTableDataCell!.answeredBy"
-			class="mx-auto mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white shadow shadow-black/30"
+			class="shadow-subtle mx-auto mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white"
 		>
 			answered by: {{ activeTableDataCell!.answeredBy ?? "no one" }}
 
 			<button
 				type="button"
-				class="rounded bg-white p-2 text-red-400 shadow shadow-black/30 transition-[box-shadow,_transform] hover:-translate-y-1 hover:shadow-md"
+				class="shadow-subtle rounded bg-white p-2 text-red-400 transition-[box-shadow,_transform] hover:-translate-y-1 hover:shadow-md"
 				@click="emit('change-answeree')"
 			>
 				<IconEdit />
@@ -73,6 +73,6 @@ p {
 }
 
 img {
-	@apply mx-auto max-h-[300px] rounded shadow shadow-black/30;
+	@apply shadow-subtle mx-auto max-h-[300px] rounded;
 }
 </style>

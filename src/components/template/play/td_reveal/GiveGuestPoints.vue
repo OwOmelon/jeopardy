@@ -138,7 +138,7 @@ function getMappedGuestList(): MappedGuestList {
 
 <style scoped lang="postcss">
 button {
-	@apply rounded-[0.1em] p-[0.4em] shadow shadow-black/30 transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1;
+	@apply shadow-subtle rounded-[0.1em] p-[0.4em] transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1;
 }
 
 .lose-points {

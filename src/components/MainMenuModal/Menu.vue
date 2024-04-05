@@ -141,7 +141,7 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 button {
-	@apply grow rounded px-2 text-lg shadow shadow-black/30 transition-colors;
+	@apply shadow-subtle grow rounded px-2 text-lg transition-colors;
 }
 
 .light button {

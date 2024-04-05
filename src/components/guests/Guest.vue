@@ -43,9 +43,7 @@ watch(totalPoints, (val) => {
 	<li class="flex flex-col items-center gap-1">
 		<span class="font-bold text-red-400">{{ name }}</span>
 
-		<div
-			class="w-24 rounded bg-stone-50 p-1 shadow shadow-black/30 transition-colors"
-		>
+		<div class="shadow-subtle w-24 rounded bg-stone-50 p-1 transition-colors">
 			<input
 				ref="textBox"
 				v-model="textInput"
