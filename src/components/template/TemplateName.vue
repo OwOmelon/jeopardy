@@ -17,7 +17,12 @@ watch(
 </script>
 
 <template>
-	<h2 class="mx-auto block w-fit min-w-[12em] text-center font-bold">
+	<h2
+		:class="[
+			{ 'min-w-[12em]': !template.name },
+			'mx-auto block w-fit text-center font-bold',
+		]"
+	>
 		<TextBox
 			v-model="textInput"
 			placeholder="enter template name"
