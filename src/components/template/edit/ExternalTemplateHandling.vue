@@ -67,7 +67,7 @@ function parseJSONFile(file: any): Promise<any> {
 			class="col-start-2 row-start-3 mx-auto grid max-w-[964px] grid-cols-3 gap-x-3"
 		>
 			<hr
-				class="col-start-1 col-end-4 my-3 rounded-full border-t-2 border-stone-600"
+				class="col-start-1 col-end-4 mb-4 mt-3 rounded-full border-t-2 border-stone-600"
 			/>
 
 			<button
