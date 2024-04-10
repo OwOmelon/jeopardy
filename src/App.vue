@@ -51,16 +51,8 @@ watch(
 </template>
 
 <style lang="postcss">
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;800&display=swap");
-
-*,
-*::before,
-*::after {
-	@apply m-0 box-border p-0;
-}
-
 body {
-	@apply bg-stone-800 font-["Poppins",_sans-serrif] text-sm text-stone-500 transition-colors lg:text-base;
+	@apply bg-stone-800 transition-colors;
 }
 
 #app {
