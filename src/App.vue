@@ -53,7 +53,7 @@ watch(
 
 <style lang="postcss">
 #app {
-	@apply flex min-h-screen flex-col items-center justify-center py-10;
+	@apply flex min-h-screen flex-col items-center justify-center pb-10 pt-16;
 }
 
 input::-webkit-outer-spin-button,
