@@ -19,7 +19,7 @@ watch(
 <template>
 	<h2
 		:class="[
-			{ 'min-w-[12em]': !template.name },
+			{ 'min-w-[12em]': !textInput },
 			'mx-auto block w-fit text-center font-bold',
 		]"
 	>
