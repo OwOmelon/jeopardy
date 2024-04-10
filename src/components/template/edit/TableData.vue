@@ -17,11 +17,11 @@ const emit = defineEmits<{
 		:class="[
 			row,
 			column,
-			'td-stylized td-rise cell cell-width cell-padding group relative !border-x-0 bg-stone-700 text-stone-300',
+			'td-stylized td-rise cell cell-width cell-padding group relative !border-x-0 bg-stone-700 text-stone-100',
 		]"
 		@click="emit('edit')"
 	>
-		<div :class="[{ 'text-stone-500': !question.text }, 'group-hover:hidden']">
+		<div :class="[{ 'text-stone-400': !question.text }, 'group-hover:hidden']">
 			<img
 				v-if="!question.text && question.image"
 				:src="question.image"
@@ -35,7 +35,7 @@ const emit = defineEmits<{
 
 		<div
 			:class="[
-				{ 'text-stone-500': !answer.text },
+				{ 'text-stone-400': !answer.text },
 				'!hidden group-hover:!block',
 			]"
 		>
