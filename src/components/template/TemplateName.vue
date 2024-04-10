@@ -30,7 +30,7 @@ watch(
 			:disabled="!template.editing"
 			blur-on-keydown-enter
 			:class="[
-				template.editing ? 'text-stone-300' : '',
+				template.editing ? 'text-stone-300' : 'text-stone-700',
 				{
 					'border-b-stone-600': template.editing,
 				},
