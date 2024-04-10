@@ -25,7 +25,7 @@ watch(
 watch(
 	() => template.editing,
 	(is) => {
-		body.className = is ? "bg-stone-800" : "bg-stone-100";
+		body.className = is ? "bg-stone-800" : "bg-stone-200";
 	},
 	{ immediate: true },
 );
