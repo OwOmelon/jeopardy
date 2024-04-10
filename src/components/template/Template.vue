@@ -86,6 +86,10 @@ function onTemplatePropertyErrorAlertClose(): void {
 	@apply flex gap-3;
 }
 
+:deep(th) {
+	@apply text-xl
+}
+
 :deep(.td-stylized) {
 	@apply h-[9.5ex] cursor-pointer text-xs;
 }
@@ -99,7 +103,7 @@ function onTemplatePropertyErrorAlertClose(): void {
 }
 
 :deep(.cell-width) {
-	@apply w-[140px];
+	@apply w-[160px];
 }
 
 :deep(.cell-padding) {
