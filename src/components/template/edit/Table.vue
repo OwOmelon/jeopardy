@@ -43,11 +43,11 @@ const template = useTemplateStore();
 
 <style scoped lang="postcss">
 :deep(.header-colors) {
-	@apply bg-stone-500 text-stone-100;
+	@apply bg-stone-300 text-stone-800;
 }
 
 :deep(.drop-to .cell) {
-	@apply !bg-stone-100 !text-stone-500;
+	@apply !bg-yellow-400 !text-white;
 }
 
 :deep(.dragging-header .cell) {
