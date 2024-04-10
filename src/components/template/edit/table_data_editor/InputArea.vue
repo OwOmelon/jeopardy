@@ -71,7 +71,7 @@ function helpHint(): void {
 			v-model="computedModelValue"
 			:placeholder="textBoxPlaceholder"
 			focus-classes="!border-stone-100"
-			class="input min-h-[10.3ex] cursor-text md:min-h-[18.2ex]"
+			class="input min-h-[10.493ex] cursor-text"
 		/>
 
 		<div class="flex items-center gap-3">
