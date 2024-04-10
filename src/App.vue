@@ -27,6 +27,7 @@ watch(
 	(is) => {
 		body.className = is ? "bg-stone-800" : "bg-stone-100";
 	},
+	{ immediate: true },
 );
 
 watch(
@@ -51,10 +52,6 @@ watch(
 </template>
 
 <style lang="postcss">
-body {
-	@apply bg-stone-800 transition-colors;
-}
-
 #app {
 	@apply flex min-h-screen flex-col items-center justify-center py-10;
 }
