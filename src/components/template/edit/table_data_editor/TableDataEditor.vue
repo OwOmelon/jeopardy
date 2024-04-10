@@ -6,6 +6,8 @@ import { vOnClickOutside } from "@vueuse/components";
 
 export type ImageModelValue = ReturnType<typeof template.fetchImageTableImage>;
 
+import IconClose from "~icons/material-symbols/close-rounded";
+import IconEnter from "~icons/ph/arrow-bend-down-right-bold";
 import InputArea from "./InputArea.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 import Edit_Images from "@/components/help/Edit_Images.vue";
@@ -97,7 +99,7 @@ onUnmounted(() => {
 <template>
 	<div
 		ref="el"
-		class="modal"
+		class="modal !max-w-[900px]"
 		v-on-click-outside="
 			() => {
 				if (!showHelp_Image) {
@@ -107,9 +109,9 @@ onUnmounted(() => {
 		"
 	>
 		<div
-			class="flex items-center justify-between gap-3 rounded-t border-b-2 border-stone-500 bg-stone-800 p-3 text-sm text-stone-400"
+			class="flex items-center justify-between gap-3 rounded-t border-b-2 border-stone-500 bg-stone-800 p-1 text-sm text-stone-400"
 		>
-			<p>
+			<span class="ml-2">
 				Editing
 				<span class="font-bold">{{
 					template.activeTableDataCell!.category ||
@@ -119,14 +121,14 @@ onUnmounted(() => {
 				<span class="font-bold">{{
 					template.activeTableDataCell!.points
 				}}</span>
-			</p>
+			</span>
 
 			<button
 				type="button"
-				class="btn hover:bg-rose-700"
+				class="btn !p-0 transition-colors hover:!bg-red-400 hover:!text-white"
 				@click="closeTableDataEditor()"
 			>
-				CLOSE <span class="hidden lg:inline">[ESC]</span>
+				<IconClose class="h-7 w-7" />
 			</button>
 		</div>
 
@@ -164,8 +166,12 @@ onUnmounted(() => {
 				/>
 			</div>
 
-			<button type="submit" class="btn mt-3 block w-full hover:bg-emerald-700">
+			<button
+				type="submit"
+				class="btn mt-3 flex w-full items-center justify-center gap-3 text-xl transition-colors hover:!bg-green-400 hover:!text-white"
+			>
 				SAVE
+				<IconEnter />
 			</button>
 		</form>
 
@@ -177,11 +183,11 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 :deep(.btn) {
-	@apply rounded bg-stone-300 px-2 py-1 font-semibold text-stone-100 text-stone-600 shadow shadow-black/30 transition-[filter] hover:brightness-125;
+	@apply shadow-subtle rounded bg-stone-300 px-2 py-1 font-semibold text-stone-100 text-stone-600;
 }
 
 .text-box {
-	@apply mt-3 min-h-[10.3ex] resize-none rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 shadow shadow-black/30 outline-none transition-colors md:min-h-[18.2ex];
+	@apply shadow-subtle mt-3 min-h-[10.3ex] resize-none rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 outline-none transition-colors md:min-h-[18.2ex];
 }
 
 .text-box-focus {
