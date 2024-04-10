@@ -158,7 +158,7 @@ onUnmounted(() => {
 
 		<div
 			ref="revealContentWrapper"
-			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-100 p-10 text-center text-5xl text-red-400"
+			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-50 p-10 text-center text-5xl text-red-400"
 		>
 			<div ref="revealContent">
 				<div class="py-5">
