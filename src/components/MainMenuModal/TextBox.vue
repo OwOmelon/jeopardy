@@ -52,24 +52,24 @@ defineExpose({ focus, blur });
 			guests.guestLimitReached ? (guests.activeGuestID ? false : true) : false
 		"
 		@keydown.enter="emit('save-changes')"
-		class="input shadow-subtle mt-3 w-full rounded border-y-2 border-transparent px-2 outline-none transition-colors"
+		class="shadow-subtle mt-3 w-full rounded border-y-2 border-transparent px-2 outline-none transition-colors"
 	/>
 </template>
 
 <style scoped lang="postcss">
-.light .input {
+.light input {
 	@apply bg-stone-100 focus:border-b-red-400;
 }
 
-.light .input:disabled {
+.light input:disabled {
 	@apply cursor-not-allowed bg-stone-400 placeholder:text-stone-500;
 }
 
-.dark .input {
-	@apply bg-stone-500 text-stone-100 placeholder:text-stone-400 focus:border-b-stone-100;
+.dark input {
+	@apply bg-stone-600 text-stone-100 placeholder:text-stone-400 focus:border-b-stone-100;
 }
 
-.dark .input:disabled {
-	@apply cursor-not-allowed bg-stone-700 placeholder:text-stone-500;
+.dark input:disabled {
+	@apply cursor-not-allowed bg-stone-900 placeholder:text-stone-600;
 }
 </style>

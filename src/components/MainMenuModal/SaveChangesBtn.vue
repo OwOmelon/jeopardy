@@ -20,7 +20,7 @@ const guests = useGuestsStore();
 		type="button"
 		:disabled="!props.textInputLength"
 		:class="[
-			'shadow-subtle mt-2 flex items-center justify-center gap-2 rounded px-2 text-xl transition-colors',
+			'shadow-subtle mt-2 flex items-center justify-center gap-2 rounded px-2 text-xl font-bold transition-colors',
 		]"
 		@click="emit('save-changes')"
 	>
@@ -41,10 +41,10 @@ const guests = useGuestsStore();
 }
 
 .dark button {
-	@apply bg-stone-300 text-stone-600 hover:bg-stone-400;
+	@apply bg-stone-300 text-stone-800 hover:bg-stone-400;
 }
 
 .dark button:disabled {
-	@apply cursor-not-allowed bg-stone-700 text-stone-500;
+	@apply cursor-not-allowed bg-stone-900 text-stone-600;
 }
 </style>

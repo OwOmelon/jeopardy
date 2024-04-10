@@ -86,15 +86,15 @@ const emit = defineEmits<{
 /* ----- */
 
 .dark .guest {
-	@apply hover:bg-stone-500;
+	@apply hover:bg-stone-700;
 }
 
 .dark .guest-active {
-	@apply bg-stone-300 text-stone-600;
+	@apply bg-stone-300 text-stone-800;
 }
 
 .dark .guest-disabled {
-	@apply bg-stone-700 text-stone-500;
+	@apply bg-stone-900 text-stone-600;
 }
 
 .dark button {

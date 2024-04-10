@@ -8,6 +8,7 @@ import { vOnClickOutside } from "@vueuse/components";
 
 import type { Guest } from "@/stores/guests";
 
+import IconPlay from "~icons/material-symbols/play-arrow-rounded";
 import TextBox from "./TextBox.vue";
 import SaveChangesBtn from "./SaveChangesBtn.vue";
 import GuestLI from "./GuestLI.vue";
@@ -61,7 +62,7 @@ onUnmounted(() => {
 	<div
 		:class="[
 			template.editing
-				? 'dark bg-stone-600 text-stone-300'
+				? 'dark bg-stone-800 text-stone-300'
 				: 'light bg-stone-300',
 			'z-100 w-[260px] rounded bg-stone-300 p-5 shadow-[0_10px_40px] shadow-black/40',
 		]"
@@ -71,7 +72,7 @@ onUnmounted(() => {
 			}
 		"
 	>
-		<h1 class="text-3xl font-bold">JEOPARDY</h1>
+		<h5 class="font-bold">JEOPARDY</h5>
 
 		<TextBox ref="textBox" v-model="textInput" @save-changes="saveChanges" />
 
@@ -106,7 +107,7 @@ onUnmounted(() => {
 			/>
 		</TransitionGroup>
 
-		<div class="flex items-center gap-3">
+		<div class="buttons flex items-center gap-3">
 			<button
 				v-if="!template.editing"
 				type="button"
@@ -126,6 +127,7 @@ onUnmounted(() => {
 
 			<button
 				type="button"
+				class="bg-red-400 text-white"
 				@click="
 					() => {
 						template.editing = !template.editing;
@@ -134,29 +136,18 @@ onUnmounted(() => {
 				"
 			>
 				{{ template.editing ? "play" : "edit" }}
+				<IconPlay />
 			</button>
 		</div>
 	</div>
 </template>
 
 <style scoped lang="postcss">
-button {
-	@apply shadow-subtle grow rounded px-2 text-lg transition-colors;
+.buttons button {
+	@apply shadow-subtle flex grow items-center justify-center gap-3 rounded px-3 py-1 text-xl font-bold transition-transform hover:-translate-y-1;
 }
 
-.light button {
-	@apply bg-red-400 text-white hover:bg-red-300;
-}
-
-.light button:disabled {
-	@apply cursor-not-allowed bg-stone-400 text-stone-500;
-}
-
-.dark button {
-	@apply bg-stone-300 text-stone-600 hover:bg-stone-400;
-}
-
-.dark button:disabled {
-	@apply cursor-not-allowed bg-stone-700 text-stone-500;
+.buttons svg {
+	@apply scale-150;
 }
 </style>
