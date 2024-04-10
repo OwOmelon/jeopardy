@@ -108,6 +108,6 @@ function parseJSONFile(file: any): Promise<any> {
 <style scoped lang="postcss">
 button,
 label {
-	@apply shadow-subtle row-start-2 flex items-center justify-center gap-2 rounded border-2 border-transparent bg-red-400 font-semibold text-white outline-none transition-[border-color,_transform] hover:-translate-y-1 focus:border-red-400 active:scale-95;
+	@apply shadow-subtle row-start-2 flex items-center justify-center gap-2 rounded border-2 border-transparent bg-red-400 text-xl font-semibold text-white outline-none transition-[border-color,_transform] hover:-translate-y-1 focus:border-red-400 active:scale-95;
 }
 </style>
