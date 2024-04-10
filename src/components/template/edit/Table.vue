@@ -10,7 +10,7 @@ const template = useTemplateStore();
 </script>
 
 <template>
-	<div class="table-wrapper !pb-0">
+	<div class="table-wrapper !pb-1">
 		<table class="grid">
 			<RowCategories class="col-start-2 row-start-1" />
 			<RowHRs class="col-start-2 row-start-2" />
