@@ -62,46 +62,52 @@ function parseJSONFile(file: any): Promise<any> {
 </script>
 
 <template>
-	<div
-		class="col-start-2 row-start-3 mx-auto grid max-w-[914px] grid-cols-3 gap-x-3 px-8"
-	>
-		<hr
-			class="col-start-1 col-end-4 my-3 rounded-full border-t-2 border-stone-600"
-		/>
-
-		<button type="button" class="cell-padding" @click="emit('reset-template')">
-			reset
-
-			<IconReset />
-		</button>
-
-		<label class="cell-padding cursor-pointer">
-			<span class="block text-center">import</span>
-			<input
-				ref="importTemplateBtn"
-				type="file"
-				class="hidden"
-				@change="importTemplate"
+	<div class="mx-8">
+		<div
+			class="col-start-2 row-start-3 mx-auto grid max-w-[964px] grid-cols-3 gap-x-3"
+		>
+			<hr
+				class="col-start-1 col-end-4 my-3 rounded-full border-t-2 border-stone-600"
 			/>
 
-			<IconUpload />
-		</label>
+			<button
+				type="button"
+				class="cell-padding"
+				@click="emit('reset-template')"
+			>
+				reset
 
-		<button
-			type="button"
-			class="cell-padding"
-			@click="downloadTemplate(template.getTemplateData())"
-		>
-			download
+				<IconReset />
+			</button>
 
-			<IconDownload />
-		</button>
+			<label class="cell-padding cursor-pointer">
+				<span class="block text-center">import</span>
+				<input
+					ref="importTemplateBtn"
+					type="file"
+					class="hidden"
+					@change="importTemplate"
+				/>
+
+				<IconUpload />
+			</label>
+
+			<button
+				type="button"
+				class="cell-padding"
+				@click="downloadTemplate(template.getTemplateData())"
+			>
+				download
+
+				<IconDownload />
+			</button>
+		</div>
 	</div>
 </template>
 
 <style scoped lang="postcss">
 button,
 label {
-	@apply shadow-subtle row-start-2 flex items-center justify-center gap-2 rounded border-2 border-transparent bg-stone-100 font-semibold text-stone-600 outline-none transition-[border-color,_transform] hover:-translate-y-1 focus:border-red-400 active:scale-95;
+	@apply shadow-subtle row-start-2 flex items-center justify-center gap-2 rounded border-2 border-transparent bg-red-400 font-semibold text-white outline-none transition-[border-color,_transform] hover:-translate-y-1 focus:border-red-400 active:scale-95;
 }
 </style>
