@@ -65,8 +65,8 @@ function helpHint(): void {
 </script>
 
 <template>
-	<div class="shadow-subtle flex flex-col gap-3 rounded bg-stone-600 p-3">
-		<label>{{ label }}</label>
+	<div class="shadow-subtle flex flex-col gap-3 rounded bg-stone-700 p-3">
+		<label class="text-stone-300">{{ label }}</label>
 		<TextBox
 			v-model="computedModelValue"
 			:placeholder="textBoxPlaceholder"
@@ -80,7 +80,7 @@ function helpHint(): void {
 			<button
 				type="button"
 				:disabled="!image"
-				class="rounded bg-stone-500 px-2 text-center text-sm text-stone-300 transition-[filter] hover:brightness-125 disabled:pointer-events-none disabled:bg-transparent disabled:text-stone-400"
+				class="shadow-subtle rounded bg-stone-500 px-2 text-center text-sm text-stone-50 transition-[filter] hover:brightness-125 disabled:pointer-events-none disabled:bg-transparent disabled:text-stone-400 disabled:shadow-none"
 				@click="emit('on-image-upload', null)"
 			>
 				{{ image ? "remove" : "add an" }} image
@@ -89,7 +89,7 @@ function helpHint(): void {
 			<button
 				ref="helpImgBtn"
 				type="button"
-				class="rounded-full border-2 border-transparent bg-stone-500 p-px text-stone-100 transition-[filter] hover:brightness-125"
+				class="shadow-subtle rounded-full border-2 border-transparent bg-stone-500 p-px text-stone-100 transition-[filter] hover:brightness-125"
 				@click="emit('show-help_image')"
 			>
 				<IconQuestionMark class="h-4 w-4" />
@@ -99,17 +99,17 @@ function helpHint(): void {
 		</div>
 
 		<div v-if="image">
-			<img :src="image" class="shadow-subtle mx-auto max-h-[300px] rounded" />
+			<img :src="image" class="mx-auto max-h-[300px] rounded" />
 		</div>
 
 		<div v-else class="flex gap-3">
 			<div
-				class="btn relative flex cursor-pointer items-center justify-center hover:!border-stone-100"
+				class="btn relative flex cursor-pointer items-center justify-center gap-2 hover:!border-stone-100"
 				@mouseenter="helpHint"
 				@click="uploadImgBtn?.click()"
 			>
+				upload
 				<IconAddPhoto class="scale-125" />
-				<span class="ml-2">upload</span>
 
 				<input
 					ref="uploadImgBtn"
@@ -144,7 +144,7 @@ function helpHint(): void {
 
 <style scoped lang="postcss">
 .input {
-	@apply shadow-subtle rounded border-2 border-transparent bg-stone-500 p-[0.5em] text-stone-100 outline-none transition-colors focus:border-stone-100;
+	@apply shadow-subtle rounded border-2 border-transparent bg-stone-600 p-[0.5em] text-stone-50 outline-none transition-colors focus:border-stone-100;
 }
 
 .help-hint {

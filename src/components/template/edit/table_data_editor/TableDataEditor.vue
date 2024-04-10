@@ -109,7 +109,7 @@ onUnmounted(() => {
 		"
 	>
 		<div
-			class="flex items-center justify-between gap-3 rounded-t border-b-2 border-stone-500 bg-stone-800 p-1 text-sm text-stone-400"
+			class="flex items-center justify-between gap-3 rounded-t border-b-2 border-stone-500 bg-stone-900 p-1 text-sm text-stone-300"
 		>
 			<span class="ml-2">
 				Editing
@@ -133,7 +133,7 @@ onUnmounted(() => {
 		</div>
 
 		<form
-			class="rounded-b bg-stone-700 p-3 text-stone-300"
+			class="rounded-b bg-stone-800 p-3"
 			@submit.prevent="saveChanges()"
 		>
 			<div
@@ -183,7 +183,7 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 :deep(.btn) {
-	@apply shadow-subtle rounded bg-stone-300 px-2 py-1 font-semibold text-stone-100 text-stone-600;
+	@apply shadow-subtle rounded bg-stone-300 px-2 py-1 font-semibold text-stone-100 text-stone-800;
 }
 
 .text-box {
