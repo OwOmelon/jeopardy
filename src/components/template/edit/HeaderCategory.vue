@@ -27,7 +27,7 @@ watch(
 <template>
 	<th>
 		<div class="bounce-y-wrapper">
-			<div class="cell cell-width cell-padding th-bg group relative">
+			<div class="cell cell-width cell-padding header-colors group relative">
 				<TextBox
 					v-model="textInput"
 					:placeholder="props.column"

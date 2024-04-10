@@ -37,7 +37,7 @@ watch(
 	<th>
 		<div class="bounce-x-wrapper">
 			<div
-				class="cell th-bg group relative grid w-full place-items-center rounded"
+				class="cell header-colors group relative grid w-full place-items-center rounded"
 			>
 				<input
 					ref="textBox"

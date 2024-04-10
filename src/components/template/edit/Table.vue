@@ -42,7 +42,7 @@ const template = useTemplateStore();
 </template>
 
 <style scoped lang="postcss">
-:deep(.th-bg) {
+:deep(.header-colors) {
 	@apply bg-stone-500 text-stone-100;
 }
 
