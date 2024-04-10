@@ -17,9 +17,7 @@ watch(
 </script>
 
 <template>
-	<caption
-		class="mx-auto block w-fit min-w-[12em] text-center text-5xl font-bold"
-	>
+	<h2 class="mx-auto block w-fit min-w-[12em] text-center font-bold">
 		<TextBox
 			v-model="textInput"
 			placeholder="enter template name"
@@ -35,5 +33,5 @@ watch(
 			]"
 			@blur="template.name = textInput"
 		/>
-	</caption>
+	</h2>
 </template>
