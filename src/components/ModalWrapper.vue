@@ -19,7 +19,7 @@ const props = defineProps<{
 
 <style scoped lang="postcss">
 :slotted(.modal) {
-	@apply w-[90vw] max-w-[1170px] rounded shadow-[0_10px_40px] shadow-black/40;
+	@apply w-[90vw] max-w-[1170px] rounded shadow-[0_0_40px] shadow-black/50;
 }
 </style>
 
