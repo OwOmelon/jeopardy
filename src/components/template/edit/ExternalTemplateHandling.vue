@@ -64,7 +64,7 @@ function parseJSONFile(file: any): Promise<any> {
 <template>
 	<div class="mx-8">
 		<div
-			class="col-start-2 row-start-3 mx-auto grid max-w-[964px] grid-cols-3 gap-x-3"
+			class="col-start-2 row-start-3 mx-auto grid max-w-[848px] grid-cols-3 gap-x-3"
 		>
 			<hr
 				class="col-start-1 col-end-4 mb-4 mt-3 rounded-full border-t-2 border-stone-600"
@@ -108,6 +108,6 @@ function parseJSONFile(file: any): Promise<any> {
 <style scoped lang="postcss">
 button,
 label {
-	@apply shadow-subtle row-start-2 flex items-center justify-center gap-2 rounded border-2 border-transparent bg-red-400 text-xl font-semibold text-white outline-none transition-[border-color,_transform] hover:-translate-y-1 focus:border-red-400 active:scale-95;
+	@apply shadow-subtle row-start-2 flex items-center justify-center gap-2 rounded border-2 border-transparent bg-red-400 text-lg font-semibold text-white outline-none transition-[border-color,_transform] hover:-translate-y-1 focus:border-red-400 active:scale-95;
 }
 </style>
