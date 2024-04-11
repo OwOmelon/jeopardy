@@ -21,7 +21,7 @@ const ImgAltTxt = (type: string) => {
 </script>
 
 <template>
-	<div>
+	<div class="font-bold text-stone-600">
 		<p>{{ activeTableDataCell!.question.text }}</p>
 
 		<div v-if="activeTableDataCell!.question.image" class="image-wrapper">
@@ -32,9 +32,9 @@ const ImgAltTxt = (type: string) => {
 		</div>
 
 		<HeightAuto :show="showAnswer" speed="slow">
-			<hr class="mx-12 my-5 rounded-full border-t-4 border-red-400" />
+			<hr class="mx-12 my-5 rounded-full border-t-4 border-stone-600" />
 
-			<p class="font-bold">
+			<p>
 				{{ activeTableDataCell!.answer.text }}
 			</p>
 
@@ -65,7 +65,7 @@ const ImgAltTxt = (type: string) => {
 
 <style scoped lang="postcss">
 p {
-	@apply break-words py-1;
+	@apply break-words py-1 leading-[120%];
 }
 
 .image-wrapper {
