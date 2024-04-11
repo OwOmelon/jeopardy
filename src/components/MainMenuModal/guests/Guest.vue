@@ -28,10 +28,10 @@ const emit = defineEmits<{
 						? '-disabled'
 						: ''
 			}`,
-			'group flex items-center justify-between rounded px-2 transition-colors',
+			'group flex gap-3 items-center justify-between rounded px-2 transition-colors',
 		]"
 	>
-		<span>{{ name }}</span>
+		<span class="truncate">{{ name }}</span>
 
 		<div class="flex items-center gap-2 transition-opacity">
 			<button
