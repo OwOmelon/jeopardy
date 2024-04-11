@@ -147,7 +147,7 @@ onUnmounted(() => {
 
 			<button
 				type="button"
-				class="absolute right-2 top-1/2 -translate-y-1/2 rounded border-2 border-stone-100 bg-stone-100 p-0.5 text-red-400 transition-colors hover:bg-red-400 hover:text-stone-100"
+				class="absolute right-2 top-1/2 -translate-y-1/2 rounded border-2 border-white bg-white p-0.5 text-red-400 transition-colors hover:bg-red-400 hover:text-white"
 				@click="setActiveDataCell(null)"
 			>
 				<IconClose class="h-6 w-6" />
