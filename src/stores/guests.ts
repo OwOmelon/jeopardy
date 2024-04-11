@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 
 export type Guest = {
-	id: `guest_${string}`;
+	id: string;
 	name: string;
 	points: {
 		legitimate: number /* POINTS EARNED THROUGH ANSWERING CELLS */;
@@ -25,7 +25,7 @@ export const useGuestsStore = defineStore("guests", () => {
 		if (guestLimitReached.value) return;
 
 		const newGuest: Guest = {
-			id: `guest_${uuidv4()}`,
+			id: uuidv4(),
 			name: name,
 			points: {
 				legitimate: 0,
@@ -37,9 +37,8 @@ export const useGuestsStore = defineStore("guests", () => {
 	}
 
 	function deleteGuest(id: Guest["id"]): void {
-		if (activeGuestID.value === id) {
-			activeGuestID.value = "guest_";
-		}
+		if (activeGuestID.value === id) resetActiveGuestID();
+
 		list.value = list.value.filter((guest) => guest.id !== id);
 	}
 
