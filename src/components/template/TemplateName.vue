@@ -20,7 +20,7 @@ watch(
 	<h2
 		:class="[
 			{ 'min-w-[12em]': !textInput },
-			'mx-auto block w-fit text-center font-bold',
+			'mx-auto w-fit text-center font-bold',
 		]"
 	>
 		<TextBox
