@@ -73,7 +73,7 @@ onUnmounted(() => {
 			}
 		"
 	>
-		<h5 class="font-bold">JEOPARDY</h5>
+		<span class="font-bold text-4xl">JEOPARDY</span>
 
 		<div>
 			<TextBox ref="textBox" v-model="textInput" @save-changes="saveChanges" />
