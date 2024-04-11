@@ -75,28 +75,31 @@ onUnmounted(() => {
 	>
 		<h5 class="font-bold">JEOPARDY</h5>
 
-		<TextBox ref="textBox" v-model="textInput" @save-changes="saveChanges" />
+		<div>
+			<TextBox ref="textBox" v-model="textInput" @save-changes="saveChanges" />
+			<SaveChangesBtn
+				class="mt-1"
+				:text-input-length="textInput.length"
+				@save-changes="saveChanges"
+			/>
+		</div>
 
-		<SaveChangesBtn
-			:text-input-length="textInput.length"
-			@save-changes="saveChanges"
-		/>
+		<div>
+			<h2 class="text-xl font-semibold">guests: {{ guests.list.length }}/6</h2>
 
-		<h2 class="mt-3 text-xl font-semibold">
-			guests: {{ guests.list.length }}/6
-		</h2>
+			<Transition name="fade" leave-active-class="absolute duration-150">
+				<p v-if="!guests.list.length" class="text-sm">nobody to play with :(</p>
+			</Transition>
 
-		<Transition name="fade" leave-active-class="absolute duration-150">
-			<p v-if="!guests.list.length" class="text-sm">nobody to play with :(</p>
-		</Transition>
-
-		<GuestList
-			:guest-list="guests.list"
-			:active-guest-i-d="guests.activeGuestID"
-			@start-guest-rename="startGuestRename"
-			@cancel-guest-rename="cancelGuestRename"
-			@delete-guest="guests.deleteGuest($event)"
-		/>
+			<GuestList
+				class="mt-1"
+				:guest-list="guests.list"
+				:active-guest-i-d="guests.activeGuestID"
+				@start-guest-rename="startGuestRename"
+				@cancel-guest-rename="cancelGuestRename"
+				@delete-guest="guests.deleteGuest($event)"
+			/>
+		</div>
 
 		<div class="buttons flex items-center gap-3">
 			<button

@@ -20,7 +20,7 @@ const guests = useGuestsStore();
 		type="button"
 		:disabled="!props.textInputLength"
 		:class="[
-			'shadow-subtle mt-2 flex items-center justify-center gap-2 rounded px-2 text-xl font-bold transition-colors',
+			'shadow-subtle flex items-center justify-center gap-2 rounded px-2 text-xl font-bold transition-colors',
 		]"
 		@click="emit('save-changes')"
 	>

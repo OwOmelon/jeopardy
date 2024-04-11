@@ -16,7 +16,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-	<TransitionGroup tag="ul" name="list-slide-left" class="relative mb-3">
+	<TransitionGroup tag="ul" name="list-slide-left" class="relative">
 		<GuestEntry
 			v-for="guest in guestList"
 			v-bind="guest"

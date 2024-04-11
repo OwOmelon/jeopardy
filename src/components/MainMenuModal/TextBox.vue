@@ -52,7 +52,7 @@ defineExpose({ focus, blur });
 			guests.guestLimitReached ? (guests.activeGuestID ? false : true) : false
 		"
 		@keydown.enter="emit('save-changes')"
-		class="shadow-subtle mt-3 w-full rounded border-y-2 border-transparent px-2 outline-none transition-colors"
+		class="shadow-subtle w-full rounded border-y-2 border-transparent px-2 outline-none transition-colors"
 	/>
 </template>
 
