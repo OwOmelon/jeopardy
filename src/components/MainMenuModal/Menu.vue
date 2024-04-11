@@ -65,7 +65,7 @@ onUnmounted(() => {
 			template.editing
 				? 'dark bg-stone-800 text-stone-300'
 				: 'light bg-stone-200 text-stone-600',
-			'z-100 w-[260px] rounded p-5 shadow-[0_10px_40px] shadow-black/40',
+			'z-100 flex w-[260px] flex-col gap-3 rounded p-5 shadow-[0_10px_40px] shadow-black/40',
 		]"
 		v-on-click-outside="
 			() => {
