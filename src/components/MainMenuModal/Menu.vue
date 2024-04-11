@@ -12,7 +12,7 @@ import IconPlay from "~icons/material-symbols/play-arrow-rounded";
 import IconRestart from "~icons/ph/arrow-counter-clockwise-bold";
 import TextBox from "./TextBox.vue";
 import SaveChangesBtn from "./SaveChangesBtn.vue";
-import GuestLI from "./GuestLI.vue";
+import GuestList from "./guests/GuestList.vue";
 
 const mainmenu = useMainMenuStore();
 const template = useTemplateStore();
@@ -90,30 +90,20 @@ onUnmounted(() => {
 			<p v-if="!guests.list.length" class="text-sm">nobody to play with :(</p>
 		</Transition>
 
-		<TransitionGroup tag="ul" name="list-slide-left" class="relative mb-3">
-			<GuestLI
-				v-for="guest in guests.list"
-				v-bind="guest"
-				:currently-editing="
-					guests.activeGuestID
-						? guests.activeGuestID === guest.id
-							? 'active'
-							: true
-						: false
-				"
-				:key="guest.id"
-				@rename="startGuestRename(guest)"
-				@rename-cancel="cancelGuestRename"
-				@delete="guests.deleteGuest(guest.id)"
-			/>
-		</TransitionGroup>
+		<GuestList
+			:guest-list="guests.list"
+			:active-guest-i-d="guests.activeGuestID"
+			@start-guest-rename="startGuestRename"
+			@cancel-guest-rename="cancelGuestRename"
+			@delete-guest="guests.deleteGuest($event)"
+		/>
 
 		<div class="buttons flex items-center gap-3">
 			<button
 				v-if="!template.editing"
 				type="button"
 				:disabled="!Object.keys(gameProgress.progress).length"
-				class="mode-btn disabled:hover:!-translate-y-0 bg-stone-50 disabled:cursor-not-allowed disabled:bg-stone-400 disabled:text-stone-500"
+				class="mode-btn bg-stone-50 disabled:cursor-not-allowed disabled:bg-stone-400 disabled:text-stone-500 disabled:hover:!-translate-y-0"
 				@click="
 					() => {
 						gameProgress.resetGameProgressWarning = true;
