@@ -9,6 +9,7 @@ import { vOnClickOutside } from "@vueuse/components";
 import type { Guest } from "@/stores/guests";
 
 import IconPlay from "~icons/material-symbols/play-arrow-rounded";
+import IconRestart from "~icons/ph/arrow-counter-clockwise-bold";
 import TextBox from "./TextBox.vue";
 import SaveChangesBtn from "./SaveChangesBtn.vue";
 import GuestLI from "./GuestLI.vue";
@@ -63,8 +64,8 @@ onUnmounted(() => {
 		:class="[
 			template.editing
 				? 'dark bg-stone-800 text-stone-300'
-				: 'light bg-stone-300',
-			'z-100 w-[260px] rounded bg-stone-300 p-5 shadow-[0_10px_40px] shadow-black/40',
+				: 'light bg-stone-200 text-stone-600',
+			'z-100 w-[260px] rounded p-5 shadow-[0_10px_40px] shadow-black/40',
 		]"
 		v-on-click-outside="
 			() => {
@@ -112,7 +113,7 @@ onUnmounted(() => {
 				v-if="!template.editing"
 				type="button"
 				:disabled="!Object.keys(gameProgress.progress).length"
-				class="mode-btn"
+				class="mode-btn disabled:hover:!-translate-y-0 bg-stone-50 disabled:cursor-not-allowed disabled:bg-stone-400 disabled:text-stone-500"
 				@click="
 					() => {
 						gameProgress.resetGameProgressWarning = true;
@@ -121,6 +122,7 @@ onUnmounted(() => {
 				"
 			>
 				restart
+				<IconRestart />
 			</button>
 
 			<!-- --- -->
@@ -136,7 +138,7 @@ onUnmounted(() => {
 				"
 			>
 				{{ template.editing ? "play" : "edit" }}
-				<IconPlay />
+				<IconPlay class="scale-150" />
 			</button>
 		</div>
 	</div>
@@ -144,10 +146,6 @@ onUnmounted(() => {
 
 <style scoped lang="postcss">
 .buttons button {
-	@apply shadow-subtle flex grow items-center justify-center gap-3 rounded px-3 py-1 text-xl font-bold transition-transform hover:-translate-y-1;
-}
-
-.buttons svg {
-	@apply scale-150;
+	@apply shadow-subtle flex grow items-center justify-center gap-3 rounded px-3 py-1 font-bold transition-transform hover:-translate-y-1;
 }
 </style>

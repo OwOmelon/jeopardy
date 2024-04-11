@@ -68,7 +68,7 @@ const emit = defineEmits<{
 
 <style scoped lang="postcss">
 .light .guest {
-	@apply hover:bg-stone-100;
+	@apply hover:bg-stone-50;
 }
 
 .light .guest-active {
@@ -76,7 +76,7 @@ const emit = defineEmits<{
 }
 
 .light .guest-disabled {
-	@apply bg-stone-400;
+	@apply bg-stone-400 text-stone-500;
 }
 
 .light button {
