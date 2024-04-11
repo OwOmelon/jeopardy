@@ -16,7 +16,14 @@ const emit = defineEmits<{
 </script>
 
 <template>
-	<TransitionGroup tag="ul" name="list-slide-left" class="relative">
+	<TransitionGroup
+		tag="ul"
+		name="list-slide-left"
+		:class="[
+			{ 'editing-guest': activeGuestID !== null },
+			'relative rounded transition-colors',
+		]"
+	>
 		<GuestEntry
 			v-for="guest in guestList"
 			v-bind="guest"
@@ -30,3 +37,13 @@ const emit = defineEmits<{
 		/>
 	</TransitionGroup>
 </template>
+
+<style scoped lang="postcss">
+.light .editing-guest {
+	@apply bg-stone-400;
+}
+
+.dark .editing-guest {
+	@apply bg-stone-900;
+}
+</style>
