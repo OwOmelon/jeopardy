@@ -23,7 +23,7 @@ const emit = defineEmits<{
 		:class="[
 			`guest${
 				currentlyEditing === 'active'
-					? '-active'
+					? '-active shadow-subtle'
 					: currentlyEditing
 						? '-disabled'
 						: ''
