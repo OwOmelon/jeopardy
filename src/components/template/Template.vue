@@ -87,7 +87,7 @@ function onTemplatePropertyErrorAlertClose(): void {
 }
 
 :deep(th) {
-	@apply text-xl
+	@apply text-lg
 }
 
 :deep(.td-stylized) {
@@ -103,7 +103,7 @@ function onTemplatePropertyErrorAlertClose(): void {
 }
 
 :deep(.cell-width) {
-	@apply w-[160px];
+	@apply w-[140px];
 }
 
 :deep(.cell-padding) {
