@@ -11,9 +11,11 @@ export type Guest = {
 	};
 };
 
+export type ActiveGuestID = Guest["id"] | null;
+
 export const useGuestsStore = defineStore("guests", () => {
 	const list = ref<Guest[]>(fetchGuestListFromLocalStorage());
-	const activeGuestID = ref<Guest["id"] | null>(null);
+	const activeGuestID = ref<ActiveGuestID>(null);
 
 	const guestLimitReached = computed<boolean>(() => {
 		const guestLimit = 6;
