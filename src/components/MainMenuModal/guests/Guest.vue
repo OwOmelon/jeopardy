@@ -76,7 +76,7 @@ const emit = defineEmits<{
 }
 
 .light .guest-disabled {
-	@apply bg-stone-400 text-stone-500;
+	@apply text-stone-500;
 }
 
 .light button {
@@ -94,7 +94,7 @@ const emit = defineEmits<{
 }
 
 .dark .guest-disabled {
-	@apply bg-stone-900 text-stone-600;
+	@apply text-stone-600;
 }
 
 .dark button {
