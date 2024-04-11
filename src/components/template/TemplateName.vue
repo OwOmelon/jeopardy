@@ -17,10 +17,10 @@ watch(
 </script>
 
 <template>
-	<h2
+	<h1
 		:class="[
 			{ 'min-w-[12em]': !textInput },
-			'mx-auto w-fit text-center font-bold',
+			'mx-auto w-fit max-w-[100vw] px-[1em] text-center font-bold',
 		]"
 	>
 		<TextBox
@@ -38,5 +38,5 @@ watch(
 			]"
 			@blur="template.name = textInput"
 		/>
-	</h2>
+	</h1>
 </template>
