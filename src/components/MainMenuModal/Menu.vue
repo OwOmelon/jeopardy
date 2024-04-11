@@ -78,7 +78,7 @@ onUnmounted(() => {
 		<div>
 			<TextBox ref="textBox" v-model="textInput" @save-changes="saveChanges" />
 			<SaveChangesBtn
-				class="mt-1"
+				class="mt-2"
 				:text-input-length="textInput.length"
 				@save-changes="saveChanges"
 			/>
