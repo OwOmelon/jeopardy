@@ -12,7 +12,7 @@ const props = defineProps<{
 		:class="[
 			rotate ? 'px-1 py-3' : 'px-3 py-1',
 			{ 'flex-col': props.rotate },
-			'handle shadow-subtle absolute left-0 top-0 flex -translate-x-1/2 -translate-y-1/2 cursor-grab rounded bg-stone-300 transition-opacity active:cursor-grabbing group-hover:opacity-100 lg:opacity-0',
+			'handle shadow-subtle absolute left-0 top-0 flex -translate-x-1/2 -translate-y-1/2 cursor-grab rounded bg-stone-100 transition-opacity active:cursor-grabbing group-hover:opacity-100 lg:opacity-0',
 		]"
 		@click.stop
 	>
@@ -23,6 +23,6 @@ const props = defineProps<{
 
 <style scoped lang="postcss">
 svg {
-	@apply h-5 w-5 text-stone-600;
+	@apply h-5 w-5 text-stone-700;
 }
 </style>
