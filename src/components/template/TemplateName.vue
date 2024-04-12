@@ -20,7 +20,7 @@ watch(
 	<div class="mx-auto w-fit">
 		<h1
 			:class="[
-				'mx-auto w-fit min-w-[4.3em] max-w-[95vw] text-center font-bold',
+				'mx-auto w-fit min-w-[3.3em] max-w-[95vw] text-center font-bold',
 			]"
 		>
 			<TextBox
@@ -40,7 +40,7 @@ watch(
 		<hr
 			:class="[
 				{'opacity-0': textInput},
-				'border-flash rounded-full border-t-4 transition-opacity duration-500 mx-8',
+				'border-flash rounded-full border-t-4 transition-opacity duration-500',
 			]"
 		/>
 	</div>
