@@ -17,26 +17,53 @@ watch(
 </script>
 
 <template>
-	<h1
-		:class="[
-			{ 'min-w-[12em]': !textInput },
-			'mx-auto w-fit max-w-[100vw] px-[1em] text-center font-bold',
-		]"
-	>
-		<TextBox
-			v-model="textInput"
-			placeholder="enter template name"
-			focus-classes="!border-b-stone-300"
-			:disabled="!template.editing"
-			blur-on-keydown-enter
+	<div class="mx-auto w-fit">
+		<h1
 			:class="[
-				template.editing ? 'text-stone-300' : 'text-stone-700',
-				{
-					'border-b-stone-600': template.editing,
-				},
-				'border-y-2 border-transparent p-2 transition-colors',
+				'mx-auto w-fit min-w-[4.3em] max-w-[95vw] text-center font-bold',
 			]"
-			@blur="template.name = textInput"
+		>
+			<TextBox
+				v-model="textInput"
+				placeholder="name"
+				:disabled="!template.editing"
+				blur-on-keydown-enter
+				:class="[
+					template.editing ? 'text-stone-300' : 'text-stone-700',
+					{ 'border-flash': !textInput },
+					'p-2 transition-colors',
+				]"
+				@blur="template.name = textInput"
+			/>
+		</h1>
+
+		<hr
+			:class="[
+				{'opacity-0': textInput},
+				'border-flash rounded-full border-t-4 transition-opacity duration-500 mx-8',
+			]"
 		/>
-	</h1>
+	</div>
 </template>
+
+<style scoped lang="postcss">
+.border-flash {
+	animation: border-flash 5s infinite;
+}
+
+@keyframes border-flash {
+	0%,
+	25%,
+	50%,
+	75%,
+	100% {
+		border-color: theme("colors.stone.600");
+	}
+
+	12.5%,
+	37.5%,
+	62.5% {
+		border-color: theme("colors.red.400");
+	}
+}
+</style>
