@@ -7,6 +7,7 @@ import IconPlay from "~icons/material-symbols/play-arrow-rounded";
 import IconQuestionMark from "~icons/material-symbols/question-mark-rounded";
 import IconAddPhoto from "~icons/material-symbols/add-a-photo-outline-rounded";
 import TextBox from "@/components/TextBox.vue";
+import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
 
 const props = defineProps<{
 	label: string;
@@ -103,56 +104,60 @@ function helpHint(): void {
 			<i class="h-px grow bg-stone-500" />
 		</div>
 
-		<div v-if="image">
-			<img :src="image" class="mx-auto max-h-[300px] rounded" />
-		</div>
+		<div>
+			<HeightAuto :show="!image">
+				<div class="flex gap-3 py-1">
+					<div
+						class="btn relative flex cursor-pointer items-center justify-center gap-2 hover:!border-stone-100"
+						@mouseenter="helpHint"
+						@click="uploadImgBtn?.click()"
+					>
+						upload
+						<IconAddPhoto class="scale-125" />
 
-		<div v-else class="flex gap-3">
-			<div
-				class="btn relative flex cursor-pointer items-center justify-center gap-2 hover:!border-stone-100"
-				@mouseenter="helpHint"
-				@click="uploadImgBtn?.click()"
-			>
-				upload
-				<IconAddPhoto class="scale-125" />
+						<input
+							ref="uploadImgBtn"
+							type="file"
+							class="pointer-events-none fixed -top-full opacity-0"
+							@change="onImageUpload"
+						/>
 
-				<input
-					ref="uploadImgBtn"
-					type="file"
-					class="pointer-events-none fixed -top-full opacity-0"
-					@change="onImageUpload"
-				/>
+						<span
+							v-if="notAnImageWarning"
+							:key="notAnImageWarning"
+							class="popup pointer-events-none absolute whitespace-nowrap rounded bg-yellow-400 p-2 text-sm text-black"
+						>
+							that's not an image, silly !
+						</span>
+					</div>
 
-				<span
-					v-if="notAnImageWarning"
-					:key="notAnImageWarning"
-					class="popup pointer-events-none absolute whitespace-nowrap rounded bg-yellow-400 p-2 text-sm text-black"
-				>
-					that's not an image, silly !
-				</span>
-			</div>
+					<div
+						class="input flex grow items-center !p-0 focus-within:!border-stone-100"
+					>
+						<input
+							v-model="imgInput"
+							type="text"
+							placeholder="enter image url"
+							size="1"
+							class="h-full w-full bg-transparent p-[0.5em] pr-0 outline-none placeholder:text-white/50"
+							@keydown.enter="applyImageUrl"
+						/>
 
-			<div
-				class="input flex grow items-center !p-0 focus-within:!border-stone-100"
-			>
-				<input
-					v-model="imgInput"
-					type="text"
-					placeholder="enter image url"
-					size="1"
-					class="h-full w-full bg-transparent p-[0.5em] pr-0 outline-none placeholder:text-white/50"
-					@keydown.enter="applyImageUrl"
-				/>
+						<button type="button" class="group" @click="applyImageUrl">
+							<IconPlay
+								:class="[
+									{ '-translate-x-3 opacity-0': !imgInput },
+									'pointer-events-none h-10 w-10 transition-[transform,_opacity] group-hover:scale-125',
+								]"
+							/>
+						</button>
+					</div>
+				</div>
+			</HeightAuto>
 
-				<button type="button" class="group" @click="applyImageUrl">
-					<IconPlay
-						:class="[
-							{ '-translate-x-3 opacity-0': !imgInput },
-							'pointer-events-none h-10 w-10 transition-[transform,_opacity] group-hover:scale-125',
-						]"
-					/>
-				</button>
-			</div>
+			<HeightAuto :show="image ? true : false">
+				<img :src="image" class="mx-auto max-h-[300px] rounded" />
+			</HeightAuto>
 		</div>
 	</div>
 </template>
