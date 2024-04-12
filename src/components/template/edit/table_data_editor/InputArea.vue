@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 
 import type { ImageModelValue } from "./TableDataEditor.vue";
 
+import IconPlay from "~icons/material-symbols/play-arrow-rounded";
 import IconQuestionMark from "~icons/material-symbols/question-mark-rounded";
 import IconAddPhoto from "~icons/material-symbols/add-a-photo-outline-rounded";
 import TextBox from "@/components/TextBox.vue";
@@ -22,7 +23,7 @@ const emit = defineEmits<{
 
 const helpImgBtn = ref<HTMLElement | null>(null);
 const uploadImgBtn = ref<HTMLInputElement | null>(null);
-const imgTextBox = ref<HTMLInputElement | null>(null);
+const imgInput = ref<string>("");
 const notAnImageWarning = ref<number>(0);
 
 const computedModelValue = computed<string>({
@@ -34,6 +35,10 @@ const computedModelValue = computed<string>({
 		emit("update:text", newText);
 	},
 });
+
+function applyImageUrl(): void {
+	emit("on-image-upload", { src: imgInput.value, type: "link" });
+}
 
 function onImageUpload(): void {
 	const file = uploadImgBtn.value!.files![0];
@@ -127,17 +132,27 @@ function helpHint(): void {
 				</span>
 			</div>
 
-			<input
-				ref="imgTextBox"
-				type="text"
-				placeholder="enter image url"
-				size="1"
-				class="input grow placeholder:text-white/50 focus:!border-stone-100"
-				@keydown.enter="imgTextBox!.blur()"
-				@blur="
-					emit('on-image-upload', { src: imgTextBox!.value, type: 'link' })
-				"
-			/>
+			<div
+				class="input flex grow items-center !p-0 focus-within:!border-stone-100"
+			>
+				<input
+					v-model="imgInput"
+					type="text"
+					placeholder="enter image url"
+					size="1"
+					class="h-full w-full bg-transparent p-[0.5em] pr-0 outline-none placeholder:text-white/50"
+					@keydown.enter="applyImageUrl"
+				/>
+
+				<button type="button" class="group" @click="applyImageUrl">
+					<IconPlay
+						:class="[
+							{ '-translate-x-3 opacity-0': !imgInput },
+							'pointer-events-none h-10 w-10 transition-[transform,_opacity] group-hover:scale-125',
+						]"
+					/>
+				</button>
+			</div>
 		</div>
 	</div>
 </template>
