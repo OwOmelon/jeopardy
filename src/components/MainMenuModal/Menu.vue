@@ -73,7 +73,15 @@ onUnmounted(() => {
 			}
 		"
 	>
-		<span class="font-bold text-4xl">JEOPARDY</span>
+		<span class="flex text-4xl font-bold">
+			<span
+				v-for="(letter, index) in 'JEOPARDY'"
+				:style="{ animationDelay: `${100 * index + 1000}ms` }"
+				class="bounce"
+			>
+				{{ letter }}
+			</span>
+		</span>
 
 		<div>
 			<TextBox ref="textBox" v-model="textInput" @save-changes="saveChanges" />
@@ -140,5 +148,20 @@ onUnmounted(() => {
 <style scoped lang="postcss">
 .buttons button {
 	@apply shadow-subtle flex grow items-center justify-center gap-3 rounded px-3 py-1 font-bold transition-transform hover:-translate-y-1;
+}
+
+.bounce {
+	animation: bounce 5s infinite;
+}
+
+@keyframes bounce {
+	0%,
+	12.5% {
+		transform: translateY(0);
+	}
+
+	6.25% {
+		transform: translateY(-0.5rem);
+	}
 }
 </style>
