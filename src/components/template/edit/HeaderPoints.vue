@@ -17,7 +17,7 @@ const textBox = ref<HTMLInputElement | null>(null);
 const textInput = ref<number>(props.points);
 
 function onBlur(): void {
-	if (!textInput.value.toString().length) {
+	if (!textInput.value.toString().length || textInput.value === props.points) {
 		textInput.value = props.points;
 		return;
 	}
