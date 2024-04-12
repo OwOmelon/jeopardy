@@ -40,8 +40,11 @@ watch(totalPoints, (val) => {
 </script>
 
 <template>
-	<li class="flex flex-col items-center gap-1">
-		<span class="font-bold text-red-400">{{ name }}</span>
+	<li class="flex w-24 flex-col items-center gap-1">
+		<span
+			class="w-full overflow-hidden text-ellipsis text-center font-bold text-stone-700"
+			>{{ name }}
+		</span>
 
 		<div class="shadow-subtle w-24 rounded bg-stone-50 p-1 transition-colors">
 			<input
