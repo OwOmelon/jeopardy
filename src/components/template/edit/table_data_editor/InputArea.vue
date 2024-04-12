@@ -130,7 +130,7 @@ function helpHint(): void {
 			<input
 				ref="imgTextBox"
 				type="text"
-				placeholder="paste image link"
+				placeholder="enter image url"
 				size="1"
 				class="input grow placeholder:text-white/50 focus:!border-stone-100"
 				@keydown.enter="imgTextBox!.blur()"
