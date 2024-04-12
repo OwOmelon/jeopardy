@@ -28,26 +28,23 @@ const dropTo = ref<number | null>(null);
 async function dragMove(e: PointerEvent): Promise<void> {
 	try {
 		const children = await getChildren();
-		const childrenCoords = children.map((child) =>
+		const childrenBoundingBoxes = children.map((child) =>
 			child.getBoundingClientRect(),
 		);
 
-		const pointerX = e.clientX;
-		const pointerY = e.clientY;
-
-		const childHoveredIndex = childrenCoords.findIndex((rect) => {
+		const hoveredChildIndex = childrenBoundingBoxes.findIndex((rect) => {
 			return (
-				pointerX >= rect.left &&
-				pointerX <= rect.right &&
-				pointerY >= rect.top &&
-				pointerY <= rect.bottom
+				e.clientX >= rect.left &&
+				e.clientX <= rect.right &&
+				e.clientY >= rect.top &&
+				e.clientY <= rect.bottom
 			);
 		});
 
-		dragCursor.move(pointerX, pointerY, true);
+		dragCursor.move(e.clientX, e.clientY, true);
 
-		if (childHoveredIndex !== dragFrom.value) {
-			dropTo.value = childHoveredIndex;
+		if (hoveredChildIndex !== dragFrom.value) {
+			dropTo.value = hoveredChildIndex;
 		}
 	} catch (e) {
 		console.error(e);
@@ -55,19 +52,20 @@ async function dragMove(e: PointerEvent): Promise<void> {
 }
 
 function swapModelValue(): void {
-	if (dragFrom.value !== null && dropTo.value !== null && dropTo.value !== -1) {
-		const swappedEntries = arrSwap(
-			Object.entries(obj.value),
-			dragFrom.value,
-			dropTo.value,
-		);
+	if (dragFrom.value === null || dropTo.value === null || dropTo.value === -1)
+		return;
 
-		const swapped = Object.fromEntries(swappedEntries) as typeof obj.value;
+	const swappedEntries = arrSwap(
+		Object.entries(obj.value),
+		dragFrom.value,
+		dropTo.value,
+	);
 
-		obj.value = swapped;
+	const swapped = Object.fromEntries(swappedEntries) as typeof obj.value;
 
-		emit("dragswap");
-	}
+	obj.value = swapped;
+
+	emit("dragswap");
 }
 
 watch(dropTo, (num) => {
@@ -80,20 +78,16 @@ async function startDragOperations(
 	e: PointerEvent,
 	attr: DragAttr,
 ): Promise<void> {
-	const handle = e.target as HTMLElement;
-
 	try {
 		const moveFromIndex = await findDragIndex(attr);
+		const handle = e.target as HTMLElement;
 
 		if (moveFromIndex === null) return;
-
-		const pointerX = e.clientX;
-		const pointerY = e.clientY;
 
 		dragFrom.value = moveFromIndex;
 
 		dragCursor.show();
-		dragCursor.move(pointerX, pointerY, false);
+		dragCursor.move(e.clientX, e.clientY, false);
 
 		handle.setPointerCapture(e.pointerId);
 		handle.addEventListener("pointermove", dragMove);
@@ -143,7 +137,7 @@ function getDragAttribute(el: HTMLElement): Promise<DragAttr> {
 
 async function getDragElHandle(el: HTMLElement): Promise<HTMLElement> {
 	return new Promise((res, rej) => {
-		const handle = el.getElementsByClassName("handle")[0] as HTMLElement;
+		const handle = el.getElementsByClassName(props.handle)[0] as HTMLElement;
 
 		if (handle === undefined) {
 			rej({ reason: "handle element not found", el });
