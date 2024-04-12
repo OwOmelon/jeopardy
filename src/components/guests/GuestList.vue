@@ -7,7 +7,7 @@ const guests = useGuestsStore();
 </script>
 
 <template>
-	<ul class="flex flex-wrap justify-center gap-3 pb-1">
+	<ul class="flex flex-wrap justify-center items-end gap-3 pb-1">
 		<Guest
 			v-for="guest in guests.list"
 			:id="guest.id"
