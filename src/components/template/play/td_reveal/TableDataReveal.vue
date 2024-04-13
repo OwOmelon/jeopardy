@@ -161,22 +161,20 @@ onUnmounted(() => {
 			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-50 p-14 text-center text-6xl"
 		>
 			<div ref="revealContent">
-				<div class="py-5">
-					<HeightAuto :show="revealProgress < 3" speed="medium">
-						<QuestionAnswer
-							:active-table-data-cell="activeTableDataCell!"
-							:show-answer="revealProgress > 1"
-							@change-answeree="revealProgress = 3"
-						/>
-					</HeightAuto>
+				<HeightAuto :show="revealProgress < 3" speed="medium">
+					<QuestionAnswer
+						:active-table-data-cell="activeTableDataCell!"
+						:show-answer="revealProgress > 1"
+						@change-answeree="revealProgress = 3"
+					/>
+				</HeightAuto>
 
-					<HeightAuto :show="revealProgress >= 3" speed="medium">
-						<GiveGuestPoints
-							:reveal-progress="revealProgress"
-							@done="setActiveDataCell(null)"
-						/>
-					</HeightAuto>
-				</div>
+				<HeightAuto :show="revealProgress >= 3" speed="medium">
+					<GiveGuestPoints
+						:reveal-progress="revealProgress"
+						@done="setActiveDataCell(null)"
+					/>
+				</HeightAuto>
 			</div>
 
 			<div class="anchor" />
