@@ -112,7 +112,7 @@ function getMappedGuestList(): MappedGuestList {
 							}`
 						: guest.answered === 'succeeded'
 							? 'gain-points'
-							: 'bg-stone-300 text-stone-500',
+							: 'bg-stone-300 text-stone-600',
 				]"
 				@click="onGuestBtnClick(guest)"
 			>
@@ -143,7 +143,7 @@ button {
 
 .lose-points {
 	animation: lose-points 0.5s;
-	@apply bg-stone-500 text-stone-300;
+	@apply bg-stone-600 text-stone-300;
 }
 
 @keyframes lose-points {
