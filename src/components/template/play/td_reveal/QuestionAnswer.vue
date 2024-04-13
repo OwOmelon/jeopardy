@@ -22,7 +22,10 @@ const ImgAltTxt = (type: string) => {
 
 <template>
 	<div class="font-bold">
-		<HeightAuto :show="!showAnswer" speed="slow">
+		<HeightAuto
+			:show="(activeTableDataCell.answeredBy ? true : false) || !showAnswer"
+			speed="slow"
+		>
 			<p>{{ activeTableDataCell!.question.text }}</p>
 
 			<img
@@ -31,6 +34,11 @@ const ImgAltTxt = (type: string) => {
 				:alt="ImgAltTxt('question')"
 			/>
 		</HeightAuto>
+
+		<hr
+			v-if="activeTableDataCell.answeredBy"
+			class="my-5 rounded-full border-t-4 border-stone-600"
+		/>
 
 		<HeightAuto :show="showAnswer" speed="slow">
 			<p>
@@ -46,7 +54,7 @@ const ImgAltTxt = (type: string) => {
 
 		<div
 			v-if="activeTableDataCell!.answeredBy"
-			class="shadow-subtle mx-auto mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white text-4xl"
+			class="shadow-subtle mx-auto mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 text-4xl font-bold tracking-wide text-white"
 		>
 			answered by: {{ activeTableDataCell!.answeredBy ?? "no one" }}
 
@@ -67,6 +75,6 @@ p {
 }
 
 img {
-	@apply mt-5 mx-auto h-[300px] rounded;
+	@apply mx-auto mt-5 h-[300px] rounded;
 }
 </style>
