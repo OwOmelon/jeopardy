@@ -123,7 +123,7 @@ function getMappedGuestList(): MappedGuestList {
 		<HeightAuto :show="revealProgress === 4">
 			<button
 				type="button"
-				class="group mx-1 mb-1 mt-3 flex items-center bg-red-400 text-white"
+				class="group m-1 flex items-center bg-red-400 text-white"
 				@click="confirm"
 			>
 				confirm
