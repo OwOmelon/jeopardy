@@ -65,14 +65,14 @@ const ImgAltTxt = (type: string) => {
 
 <style scoped lang="postcss">
 p {
-	@apply break-words py-1 leading-[120%];
+	@apply break-words mb-5 leading-[120%];
 }
 
 .image-wrapper {
-	@apply mx-auto w-2/3 p-2 py-5;
+	@apply mx-auto w-fit;
 }
 
 img {
-	@apply mx-auto max-h-[300px] rounded;
+	@apply h-[300px] rounded;
 }
 </style>
