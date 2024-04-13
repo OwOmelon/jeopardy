@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
 import { useMainMenuStore } from "@/stores/mainmenu";
-import { useElementSize } from "@vueuse/core";
 import { vOnClickOutside } from "@vueuse/components";
 
 import IconClose from "~icons/material-symbols/close-rounded";
@@ -22,40 +21,11 @@ const { disableToggle: disableMainMenuToggle } =
 
 // ------------------------------
 
-const revealContentWrapper = ref<HTMLDivElement | null>(null);
-const revealContent = ref<HTMLDivElement | null>(null);
-
-const { height: revealContentHeight } = useElementSize(revealContent);
-
-const revealContentOverflow = computed(() => {
-	if (!revealContentWrapper.value?.offsetHeight || !revealContentHeight.value)
-		return false;
-
-	return (
-		Math.ceil(revealContentHeight.value) >
-		Math.ceil(revealContentWrapper.value?.offsetHeight)
-	);
-});
-
-function scrollDown(): void {
-	revealContentWrapper.value!.scrollTo(
-		0,
-		revealContentWrapper.value!.scrollHeight,
-	);
-}
-
-watch(revealContentOverflow, (overflow) => {
-	if (overflow && revealProgress.value === 2) {
-		scrollDown();
-	}
-});
-
-// ------------------------------
-
 // 	1 = "show_question"
 // 	2 = "reveal_answer"
 // 	3 = "deduct_points"
 // 	4 = "add_points"
+
 const revealProgress = ref<number>(
 	activeTableDataCell.value!.answeredBy ? 2 : 1,
 );
@@ -102,8 +72,6 @@ function advanceProgress(): void {
 
 	revealContentTransition.value = "fade-slide-left";
 	revealProgress.value++;
-
-	if (revealProgress.value === 2) scrollDown();
 }
 
 function onKeyDown(e: KeyboardEvent) {
@@ -161,10 +129,9 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			ref="revealContentWrapper"
 			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-50 p-14 text-center text-6xl"
 		>
-			<div ref="revealContent">
+			<div>
 				<Transition :name="revealContentTransition" mode="out-in">
 					<QuestionAnswer
 						v-if="revealProgress < 3"
@@ -223,10 +190,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="postcss">
-.content * {
-	overflow-anchor: none;
-}
-
 .content {
 	-ms-overflow-style: none;
 	scrollbar-width: none;
