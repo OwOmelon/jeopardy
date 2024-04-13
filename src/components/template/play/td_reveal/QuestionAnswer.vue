@@ -63,10 +63,10 @@ const ImgAltTxt = (type: string) => {
 
 <style scoped lang="postcss">
 p {
-	@apply mb-5 break-words leading-[120%];
+	@apply break-words leading-[120%];
 }
 
 img {
-	@apply mx-auto h-[300px] rounded;
+	@apply mt-5 mx-auto h-[300px] rounded;
 }
 </style>
