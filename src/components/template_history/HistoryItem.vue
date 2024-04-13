@@ -80,7 +80,7 @@ function getImg(row: RowID, column: ColumnID) {
 			<div class="flex flex-col gap-2">
 				<hr class="mt-2 border-white" />
 				<p>
-					man what in the goddamn:
+					name:
 					<span class="item ml-2 !inline font-bold">{{ name || "x" }}</span>
 				</p>
 
