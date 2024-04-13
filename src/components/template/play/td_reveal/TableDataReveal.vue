@@ -121,7 +121,7 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-50 p-14 text-center text-6xl"
+			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-50 p-14 text-center text-6xl text-stone-600"
 		>
 			<div>
 				<Transition :name="revealContentTransition" mode="out-in">

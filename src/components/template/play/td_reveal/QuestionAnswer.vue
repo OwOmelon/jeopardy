@@ -21,7 +21,7 @@ const ImgAltTxt = (type: string) => {
 </script>
 
 <template>
-	<div class="font-bold text-stone-600">
+	<div class="font-bold">
 		<HeightAuto :show="!showAnswer" speed="slow">
 			<p>{{ activeTableDataCell!.question.text }}</p>
 
