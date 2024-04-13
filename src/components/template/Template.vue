@@ -103,7 +103,7 @@ function onTemplatePropertyErrorAlertClose(): void {
 }
 
 :deep(.cell-width) {
-	@apply w-[140px];
+	@apply w-[8.75rem];
 }
 
 :deep(.cell-padding) {
