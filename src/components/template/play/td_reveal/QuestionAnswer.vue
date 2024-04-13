@@ -22,17 +22,17 @@ const ImgAltTxt = (type: string) => {
 
 <template>
 	<div class="font-bold text-stone-600">
-		<p>{{ activeTableDataCell!.question.text }}</p>
+		<HeightAuto :show="!showAnswer" speed="slow">
+			<p>{{ activeTableDataCell!.question.text }}</p>
 
-		<img
-			v-if="activeTableDataCell!.question.image"
-			:src="activeTableDataCell!.question.image"
-			:alt="ImgAltTxt('question')"
-		/>
+			<img
+				v-if="activeTableDataCell!.question.image"
+				:src="activeTableDataCell!.question.image"
+				:alt="ImgAltTxt('question')"
+			/>
+		</HeightAuto>
 
 		<HeightAuto :show="showAnswer" speed="slow">
-			<hr class="mx-12 my-5 rounded-full border-t-4 border-stone-600" />
-
 			<p>
 				{{ activeTableDataCell!.answer.text }}
 			</p>
