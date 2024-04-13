@@ -13,7 +13,6 @@ import IconArrowRight from "~icons/material-symbols/arrow-right-rounded";
 
 import QuestionAnswer from "./QuestionAnswer.vue";
 import GiveGuestPoints from "./GiveGuestPoints.vue";
-import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
 
 const { list: guestList } = storeToRefs(useGuestsStore());
 const { activeTableDataCell } = storeToRefs(useTemplateStore());
@@ -60,6 +59,9 @@ watch(revealContentOverflow, (overflow) => {
 const revealProgress = ref<number>(
 	activeTableDataCell.value!.answeredBy ? 2 : 1,
 );
+const revealContentTransition = ref<"fade-slide-left" | "fade-slide-right">(
+	"fade-slide-left",
+);
 
 const cancelRevertProgress = computed<boolean>(() => {
 	return activeTableDataCell.value!.answeredBy &&
@@ -79,6 +81,7 @@ function revertProgress(): void {
 		return;
 	}
 
+	revealContentTransition.value = "fade-slide-right";
 	revealProgress.value--;
 }
 
@@ -97,6 +100,7 @@ function advanceProgress(): void {
 		return;
 	}
 
+	revealContentTransition.value = "fade-slide-left";
 	revealProgress.value++;
 
 	if (revealProgress.value === 2) scrollDown();
@@ -161,20 +165,20 @@ onUnmounted(() => {
 			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-50 p-14 text-center text-6xl"
 		>
 			<div ref="revealContent">
-				<HeightAuto :show="revealProgress < 3" speed="medium">
+				<Transition :name="revealContentTransition" mode="out-in">
 					<QuestionAnswer
+						v-if="revealProgress < 3"
 						:active-table-data-cell="activeTableDataCell!"
 						:show-answer="revealProgress > 1"
 						@change-answeree="revealProgress = 3"
 					/>
-				</HeightAuto>
 
-				<HeightAuto :show="revealProgress >= 3" speed="medium">
 					<GiveGuestPoints
+						v-else
 						:reveal-progress="revealProgress"
 						@done="setActiveDataCell(null)"
 					/>
-				</HeightAuto>
+				</Transition>
 			</div>
 
 			<div class="anchor" />
