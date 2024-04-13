@@ -140,7 +140,7 @@ function helpHint(): void {
 							placeholder="enter image url"
 							size="1"
 							class="h-full w-full bg-transparent p-[0.5em] pr-0 outline-none placeholder:text-white/50"
-							@keydown.enter="applyImageUrl"
+							@keydown.enter.prevent="applyImageUrl"
 						/>
 
 						<button type="button" class="group" @click="applyImageUrl">
