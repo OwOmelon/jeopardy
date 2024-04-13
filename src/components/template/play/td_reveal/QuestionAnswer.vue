@@ -46,7 +46,7 @@ const ImgAltTxt = (type: string) => {
 
 		<div
 			v-if="activeTableDataCell!.answeredBy"
-			class="shadow-subtle mx-auto mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white"
+			class="shadow-subtle mx-auto mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 font-bold tracking-wide text-white text-4xl"
 		>
 			answered by: {{ activeTableDataCell!.answeredBy ?? "no one" }}
 
