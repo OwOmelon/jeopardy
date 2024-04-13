@@ -4,7 +4,6 @@ import { storeToRefs } from "pinia";
 import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
 import { useMainMenuStore } from "@/stores/mainmenu";
-import { vOnClickOutside } from "@vueuse/components";
 
 import IconClose from "~icons/material-symbols/close-rounded";
 import IconArrowLeft from "~icons/material-symbols/arrow-left-rounded";
@@ -98,14 +97,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div
-		class="fixed right-0 top-0 flex h-screen w-screen flex-col"
-		v-on-click-outside="
-			() => {
-				setActiveDataCell(null);
-			}
-		"
-	>
+	<div class="fixed right-0 top-0 flex h-screen w-screen flex-col">
 		<div
 			class="relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-xl text-white"
 		>
@@ -154,7 +146,7 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="grid grid-cols-[1fr,max-content,_1fr] place-items-center border-t-4 border-stone-400 bg-stone-300 text-sm"
+			class="grid grid-cols-[1fr,max-content,_1fr] place-items-center border-t-4 border-stone-400 bg-stone-300 text-sm text-stone-600"
 		>
 			<button
 				type="button"
