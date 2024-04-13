@@ -156,7 +156,7 @@ function helpHint(): void {
 			</HeightAuto>
 
 			<HeightAuto :show="image ? true : false">
-				<img :src="image" class="mx-auto max-h-[300px] rounded" />
+				<img :src="image" class="mx-auto h-[300px] rounded" />
 			</HeightAuto>
 		</div>
 	</div>
