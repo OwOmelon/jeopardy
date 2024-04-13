@@ -24,12 +24,11 @@ const ImgAltTxt = (type: string) => {
 	<div class="font-bold text-stone-600">
 		<p>{{ activeTableDataCell!.question.text }}</p>
 
-		<div v-if="activeTableDataCell!.question.image" class="image-wrapper">
-			<img
-				:src="activeTableDataCell!.question.image"
-				:alt="ImgAltTxt('question')"
-			/>
-		</div>
+		<img
+			v-if="activeTableDataCell!.question.image"
+			:src="activeTableDataCell!.question.image"
+			:alt="ImgAltTxt('question')"
+		/>
 
 		<HeightAuto :show="showAnswer" speed="slow">
 			<hr class="mx-12 my-5 rounded-full border-t-4 border-stone-600" />
@@ -38,12 +37,11 @@ const ImgAltTxt = (type: string) => {
 				{{ activeTableDataCell!.answer.text }}
 			</p>
 
-			<div v-if="activeTableDataCell!.answer.image" class="image-wrapper">
-				<img
-					:src="activeTableDataCell!.answer.image"
-					:alt="ImgAltTxt('answer')"
-				/>
-			</div>
+			<img
+				v-if="activeTableDataCell!.answer.image"
+				:src="activeTableDataCell!.answer.image"
+				:alt="ImgAltTxt('answer')"
+			/>
 		</HeightAuto>
 
 		<div
@@ -65,14 +63,10 @@ const ImgAltTxt = (type: string) => {
 
 <style scoped lang="postcss">
 p {
-	@apply break-words mb-5 leading-[120%];
-}
-
-.image-wrapper {
-	@apply mx-auto w-fit;
+	@apply mb-5 break-words leading-[120%];
 }
 
 img {
-	@apply h-[300px] rounded;
+	@apply mx-auto h-[300px] rounded;
 }
 </style>
