@@ -96,7 +96,7 @@ function getMappedGuestList(): MappedGuestList {
 
 		<div
 			v-if="mappedGuestList.length > 1"
-			class="my-5 flex flex-wrap justify-center gap-3"
+			class="my-10 flex flex-wrap justify-center gap-3"
 		>
 			<button
 				v-for="guest in mappedGuestList"
