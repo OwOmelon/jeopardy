@@ -179,7 +179,7 @@ button {
 	}
 
 	25%,
-	75% {
+	50% {
 		scale: 1.1;
 		@apply bg-white text-amber-300 shadow-[0_0_50px] shadow-amber-300;
 	}
