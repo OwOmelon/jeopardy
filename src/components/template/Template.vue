@@ -99,7 +99,7 @@ function onTemplatePropertyErrorAlertClose(): void {
 }
 
 :deep(.cell) {
-	@apply break-words rounded border-2 border-transparent shadow !shadow-black/30 transition-[background-color,_border_color,_color,_box-shadow,_opacity,_transform] focus-within:border-stone-100;
+	@apply break-words rounded border-2 border-transparent shadow !shadow-black/30 transition-[background-color,_border_color,_color,_box-shadow,_opacity,_transform];
 }
 
 :deep(.cell-width) {
