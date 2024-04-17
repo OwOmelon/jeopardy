@@ -97,7 +97,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="fixed right-0 top-0 flex h-screen w-screen flex-col">
+	<div class="fixed right-0 top-0 flex h-screen w-screen flex-col bg-stone-50">
 		<div
 			class="relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-xl text-white"
 		>
@@ -121,7 +121,7 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden bg-stone-50 p-14 text-center text-5xl text-stone-600"
+			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden p-14 text-center text-5xl text-stone-600"
 		>
 			<div>
 				<Transition :name="revealContentTransition" mode="out-in">
