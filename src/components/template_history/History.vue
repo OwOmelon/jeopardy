@@ -103,7 +103,6 @@ watch(hide, () => {
 <style scoped lang="postcss">
 ul {
 	scrollbar-color: rgb(255, 255, 255, 0.35) #0000;
-	scrollbar-width: thin;
 }
 
 button {
