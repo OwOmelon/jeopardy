@@ -110,4 +110,9 @@ button,
 label {
 	@apply shadow-subtle row-start-2 flex items-center justify-center gap-2 rounded border-2 border-transparent bg-red-400 text-lg font-semibold text-white outline-none transition-[border-color,_transform] hover:-translate-y-1 focus:border-red-400 active:scale-95;
 }
+
+button svg,
+label svg {
+	@apply hidden sm:block;
+}
 </style>
