@@ -67,7 +67,11 @@ provide("filtered-table-data-rows", filteredTableDataRows);
 		<GuestList />
 
 		<Teleport to="#new-window">
-			<Transition name="fade-slide-down">
+			<Transition
+				name="fade-slide-down"
+				enter-active-class="duration-300"
+				leave-active-class="duration-300"
+			>
 				<TableDataReveal v-if="template.activeTableDataCell ? true : false" />
 			</Transition>
 		</Teleport>
