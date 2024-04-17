@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import IconTabArrowLeft from "~icons/fluent/tab-arrow-left-24-regular";
 import IconNoPhotography from "~icons/material-symbols/no-photography";
-import HeightAuto from "../HeightAutoTransitionWrapper.vue";
+import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
 
 import type { RowID, ColumnID, HistoryTemplate } from "@/stores/template";
 

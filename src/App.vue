@@ -7,7 +7,7 @@ import MainMenu from "./components/main_menu/Menu.vue";
 import PauseBtn from "./components/main_menu/PauseBtn.vue";
 import JeopardyTemplate from "./components/template/Template.vue";
 import ModalWrapper from "./components/ModalWrapper.vue";
-import TemplateHistory from "./components/template_history/History.vue";
+import TemplateHistory from "./components/template/history/History.vue";
 import DragCursor from "./components/template/edit/draggable/DragCrusor.vue";
 
 const template = useTemplateStore();
