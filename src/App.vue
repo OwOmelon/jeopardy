@@ -3,8 +3,8 @@ import { watch } from "vue";
 import { useTemplateStore } from "./stores/template";
 import { useMainMenuStore } from "./stores/mainmenu";
 
-import MainMenu from "./components/MainMenuModal/Menu.vue";
-import PauseBtn from "./components/MainMenuModal/PauseBtn.vue";
+import MainMenu from "./components/main_menu/Menu.vue";
+import PauseBtn from "./components/main_menu/PauseBtn.vue";
 import JeopardyTemplate from "./components/template/Template.vue";
 import ModalWrapper from "./components/ModalWrapper.vue";
 import TemplateHistory from "./components/template_history/History.vue";
