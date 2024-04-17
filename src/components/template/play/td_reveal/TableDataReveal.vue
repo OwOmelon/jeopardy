@@ -99,7 +99,7 @@ onUnmounted(() => {
 <template>
 	<div class="fixed right-0 top-0 flex h-screen w-screen flex-col bg-stone-50">
 		<div
-			class="relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-xl text-white"
+			class="animate-slide-left relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-xl text-white opacity-0"
 		>
 			<p class="text-center">
 				<span class="font-bold">{{
@@ -121,7 +121,8 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="content relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden p-14 text-center text-5xl text-stone-600"
+			style="animation-delay: 50ms"
+			class="content animate-slide-left relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden p-14 text-center text-5xl text-stone-600 opacity-0"
 		>
 			<div>
 				<Transition :name="revealContentTransition" mode="out-in">
@@ -146,7 +147,8 @@ onUnmounted(() => {
 		<!-- -------- -->
 
 		<div
-			class="grid grid-cols-[1fr,max-content,_1fr] place-items-center border-t-4 border-stone-400 bg-stone-300 text-sm text-stone-600"
+			style="animation-delay: 150ms"
+			class="animate-slide-left grid grid-cols-[1fr,max-content,_1fr] place-items-center border-t-4 border-stone-400 bg-stone-300 text-sm text-stone-600 opacity-0"
 		>
 			<button
 				type="button"
@@ -205,5 +207,22 @@ onUnmounted(() => {
 .anchor {
 	height: 1px;
 	overflow-anchor: auto;
+}
+
+.animate-slide-left {
+	animation: slide-left 500ms forwards;
+}
+
+@keyframes slide-left {
+	0%,
+	30% {
+		opacity: 0;
+		transform: translateX(15px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
 }
 </style>
