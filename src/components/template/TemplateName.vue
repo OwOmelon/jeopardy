@@ -18,9 +18,9 @@ watch(
 
 <template>
 	<div class="mx-auto w-fit">
-		<h1
+		<div
 			:class="[
-				'mx-auto w-fit min-w-[3.3em] max-w-[95vw] text-center font-bold',
+				'block mx-auto w-fit min-w-[3.3em] max-w-[95vw] text-center font-bold text-[5.61rem]',
 			]"
 		>
 			<TextBox
@@ -35,7 +35,7 @@ watch(
 				]"
 				@blur="template.name = textInput"
 			/>
-		</h1>
+		</div>
 
 		<hr
 			:class="[
