@@ -17,9 +17,9 @@ const disableUndoRedo = computed(() => {
 	return template.history.length === 1
 		? "both"
 		: template.historyIndexOfCurrentTemplate - 1 < 0
-			? "undo"
+			? "redo"
 			: template.historyIndexOfCurrentTemplate >= template.history.length - 1
-				? "redo"
+				? "undo"
 				: null;
 });
 
@@ -33,7 +33,9 @@ function setActiveItem(index: number) {
 
 function undoRedo(dir: -1 | 1): void {
 	const templateToLoad =
-		template.history[template.historyIndexOfCurrentTemplate + dir];
+		template.history?.[template.historyIndexOfCurrentTemplate + dir];
+
+	if (!templateToLoad) return;
 
 	template.loadTemplate(templateToLoad);
 }
@@ -85,14 +87,14 @@ watch(hide, () => {
 			<button
 				type="button"
 				:disabled="disableUndoRedo === 'undo' || disableUndoRedo === 'both'"
-				@click="undoRedo(-1)"
+				@click="undoRedo(1)"
 			>
 				undo
 			</button>
 			<button
 				type="button"
 				:disabled="disableUndoRedo === 'redo' || disableUndoRedo === 'both'"
-				@click="undoRedo(1)"
+				@click="undoRedo(-1)"
 			>
 				redo
 			</button>
