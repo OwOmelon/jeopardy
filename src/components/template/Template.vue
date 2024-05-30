@@ -87,7 +87,7 @@ function onTemplatePropertyErrorAlertClose(): void {
 }
 
 :deep(th) {
-	@apply text-lg
+	@apply text-lg leading-tight;
 }
 
 :deep(.td-stylized) {
