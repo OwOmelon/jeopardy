@@ -395,14 +395,14 @@ export const useTemplateStore = defineStore("template", () => {
 			return;
 		}
 
-		if (historyIndexOfCurrentTemplate.value !== history.value.length - 1) {
-			history.value.splice(historyIndexOfCurrentTemplate.value + 1);
+		if (historyIndexOfCurrentTemplate.value !== 0) {
+			history.value.splice(0, historyIndexOfCurrentTemplate.value);
 		}
 
 		historyPushIteration.value++;
 		currentID.value = `template_${uuidv4()}`;
 
-		history.value.push({
+		history.value.unshift({
 			...JSON.parse(JSON.stringify(template)),
 			id: currentID.value,
 			iteration: historyPushIteration.value,
