@@ -395,14 +395,8 @@ export const useTemplateStore = defineStore("template", () => {
 			return;
 		}
 
-		const historyLengthLimit = 15;
-
 		if (historyIndexOfCurrentTemplate.value !== history.value.length - 1) {
 			history.value.splice(historyIndexOfCurrentTemplate.value + 1);
-		}
-
-		if (history.value.length >= historyLengthLimit) {
-			history.value.splice(0, 1);
 		}
 
 		historyPushIteration.value++;
