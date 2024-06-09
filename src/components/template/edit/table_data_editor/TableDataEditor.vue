@@ -121,6 +121,7 @@ onUnmounted(() => {
 				<span class="font-bold">{{
 					template.activeTableDataCell!.points
 				}}</span>
+				points
 			</span>
 
 			<button
