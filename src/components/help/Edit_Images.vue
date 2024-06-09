@@ -36,7 +36,10 @@ const emit = defineEmits<{
 				<span class="font-bold">Read below for more info.</span>
 			</p>
 
-			<div class="gif-placeholder h-16">gif goes here</div>
+			<img
+				src="https://cdn.discordapp.com/attachments/715591147262705737/1249274864901165106/jeopardy_use_images_1.gif?ex=6666b562&is=666563e2&hm=bce4d9ba09f72e6d50eead730b61c8cac0b12bad3d8bb72ad20a7ec5d6e11be1&"
+				alt=""
+			/>
 
 			<hr class="my-3 border-stone-900" />
 
@@ -56,12 +59,15 @@ const emit = defineEmits<{
 						can vary from 1 kilobyte to
 						<span class="italic">way more</span> than 5 megabytes. Just a
 						handful of high-quality images is enough to easily fill up local
-						storage. And so, because of that, uploaded images will not be saved
-						on local storage. Once the page refreshes, all of your uploaded
-						images will be gone.
+						storage. And so, because of that, this website will not save
+						uploaded images to local storage. Once the this website is
+						refreshed, all of your uploaded images will be gone.
 					</p>
 
-					<div class="gif-placeholder h-48">gif 1 goes here</div>
+					<img
+						src="https://cdn.discordapp.com/attachments/715591147262705737/1249274864507031612/jeopardy_use_images_2.gif?ex=6666b562&is=666563e2&hm=1c1fe1dc098fb1e8a7d0e82baa9d59663eacaf5909b89e1dee2b7dc0dabece67&"
+						alt=""
+					/>
 				</div>
 
 				<div>
@@ -76,12 +82,14 @@ const emit = defineEmits<{
 						>
 						An image URL is just a piece of
 						<span class="underline">text</span> that links to an image that has
-						been saved on the internet. A URL would take up a
-						<span class="italic">teensy tiny</span> bit more local storage space
-						than any piece of text would.
+						been saved on the internet. A URL would take up just about as much
+						local storage space any piece of text would.
 					</p>
 
-					<div class="gif-placeholder h-48">gif 2 goes here</div>
+					<img
+						src="https://cdn.discordapp.com/attachments/715591147262705737/1249278212937351209/jeopardy_use_images_half.gif?ex=6666b880&is=66656700&hm=7592d85152af095908ec164fceb42e74d03631cc4d0e01369451aadb3a493572&"
+						alt=""
+					/>
 				</div>
 
 				<div>
@@ -91,13 +99,16 @@ const emit = defineEmits<{
 						browser will download your
 						<span class="font-bold">whole</span> template and save it on your
 						device (text, image URLs <span class="italic">and</span> uploaded
-						images are saved). And then, once you're ready to use said template,
+						images are saved). And then, once you're ready to use your template,
 						click on the "import" button, select the template that you
 						downloaded/exported, and voila! You will see that your uploaded
 						images are in your template :DDD.
 					</p>
 
-					<div class="gif-placeholder h-48">gif 3 goes here</div>
+					<img
+						src="https://cdn.discordapp.com/attachments/715591147262705737/1249274864137928734/jeopardy_use_images_3.gif?ex=6666b562&is=666563e2&hm=62d3cb82de3952f10e0e3cb08efe093f16c2ff2033a61eb5e3bdfaf9a32ede1f&"
+						alt=""
+					/>
 				</div>
 			</div>
 
@@ -117,7 +128,7 @@ a {
 	@apply rounded-sm border-2 border-stone-400 bg-stone-400 px-1 text-white transition-colors hover:bg-transparent hover:text-stone-900;
 }
 
-.gif-placeholder {
-	@apply mt-5 grid place-items-center rounded bg-stone-600 text-white;
+img {
+	@apply mt-5 rounded bg-stone-600;
 }
 </style>
