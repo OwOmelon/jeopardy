@@ -68,7 +68,7 @@ provide("filtered-table-data-rows", filteredTableDataRows);
 
 		<Teleport to="#new-window">
 			<Transition
-				name="fade-slide-down"
+				:name="template.activeTableDataCell ? 'fade' : 'fade-slide-down'"
 				enter-active-class="duration-300"
 				leave-active-class="duration-300"
 			>
