@@ -51,7 +51,7 @@ watch(hide, () => {
 	<div
 		:class="[
 			{ '-translate-x-full': hide },
-			'fixed left-0 top-0 z-10 w-[calc(100%_-_(50.48px_+_8px))] max-w-[450px] transition-transform duration-300',
+			'fixed left-0 top-0 z-10 w-[calc(100%_-_(50.48px_+_8px))] max-w-[450px] transition-transform duration-300 z-30',
 		]"
 	>
 		<ul
