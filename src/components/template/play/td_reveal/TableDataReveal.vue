@@ -107,7 +107,7 @@ onUnmounted(() => {
 
 <template>
 	<div
-		class="fixed right-0 top-0 flex h-screen w-screen flex-col backdrop-blur"
+		class="fixed right-0 top-0 z-30 flex h-screen w-screen flex-col backdrop-blur"
 	>
 		<div ref="openingTransitionElement">
 			<OpeningTransition
