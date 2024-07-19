@@ -17,8 +17,8 @@ const emit = defineEmits<{
 	>
 		<div class="relative border-black">
 			<svg
-				width="40rem"
-				height="40rem"
+				width="50"
+				height="50"
 				viewBox="0 0 50 50"
 				fill="none"
 				xmlns="http://www.w3.org/2000/svg"
@@ -33,9 +33,7 @@ const emit = defineEmits<{
 				/>
 			</svg>
 
-			<div
-				class="text relative flex max-w-[60rem] flex-col text-[6rem] font-bold leading-[1em] text-stone-700"
-			>
+			<div class="text">
 				<span class="z-10">{{ category }}</span>
 
 				<hr class="mb-4 rounded-full border-2 border-[currentColor]" />
@@ -51,6 +49,8 @@ const emit = defineEmits<{
 <style scoped lang="postcss">
 .text {
 	animation: fade-slide-right 500ms forwards;
+
+	@apply px-3 w-fit relative flex max-w-[60rem] flex-col text-5xl font-bold leading-[1em] text-stone-700 md:text-8xl;
 }
 
 .text span {
@@ -72,7 +72,7 @@ const emit = defineEmits<{
 svg {
 	animation: slow-spin 2s forwards;
 
-	@apply absolute absolute left-0 top-0 grid place-items-center text-[12rem] text-red-400;
+	@apply absolute absolute left-0 top-0 grid h-[30rem] w-[30rem] place-items-center text-[12rem] text-red-400;
 }
 
 @keyframes slow-spin {
