@@ -9,6 +9,7 @@ import IconClose from "~icons/material-symbols/close-rounded";
 import IconArrowLeft from "~icons/material-symbols/arrow-left-rounded";
 import IconArrowRight from "~icons/material-symbols/arrow-right-rounded";
 
+import OpeningTransition from "./OpeningTransition.vue";
 import QuestionAnswer from "./QuestionAnswer.vue";
 import GiveGuestPoints from "./GiveGuestPoints.vue";
 
@@ -19,6 +20,14 @@ const { disableToggle: disableMainMenuToggle } =
 	storeToRefs(useMainMenuStore());
 
 // ------------------------------
+
+const openingTransitionElement = ref<HTMLElement | null>(null);
+
+function removeOpeningTransitionElement(): void {
+	if (!openingTransitionElement.value) return;
+
+	openingTransitionElement.value.remove();
+}
 
 // 	1 = "show_question"
 // 	2 = "reveal_answer"
@@ -97,9 +106,24 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="fixed right-0 top-0 flex h-screen w-screen flex-col bg-stone-50">
+	<div
+		class="fixed right-0 top-0 flex h-screen w-screen flex-col backdrop-blur"
+	>
+		<div ref="openingTransitionElement">
+			<OpeningTransition
+				:category="activeTableDataCell!.category"
+				:points="activeTableDataCell!.points"
+				@finish="removeOpeningTransitionElement"
+			/>
+		</div>
+
+		<i
+			class="bg-entry-anim absolute left-0 top-0 h-full w-full bg-stone-50 opacity-0"
+		/>
+
 		<div
-			class="animate-slide-left relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-xl text-white opacity-0"
+			style="animation-delay: 1.15s"
+			class="animate-slide-right relative flex justify-center border-b-4 border-red-300 bg-red-400 p-2 text-xl text-white opacity-0"
 		>
 			<p class="text-center">
 				<span class="font-bold">{{
@@ -118,11 +142,9 @@ onUnmounted(() => {
 			</button>
 		</div>
 
-		<!-- -------- -->
-
 		<div
-			style="animation-delay: 50ms"
-			class="content animate-slide-left relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden p-14 text-center text-5xl text-stone-600 opacity-0"
+			style="animation-delay: 1.3s"
+			class="content animate-slide-right relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden p-14 text-center text-5xl text-stone-600 opacity-0"
 		>
 			<div>
 				<Transition :name="revealContentTransition" mode="out-in">
@@ -144,11 +166,9 @@ onUnmounted(() => {
 			<div class="anchor" />
 		</div>
 
-		<!-- -------- -->
-
 		<div
-			style="animation-delay: 150ms"
-			class="animate-slide-left grid grid-cols-[1fr,max-content,_1fr] place-items-center border-t-4 border-stone-400 bg-stone-300 text-sm text-stone-600 opacity-0"
+			style="animation-delay: 1.45s"
+			class="animate-slide-right grid grid-cols-[1fr,max-content,_1fr] place-items-center border-t-4 border-stone-400 bg-stone-300 text-sm text-stone-600 opacity-0"
 		>
 			<button
 				type="button"
@@ -184,6 +204,23 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="postcss">
+.bg-entry-anim {
+	animation: bg-entry-anim 1.5s 150ms ease-in forwards;
+}
+
+@keyframes bg-entry-anim {
+	from,
+	50% {
+		opacity: 0;
+		transform: translateX(-100%);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
 .content {
 	-ms-overflow-style: none;
 	scrollbar-width: none;
@@ -209,15 +246,15 @@ onUnmounted(() => {
 	overflow-anchor: auto;
 }
 
-.animate-slide-left {
-	animation: slide-left 500ms forwards;
+.animate-slide-right {
+	animation: slide-right 1s forwards;
 }
 
-@keyframes slide-left {
+@keyframes slide-right {
 	0%,
 	30% {
 		opacity: 0;
-		transform: translateX(15px);
+		transform: translateX(-4rem);
 	}
 
 	100% {
