@@ -49,11 +49,11 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 
 		gameProgressRows.forEach((row) => {
 			const pointsToAssign = template.rows[row];
-			const gamePRogressColumns = Object.keys(
+			const gameProgressColumns = Object.keys(
 				progress.value[row],
 			) as ColumnID[];
 
-			gamePRogressColumns.forEach((column) => {
+			gameProgressColumns.forEach((column) => {
 				const gameProgressValue = progress.value[row][column];
 
 				gameProgressValue.failedToAnswer.forEach((id) => {
