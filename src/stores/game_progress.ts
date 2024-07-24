@@ -1,4 +1,4 @@
-import { ref, computed, watch } from "vue";
+import { ref, watch } from "vue";
 import { defineStore } from "pinia";
 import { useTemplateStore } from "./template";
 import { useGuestsStore } from "./guests";
@@ -36,7 +36,8 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 			failedToAnswer,
 			successfullyAnswered,
 		};
-		progress.value[template.activeTableDataCell!.row] = progressRow;
+
+		progress.value[row] = progressRow;
 	}
 
 	function updateGuestsLegitimatePoints(): void {
