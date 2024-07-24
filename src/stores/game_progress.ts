@@ -20,16 +20,11 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 	function updateGameProgress(
 		row: RowID,
 		column: ColumnID,
-		failedToAnswer: GameProgressValue["failedToAnswer"],
-		successfullyAnswered: GameProgressValue["successfullyAnswered"],
+		answerResult: AnswerResult,
 	) {
 		const progressRow = progress.value?.[row] ?? {};
 
-		progressRow[column] = {
-			failedToAnswer,
-			successfullyAnswered,
-		};
-
+		progressRow[column] = answerResult;
 		progress.value[row] = progressRow;
 	}
 
@@ -38,27 +33,22 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 			guest.points.legitimate = 0;
 		});
 
-		const gameProgressRows = Object.keys(progress.value) as RowID[];
+		Object.entries(progress.value).forEach(([row, columns]) => {
+			const pointsToAssign = template.rows[row as RowID];
 
-		gameProgressRows.forEach((row) => {
-			const pointsToAssign = template.rows[row];
-			const gameProgressColumns = Object.keys(
-				progress.value[row],
-			) as ColumnID[];
+			Object.entries(columns).forEach(([_, answerResults]) => {
+				if (answerResults.success) {
+					guests.editGuestPoints(
+						answerResults?.success,
+						pointsToAssign,
+						"legitimate",
+						true,
+					);
+				}
 
-			gameProgressColumns.forEach((column) => {
-				const gameProgressValue = progress.value[row][column];
-
-				gameProgressValue.failedToAnswer.forEach((id) => {
+				answerResults.fail.forEach((id) => {
 					guests.editGuestPoints(id, -pointsToAssign, "legitimate", true);
 				});
-
-				guests.editGuestPoints(
-					gameProgressValue?.successfullyAnswered ?? "guest_",
-					pointsToAssign,
-					"legitimate",
-					true,
-				);
 			});
 		});
 	}
