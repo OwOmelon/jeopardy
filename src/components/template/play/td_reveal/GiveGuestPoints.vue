@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
-import { useGameProgressStore } from "@/stores/game_progress";
-import { useGuestsStore } from "@/stores/guests";
-
-import type { Guest } from "@/stores/guests";
-type MappedGuestList = (Guest & { answered: "no" | "failed" | "succeeded" })[];
+import {
+	type AnswerResult,
+	useGameProgressStore,
+} from "@/stores/game_progress";
+import { type Guest, useGuestsStore } from "@/stores/guests";
 
 import IconArrowRight from "~icons/material-symbols/arrow-right-rounded";
 import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
@@ -18,75 +19,54 @@ const emit = defineEmits<{
 	done: [];
 }>();
 
-const template = useTemplateStore();
-const gameProgress = useGameProgressStore();
-const guests = useGuestsStore();
+const { activeTableDataCell } = storeToRefs(useTemplateStore());
+const { getAnswerResults, updateGameProgress } = useGameProgressStore();
+const { list: guestList } = storeToRefs(useGuestsStore());
 
-// !!! rename this variable
-const mappedGuestList = ref<MappedGuestList>(getMappedGuestList());
+// --------------------
 
-function onGuestBtnClick(guest: (typeof mappedGuestList.value)[number]): void {
-	if (guest.answered !== "no") {
-		guest.answered = "no";
+const answerResults = ref<AnswerResult>(
+	getAnswerResults(
+		activeTableDataCell.value!.row,
+		activeTableDataCell.value!.column,
+	),
+);
 
-		return;
-	}
+function getGuestAnswerResult(guestID: Guest["id"]): "success" | "fail" | "" {
+	return answerResults.value.success === guestID
+		? "success"
+		: answerResults.value.fail.indexOf(guestID) !== -1
+			? "fail"
+			: "";
+}
+
+function onGuestBtnClick(guestID: Guest["id"]): void {
+	const guestAnswerResult = getGuestAnswerResult(guestID);
 
 	if (props.revealProgress < 4) {
-		guest.answered = "failed";
+		if (guestAnswerResult === "success") answerResults.value.success = null;
+		if (guestAnswerResult === "fail") {
+			answerResults.value.fail.splice(
+				answerResults.value.fail.indexOf(guestID),
+				1,
+			);
+		} else {
+			answerResults.value.fail.push(guestID);
+		}
 	} else {
-		mappedGuestList.value.forEach((guest) => {
-			if (guest.answered === "succeeded") {
-				guest.answered = "no";
-			}
-		});
-
-		guest.answered = "succeeded";
+		answerResults.value.success =
+			guestAnswerResult === "success" ? null : guestID;
 	}
 }
 
 function confirm(): void {
-	const failedToAnswer: Guest["id"][] = [];
-	let successfulyAnswered: Guest["id"] | null = null;
-
-	mappedGuestList.value.forEach((guest) => {
-		switch (guest.answered) {
-			case "failed":
-				failedToAnswer.push(guest.id);
-				break;
-
-			case "succeeded":
-				successfulyAnswered = guest.id;
-				break;
-		}
-	});
-
-	gameProgress.updateGameProgress(
-		template.activeTableDataCell!.row,
-		template.activeTableDataCell!.column,
-		failedToAnswer,
-		successfulyAnswered,
+	updateGameProgress(
+		activeTableDataCell.value!.row,
+		activeTableDataCell.value!.column,
+		answerResults.value,
 	);
 
 	emit("done");
-}
-
-function getMappedGuestList(): MappedGuestList {
-	const gameProgressValue =
-		gameProgress.progress?.[template.activeTableDataCell!.row]?.[
-			template.activeTableDataCell!.column
-		];
-
-	return guests.list.map((guest) => {
-		return {
-			...guest,
-			answered: gameProgressValue?.failedToAnswer?.includes(guest.id)
-				? "failed"
-				: guest.id === gameProgressValue?.successfullyAnswered
-					? "succeeded"
-					: "no",
-		};
-	});
 }
 </script>
 
@@ -95,26 +75,19 @@ function getMappedGuestList(): MappedGuestList {
 		<span>who got it {{ props.revealProgress < 4 ? "wrong" : "right" }} ?</span>
 
 		<div
-			v-if="mappedGuestList.length > 1"
+			v-if="guestList.length > 1"
 			class="my-10 flex flex-wrap justify-center gap-3"
 		>
 			<button
-				v-for="guest in mappedGuestList"
+				v-for="guest in guestList"
 				:key="guest.id"
 				type="button"
-				:disabled="guest.answered === 'failed' && props.revealProgress === 4"
-				:class="[
-					guest.answered === 'failed'
-						? `lose-points ${
-								props.revealProgress === 4
-									? 'pointer-events-none opacity-50'
-									: ''
-							}`
-						: guest.answered === 'succeeded'
-							? 'gain-points'
-							: 'bg-stone-300 text-stone-600',
-				]"
-				@click="onGuestBtnClick(guest)"
+				:disabled="
+					getGuestAnswerResult(guest.id) === 'fail' &&
+					props.revealProgress === 4
+				"
+				:class="[`guest_${getGuestAnswerResult(guest.id)}`]"
+				@click="onGuestBtnClick(guest.id)"
 			>
 				{{ guest.name }}
 			</button>
@@ -141,10 +114,23 @@ button {
 	@apply shadow-subtle rounded-[0.15em] p-[0.4em] transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1;
 }
 
-.lose-points {
-	animation: lose-points 0.5s;
-	@apply bg-stone-600 text-stone-300;
+/* ----- */
+
+.guest_ {
+	@apply bg-stone-300 text-stone-600;
 }
+
+.guest_fail {
+	animation: lose-points 0.5s;
+	@apply bg-stone-600 text-stone-300 disabled:pointer-events-none disabled:opacity-50;
+}
+
+.guest_success {
+	animation: gain-points 0.75s;
+	@apply bg-red-400 text-white;
+}
+
+/* ----- */
 
 @keyframes lose-points {
 	0%,
@@ -166,11 +152,6 @@ button {
 	75% {
 		translate: 0 -0.5rem;
 	}
-}
-
-.gain-points {
-	animation: gain-points 0.75s;
-	@apply bg-red-400 text-white;
 }
 
 @keyframes gain-points {
