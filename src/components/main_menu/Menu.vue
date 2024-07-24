@@ -8,6 +8,7 @@ import { vOnClickOutside } from "@vueuse/components";
 
 import type { Guest } from "@/stores/guests";
 
+import IconClose from "~icons/material-symbols/close-rounded";
 import IconPlay from "~icons/material-symbols/play-arrow-rounded";
 import IconRestart from "~icons/ph/arrow-counter-clockwise-bold";
 import TextBox from "./TextBox.vue";
@@ -65,7 +66,7 @@ onUnmounted(() => {
 			template.editing
 				? 'dark bg-stone-800 text-stone-300'
 				: 'light bg-stone-200 text-stone-600',
-			'z-100 flex w-[260px] flex-col gap-3 rounded p-5 shadow-[0_10px_40px] shadow-black/40',
+			'z-100 relative flex w-[260px] flex-col gap-3 rounded p-5 drop-shadow-[0_10px_40px_rgba(0,_0,_0,_0.4)]',
 		]"
 		v-on-click-outside="
 			() => {
@@ -73,6 +74,22 @@ onUnmounted(() => {
 			}
 		"
 	>
+		<button
+			type="button"
+			class="close-btn group absolute left-full top-2 rounded-r bg-stone-300 text-stone-800"
+			@click="mainmenu.show = false"
+		>
+			<div
+				class="rounded-[inherit] bg-[inherit] p-2 text-xl transition-transform duration-150 group-hover:translate-x-2"
+			>
+				<IconClose />
+			</div>
+
+			<i
+				class="pointer-events-none absolute left-0 top-0 h-full w-full shadow-[inset_10px_0_10px_-10px] shadow-black/50"
+			/>
+		</button>
+
 		<span class="flex text-4xl font-bold">
 			<span
 				v-for="(letter, index) in 'JEOPARDY'"
