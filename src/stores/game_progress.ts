@@ -17,6 +17,10 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 	const progress = ref<GameProgress>(fetchGameProgressFromLocalStorage() || {});
 	const resetGameProgressWarning = ref<boolean>(false);
 
+	function getAnswerResults(row: RowID, column: ColumnID): AnswerResult {
+		return progress.value?.[row]?.[column] ?? { success: null, fail: [] };
+	}
+
 	function updateGameProgress(
 		row: RowID,
 		column: ColumnID,
@@ -71,6 +75,7 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 	return {
 		progress,
 		resetGameProgressWarning,
+		getAnswerResults,
 		updateGameProgress,
 	};
 });
