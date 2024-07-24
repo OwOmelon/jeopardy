@@ -296,7 +296,7 @@ export const useTemplateStore = defineStore("template", () => {
 				...allRows,
 				[row]: columnEntries.reduce((allColumns, [column, category]) => {
 					const successfullyAnswered =
-						gameProgress.progress?.[row]?.[column]?.successfullyAnswered;
+						gameProgress.progress?.[row]?.[column]?.success;
 
 					const completeTableCell: TableDataCell = {
 						row,
