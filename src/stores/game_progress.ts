@@ -1,21 +1,14 @@
 import { ref, watch } from "vue";
 import { defineStore } from "pinia";
-import { useTemplateStore } from "./template";
-import { useGuestsStore } from "./guests";
+import { type RowID, type ColumnID, useTemplateStore } from "./template";
+import { type Guest, useGuestsStore } from "./guests";
 
-import type { RowID, ColumnID } from "./template";
-import type { Guest } from "./guests";
-
-export type GameProgressValue = {
-	failedToAnswer: Guest["id"][];
-	successfullyAnswered: Guest["id"] | null;
+export type AnswerResult = {
+	success: Guest["id"] | null;
+	fail: Guest["id"][];
 };
 
-export type GameProgress = {
-	[key: RowID]: {
-		[key: ColumnID]: GameProgressValue;
-	};
-};
+type GameProgress = Record<RowID, Record<ColumnID, AnswerResult>>;
 
 export const useGameProgressStore = defineStore("game-progress", () => {
 	const template = useTemplateStore();
