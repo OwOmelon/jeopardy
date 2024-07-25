@@ -29,6 +29,12 @@ function removeOpeningTransitionElement(): void {
 	openingTransitionElement.value.remove();
 }
 
+// ---------------
+
+const revealContentTransition = ref<"fade-slide-left" | "fade-slide-right">(
+	"fade-slide-left",
+);
+
 // 	1 = "show_question"
 // 	2 = "reveal_answer"
 // 	3 = "deduct_points"
@@ -37,9 +43,12 @@ function removeOpeningTransitionElement(): void {
 const revealProgress = ref<number>(
 	activeTableDataCell.value!.answeredBy ? 2 : 1,
 );
-const revealContentTransition = ref<"fade-slide-left" | "fade-slide-right">(
-	"fade-slide-left",
-);
+
+const revealProgressLimit = computed<number>(() => {
+	const guestCount = guestList.value.length;
+
+	return !guestCount ? 2 : guestCount === 1 ? 3 : 4;
+});
 
 const cancelRevertProgress = computed<boolean>(() => {
 	return activeTableDataCell.value!.answeredBy &&
@@ -64,11 +73,10 @@ function revertProgress(): void {
 }
 
 const cancelAdvanceProgress = computed<boolean>(() => {
-	return revealProgress.value === 4 ||
-		(!guestList.value.length && revealProgress.value === 2) ||
-		activeTableDataCell.value!.answeredBy
-		? revealProgress.value !== 3
-		: false;
+	return revealProgress.value === revealProgressLimit.value
+		? true
+		: revealProgress.value === 2 &&
+				activeTableDataCell.value!.answeredBy !== "";
 });
 
 function advanceProgress(): void {
@@ -173,28 +181,20 @@ onUnmounted(() => {
 			<button
 				type="button"
 				:disabled="cancelRevertProgress"
-				:class="[
-					{
-						'opacity-0': cancelRevertProgress,
-					},
-					'prog-btn',
-				]"
+				class="prog-btn"
 				@click="revertProgress"
 			>
 				<IconArrowLeft />
 			</button>
 
-			<span class="text-center">{{ revealProgress }} / 4</span>
+			<span class="text-center"
+				>{{ revealProgress }} / {{ revealProgressLimit }}</span
+			>
 
 			<button
 				type="button"
 				:disabled="cancelAdvanceProgress"
-				:class="[
-					{
-						'opacity-0': cancelAdvanceProgress,
-					},
-					'prog-btn',
-				]"
+				class="prog-btn"
 				@click="advanceProgress"
 			>
 				<IconArrowRight />
@@ -230,7 +230,7 @@ onUnmounted(() => {
 }
 
 .prog-btn {
-	@apply grid place-items-center p-2 transition-opacity;
+	@apply grid place-items-center p-2 transition-opacity disabled:opacity-0;
 }
 
 .prog-btn svg {
