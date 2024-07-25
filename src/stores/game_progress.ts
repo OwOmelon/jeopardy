@@ -3,12 +3,12 @@ import { defineStore } from "pinia";
 import { type RowID, type ColumnID, useTemplateStore } from "./template";
 import { type Guest, useGuestsStore } from "./guests";
 
-export type AnswerResult = {
+export type AnswerResults = {
 	success: Guest["id"] | null;
 	fail: Guest["id"][];
 };
 
-type GameProgress = Record<RowID, Record<ColumnID, AnswerResult>>;
+type GameProgress = Record<RowID, Record<ColumnID, AnswerResults>>;
 
 export const useGameProgressStore = defineStore("game-progress", () => {
 	const template = useTemplateStore();
@@ -17,14 +17,14 @@ export const useGameProgressStore = defineStore("game-progress", () => {
 	const progress = ref<GameProgress>(fetchGameProgressFromLocalStorage() || {});
 	const resetGameProgressWarning = ref<boolean>(false);
 
-	function getAnswerResults(row: RowID, column: ColumnID): AnswerResult {
+	function getAnswerResults(row: RowID, column: ColumnID): AnswerResults {
 		return progress.value?.[row]?.[column] ?? { success: null, fail: [] };
 	}
 
 	function updateGameProgress(
 		row: RowID,
 		column: ColumnID,
-		answerResult: AnswerResult,
+		answerResult: AnswerResults,
 	) {
 		const progressRow = progress.value?.[row] ?? {};
 
