@@ -15,11 +15,11 @@ const { activeTableDataCell } = storeToRefs(useTemplateStore());
 const revealProgress = inject("reveal-progress") as number;
 const showAnswer = computed<boolean>(() => revealProgress > 1);
 
-const ImgAltTxt = (type: string) => {
+function getImgAltTxt(type: string): string {
 	return `image for ${type} of ${
 		activeTableDataCell.value!.category || activeTableDataCell.value!.column
 	} for ${activeTableDataCell.value!.points} points`;
-};
+}
 </script>
 
 <template>
@@ -33,7 +33,7 @@ const ImgAltTxt = (type: string) => {
 			<img
 				v-if="activeTableDataCell!.question.image"
 				:src="activeTableDataCell!.question.image"
-				:alt="ImgAltTxt('question')"
+				:alt="getImgAltTxt('question')"
 			/>
 		</HeightAuto>
 
@@ -50,7 +50,7 @@ const ImgAltTxt = (type: string) => {
 			<img
 				v-if="activeTableDataCell!.answer.image"
 				:src="activeTableDataCell!.answer.image"
-				:alt="ImgAltTxt('answer')"
+				:alt="getImgAltTxt('answer')"
 			/>
 		</HeightAuto>
 
