@@ -8,8 +8,10 @@ import {
 } from "@/stores/game_progress";
 import { type Guest, useGuestsStore } from "@/stores/guests";
 
-import IconArrowRight from "~icons/material-symbols/arrow-right-rounded";
+import ConfirmBtn from "./ConfirmBtn.vue";
 import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
+
+type AnswerResultType = keyof AnswerResult;
 
 const props = defineProps<{
 	revealProgress: number;
@@ -32,7 +34,7 @@ const answerResults = ref<AnswerResult>(
 	),
 );
 
-function getGuestAnswerResult(guestID: Guest["id"]): "success" | "fail" | "" {
+function getGuestAnswerResult(guestID: Guest["id"]): AnswerResultType | "" {
 	return answerResults.value.success === guestID
 		? "success"
 		: answerResults.value.fail.indexOf(guestID) !== -1
@@ -40,22 +42,55 @@ function getGuestAnswerResult(guestID: Guest["id"]): "success" | "fail" | "" {
 			: "";
 }
 
+function removeGuestFromFailAnswerResults(guestID: Guest["id"]): void {
+	answerResults.value.fail.splice(answerResults.value.fail.indexOf(guestID), 1);
+}
+
 function onGuestBtnClick(guestID: Guest["id"]): void {
 	const guestAnswerResult = getGuestAnswerResult(guestID);
 
 	if (props.revealProgress < 4) {
-		if (guestAnswerResult === "success") answerResults.value.success = null;
-		if (guestAnswerResult === "fail") {
-			answerResults.value.fail.splice(
-				answerResults.value.fail.indexOf(guestID),
-				1,
-			);
-		} else {
-			answerResults.value.fail.push(guestID);
+		switch (guestAnswerResult) {
+			case "success":
+				answerResults.value.success = null;
+				break;
+
+			case "fail":
+				removeGuestFromFailAnswerResults(guestID);
+				break;
+
+			case null:
+				answerResults.value.fail.push(guestID);
+				break;
 		}
-	} else {
-		answerResults.value.success =
-			guestAnswerResult === "success" ? null : guestID;
+
+		return;
+	}
+
+	answerResults.value.success =
+		guestAnswerResult === "success" ? null : guestID;
+}
+
+function onSingleGuestBtnClick(result: AnswerResultType): void {
+	const guestID = guestList.value[0].id;
+	const guestAnswerResult = getGuestAnswerResult(guestList.value[0].id);
+
+	switch (result) {
+		case "fail":
+			answerResults.value.success = null;
+
+			if (guestAnswerResult !== "fail") {
+				answerResults.value.fail.push(guestID);
+			} else {
+				removeGuestFromFailAnswerResults(guestID);
+			}
+
+			break;
+		case "success":
+			removeGuestFromFailAnswerResults(guestID);
+
+			answerResults.value.success =
+				guestAnswerResult !== "success" ? guestID : null;
 	}
 }
 
@@ -72,44 +107,61 @@ function confirm(): void {
 
 <template>
 	<div class="flex flex-col items-center justify-center text-4xl font-bold">
-		<span>who got it {{ props.revealProgress < 4 ? "wrong" : "right" }} ?</span>
-
-		<div
-			v-if="guestList.length > 1"
-			class="my-10 flex flex-wrap justify-center gap-3"
-		>
-			<button
-				v-for="guest in guestList"
-				:key="guest.id"
-				type="button"
-				:disabled="
-					getGuestAnswerResult(guest.id) === 'fail' &&
-					props.revealProgress === 4
-				"
-				:class="[`guest_${getGuestAnswerResult(guest.id)}`]"
-				@click="onGuestBtnClick(guest.id)"
+		<template v-if="guestList.length > 1">
+			<span
+				>who got it {{ props.revealProgress < 4 ? "wrong" : "right" }} ?</span
 			>
-				{{ guest.name }}
-			</button>
-		</div>
 
-		<HeightAuto :show="revealProgress === 4">
-			<button
-				type="button"
-				class="group m-1 flex items-center bg-red-400 text-white"
-				@click="confirm"
-			>
-				confirm
+			<div class="buttons">
+				<button
+					v-for="guest in guestList"
+					:key="guest.id"
+					type="button"
+					:disabled="
+						getGuestAnswerResult(guest.id) === 'fail' &&
+						props.revealProgress === 4
+					"
+					:class="[`guest_${getGuestAnswerResult(guest.id)}`]"
+					@click="onGuestBtnClick(guest.id)"
+				>
+					{{ guest.name }}
+				</button>
+			</div>
 
-				<IconArrowRight
-					class="ml-3 scale-[3] transition-transform group-hover:translate-x-2"
-				/>
-			</button>
-		</HeightAuto>
+			<HeightAuto :show="revealProgress === 4">
+				<ConfirmBtn @confirm="confirm" />
+			</HeightAuto>
+		</template>
+
+		<template v-else>
+			<span>did {{ guestList[0].name }} get it right?</span>
+
+			<div class="buttons">
+				<button
+					v-for="{ text, answerResultType } in [
+						{ text: 'no', answerResultType: 'fail' },
+						{ text: 'yes', answerResultType: 'success' },
+					]"
+					type="button"
+					:class="[
+						`guest_${getGuestAnswerResult(guestList[0].id) === answerResultType ? answerResultType : ''}`,
+					]"
+					@click="onSingleGuestBtnClick(answerResultType as AnswerResultType)"
+				>
+					{{ text }}
+				</button>
+			</div>
+
+			<ConfirmBtn @confirm="confirm" />
+		</template>
 	</div>
 </template>
 
 <style scoped lang="postcss">
+.buttons {
+	@apply my-10 flex flex-wrap justify-center gap-3;
+}
+
 button {
 	@apply shadow-subtle rounded-[0.15em] p-[0.4em] transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1;
 }
