@@ -53,13 +53,14 @@ function onGuestBtnClick(guestID: Guest["id"]): void {
 		switch (guestAnswerResult) {
 			case "success":
 				answerResults.value.success = null;
+				answerResults.value.fail.push(guestID);
 				break;
 
 			case "fail":
 				removeGuestFromFailAnswerResults(guestID);
 				break;
 
-			case null:
+			case "":
 				answerResults.value.fail.push(guestID);
 				break;
 		}
