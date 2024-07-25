@@ -7,7 +7,7 @@ import IconEdit from "~icons/material-symbols/edit-rounded";
 import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
 
 const emit = defineEmits<{
-	"change-answeree": [];
+	"change-answer-results": [];
 }>();
 
 const { activeTableDataCell } = storeToRefs(useTemplateStore());
@@ -63,7 +63,7 @@ function getImgAltTxt(type: string): string {
 			<button
 				type="button"
 				class="shadow-subtle rounded bg-white p-2 text-red-400 transition-[box-shadow,_transform] hover:-translate-y-1 hover:shadow-md"
-				@click="emit('change-answeree')"
+				@click="emit('change-answer-results')"
 			>
 				<IconEdit />
 			</button>
