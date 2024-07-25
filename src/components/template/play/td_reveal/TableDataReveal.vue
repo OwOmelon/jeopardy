@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, provide, onMounted, onUnmounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
@@ -99,6 +99,8 @@ function onKeyDown(e: KeyboardEvent) {
 }
 
 // ------------------------------
+
+provide("reveal-progress", revealProgress);
 
 onMounted(() => {
 	disableMainMenuToggle.value = true;
