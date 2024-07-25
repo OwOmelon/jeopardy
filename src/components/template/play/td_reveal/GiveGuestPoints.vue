@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
 import {
-	type AnswerResult,
+	type AnswerResults,
 	useGameProgressStore,
 } from "@/stores/game_progress";
 import { type Guest, useGuestsStore } from "@/stores/guests";
@@ -11,7 +11,7 @@ import { type Guest, useGuestsStore } from "@/stores/guests";
 import ConfirmBtn from "./ConfirmBtn.vue";
 import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
 
-type AnswerResultType = keyof AnswerResult;
+type AnswerResult = keyof AnswerResults;
 
 const props = defineProps<{
 	revealProgress: number;
@@ -27,14 +27,14 @@ const { list: guestList } = storeToRefs(useGuestsStore());
 
 // --------------------
 
-const answerResults = ref<AnswerResult>(
+const answerResults = ref<AnswerResults>(
 	getAnswerResults(
 		activeTableDataCell.value!.row,
 		activeTableDataCell.value!.column,
 	),
 );
 
-function getGuestAnswerResult(guestID: Guest["id"]): AnswerResultType | "" {
+function getGuestAnswerResult(guestID: Guest["id"]): AnswerResult | "" {
 	return answerResults.value.success === guestID
 		? "success"
 		: answerResults.value.fail.indexOf(guestID) !== -1
@@ -72,7 +72,7 @@ function onGuestBtnClick(guestID: Guest["id"]): void {
 		guestAnswerResult === "success" ? null : guestID;
 }
 
-function onSingleGuestBtnClick(result: AnswerResultType): void {
+function onSingleGuestBtnClick(result: AnswerResult): void {
 	const guestID = guestList.value[0].id;
 	const guestAnswerResult = getGuestAnswerResult(guestList.value[0].id);
 
@@ -109,9 +109,9 @@ function confirm(): void {
 <template>
 	<div class="flex flex-col items-center justify-center text-4xl font-bold">
 		<template v-if="guestList.length > 1">
-			<span
-				>who got it {{ props.revealProgress < 4 ? "wrong" : "right" }} ?</span
-			>
+			<span>
+				who got it {{ props.revealProgress < 4 ? "wrong" : "right" }} ?
+			</span>
 
 			<div class="buttons">
 				<button
@@ -147,7 +147,7 @@ function confirm(): void {
 					:class="[
 						`guest_${getGuestAnswerResult(guestList[0].id) === answerResultType ? answerResultType : ''}`,
 					]"
-					@click="onSingleGuestBtnClick(answerResultType as AnswerResultType)"
+					@click="onSingleGuestBtnClick(answerResultType as AnswerResult)"
 				>
 					{{ text }}
 				</button>
