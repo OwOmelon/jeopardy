@@ -1,29 +1,31 @@
 <script setup lang="ts">
+import { computed, inject } from "vue";
+import { storeToRefs } from "pinia";
+import { useTemplateStore } from "@/stores/template";
+
 import IconEdit from "~icons/material-symbols/edit-rounded";
 import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
-
-import type { TableDataCell } from "@/stores/template";
-
-const props = defineProps<{
-	activeTableDataCell: TableDataCell;
-	showAnswer: boolean;
-}>();
 
 const emit = defineEmits<{
 	"change-answeree": [];
 }>();
 
+const { activeTableDataCell } = storeToRefs(useTemplateStore());
+
+const revealProgress = inject("reveal-progress") as number;
+const showAnswer = computed<boolean>(() => revealProgress > 1);
+
 const ImgAltTxt = (type: string) => {
 	return `image for ${type} of ${
-		props.activeTableDataCell.category || props.activeTableDataCell.column
-	} for ${props.activeTableDataCell.points} points`;
+		activeTableDataCell.value!.category || activeTableDataCell.value!.column
+	} for ${activeTableDataCell.value!.points} points`;
 };
 </script>
 
 <template>
 	<div class="font-bold">
 		<HeightAuto
-			:show="(activeTableDataCell.answeredBy ? true : false) || !showAnswer"
+			:show="(activeTableDataCell!.answeredBy ? true : false) || !showAnswer"
 			speed="slow"
 		>
 			<p>{{ activeTableDataCell!.question.text }}</p>
@@ -36,7 +38,7 @@ const ImgAltTxt = (type: string) => {
 		</HeightAuto>
 
 		<hr
-			v-if="activeTableDataCell.answeredBy"
+			v-if="activeTableDataCell!.answeredBy"
 			class="my-5 rounded-full border-t-4 border-stone-600"
 		/>
 
