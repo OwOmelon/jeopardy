@@ -9,8 +9,7 @@ import {
 import { type Guest, useGuestsStore } from "@/stores/guests";
 import { revealProgressInjectionKey } from "./reveal-progress-injection-key";
 
-import ConfirmBtn from "./ConfirmBtn.vue";
-import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
+import ConfirmBtn_ProgressNav from "./ConfirmBtn_ProgressNav.vue";
 
 type AnswerResult = keyof AnswerResults;
 
@@ -24,7 +23,7 @@ const { list: guestList } = storeToRefs(useGuestsStore());
 
 // --------------------
 
-const revealProgress = inject(revealProgressInjectionKey)!;
+const { revealProgress } = inject(revealProgressInjectionKey)!;
 const answerResults = ref<AnswerResults>(
 	getAnswerResults(
 		activeTableDataCell.value!.row,
@@ -117,16 +116,14 @@ function confirm(): void {
 					:disabled="
 						getGuestAnswerResult(guest.id) === 'fail' && revealProgress === 4
 					"
-					:class="[`guest_${getGuestAnswerResult(guest.id)}`]"
+					:class="[`guest_${getGuestAnswerResult(guest.id)}`, 'rect-btn']"
 					@click="onGuestBtnClick(guest.id)"
 				>
 					{{ guest.name }}
 				</button>
 			</div>
 
-			<HeightAuto :show="revealProgress === 4">
-				<ConfirmBtn @confirm="confirm" />
-			</HeightAuto>
+			<ConfirmBtn_ProgressNav @confirm="confirm" />
 		</template>
 
 		<template v-else>
@@ -148,7 +145,7 @@ function confirm(): void {
 				</button>
 			</div>
 
-			<ConfirmBtn @confirm="confirm" />
+			<ConfirmBtn_ProgressNav @confirm="confirm" />
 		</template>
 	</div>
 </template>
@@ -158,7 +155,11 @@ function confirm(): void {
 	@apply my-10 flex flex-wrap justify-center gap-3;
 }
 
-button {
+:deep(button):disabled {
+	@apply opacity-50;
+}
+
+:deep(.rect-btn) {
 	@apply shadow-subtle rounded-[0.15em] p-[0.4em] transition-[background-color,_color,_opacity,_transform] hover:-translate-y-1;
 }
 
@@ -170,7 +171,7 @@ button {
 
 .guest_fail {
 	animation: lose-points 0.5s;
-	@apply bg-stone-600 text-stone-300 disabled:pointer-events-none disabled:opacity-50;
+	@apply bg-stone-600 text-stone-300 disabled:pointer-events-none;
 }
 
 .guest_success {
