@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import type { TableDataCell } from "@/stores/template";
-
-defineProps<{
-	category: TableDataCell["category"];
-	points: TableDataCell["points"];
-}>();
+import { storeToRefs } from "pinia";
+import { useTemplateStore } from "@/stores/template";
 
 const emit = defineEmits<{
 	finish: [];
 }>();
+
+const { activeTableDataCell } = storeToRefs(useTemplateStore());
 </script>
 
 <template>
@@ -34,12 +32,14 @@ const emit = defineEmits<{
 			</svg>
 
 			<div class="text">
-				<span class="z-10">{{ category }}</span>
+				<span class="z-10">{{
+					activeTableDataCell?.category || activeTableDataCell!.column
+				}}</span>
 
 				<hr class="mb-4 rounded-full border-2 border-[currentColor]" />
 
 				<div class="w-fit rounded bg-red-400 px-3 py-1 text-white">
-					<span>{{ points }}</span>
+					<span>{{ activeTableDataCell!.points }}</span>
 				</div>
 			</div>
 		</div>
@@ -50,7 +50,7 @@ const emit = defineEmits<{
 .text {
 	animation: fade-slide-right 500ms forwards;
 
-	@apply px-3 w-fit relative flex max-w-[60rem] flex-col text-5xl font-bold leading-[1em] text-stone-700 md:text-8xl;
+	@apply relative flex w-fit max-w-[60rem] flex-col px-3 text-5xl font-bold leading-[1em] text-stone-700 md:text-8xl;
 }
 
 .text span {
