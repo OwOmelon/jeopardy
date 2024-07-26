@@ -2,6 +2,7 @@
 import { computed, inject } from "vue";
 import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
+import { revealProgressInjectionKey } from "./reveal-progress-injection-key";
 
 import IconEdit from "~icons/material-symbols/edit-rounded";
 import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
@@ -12,8 +13,10 @@ const emit = defineEmits<{
 
 const { activeTableDataCell } = storeToRefs(useTemplateStore());
 
-const revealProgress = inject("reveal-progress") as number;
-const showAnswer = computed<boolean>(() => revealProgress > 1);
+const revealProgress = inject(revealProgressInjectionKey)!;
+const showAnswer = computed<boolean>(() => {
+	return revealProgress.value > 1;
+});
 
 function getImgAltTxt(type: string): string {
 	return `image for ${type} of ${
