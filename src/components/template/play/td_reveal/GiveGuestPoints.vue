@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
 import {
@@ -7,15 +7,12 @@ import {
 	useGameProgressStore,
 } from "@/stores/game_progress";
 import { type Guest, useGuestsStore } from "@/stores/guests";
+import { revealProgressInjectionKey } from "./reveal-progress-injection-key";
 
 import ConfirmBtn from "./ConfirmBtn.vue";
 import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
 
 type AnswerResult = keyof AnswerResults;
-
-const props = defineProps<{
-	revealProgress: number;
-}>();
 
 const emit = defineEmits<{
 	done: [];
@@ -27,6 +24,7 @@ const { list: guestList } = storeToRefs(useGuestsStore());
 
 // --------------------
 
+const revealProgress = inject(revealProgressInjectionKey)!;
 const answerResults = ref<AnswerResults>(
 	getAnswerResults(
 		activeTableDataCell.value!.row,
@@ -49,7 +47,7 @@ function removeGuestFromFailAnswerResults(guestID: Guest["id"]): void {
 function onGuestBtnClick(guestID: Guest["id"]): void {
 	const guestAnswerResult = getGuestAnswerResult(guestID);
 
-	if (props.revealProgress < 4) {
+	if (revealProgress.value < 4) {
 		switch (guestAnswerResult) {
 			case "success":
 				answerResults.value.success = null;
@@ -109,9 +107,7 @@ function confirm(): void {
 <template>
 	<div class="flex flex-col items-center justify-center text-4xl font-bold">
 		<template v-if="guestList.length > 1">
-			<span>
-				who got it {{ props.revealProgress < 4 ? "wrong" : "right" }} ?
-			</span>
+			<span> who got it {{ revealProgress < 4 ? "wrong" : "right" }} ? </span>
 
 			<div class="buttons">
 				<button
@@ -119,8 +115,7 @@ function confirm(): void {
 					:key="guest.id"
 					type="button"
 					:disabled="
-						getGuestAnswerResult(guest.id) === 'fail' &&
-						props.revealProgress === 4
+						getGuestAnswerResult(guest.id) === 'fail' && revealProgress === 4
 					"
 					:class="[`guest_${getGuestAnswerResult(guest.id)}`]"
 					@click="onGuestBtnClick(guest.id)"
