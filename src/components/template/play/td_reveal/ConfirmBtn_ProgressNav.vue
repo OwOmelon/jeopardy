@@ -23,7 +23,7 @@ const { revertProgress, advanceProgress } = inject(
 
 <template>
 	<div class="flex items-center justify-center gap-3">
-		<button type="button" class="revert" @click="revertProgress">
+		<button type="button" class="revert" @click.stop="revertProgress">
 			<IconArrowLeft />
 		</button>
 
@@ -40,7 +40,7 @@ const { revertProgress, advanceProgress } = inject(
 			type="button"
 			:disabled="revealProgress === revealProgressLimit"
 			class="advance"
-			@click="advanceProgress"
+			@click.stop="advanceProgress"
 		>
 			<IconArrowRight />
 		</button>
