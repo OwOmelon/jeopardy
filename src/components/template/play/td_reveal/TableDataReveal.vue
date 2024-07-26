@@ -130,11 +130,7 @@ onUnmounted(() => {
 		class="fixed right-0 top-0 z-30 flex h-screen w-screen flex-col backdrop-blur"
 	>
 		<div ref="openingTransitionElement">
-			<OpeningTransition
-				:category="activeTableDataCell!.category"
-				:points="activeTableDataCell!.points"
-				@finish="removeOpeningTransitionElement"
-			/>
+			<OpeningTransition @finish="removeOpeningTransitionElement" />
 		</div>
 
 		<i
