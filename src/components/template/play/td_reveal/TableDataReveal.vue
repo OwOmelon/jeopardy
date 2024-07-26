@@ -54,19 +54,15 @@ const revealProgressLimit = computed<number>(() => {
 	return !guestCount ? 2 : guestCount === 1 ? 3 : 4;
 });
 
-const cancelRevertProgress = computed<boolean>(() => {
-	return activeTableDataCell.value!.answeredBy &&
-		revealProgress.value !== 2 &&
-		revealProgress.value !== 4
-		? true
-		: false;
+const leaveOnRevertProgress = computed<boolean>(() => {
+	return (
+		revealProgress.value === 1 ||
+		(revealProgress.value === 2 && activeTableDataCell.value!.answeredBy !== "")
+	);
 });
 
 function revertProgress(): void {
-	if (
-		revealProgress.value === 1 ||
-		(activeTableDataCell.value!.answeredBy && revealProgress.value === 2)
-	) {
+	if (leaveOnRevertProgress.value) {
 		setActiveDataCell(null);
 
 		return;
@@ -76,15 +72,8 @@ function revertProgress(): void {
 	revealProgress.value--;
 }
 
-const cancelAdvanceProgress = computed<boolean>(() => {
-	return revealProgress.value === revealProgressLimit.value
-		? true
-		: revealProgress.value === 2 &&
-				activeTableDataCell.value!.answeredBy !== "";
-});
-
 function advanceProgress(): void {
-	if (cancelAdvanceProgress.value) {
+	if (revealProgress.value === revealProgressLimit.value) {
 		setActiveDataCell(null);
 
 		return;
@@ -102,7 +91,7 @@ function onKeyDown(e: KeyboardEvent) {
 	}
 }
 
-// ------------------------------
+// ---------------
 
 provide(revealProgressInjectionKey, {
 	revealProgress: readonly(revealProgress),
@@ -182,12 +171,7 @@ onUnmounted(() => {
 			style="animation-delay: 1.45s"
 			class="animate-slide-right grid grid-cols-[1fr,max-content,_1fr] place-items-center border-t-4 border-stone-400 bg-stone-300 text-sm text-stone-600 opacity-0"
 		>
-			<button
-				type="button"
-				:disabled="cancelRevertProgress"
-				class="prog-btn"
-				@click="revertProgress"
-			>
+			<button type="button" class="prog-btn" @click="revertProgress">
 				<IconArrowLeft />
 			</button>
 
@@ -195,12 +179,7 @@ onUnmounted(() => {
 				>{{ revealProgress }} / {{ revealProgressLimit }}</span
 			>
 
-			<button
-				type="button"
-				:disabled="cancelAdvanceProgress"
-				class="prog-btn"
-				@click="advanceProgress"
-			>
+			<button type="button" class="prog-btn" @click="advanceProgress">
 				<IconArrowRight />
 			</button>
 		</div>
