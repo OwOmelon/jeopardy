@@ -4,12 +4,7 @@ import { storeToRefs } from "pinia";
 import { useTemplateStore } from "@/stores/template";
 import { revealProgressInjectionKey } from "./reveal-progress-injection-key";
 
-import IconEdit from "~icons/material-symbols/edit-rounded";
 import HeightAuto from "@/components/HeightAutoTransitionWrapper.vue";
-
-const emit = defineEmits<{
-	"change-answer-results": [];
-}>();
 
 const { activeTableDataCell } = storeToRefs(useTemplateStore());
 
@@ -62,14 +57,6 @@ function getImgAltTxt(type: string): string {
 			class="shadow-subtle mx-auto mt-10 flex w-fit items-center gap-3 rounded bg-red-400 p-2 text-4xl font-bold tracking-wide text-white"
 		>
 			answered by: {{ activeTableDataCell!.answeredBy ?? "no one" }}
-
-			<button
-				type="button"
-				class="shadow-subtle rounded bg-white p-2 text-red-400 transition-[box-shadow,_transform] hover:-translate-y-1 hover:shadow-md"
-				@click="emit('change-answer-results')"
-			>
-				<IconEdit />
-			</button>
 		</div>
 	</div>
 </template>
