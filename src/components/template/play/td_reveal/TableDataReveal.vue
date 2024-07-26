@@ -168,7 +168,7 @@ onUnmounted(() => {
 				<Transition :name="revealContentTransition" mode="out-in">
 					<QuestionAnswer
 						v-if="revealProgress < 3"
-						@change-answeree="revealProgress = 3"
+						@change-answer-results="revealProgress = 3"
 					/>
 
 					<GiveGuestPoints v-else @done="setActiveDataCell(null)" />
