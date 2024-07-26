@@ -10,8 +10,6 @@ import {
 } from "./reveal-progress-injection-key";
 
 import IconClose from "~icons/material-symbols/close-rounded";
-import IconArrowLeft from "~icons/material-symbols/arrow-left-rounded";
-import IconArrowRight from "~icons/material-symbols/arrow-right-rounded";
 
 import OpeningTransition from "./OpeningTransition.vue";
 import QuestionAnswer from "./QuestionAnswer.vue";
@@ -35,6 +33,7 @@ function removeOpeningTransitionElement(): void {
 
 // ---------------
 
+const content = ref<HTMLElement | null>(null);
 const revealContentTransition = ref<"fade-slide-left" | "fade-slide-right">(
 	"fade-slide-left",
 );
@@ -88,6 +87,20 @@ function onKeyDown(e: KeyboardEvent) {
 		case "Escape":
 			setActiveDataCell(null);
 			break;
+	}
+}
+
+function onContentClick(e: MouseEvent): void {
+	if (revealProgress.value > 2) return;
+
+	const contentWidth = content.value?.getBoundingClientRect()?.width;
+
+	if (!contentWidth) return;
+
+	if ((e.clientX / contentWidth) * 100 < 100 / 3) {
+		revertProgress();
+	} else {
+		advanceProgress();
 	}
 }
 
@@ -150,8 +163,10 @@ onUnmounted(() => {
 		</div>
 
 		<div
+			ref="content"
 			style="animation-delay: 1.3s"
 			class="content animate-slide-right relative grid grow grid-rows-[auto,_1px] items-center gap-5 gap-y-0 overflow-y-auto overflow-x-hidden p-14 text-center text-5xl text-stone-600 opacity-0"
+			@click="onContentClick"
 		>
 			<div>
 				<Transition :name="revealContentTransition" mode="out-in">
@@ -165,23 +180,6 @@ onUnmounted(() => {
 			</div>
 
 			<div class="anchor" />
-		</div>
-
-		<div
-			style="animation-delay: 1.45s"
-			class="animate-slide-right grid grid-cols-[1fr,max-content,_1fr] place-items-center border-t-4 border-stone-400 bg-stone-300 text-sm text-stone-600 opacity-0"
-		>
-			<button type="button" class="prog-btn" @click="revertProgress">
-				<IconArrowLeft />
-			</button>
-
-			<span class="text-center"
-				>{{ revealProgress }} / {{ revealProgressLimit }}</span
-			>
-
-			<button type="button" class="prog-btn" @click="advanceProgress">
-				<IconArrowRight />
-			</button>
 		</div>
 	</div>
 </template>
