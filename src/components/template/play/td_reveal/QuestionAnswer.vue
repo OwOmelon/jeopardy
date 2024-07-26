@@ -13,7 +13,7 @@ const emit = defineEmits<{
 
 const { activeTableDataCell } = storeToRefs(useTemplateStore());
 
-const revealProgress = inject(revealProgressInjectionKey)!;
+const { revealProgress } = inject(revealProgressInjectionKey)!;
 const showAnswer = computed<boolean>(() => {
 	return revealProgress.value > 1;
 });
