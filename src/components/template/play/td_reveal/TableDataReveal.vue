@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, provide, onMounted, onUnmounted } from "vue";
+import { readonly, ref, computed, provide, onMounted, onUnmounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
 import { useMainMenuStore } from "@/stores/mainmenu";
 import {
 	revealProgressInjectionKey,
-	revealProgressLimitInjectionKey,
+	updateRevealProgressInjectionKey,
 } from "./reveal-progress-injection-key";
 
 import IconClose from "~icons/material-symbols/close-rounded";
@@ -104,8 +104,11 @@ function onKeyDown(e: KeyboardEvent) {
 
 // ------------------------------
 
-provide(revealProgressInjectionKey, revealProgress);
-provide(revealProgressLimitInjectionKey, revealProgressLimit);
+provide(revealProgressInjectionKey, {
+	revealProgress: readonly(revealProgress),
+	revealProgressLimit: readonly(revealProgressLimit),
+});
+provide(updateRevealProgressInjectionKey, { revertProgress, advanceProgress });
 
 onMounted(() => {
 	disableMainMenuToggle.value = true;
