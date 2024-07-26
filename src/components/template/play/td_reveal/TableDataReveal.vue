@@ -4,7 +4,10 @@ import { storeToRefs } from "pinia";
 import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
 import { useMainMenuStore } from "@/stores/mainmenu";
-import { revealProgressInjectionKey } from "./reveal-progress-injection-key";
+import {
+	revealProgressInjectionKey,
+	revealProgressLimitInjectionKey,
+} from "./reveal-progress-injection-key";
 
 import IconClose from "~icons/material-symbols/close-rounded";
 import IconArrowLeft from "~icons/material-symbols/arrow-left-rounded";
@@ -102,6 +105,7 @@ function onKeyDown(e: KeyboardEvent) {
 // ------------------------------
 
 provide(revealProgressInjectionKey, revealProgress);
+provide(revealProgressLimitInjectionKey, revealProgressLimit);
 
 onMounted(() => {
 	disableMainMenuToggle.value = true;
