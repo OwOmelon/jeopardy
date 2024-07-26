@@ -161,16 +161,10 @@ onUnmounted(() => {
 				<Transition :name="revealContentTransition" mode="out-in">
 					<QuestionAnswer
 						v-if="revealProgress < 3"
-						:active-table-data-cell="activeTableDataCell!"
-						:show-answer="revealProgress > 1"
 						@change-answeree="revealProgress = 3"
 					/>
 
-					<GiveGuestPoints
-						v-else
-						:reveal-progress="revealProgress"
-						@done="setActiveDataCell(null)"
-					/>
+					<GiveGuestPoints v-else @done="setActiveDataCell(null)" />
 				</Transition>
 			</div>
 
