@@ -108,6 +108,7 @@ input[type="number"] {
 	}
 }
 
+/* !!! IMPROVE SLIDE ANIMATIONS */
 .fade-slide-right {
 	&-enter-active {
 		transition:

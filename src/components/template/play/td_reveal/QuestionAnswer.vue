@@ -22,6 +22,7 @@ function getImgAltTxt(type: string): string {
 
 <template>
 	<div class="font-bold">
+		<!-- FIX IMAGE NOT MAINTAINING ASPECT RATIO -->
 		<HeightAuto
 			:show="(activeTableDataCell!.answeredBy ? true : false) || !showAnswer"
 			speed="slow"
