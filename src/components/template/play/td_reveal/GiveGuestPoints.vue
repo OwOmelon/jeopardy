@@ -138,6 +138,7 @@ function confirm(): void {
 					type="button"
 					:class="[
 						`guest_${getGuestAnswerResult(guestList[0].id) === answerResultType ? answerResultType : ''}`,
+						'rect-btn',
 					]"
 					@click="onSingleGuestBtnClick(answerResultType as AnswerResult)"
 				>
