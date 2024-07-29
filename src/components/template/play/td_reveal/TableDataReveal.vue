@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { readonly, ref, computed, provide, onMounted, onUnmounted } from "vue";
+import {
+	type ComponentPublicInstance,
+	readonly,
+	ref,
+	computed,
+	provide,
+	onMounted,
+	onUnmounted,
+} from "vue";
 import { storeToRefs } from "pinia";
 import { useGuestsStore } from "@/stores/guests";
 import { useTemplateStore } from "@/stores/template";
@@ -23,12 +31,12 @@ const { disableToggle: disableMainMenuToggle } =
 
 // ------------------------------
 
-const openingTransitionElement = ref<HTMLElement | null>(null);
+const openingTransitionElement = ref<ComponentPublicInstance | null>(null);
 
 function removeOpeningTransitionElement(): void {
 	if (!openingTransitionElement.value) return;
 
-	openingTransitionElement.value.remove();
+	openingTransitionElement.value.$el.remove();
 }
 
 // ---------------
@@ -129,9 +137,10 @@ onUnmounted(() => {
 	<div
 		class="fixed right-0 top-0 z-30 flex h-screen w-screen flex-col backdrop-blur"
 	>
-		<div ref="openingTransitionElement">
-			<OpeningTransition @finish="removeOpeningTransitionElement" />
-		</div>
+		<OpeningTransition
+			ref="openingTransitionElement"
+			@finish="removeOpeningTransitionElement"
+		/>
 
 		<i
 			class="bg-entry-anim absolute left-0 top-0 h-full w-full bg-stone-50 opacity-0"
