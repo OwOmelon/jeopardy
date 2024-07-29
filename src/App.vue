@@ -98,7 +98,7 @@ input[type="number"] {
 	}
 
 	&-enter-from {
-		opacity: 1;
+		opacity: 0;
 		transform: translateX(15px);
 	}
 
@@ -108,7 +108,6 @@ input[type="number"] {
 	}
 }
 
-/* !!! IMPROVE SLIDE ANIMATIONS */
 .fade-slide-right {
 	&-enter-active {
 		transition:
@@ -123,7 +122,7 @@ input[type="number"] {
 	}
 
 	&-enter-from {
-		opacity: 1;
+		opacity: 0;
 		transform: translateX(-15px);
 	}
 
