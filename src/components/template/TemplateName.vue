@@ -20,7 +20,7 @@ watch(
 	<div class="mx-auto w-fit">
 		<div
 			:class="[
-				'block mx-auto w-fit min-w-[3.3em] max-w-[95vw] text-center font-bold text-[5.61rem]',
+				'mx-auto block w-fit min-w-[3.3em] max-w-[95vw] text-center text-[5.61rem] font-bold',
 			]"
 		>
 			<TextBox
@@ -30,7 +30,6 @@ watch(
 				blur-on-keydown-enter
 				:class="[
 					template.editing ? 'text-stone-300' : 'text-stone-700',
-					{ 'border-flash': !textInput },
 					'p-2 transition-colors',
 				]"
 				@blur="template.name = textInput"
@@ -39,7 +38,7 @@ watch(
 
 		<hr
 			:class="[
-				{'opacity-0': textInput},
+				{ 'opacity-0': textInput },
 				'border-flash rounded-full border-t-4 transition-opacity duration-500',
 			]"
 		/>
