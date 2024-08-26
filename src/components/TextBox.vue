@@ -3,104 +3,111 @@ import { ref, watch, onMounted } from "vue";
 
 const props = withDefaults(
 	defineProps<{
-		modelValue: string;
 		placeholder?: string;
-		focusClasses?: string;
 		disabled?: boolean;
 		blurOnKeydownEnter?: boolean;
 	}>(),
 	{
-		placeholder: "",
-		focusClasses: "",
+		placeholder: "string",
 		disabled: false,
+		blurOnKeydownEnter: false,
 	},
 );
 
 const emit = defineEmits<{
-	blur: [];
-	focus: [];
-	"update:modelValue": [string];
+	onBlur: [];
+	onFocus: [];
 }>();
 
-const container = ref<HTMLDivElement | null>(null);
-const input = ref<HTMLSpanElement | null>(null);
+const textbox = ref<HTMLSpanElement | null>(null);
+const text = defineModel<string>({ required: true });
+let stopTextWatcher = false;
 
-const focused = ref<boolean>(false);
+function onPointerdown() {
+	if (!textbox.value || props.disabled) return;
 
-function moveCaretPosition(): void {
-	if (!input.value!.hasChildNodes()) return;
-
-	const range = document.createRange();
-	const selection = window.getSelection()!;
-	const node = input.value!.lastChild!;
-
-	range.setStart(node, node.textContent?.length ?? 0);
-	range.collapse(true);
-
-	selection.removeAllRanges();
-	selection.addRange(range);
+	textbox.value.contentEditable = "true";
+	textbox.value.focus();
+	emit("onFocus");
 }
 
+function onInput() {
+	if (!textbox.value) return;
+
+	text.value = textbox.value.innerText;
+	stopTextWatcher = true;
+}
+
+function onBlur() {
+	if (!textbox.value) return;
+
+	textbox.value.contentEditable = "false";
+	emit("onBlur");
+}
+
+function setPlaceholder(placeholder: typeof props.placeholder) {
+	if (!textbox.value || typeof placeholder !== "string") return;
+
+	textbox.value.style.setProperty("--placeholder", `"${placeholder}"`);
+}
+
+function addBlurOnKeydownEventListener() {
+	if (!textbox.value) return;
+
+	textbox.value.addEventListener("keydown", (e) => {
+		if (e.code === "Enter") onBlur();
+	});
+}
+
+watch(text, (t) => {
+	if (!textbox.value) return;
+	if (stopTextWatcher) {
+		stopTextWatcher = false;
+		return;
+	}
+
+	textbox.value.innerText = t;
+});
+
 watch(
-	() => props.modelValue,
-	(val) => {
-		if (val !== input.value!.innerText) {
-			input.value!.innerText = val;
-		}
+	() => props.placeholder,
+	(ph) => {
+		if (textbox.value) setPlaceholder(ph);
 	},
 );
 
 onMounted(() => {
-	input.value!.innerText = props.modelValue;
+	if (!textbox.value) return;
+
+	textbox.value.innerText = text.value;
+	setPlaceholder(props.placeholder);
+
+	if (props.blurOnKeydownEnter) addBlurOnKeydownEventListener();
 });
 </script>
 
 <template>
-	<div
-		ref="container"
-		:class="[focused ? focusClasses : '', 'relative flex']"
-		@click="
-			() => {
-				if (focused) return;
-
-				input!.focus();
-				moveCaretPosition();
-			}
-		"
-	>
-		<span
-			ref="input"
-			:contenteditable="!disabled"
-			class="block h-full w-full whitespace-pre-wrap outline-none"
-			@focus="
-				() => {
-					focused = true;
-					emit('focus');
-				}
-			"
-			@blur="
-				() => {
-					focused = false;
-					emit('blur');
-				}
-			"
-			@input="emit('update:modelValue', input!.innerText)"
-			@keydown.enter="
-				() => {
-					if (blurOnKeydownEnter) input!.blur();
-				}
-			"
-		/>
-
-		<span v-if="props.disabled && !modelValue.length">&nbsp</span>
-
-		<div
-			v-if="!modelValue.trim().length"
-			class="pointer-events-none absolute bottom-0 left-0 top-0 h-full w-full border-[inherit] p-[inherit] opacity-50"
-		>
-			<span class="block h-full w-full overflow-hidden">
-				{{ placeholder }}
-			</span>
-		</div>
-	</div>
+	<span
+		ref="textbox"
+		:data-hide-placeholder="text.trim() ? true : false"
+		@pointerdown="onPointerdown"
+		@input="onInput"
+		@blur="onBlur"
+	/>
 </template>
+
+<style scoped lang="postcss">
+span {
+	@apply block cursor-text outline-none;
+}
+
+span::before {
+	content: var(--placeholder);
+
+	@apply pointer-events-none opacity-50;
+}
+
+span[data-hide-placeholder="true"]::before {
+	@apply !hidden;
+}
+</style>
