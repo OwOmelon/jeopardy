@@ -26,17 +26,16 @@ watch(
 
 <template>
 	<th>
-		<div class="bounce-y-wrapper">
-			<div class="cell cell-width cell-padding header-colors group relative">
-				<TextBox
-					v-model="textInput"
-					:placeholder="props.column"
-					blur-on-keydown-enter
-					@blur="emit('change-column-category', props.column, textInput)"
-				/>
+		<div class="bounce-y-wrapper group relative">
+			<TextBox
+				v-model="textInput"
+				class="cell cell-width cell-padding header-colors"
+				:placeholder="props.column"
+				blur-on-keydown-enter
+				@blur="emit('change-column-category', props.column, textInput)"
+			/>
 
-				<DragHandle />
-			</div>
+			<DragHandle />
 		</div>
 	</th>
 </template>
