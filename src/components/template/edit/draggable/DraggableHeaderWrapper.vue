@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from "vue";
+import { type ComponentPublicInstance, ref, watch, onMounted } from "vue";
 import { arrSwap } from "@/composables/array_swap";
 import { useDragCursor } from "./drag_cursor";
 
-type DragAttr = `drag-${typeof props.group}-${number}`;
+type DragAttr = `data-draggable-${typeof props.group}-${number}`;
 
 const emit = defineEmits<{
 	dragstart: [];
@@ -20,7 +20,7 @@ const props = defineProps<{
 
 const obj = defineModel<Record<string, string | number>>({ required: true });
 const dragCursor = useDragCursor();
-const wrapper = ref<any>(null);
+const wrapper = ref<ComponentPublicInstance | null>(null);
 
 const dragFrom = ref<number | null>(null);
 const dropTo = ref<number | null>(null);
@@ -218,7 +218,7 @@ onMounted(() => {
 			const children = await getChildren();
 
 			children.forEach(async (child, index) => {
-				const attr: DragAttr = `drag-${props.group}-${index}`;
+				const attr: DragAttr = `data-draggable-${props.group}-${index}`;
 
 				try {
 					const handle = await getDragElHandle(child);
