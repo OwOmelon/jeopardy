@@ -76,8 +76,7 @@ function helpHint(): void {
 		<TextBox
 			v-model="computedModelValue"
 			:placeholder="textBoxPlaceholder"
-			focus-classes="!border-stone-100"
-			class="input min-h-[10.493ex] cursor-text"
+			span-classes="input input-padding min-h-[10.493ex] cursor-text"
 		/>
 
 		<div class="flex items-center gap-3">
@@ -132,14 +131,14 @@ function helpHint(): void {
 					</div>
 
 					<div
-						class="input flex grow items-center !p-0 focus-within:!border-stone-100"
+						class="input flex grow items-center focus-within:!border-stone-100"
 					>
 						<input
 							v-model="imgInput"
 							type="text"
 							placeholder="enter image url"
 							size="1"
-							class="h-full w-full bg-transparent p-[0.5em] pr-0 outline-none placeholder:text-white/50"
+							class="input-padding h-full w-full bg-transparent pr-0 outline-none placeholder:text-white/50"
 							@keydown.enter.prevent="applyImageUrl"
 						/>
 
@@ -163,8 +162,12 @@ function helpHint(): void {
 </template>
 
 <style scoped lang="postcss">
-.input {
-	@apply shadow-subtle rounded border-2 border-transparent bg-stone-600 p-[0.5em] text-stone-50 outline-none transition-colors focus:border-stone-100;
+:deep(.input) {
+	@apply shadow-subtle rounded border-2 border-transparent bg-stone-600 text-stone-50 outline-none transition-colors focus:border-stone-100;
+}
+
+:deep(.input-padding) {
+	@apply p-[0.5em];
 }
 
 .help-hint {
