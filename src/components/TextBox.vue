@@ -6,43 +6,30 @@ const props = withDefaults(
 		placeholder?: string;
 		disabled?: boolean;
 		blurOnKeydownEnter?: boolean;
+		spanClasses?: string;
 	}>(),
 	{
-		placeholder: "string",
+		placeholder: `"\a0"`,
 		disabled: false,
 		blurOnKeydownEnter: false,
+		spanClasses: "",
 	},
 );
 
 const emit = defineEmits<{
-	onBlur: [];
-	onFocus: [];
+	"on-blur": [];
+	"on-focus": [];
 }>();
 
 const textbox = ref<HTMLSpanElement | null>(null);
 const text = defineModel<string>({ required: true });
 let stopTextWatcher = false;
 
-function onPointerdown() {
-	if (!textbox.value || props.disabled) return;
-
-	textbox.value.contentEditable = "true";
-	textbox.value.focus();
-	emit("onFocus");
-}
-
 function onInput() {
 	if (!textbox.value) return;
 
 	text.value = textbox.value.innerText;
 	stopTextWatcher = true;
-}
-
-function onBlur() {
-	if (!textbox.value) return;
-
-	textbox.value.contentEditable = "false";
-	emit("onBlur");
 }
 
 function setPlaceholder(placeholder: typeof props.placeholder) {
@@ -55,7 +42,7 @@ function addBlurOnKeydownEventListener() {
 	if (!textbox.value) return;
 
 	textbox.value.addEventListener("keydown", (e) => {
-		if (e.code === "Enter") onBlur();
+		if (e.code === "Enter") textbox.value!.blur();
 	});
 }
 
@@ -87,18 +74,26 @@ onMounted(() => {
 </script>
 
 <template>
-	<span
-		ref="textbox"
-		:data-hide-placeholder="text.trim() ? true : false"
-		@pointerdown="onPointerdown"
-		@input="onInput"
-		@blur="onBlur"
-	/>
+	<div>
+		<span
+			ref="textbox"
+			:class="[spanClasses]"
+			:contenteditable="!disabled"
+			:data-hide-placeholder="text.trim() ? true : false"
+			@input="onInput"
+			@focus="emit('on-focus')"
+			@blur="emit('on-blur')"
+		/>
+	</div>
 </template>
 
 <style scoped lang="postcss">
+div {
+	@apply relative;
+}
+
 span {
-	@apply block cursor-text outline-none;
+	@apply block h-full outline-none;
 }
 
 span::before {
