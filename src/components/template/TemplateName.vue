@@ -33,7 +33,7 @@ watch(
 					template.editing ? 'text-stone-300' : 'text-stone-700',
 					'transition-colors',
 				]"
-				@blur="template.name = textInput"
+				@on-blur="template.name = textInput"
 			/>
 		</div>
 
