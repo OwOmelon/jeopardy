@@ -29,10 +29,11 @@ watch(
 		<div class="bounce-y-wrapper group relative">
 			<TextBox
 				v-model="textInput"
-				class="cell cell-width cell-padding header-colors"
+				class="cell cell-width header-colors"
 				:placeholder="props.column"
 				blur-on-keydown-enter
-				@blur="emit('change-column-category', props.column, textInput)"
+				span-classes="cell-padding"
+				@on-blur="emit('change-column-category', props.column, textInput)"
 			/>
 
 			<DragHandle />
