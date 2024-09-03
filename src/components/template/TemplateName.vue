@@ -28,9 +28,10 @@ watch(
 				placeholder="name"
 				:disabled="!template.editing"
 				blur-on-keydown-enter
+				span-classes="p-2"
 				:class="[
 					template.editing ? 'text-stone-300' : 'text-stone-700',
-					'p-2 transition-colors',
+					'transition-colors',
 				]"
 				@blur="template.name = textInput"
 			/>
